@@ -1,2 +1,3 @@
-# battleship
+# МОРСКОЙ БОЙ
+
 Game
