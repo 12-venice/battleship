@@ -10,7 +10,8 @@
     "stylelint": "node_modules/.bin/stylelint src/**/*.css",
     "stylelint:fix": "node_modules/.bin/stylelint src/**/*.css --fix",
     "eslint": "node_modules/.bin/eslint ./src --ext .js,.ts,.tsx --cache",
-    "eslint:fix": "node_modules/.bin/eslint ./src --ext .js,.ts,.tsx --fix"
+    "eslint:fix": "node_modules/.bin/eslint ./src --ext .js,.ts,.tsx --fix",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +30,7 @@
     "eslint-plugin-react": "7.29.4",
     "eslint-plugin-react-hooks": "4.4.0",
     "html-webpack-plugin": "5.5.0",
+    "husky": "7.0.4",
     "path": "0.12.7",
     "prettier": "2.6.1",
     "rimraf": "3.0.2",
