@@ -7,6 +7,8 @@
     "clean": "rimraf ./dist",
     "start": "webpack serve --mode development --open --hot",
     "build": "webpack --mode production",
+    "stylelint": "node_modules/.bin/stylelint src/**/*.css",
+    "stylelint:fix": "node_modules/.bin/stylelint src/**/*.css --fix",
     "eslint": "node_modules/.bin/eslint ./src --ext .js,.ts,.tsx --cache",
     "eslint:fix": "node_modules/.bin/eslint ./src --ext .js,.ts,.tsx --fix"
   },
@@ -31,6 +33,8 @@
     "prettier": "2.6.1",
     "rimraf": "3.0.2",
     "style-loader": "3.3.1",
+    "stylelint": "14.6.1",
+    "stylelint-config-standard": "25.0.0",
     "ts-loader": "9.2.8",
     "typescript": "4.6.3",
     "webpack": "5.70.0",
