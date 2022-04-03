@@ -16,7 +16,14 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: "ts-loader",
+                use: [
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            transpileOnly: true, // https://github.com/TypeStrong/ts-loader#transpileonly
+                        },
+                    },
+                ],
                 exclude: /node_modules/
             },
             {
