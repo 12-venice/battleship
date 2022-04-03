@@ -9,24 +9,27 @@ export class ErrorBoundary extends Component<Props, State> {
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         this.setState({
-            error: error,
-            errorInfo: errorInfo
-        })
+            error,
+            errorInfo,
+        });
     }
 
     render() {
-        if (this.state.errorInfo) {
+        const { children } = this.props;
+        const { error, errorInfo } = this.state;
+
+        if (errorInfo) {
             return (
                 <div>
                     <h2>Something went wrong.</h2>
                     <details style={{ whiteSpace: 'pre-wrap' }}>
-                        {this.state.error && this.state.error.toString()}
+                        {error && error.toString()}
                         <br />
-                        {this.state.errorInfo.componentStack}
+                        {errorInfo.componentStack}
                     </details>
                 </div>
             );
         }
-        return this.props.children;
+        return children;
     }
 }
