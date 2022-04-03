@@ -24,6 +24,7 @@
         "prettier"
     ],
     "rules": {
+        "indent": ["error", 4],
         "import/extensions": [
             "error",
             "ignorePackages",
@@ -32,6 +33,8 @@
                 "tsx": "never"
             }
         ],
+        "react/jsx-indent": ["error", 4],
+        "react/jsx-indent-props": ["error", 4],
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "react/jsx-uses-react": "off",
