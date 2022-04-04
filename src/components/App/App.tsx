@@ -1,3 +1,4 @@
+import { Routes } from 'src/components/utils/Routes';
 import './App.css';
 
-export const App = (): JSX.Element => <h1>Морской бой</h1>;
+export const App = (): JSX.Element => <Routes />;
