@@ -1,0 +1,23 @@
+.button {
+    background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #F1972B 38.02%, #E37D00 100%);
+    border-radius: 13px;
+    color: #ffffff;
+    margin: 10px 10px;
+    padding: 10px 30px;
+    font-size: 26px;
+    font-family: 'Titan One';
+
+    &.red {
+        background: radial-gradient(100% 100% at 50.31% 100%, #F7B1A2 0%, #EE4727 45.83%, #EE4727 100%);
+    }
+
+    &.green {
+        background: radial-gradient(100% 100% at 50.31% 100%, #C8FC77 0%, #58B034 45.83%, #58B034 100%);
+    }
+
+    &.big {
+        padding: 20px 50px;
+        font-size: 46px;
+    }
+
+}

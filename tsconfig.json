@@ -26,6 +26,7 @@
   },
   "include": [
     "src",
+    "additional.d.ts",
     "typings/**/*.d.ts",
     "./node_modules/@types"
   ],
