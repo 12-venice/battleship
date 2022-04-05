@@ -1,4 +1,4 @@
-import { ErrorInfo } from 'react';
+import { ChangeEventHandler, ErrorInfo } from 'react';
 
 export type OwnProps = {};
 
@@ -15,12 +15,15 @@ export type ButtonProps = {
 };
 
 export type inputProps = {
-    className?: string;
+    value: string;
+    name: string;
+    onChange: ChangeEventHandler<HTMLInputElement>;
     title: string;
 };
 
 export type formProps = {
-    inputs: inputProps[];
+    form: {};
+    setForm: Function;
     childrensUp: JSX.Element;
     childrensDown: JSX.Element;
 };

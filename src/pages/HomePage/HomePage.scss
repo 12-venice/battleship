@@ -1,15 +1,8 @@
-.main {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
 .block__main {
     position: absolute;
-    left: 460px;
-    width: 60%;
-    height: 70vh;
-    padding: 30px;
+    left: 500px;
+    width: 65%;
+    height: 80vh;
     border-radius: 38px;
     background: #1E61BE;
     display: flex;
@@ -26,23 +19,52 @@
 }
 
 .block__header {
-    font-size: 100px;
+    font-size: 130px;
     color: #ffffff
 }
 
+.block__menu {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .block__select {
-    font-size: 153px;
+    height: 25vh;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.block__select-toggle-logotype {
+    font-size: 30px;
     color: #ffffff
+}
+
+.block__select-type-logotype {
+    font-size: 40px;
+    color: #ffffff;
+    margin: 20px;
+    opacity: 0.5;
+
+    &.selected {
+        opacity: 1;
+    }
 }
 
 .image__left {
     z-index: 2;
     position: absolute;
-    left: -60px;
+    left: -500px;
     width: 60%;
-    height: 50vh;
+    height: 60vh;
 }
 
 .image__right {
-    height: 80%;
+    height: 100%;
+    transform: scale(-1, 1);
 }

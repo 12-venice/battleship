@@ -11,8 +11,6 @@ export const Routes = (): JSX.Element => (
         <Route exact path="/auth">
             <AuthPage />
         </Route>
-        <Route>
-            <NotFoundPage />
-        </Route>
+        <Route>{NotFoundPage}</Route>
     </Switch>
 );
