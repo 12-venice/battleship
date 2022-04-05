@@ -1,16 +1,17 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: "./src/index.tsx",
+    entry: './src/index.tsx',
     output: {
-        path: path.join(__dirname, "/dist"),
-        filename: "bundle.js"
+        path: path.join(__dirname, '/dist'),
+        filename: 'bundle.js',
     },
     resolve: {
         plugins: [new TsconfigPathsPlugin()],
-        extensions: [".tsx", ".ts", ".js"]
+        extensions: ['.tsx', '.ts', '.js'],
     },
     module: {
         rules: [
@@ -24,18 +25,39 @@ module.exports = {
                         },
                     },
                 ],
-                exclude: /node_modules/
+                exclude: /node_modules/,
             },
             {
-                test: /\.css$/,
-                use: ["style-loader", "css-loader"]
-            }
-        ]
+                test: /\.(png|jp(e*)g|svg|gif)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: 'images/[hash]-[name].[ext]',
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {},
+                    },
+                    'css-loader',
+                    'sass-loader',
+                ],
+            },
+        ],
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: "./www/index.html"
-        })
+            template: './www/index.html',
+        }),
+        new MiniCssExtractPlugin({
+            filename: 'style-[hash].css',
+        }),
     ],
     devServer: {
         static: {

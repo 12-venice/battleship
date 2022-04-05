@@ -1,1 +1,1 @@
-export const NotFoundPage = (): JSX.Element => <h1>Страница не найдена</h1>;
+export const NotFoundPage = <h1>Страница не найдена</h1>;
