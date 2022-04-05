@@ -9,7 +9,6 @@ export const AuthPage = (): JSX.Element => {
         Login: '',
         Password: '',
     });
-    console.log(form);
     const childrensUp = <span className="auth__header">AUTHORIZATION</span>;
     const childrensDown = (
         <NavLink to="/">

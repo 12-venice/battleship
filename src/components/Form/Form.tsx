@@ -19,7 +19,7 @@ export const Form = ({
                 {Object.keys(form).map(
                     (key: string, index: number): JSX.Element => (
                         <Input
-                            key={index}
+                            key={index as any}
                             value={(form as any)[key]}
                             title={key}
                             name={key}

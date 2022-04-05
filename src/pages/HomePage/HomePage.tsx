@@ -35,8 +35,9 @@ export const HomePage = (): JSX.Element => {
                     <div className="block__select">
                         <div>
                             <div className="switch">
-                                <label>
+                                <label htmlFor="toggle">
                                     <input
+                                        id="toggle"
                                         type="checkbox"
                                         checked={typeOfGame}
                                         onChange={() => {

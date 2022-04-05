@@ -4,7 +4,7 @@ export const Layout = ({
     children,
 }: JSX.ElementChildrenAttribute): JSX.Element => (
     <div
-        className="background"
+        className="layout__background"
         style={{
             backgroundImage: `url(${background})`,
         }}
