@@ -1,4 +1,4 @@
-import { ChangeEventHandler, ErrorInfo } from 'react';
+import { ChangeEventHandler, ErrorInfo, MouseEventHandler } from 'react';
 
 export type OwnProps = {};
 
@@ -12,18 +12,21 @@ export type State = {
 export type ButtonProps = {
     className?: string;
     title: string;
+    disabled?: boolean;
+    type?: 'button' | 'submit' | 'reset';
+    onClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export type inputProps = {
-    value: string;
-    name: string;
-    onChange: ChangeEventHandler<HTMLInputElement>;
+    type: string;
     title: string;
+    value: string;
+    setValid: Function;
+    onChange: ChangeEventHandler<HTMLInputElement>;
 };
 
 export type formProps = {
-    form: {};
-    setForm: Function;
-    childrensUp: JSX.Element;
-    childrensDown: JSX.Element;
+    fields: { type: string; title: string }[];
+    setData: Function;
+    submit: JSX.Element;
 };

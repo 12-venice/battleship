@@ -1,4 +1,4 @@
-.block__main {
+.home__main {
     position: absolute;
     left: 500px;
     width: 65%;
@@ -11,19 +11,19 @@
     justify-content: center;
 }
 
-.block__buttons {
+.home__buttons {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
 }
 
-.block__header {
+.home__header {
     font-size: 130px;
     color: #ffffff
 }
 
-.block__menu {
+.home__menu {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -31,7 +31,7 @@
     align-items: center;
 }
 
-.block__select {
+.home__select {
     height: 25vh;
     width: 90%;
     display: flex;
@@ -40,12 +40,12 @@
     align-items: flex-end;
 }
 
-.block__select-toggle-logotype {
+.home__select-toggle-logotype {
     font-size: 30px;
     color: #ffffff
 }
 
-.block__select-type-logotype {
+.home__select-type-logotype {
     font-size: 40px;
     color: #ffffff;
     margin: 20px;
@@ -56,7 +56,7 @@
     }
 }
 
-.image__left {
+.home__image-left {
     z-index: 2;
     position: absolute;
     left: -500px;
@@ -64,7 +64,7 @@
     height: 60vh;
 }
 
-.image__right {
+.home__image-right {
     height: 100%;
     transform: scale(-1, 1);
 }

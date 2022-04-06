@@ -10,15 +10,15 @@ export const HomePage = (): JSX.Element => {
 
     return (
         <Layout>
-            <div className="block__main">
-                <div className="block__buttons">
+            <div className="home__main">
+                <div className="home__buttons">
                     <NavLink to="/">
                         <Button title="forum" />
                     </NavLink>
                     <NavLink to="/">
                         <Button title="leaders" />
                     </NavLink>
-                    <NavLink to="/">
+                    <NavLink to="/profile">
                         <Button title="profile" />
                     </NavLink>
                     <NavLink to="/auth">
@@ -26,13 +26,13 @@ export const HomePage = (): JSX.Element => {
                     </NavLink>
                 </div>
                 <img
-                    className="image__left"
+                    className="home__image-left"
                     src={menuLogoWithShips}
                     alt="Логотип с кораблями"
                 />
-                <span className="block__header">BATTLESHIP</span>
-                <div className="block__menu">
-                    <div className="block__select">
+                <span className="home__header">BATTLESHIP</span>
+                <div className="home__menu">
+                    <div className="home__select">
                         <div>
                             <div className="switch">
                                 <label htmlFor="toggle">
@@ -45,21 +45,21 @@ export const HomePage = (): JSX.Element => {
                                         }}
                                     />
                                     <span className="lever" />
-                                    <span className="block__select-toggle-logotype">
+                                    <span className="home__select-toggle-logotype">
                                         Toggle play mode!
                                     </span>
                                 </label>
                             </div>
-                            <div className="block__select-type">
+                            <div className="home__select-type">
                                 <span
-                                    className={`block__select-type-logotype ${
+                                    className={`home__select-type-logotype ${
                                         !typeOfGame ? 'selected' : ''
                                     }`}
                                 >
                                     CLASSIC
                                 </span>
                                 <span
-                                    className={`block__select-type-logotype ${
+                                    className={`home__select-type-logotype ${
                                         typeOfGame ? 'selected' : ''
                                     }`}
                                 >
@@ -72,7 +72,7 @@ export const HomePage = (): JSX.Element => {
                         </NavLink>
                     </div>
                     <img
-                        className="image__right"
+                        className="home__image-right"
                         src={menuLogoWithPirates}
                         alt="Логотип с пиратами"
                     />
