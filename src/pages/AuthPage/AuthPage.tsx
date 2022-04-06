@@ -3,13 +3,16 @@ import { NavLink } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { Form } from 'src/components/Form';
 import { Layout } from '../../components/Layout';
+import styles from './AuthPage.scss';
 
 export const AuthPage = (): JSX.Element => {
     const [form, setForm] = useState({
         Login: '',
         Password: '',
     });
-    const childrensUp = <span className="auth__header">AUTHORIZATION</span>;
+    const childrensUp = (
+        <span className={styles.auth__header}>AUTHORIZATION</span>
+    );
     const childrensDown = (
         <NavLink to="/">
             <Button title="sign in!" />

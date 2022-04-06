@@ -1,5 +1,6 @@
 import { Input } from '../Input';
 import { formProps } from '../utils/ErrorBoundary/types';
+import styles from './Form.scss';
 
 export const Form = ({
     form,
@@ -13,9 +14,9 @@ export const Form = ({
         setForm({ ...form, [event.target.name]: event.target.value });
     };
     return (
-        <div className="form__main">
+        <div className={styles.form__main}>
             {childrensUp}
-            <form className="form__block">
+            <form className={styles.form__block}>
                 {Object.keys(form).map(
                     (key: string, index: number): JSX.Element => (
                         <Input
