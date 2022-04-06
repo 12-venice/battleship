@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { Layout } from '../../components/Layout';
 
@@ -13,7 +14,9 @@ export const ProfilePage = (): JSX.Element => {
         <Layout>
             <div className="profile__main">
                 <div className="profile__block-up">
-                    <Button className="red" title="x" />
+                    <NavLink to="/">
+                        <Button className="red" title="x" />
+                    </NavLink>
                 </div>
                 <div className="profile__block-center">
                     <div className="profile__avatar">{user.login[0]}</div>
