@@ -1,10 +1,12 @@
+@import 'src/styles/colors.css';
+
 .block__main {
     position: absolute;
     left: 500px;
     width: 65%;
     height: 80vh;
     border-radius: 38px;
-    background: #1E61BE;
+    background: var(--blue);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -20,7 +22,7 @@
 
 .block__header {
     font-size: 130px;
-    color: #ffffff
+    color: var(--white);
 }
 
 .block__menu {
@@ -42,12 +44,12 @@
 
 .block__select-toggle-logotype {
     font-size: 30px;
-    color: #ffffff
+    color: var(--white);
 }
 
 .block__select-type-logotype {
     font-size: 40px;
-    color: #ffffff;
+    color: var(--white);
     margin: 20px;
     opacity: 0.5;
 
