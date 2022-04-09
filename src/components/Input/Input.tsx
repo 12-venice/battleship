@@ -1,6 +1,6 @@
 import M from 'materialize-css';
 import { useEffect, useState } from 'react';
-import { inputProps } from '../utils/ErrorBoundary/types';
+import { inputProps } from './types';
 import { validationFields } from './validationFields';
 
 export const Input = ({

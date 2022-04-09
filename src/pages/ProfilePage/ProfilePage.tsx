@@ -5,10 +5,10 @@ import { Layout } from '../../components/Layout';
 export const ProfilePage = (): JSX.Element => {
     const user = {
         login: 'DRZ',
-        first_name: 'Andrey',
-        second_name: 'Sharov',
+        first_name: 'Ivan',
+        second_name: 'Ivanov',
         email: 'drzz@dd.ru',
-        phone: '89151437599',
+        phone: '89101112233',
     };
     return (
         <Layout>

@@ -1,19 +1,21 @@
-import { ButtonProps } from '../utils/ErrorBoundary/types';
+// Линтер требует указать в качестве типа строку или тернераное выражение
+/* eslint-disable react/button-has-type */
+
+import { ButtonProps } from './types';
 
 export const Button = ({
     className,
     title,
     disabled = false,
     onClick,
-    type,
+    type = 'button',
 }: ButtonProps): JSX.Element => (
     <button
         className={`button ${className}`}
         disabled={disabled}
-        // eslint-disable-next-line react/button-has-type
-        type={type || 'button'}
+        type={type}
         onClick={onClick}
     >
-        <span>{title.toUpperCase()}</span>
+        <span>{title}</span>
     </button>
 );
