@@ -1,3 +1,6 @@
+@import "src/styles/variables.css";
+
 body {
     margin: 0px;
+    font-family: var(--font-family);
 }

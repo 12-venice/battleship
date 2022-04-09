@@ -1,10 +1,12 @@
+@import 'src/styles/colors.css';
+
 .home__main {
     position: absolute;
     left: 35vw;
     width: 60vw;
     height: 70vh;
     border-radius: 38px;
-    background: #1E61BE;
+    background: var(--blue);
     display: flex;
     flex-direction: column;
     align-items: center;

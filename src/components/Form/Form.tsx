@@ -24,10 +24,11 @@ export const Form = ({ fields, setData, submit }: formProps): JSX.Element => {
     };
 
     return (
-        <form className="form__main" onSubmit={handleSubmit}>
-            <div className="form__block">
-                {fields.map(
-                    (field): JSX.Element => (
+        <div className={styles.form__main}>
+            {childrensUp}
+            <form className={styles.form__block}>
+                {Object.keys(form).map(
+                    (key: string, index: number): JSX.Element => (
                         <Input
                             setValid={setValid}
                             key={uuidv4()}

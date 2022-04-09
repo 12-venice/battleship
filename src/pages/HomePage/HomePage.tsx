@@ -1,17 +1,19 @@
+import cn from 'classnames';
 import { Button } from 'src/components/Button';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.svg';
 import { Layout } from '../../components/Layout';
+import styles from './HomePage.scss';
 
 export const HomePage = (): JSX.Element => {
     const [typeOfGame, setTypeOfGame] = useState(false);
 
     return (
         <Layout>
-            <div className="home__main">
-                <div className="home__buttons">
+            <div className={styles.home__main}>
+                <div className={styles.home__buttons}>
                     <NavLink to="/">
                         <Button title="forum" />
                     </NavLink>
@@ -26,15 +28,15 @@ export const HomePage = (): JSX.Element => {
                     </NavLink>
                 </div>
                 <img
-                    className="home__image-left"
+                    className={styles.image__left}
                     src={menuLogoWithShips}
                     alt="Логотип с кораблями"
                 />
-                <span className="home__header">BATTLESHIP</span>
-                <div className="home__menu">
-                    <div className="home__select">
+                <span className={styles.block__header}>BATTLESHIP</span>
+                <div className={styles.block__menu}>
+                    <div className={styles.block__select}>
                         <div>
-                            <div className="switch">
+                            <div>
                                 <label htmlFor="toggle">
                                     <input
                                         id="toggle"
@@ -45,23 +47,31 @@ export const HomePage = (): JSX.Element => {
                                         }}
                                     />
                                     <span className="lever" />
-                                    <span className="home__select-toggle-logotype">
+                                    <span
+                                        className={
+                                            styles[
+                                                'home__select-toggle-logotype'
+                                            ]
+                                        }
+                                    >
                                         Toggle play mode!
                                     </span>
                                 </label>
                             </div>
                             <div className="home__select-type">
                                 <span
-                                    className={`home__select-type-logotype ${
-                                        !typeOfGame ? 'selected' : ''
-                                    }`}
+                                    className={cn(
+                                        styles['home__select-type-logotype'],
+                                        { selected: !typeOfGame },
+                                    )}
                                 >
                                     CLASSIC
                                 </span>
                                 <span
-                                    className={`home__select-type-logotype ${
-                                        typeOfGame ? 'selected' : ''
-                                    }`}
+                                    className={cn(
+                                        styles['home__select-type-logotype'],
+                                        { selected: !typeOfGame },
+                                    )}
                                 >
                                     ONLINE
                                 </span>
@@ -72,7 +82,7 @@ export const HomePage = (): JSX.Element => {
                         </NavLink>
                     </div>
                     <img
-                        className="home__image-right"
+                        className={styles.home__image-right}
                         src={menuLogoWithPirates}
                         alt="Логотип с пиратами"
                     />
