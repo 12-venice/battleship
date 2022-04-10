@@ -1,4 +1,5 @@
 declare const styles: {
-    readonly layout__background: string;
+  readonly "layout__background": string;
 };
 export = styles;
+
