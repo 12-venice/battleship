@@ -15,21 +15,21 @@ export const Topic: Props = ({date, name, theme, description, children}): JSX.El
     return (
         <div>
             <div className={styles.topic} onClick={handleClick}>
-                <header className={styles.header}>
+                <div className={styles.header}>
                     <h2 className={styles.theme}>
-                        { theme ? theme : "Topic" }
+                        { theme }
                     </h2>
                     <div className={styles.author}>
                         <h3 className={styles.name}>
-                            { name ? name : "NoName" }
+                            { name }
                         </h3>
                         <p className={styles.date}>
-                            { date ? date : '' }
+                            { date }
                         </p>
                     </div>
-                </header>
+                </div>
                 <p className={styles.description}>
-                { description ? description : 'No description...' }
+                { description }
                 </p>
             </div>
             { state ? children : ''}

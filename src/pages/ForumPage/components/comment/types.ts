@@ -1,8 +1,8 @@
 import { FC } from "react";
 
 type CommentProps = {
-    name: string;
-    date: string;
+    name?: string;
+    date?: string;
     description?: string;
 };
   
