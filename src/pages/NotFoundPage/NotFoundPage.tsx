@@ -12,11 +12,6 @@ export const NotFoundPage = (): JSX.Element => {
             <div className={styles.bg}>
                 <div className={styles.defeat_bg} style={{
                     backgroundImage: `url(${background})`,
-                    width: '600px',
-                    height: '849px',
-                    display: 'flex',
-                    margin: '40px auto',
-                    justifyContent: 'center',
                 }}>
                         <NavLink to="/">
                             <Button className={`${styles.btn} ${styles.btn_yellow}`} title="back" />
