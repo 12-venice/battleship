@@ -6,6 +6,7 @@ import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.svg';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
+import stylesButton from '../../components/Button/Button.scss';
 
 export const HomePage = (): JSX.Element => {
     const [typeOfGame, setTypeOfGame] = useState(false);
@@ -24,7 +25,7 @@ export const HomePage = (): JSX.Element => {
                         <Button title="profile" />
                     </NavLink>
                     <NavLink to="/auth">
-                        <Button className="red" title="x" />
+                        <Button className={stylesButton.red} title="x" />
                     </NavLink>
                 </div>
                 <img
@@ -78,7 +79,13 @@ export const HomePage = (): JSX.Element => {
                             </div>
                         </div>
                         <NavLink to="/auth">
-                            <Button className="green big" title="play" />
+                            <Button
+                                className={cn(
+                                    stylesButton.green,
+                                    stylesButton.big,
+                                )}
+                                title="play"
+                            />
                         </NavLink>
                     </div>
                     <img
