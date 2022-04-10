@@ -1,6 +1,6 @@
 // Линтер требует указать в качестве типа строку или тернераное выражение
 /* eslint-disable react/button-has-type */
-
+import cn from 'classnames';
 import { ButtonProps } from './types';
 
 export const Button = ({
@@ -11,7 +11,7 @@ export const Button = ({
     type = 'button',
 }: ButtonProps): JSX.Element => (
     <button
-        className={`button ${className}`}
+        className={cn(styles.button, className)}
         disabled={disabled}
         type={type}
         onClick={onClick}
