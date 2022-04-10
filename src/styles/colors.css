@@ -1,4 +1,7 @@
 :root {
   --blue: #1e61be;
   --white: #fff;
+  --bg-dark-gray: rgba(0, 0, 0, 0.68);
+  --light-yellow: #FDDE4F;
+  --light-green: #C8FC77;
 }

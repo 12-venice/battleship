@@ -12,6 +12,7 @@ export type State = {
 export type ButtonProps = {
     className?: string;
     title: string;
+    callback?: () => void;
 };
 
 export type inputProps = {

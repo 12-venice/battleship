@@ -1,7 +1,11 @@
+@import 'src/styles/colors.css';
+
 .bg {
+    position: absolute;
+    z-index: 10;
     height: 100vh;
     width: 100vw;
-    background: rgba(0, 0, 0, 0.68);
+    background: var(--bg-dark-gray);
     .defeat_bg {
         .buttons {
             width: 394px;
@@ -16,11 +20,11 @@
                 border-left: none;
                 border-right: none;
                 &_green {
-                    border-color: #C8FC77;
+                    border-color: var(--light-green);
                     background: radial-gradient(100% 100% at 50.31% 100%, #C8FC77 0%, #58B034 45.83%, #58B034 100%);
                 }
                 &_yellow {
-                    border-color: #FDDE4F;
+                    border-color: var(--light-yellow);
                     background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #FDBB28 50%, #FDBB28 100%);
                 }
             }
