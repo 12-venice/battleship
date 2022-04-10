@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Form } from 'src/components/Form';
 import { Layout } from '../../components/Layout';
+import styles from './AuthPage.scss';
 import { fields, headers, submit } from './config';
 
 export const AuthPage = (): JSX.Element => {
@@ -8,12 +9,14 @@ export const AuthPage = (): JSX.Element => {
 
     return (
         <Layout>
-            <div className="auth__main">
-                <span className="auth__link">{headers.title}</span>
-                <span className="auth__header">{headers.page}</span>
+            <div className={styles.auth__main}>
+                <span className={styles.auth__link}>{headers.title}</span>
+                <span className={styles.auth__header}>{headers.page}</span>
                 <Form fields={fields} setData={setData} submit={submit} />
                 <NavLink to="/register">
-                    <span className="auth__link">{headers.navigation}</span>
+                    <span className={styles.auth__link}>
+                        {headers.navigation}
+                    </span>
                 </NavLink>
             </div>
         </Layout>

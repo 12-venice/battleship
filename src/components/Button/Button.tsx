@@ -1,6 +1,7 @@
 // Линтер требует указать в качестве типа строку или тернераное выражение
 /* eslint-disable react/button-has-type */
 import cn from 'classnames';
+import styles from './Button.scss';
 import { ButtonProps } from './types';
 
 export const Button = ({

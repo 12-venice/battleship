@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Input } from '../Input';
+import styles from './Form.scss';
 import { formProps } from './types';
 
 export const Form = ({ fields, setData, submit }: formProps): JSX.Element => {
@@ -24,8 +25,8 @@ export const Form = ({ fields, setData, submit }: formProps): JSX.Element => {
     };
 
     return (
-        <form className="form__main" onSubmit={handleSubmit}>
-            <div className="form__block">
+        <form className={styles.form__main} onSubmit={handleSubmit}>
+            <div className={styles.form__block}>
                 {fields.map(
                     (field): JSX.Element => (
                         <Input

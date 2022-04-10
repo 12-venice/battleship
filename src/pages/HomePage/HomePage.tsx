@@ -28,7 +28,7 @@ export const HomePage = (): JSX.Element => {
                     </NavLink>
                 </div>
                 <img
-                    className={styles.image__left}
+                    className={styles['home__image-left']}
                     src={menuLogoWithShips}
                     alt="Логотип с кораблями"
                 />
@@ -82,7 +82,7 @@ export const HomePage = (): JSX.Element => {
                         </NavLink>
                     </div>
                     <img
-                        className={styles.image__right}
+                        className={styles['home__image-right']}
                         src={menuLogoWithPirates}
                         alt="Логотип с пиратами"
                     />
