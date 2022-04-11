@@ -44,7 +44,8 @@
         "react/function-component-definition": [2, { "namedComponents": "arrow-function" }],
         "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
         "import/no-default-export": "error",
-        "prettier/prettier": "error"
+        "prettier/prettier": ["error",{"endOfLine": "auto"}],
+        "linebreak-style": 0
     },
     "settings": {
         "import/resolver": {
