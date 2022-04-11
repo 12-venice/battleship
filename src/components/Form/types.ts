@@ -1,5 +1,5 @@
 export type formProps = {
     fields: { type: string; title: string }[];
-    setData: Function;
+    setData: () => void;
     submit: JSX.Element;
 };
