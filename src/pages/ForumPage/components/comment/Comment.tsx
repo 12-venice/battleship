@@ -23,3 +23,9 @@ export const Comment: Props = ({date, name, description}): JSX.Element => {
         </div>
     );
 };
+
+Comment.defaultProps = {
+    name: "Noname",
+    date: '',
+    description: "Default description..."
+}

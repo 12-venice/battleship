@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
 import { Props, handleClickType } from './types';
+import { Comment } from '../comment';
 
 import styles from './Topic.scss';
 
-export const Topic: Props = ({date, name, theme, description, children}): JSX.Element => {
+export const Topic: Props = ({date, name, theme, description, comments}): JSX.Element => {
 
     const [state, toggleState] = useState(false);
 
@@ -32,7 +33,16 @@ export const Topic: Props = ({date, name, theme, description, children}): JSX.El
                 { description }
                 </p>
             </div>
-            { state ? children : ''}
+            { state && comments && comments.map(comment => (
+                <Comment name={comment.name} date={comment.date} description={comment.description}/>
+            ))}
         </div>
     );
 };
+
+Topic.defaultProps = {
+    name: "Noname",
+    date: '',
+    description: "Default description...",
+    theme: "Topic"
+}

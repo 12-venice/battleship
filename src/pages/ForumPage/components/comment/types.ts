@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-type CommentProps = {
+export type CommentProps = {
     name?: string;
     date?: string;
     description?: string;
