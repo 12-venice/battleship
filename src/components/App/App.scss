@@ -1,4 +1,6 @@
+@import "src/styles/variables.css";
+
 body {
     margin: 0px;
-    font-family: 'Titan One'
+    font-family: var(--font-family);
 }

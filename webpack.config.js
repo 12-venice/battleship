@@ -3,6 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const devMode = process.env.NODE_ENV !== "production";
+
+
 module.exports = {
     entry: './src/index.tsx',
     output: {
@@ -41,11 +44,16 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
+                    devMode ? "style-loader" : MiniCssExtractPlugin.loader,
                     {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {},
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                localIdentName: '[local]_[hash:base64:5]',
+                            },
+                            sourceMap: true,
+                        },
                     },
-                    'css-loader',
                     'sass-loader',
                 ],
             },
