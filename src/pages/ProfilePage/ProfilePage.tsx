@@ -17,7 +17,7 @@ export const ProfilePage = (): JSX.Element => {
             <div className={styles.profile__main}>
                 <div className={styles['profile__block-up']}>
                     <NavLink to="/">
-                        <Button className={stylesButton.red} title="x" />
+                        <Button className={stylesButton.red} title="X" />
                     </NavLink>
                 </div>
                 <div className={styles['profile__block-center']}>
