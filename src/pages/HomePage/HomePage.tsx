@@ -37,7 +37,7 @@ export const HomePage = (): JSX.Element => {
                 <div className={styles.home__menu}>
                     <div className={styles.home__select}>
                         <div>
-                            <div>
+                            <div className="switch">
                                 <label htmlFor="toggle">
                                     <input
                                         id="toggle"

@@ -20,4 +20,13 @@
         font-size: 46px;
     }
 
+    &.wide {
+        width: 100%;
+    }
+
+    &.disable {
+        background: #cccccc;
+        color: #666666;
+    }
+
 }

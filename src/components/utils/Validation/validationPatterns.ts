@@ -1,16 +1,13 @@
 // Линтер считает, что указанны не используемые значения, в регулярном выражении - email
 /* eslint-disable no-useless-escape */
-export const validationFields: Record<
+
+export const validationPatterns: Record<
     string,
     { pattern: RegExp; error: string }
 > = {
-    first_name: {
+    name: {
         pattern: /^[А-ЯЁA-Z][А-ЯЁA-Zа-яёa-z-]+$/,
-        error: 'The name is incorrect',
-    },
-    second_name: {
-        pattern: /^[А-ЯЁA-Z][А-ЯЁA-Zа-яёa-z-]+$/,
-        error: 'The surname is incorrect',
+        error: 'This field is filled in incorrectly',
     },
     login: {
         pattern: /^(?=.*[a-zA-Z])([a-zA-Z0-9-_]){3,20}$/,

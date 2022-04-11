@@ -31,8 +31,14 @@ export const ProfilePage = (): JSX.Element => {
                     <span>{user.phone}</span>
                 </div>
                 <div className={styles['profile__block-down']}>
-                    <Button title="edit profile" />
-                    <Button title="edit password" />
+                    <Button
+                        title="edit profile"
+                        className={stylesButton.wide}
+                    />
+                    <Button
+                        title="edit password"
+                        className={stylesButton.wide}
+                    />
                 </div>
             </div>
         </Layout>
