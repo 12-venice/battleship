@@ -10,7 +10,7 @@ export type fieldsProps = {
 };
 
 export type formProps = {
-    inputs: fieldsProps[];
-    setData: (data: {}) => void;
-    submitTitle: string;
+    fields: { type: string; title: string }[];
+    setData: () => void;
+    submit: JSX.Element;
 };
