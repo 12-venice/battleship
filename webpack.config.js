@@ -2,7 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { TypedCssModulesPlugin } = require('typed-css-modules-webpack-plugin');
 
 const devMode = process.env.NODE_ENV !== "production";
 
@@ -66,9 +65,6 @@ module.exports = {
         }),
         new MiniCssExtractPlugin({
             filename: 'style-[hash].css',
-        }),
-        new TypedCssModulesPlugin({
-            globPattern: 'src/**/*.scss',
         }),
     ],
     devServer: {

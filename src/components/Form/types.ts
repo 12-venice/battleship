@@ -11,6 +11,6 @@ export type fieldsProps = {
 
 export type formProps = {
     inputs: fieldsProps[];
-    setData: Function;
+    setData: (data: {}) => void;
     submitTitle: string;
 };

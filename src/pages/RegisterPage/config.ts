@@ -9,7 +9,6 @@ export const inputs = [
         validateType: 'name',
         title: 'First name',
         name: 'first_name',
-        defaultValue: 'Andrey',
     },
     {
         validateType: 'name',
