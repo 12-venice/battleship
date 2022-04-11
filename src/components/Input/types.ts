@@ -4,6 +4,6 @@ export type inputProps = {
     type: string;
     title: string;
     value: string;
-    setValid: Function;
+    setValid: () => void;
     onChange: ChangeEventHandler<HTMLInputElement>;
 };
