@@ -1,67 +1,68 @@
-export default [
+export const dataForum = [
     {
-        name: "Fedor",
+        name: 'Fedor',
         date: '02.04.22',
-        description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ullam nam inventore fugit suscipit!',
-        theme: "Topic 1",
+        description:
+            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ullam nam inventore fugit suscipit!',
+        theme: 'Topic 1',
         comments: [
             {
-                name: "Dima",
+                name: 'Dima',
                 date: '02.04.22',
-                description: "Some text..."
+                description: 'Some text...',
             },
             {
-                name: "Jo",
+                name: 'Jo',
                 date: '02.04.22',
-                description: "Try again!"
+                description: 'Try again!',
             },
             {
-                name: "Inna",
+                name: 'Inna',
                 date: '03.04.22',
-                description: "Oh, shit!"
+                description: 'Oh, shit!',
             },
-        ]
+        ],
     },
     {
-        name: "Inna",
+        name: 'Inna',
         date: '04.04.22',
-        description: "Cool app!!!",
-        theme: "Best app!",
+        description: 'Cool app!!!',
+        theme: 'Best app!',
         comments: [
             {
-                name: "Admin",
+                name: 'Admin',
                 date: '04.04.22',
-                description: "Of course!"
+                description: 'Of course!',
             },
             {
-                name: "Jhon",
+                name: 'Jhon',
                 date: '04.04.22',
-                description: "+"
+                description: '+',
             },
             {
-                name: "Dino",
+                name: 'Dino',
                 date: '04.04.22',
-                description: "Yes"
+                description: 'Yes',
             },
-        ]
+        ],
     },
     {
-        name: "Luna",
+        name: 'Luna',
         date: '06.04.22',
-        description: "Learning button does not work",
-        theme: "Lol, help me!",
+        description: 'Learning button does not work',
+        theme: 'Lol, help me!',
     },
     {
-        name: "IvanPro100TopNumberOne",
+        name: 'IvanPro100TopNumberOne',
         date: '09.04.22',
         description: "I'm the best.",
-        theme: "IVAN",
+        theme: 'IVAN',
         comments: [
             {
-                name: "Pasha",
+                name: 'Pasha',
                 date: '11.04.22',
-                description: "Ahahahaha"
+                description: 'Ahahahaha',
             },
-        ]
+        ],
     },
-]
+];

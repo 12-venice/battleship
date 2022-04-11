@@ -1,1 +1,1 @@
-export * from './Topic'
+export * from './Topic';

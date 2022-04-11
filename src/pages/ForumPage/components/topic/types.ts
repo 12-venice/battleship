@@ -1,6 +1,6 @@
-import { MouseEvent, FC } from "react";
+import { FC, MouseEventHandler } from 'react';
 
-import { CommentProps } from "../comment/types"
+import { CommentProps } from '../comment/types';
 
 type TopicProps = {
     name?: string;
@@ -10,6 +10,6 @@ type TopicProps = {
     comments?: CommentProps[];
 };
 
-export type handleClickType = (event: MouseEvent<HTMLDivElement>) => void
-  
+export type handleClickType = MouseEventHandler<HTMLDivElement>;
+
 export type Props = FC<TopicProps>;
