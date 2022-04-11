@@ -1,35 +1,50 @@
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { Input } from '../Input';
-import { formProps } from '../utils/ErrorBoundary/types';
 import styles from './Form.scss';
+import { formProps } from './types';
 
-export const Form = ({
-    form,
-    setForm,
-    childrensUp,
-    childrensDown,
-}: formProps): JSX.Element => {
+export const Form = ({ fields, setData, submit }: formProps): JSX.Element => {
+    const [valid, setValid] = useState(false);
+    const [formFields, setFormFields] = useState(
+        fields.reduce((obj, item) => ({ ...obj, ...{ [item.type]: '' } }), {}),
+    );
     const changeHandler = (
         event: React.ChangeEvent<HTMLInputElement>,
     ): void => {
-        setForm({ ...form, [event.target.name]: event.target.value });
+        setFormFields({
+            ...formFields,
+            [event.target.name]: event.target.value,
+        });
     };
+    const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if (valid) {
+            setData(formFields);
+        }
+    };
+
     return (
-        <div className={styles.form__main}>
-            {childrensUp}
-            <form className={styles.form__block}>
-                {Object.keys(form).map(
-                    (key: string, index: number): JSX.Element => (
+        <form className={styles.form__main} onSubmit={handleSubmit}>
+            <div className={styles.form__block}>
+                {fields.map(
+                    (field): JSX.Element => (
                         <Input
-                            key={index as any}
-                            value={(form as any)[key]}
-                            title={key}
-                            name={key}
+                            setValid={setValid}
+                            key={uuidv4()}
+                            type={field.type}
+                            value={
+                                formFields[
+                                    field.type as keyof typeof formFields
+                                ]
+                            }
+                            title={field.title}
                             onChange={changeHandler}
                         />
                     ),
                 )}
-            </form>
-            {childrensDown}
-        </div>
+            </div>
+            {submit}
+        </form>
     );
 };
