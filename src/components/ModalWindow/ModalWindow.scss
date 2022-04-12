@@ -12,12 +12,14 @@
 }
 .modal__plate {
     background: var(--blue);
-}
-.modal__plate-no-bg {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin: 0 auto;
     border-radius: 38px;
     align-items: center;
+    padding: 45px;
+}
+.modal__plate-no-bg {
+    background: none;
 }

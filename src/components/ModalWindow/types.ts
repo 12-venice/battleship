@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 type ModalWindowProps = {
-    background?: boolean;
+    noBackground?: boolean;
 };
 
 export type Props = FC<ModalWindowProps>;
