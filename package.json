@@ -6,7 +6,9 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "dev": "webpack serve --mode development --open --hot",
-    "start": "webpack --mode production",
+    "build": "webpack --mode production",
+    "start": "npm run build && npm run server",
+    "server": "node app.js",
     "stylelint": "stylelint src/**/*.css",
     "stylelint:fix": "stylelint src/**/*.css --fix",
     "eslint": "eslint ./src --ext .js,.ts,.tsx --cache",
@@ -56,6 +58,7 @@
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
     "classnames": "^2.3.1",
+    "express": "4.17.3",
     "materialize-css": "^1.0.0-rc.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
