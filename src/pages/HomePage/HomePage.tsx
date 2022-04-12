@@ -3,7 +3,7 @@ import { Button } from 'src/components/Button';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
-import menuLogoWithPirates from '../../../images/menuLogoWithPirates.svg';
+import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
 import stylesButton from '../../components/Button/Button.scss';
@@ -16,16 +16,16 @@ export const HomePage = (): JSX.Element => {
             <div className={styles.home__main}>
                 <div className={styles.home__buttons}>
                     <NavLink to="/">
-                        <Button title="forum" />
+                        <Button title="FORUM" />
                     </NavLink>
                     <NavLink to="/">
-                        <Button title="leaders" />
+                        <Button title="LEADERS" />
                     </NavLink>
                     <NavLink to="/profile">
-                        <Button title="profile" />
+                        <Button title="PROFILE" />
                     </NavLink>
                     <NavLink to="/auth">
-                        <Button className={stylesButton.red} title="x" />
+                        <Button className={stylesButton.red} title="X" />
                     </NavLink>
                 </div>
                 <img
@@ -37,7 +37,7 @@ export const HomePage = (): JSX.Element => {
                 <div className={styles.home__menu}>
                     <div className={styles.home__select}>
                         <div>
-                            <div>
+                            <div className="switch">
                                 <label htmlFor="toggle">
                                     <input
                                         id="toggle"
@@ -63,7 +63,7 @@ export const HomePage = (): JSX.Element => {
                                 <span
                                     className={cn(
                                         styles['home__select-type-logotype'],
-                                        { selected: !typeOfGame },
+                                        !typeOfGame ? styles.selected : '',
                                     )}
                                 >
                                     CLASSIC
@@ -71,7 +71,7 @@ export const HomePage = (): JSX.Element => {
                                 <span
                                     className={cn(
                                         styles['home__select-type-logotype'],
-                                        { selected: !typeOfGame },
+                                        typeOfGame ? styles.selected : '',
                                     )}
                                 >
                                     ONLINE
@@ -84,7 +84,7 @@ export const HomePage = (): JSX.Element => {
                                     stylesButton.green,
                                     stylesButton.big,
                                 )}
-                                title="play"
+                                title="PLAY"
                             />
                         </NavLink>
                     </div>
