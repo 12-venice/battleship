@@ -1,11 +1,7 @@
-// todo: разобраться с импортом
-//  Ошибка: Unable to resolve path to module 'images/ships/ship1.png'
-/* eslint-disable */
 import ship1Img from 'images/ships/ship1.png';
 import ship2Img from 'images/ships/ship2.png';
 import ship3Img from 'images/ships/ship3.png';
 import ship4Img from 'images/ships/ship4.png';
-/* eslint-enable */
 import {
     IMG_WIDTH,
     MARGIN,
@@ -22,7 +18,7 @@ const shipsSrc = new Map([
 
 export const getCurrentShips = (ships: Props['ships']) =>
     ships.reduce((acc, { id, type, visible }, index) => {
-    if (visible) return acc;
+    if (!visible) return acc;
 
     const src = shipsSrc.has(type) ? shipsSrc.get(type) : '';
 
@@ -35,10 +31,12 @@ export const getCurrentShips = (ships: Props['ships']) =>
         left = (IMG_WIDTH + MARGIN) * (index - 2);
     }
 
-    return acc.push({
+    acc.push({
         id,
         src,
         bottom,
         left,
     });
+
+    return acc;
 }, []);
