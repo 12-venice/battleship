@@ -8,11 +8,11 @@ export const Comment: Props = ({
     description = 'Default description...',
 }): JSX.Element => (
     <div className={styles.comment}>
-        <div className={styles.header}>
-            <p className={styles.description}>{description}</p>
-            <div className={styles.author}>
-                <h3 className={styles.name}>{name}</h3>
-                <p className={styles.date}>{date}</p>
+        <div className={styles.comment__header}>
+            <p className={styles.comment__description}>{description}</p>
+            <div className={styles.comment__author}>
+                <h3 className={styles['comment__author-name']}>{name}</h3>
+                <p className={styles['comment__author-date']}>{date}</p>
             </div>
         </div>
     </div>
