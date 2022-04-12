@@ -2,9 +2,9 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
-const devMode = process.env.NODE_ENV !== "production";
-
+const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
     entry: './src/index.tsx',
@@ -44,7 +44,7 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-                    devMode ? "style-loader" : MiniCssExtractPlugin.loader,
+                    devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
                         options: {
@@ -62,10 +62,18 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './www/index.html',
+            filename: 'index.html',
+            minify: {
+                collapseWhitespace: true,
+                removeComments: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+            },
         }),
         new MiniCssExtractPlugin({
             filename: 'style-[hash].css',
         }),
+        new FaviconsWebpackPlugin('./images/menuLogoWithPirates.png'),
     ],
     devServer: {
         static: {
