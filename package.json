@@ -6,8 +6,8 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "dev": "webpack serve --mode development --open --hot",
-    "build": "npm run clean && webpack install && webpack --mode production",
-    "start": "npm run build && npm run server",
+    "build": "npm run clean && webpack --mode production",
+    "start": "npm run server",
     "server": "node app.js",
     "stylelint": "stylelint src/**/*.css",
     "stylelint:fix": "stylelint src/**/*.css --fix",
