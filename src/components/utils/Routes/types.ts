@@ -4,4 +4,5 @@ export const enum PageLinks {
     game = '/battleship',
     register = '/register',
     profile = '/profile',
+    forum = '/forum',
 }
