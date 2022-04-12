@@ -2,41 +2,43 @@ import cn from 'classnames';
 import { Button } from 'src/components/Button';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
+import { PageLinks } from 'src/components/utils/Routes/types';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
-import menuLogoWithPirates from '../../../images/menuLogoWithPirates.svg';
+import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
+import stylesButton from '../../components/Button/Button.scss';
 
 export const HomePage = (): JSX.Element => {
     const [typeOfGame, setTypeOfGame] = useState(false);
 
     return (
         <Layout>
-            <div className={styles.block__main}>
-                <div className={styles.block__buttons}>
-                    <NavLink to="/">
-                        <Button title="forum" />
+            <div className={styles.home__main}>
+                <div className={styles.home__buttons}>
+                    <NavLink to={PageLinks.forum}>
+                        <Button title="FORUM" />
                     </NavLink>
                     <NavLink to="/">
-                        <Button title="leaders" />
+                        <Button title="LEADERS" />
                     </NavLink>
-                    <NavLink to="/">
-                        <Button title="profile" />
+                    <NavLink to={PageLinks.profile}>
+                        <Button title="PROFILE" />
                     </NavLink>
-                    <NavLink to="/auth">
-                        <Button className="red" title="x" />
+                    <NavLink to={PageLinks.auth}>
+                        <Button className={stylesButton.red} title="X" />
                     </NavLink>
                 </div>
                 <img
-                    className={styles.image__left}
+                    className={styles['home__image-left']}
                     src={menuLogoWithShips}
                     alt="Логотип с кораблями"
                 />
-                <span className={styles.block__header}>BATTLESHIP</span>
-                <div className={styles.block__menu}>
-                    <div className={styles.block__select}>
+                <span className={styles.home__header}>BATTLESHIP</span>
+                <div className={styles.home__menu}>
+                    <div className={styles.home__select}>
                         <div>
-                            <div>
+                            <div className="switch">
                                 <label htmlFor="toggle">
                                     <input
                                         id="toggle"
@@ -50,7 +52,7 @@ export const HomePage = (): JSX.Element => {
                                     <span
                                         className={
                                             styles[
-                                                'block__select-toggle-logotype'
+                                                'home__select-toggle-logotype'
                                             ]
                                         }
                                     >
@@ -58,31 +60,37 @@ export const HomePage = (): JSX.Element => {
                                     </span>
                                 </label>
                             </div>
-                            <div className="block__select-type">
+                            <div className="home__select-type">
                                 <span
                                     className={cn(
-                                        styles['block__select-type-logotype'],
-                                        { selected: !typeOfGame },
+                                        styles['home__select-type-logotype'],
+                                        !typeOfGame ? styles.selected : '',
                                     )}
                                 >
                                     CLASSIC
                                 </span>
                                 <span
                                     className={cn(
-                                        styles['block__select-type-logotype'],
-                                        { selected: !typeOfGame },
+                                        styles['home__select-type-logotype'],
+                                        typeOfGame ? styles.selected : '',
                                     )}
                                 >
                                     ONLINE
                                 </span>
                             </div>
                         </div>
-                        <NavLink to="/auth">
-                            <Button className="green big" title="play" />
+                        <NavLink to={PageLinks.auth}>
+                            <Button
+                                className={cn(
+                                    stylesButton.green,
+                                    stylesButton.big,
+                                )}
+                                title="PLAY"
+                            />
                         </NavLink>
                     </div>
                     <img
-                        className={styles.image__right}
+                        className={styles['home__image-right']}
                         src={menuLogoWithPirates}
                         alt="Логотип с пиратами"
                     />

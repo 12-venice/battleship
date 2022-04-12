@@ -2,9 +2,9 @@
     background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #F1972B 38.02%, #E37D00 100%);
     border-radius: 13px;
     color: #ffffff;
-    margin: 10px 10px;
-    padding: 10px 30px;
-    font-size: 26px;
+    margin: 10px;
+    padding: 10px 50px;
+    font-size: 3vh;
     font-family: 'Titan One';
 
     &.red {
@@ -16,8 +16,17 @@
     }
 
     &.big {
-        padding: 20px 50px;
-        font-size: 46px;
+        padding: 20px 100px;
+        font-size: 7vh;
+    }
+
+    &.wide {
+        width: 100%;
+    }
+
+    &.disable {
+        background: #cccccc;
+        color: #666666;
     }
 
 }

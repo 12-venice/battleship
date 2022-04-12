@@ -1,31 +1,28 @@
-import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Button } from 'src/components/Button';
 import { Form } from 'src/components/Form';
 import { Layout } from '../../components/Layout';
 import styles from './AuthPage.scss';
+import { inputs, headers, submitTitle } from './config';
 
 export const AuthPage = (): JSX.Element => {
-    const [form, setForm] = useState({
-        Login: '',
-        Password: '',
-    });
-    const childrensUp = (
-        <span className={styles.auth__header}>AUTHORIZATION</span>
-    );
-    const childrensDown = (
-        <NavLink to="/">
-            <Button title="sign in!" />
-        </NavLink>
-    );
+    const setData = (data: {}) => data;
+
     return (
         <Layout>
-            <Form
-                form={form}
-                setForm={setForm}
-                childrensUp={childrensUp}
-                childrensDown={childrensDown}
-            />
+            <div className={styles.auth__main}>
+                <span className={styles.auth__link}>{headers.title}</span>
+                <span className={styles.auth__header}>{headers.page}</span>
+                <Form
+                    inputs={inputs}
+                    setData={setData}
+                    submitTitle={submitTitle}
+                />
+                <NavLink to="/register">
+                    <span className={styles.auth__link}>
+                        {headers.navigation}
+                    </span>
+                </NavLink>
+            </div>
         </Layout>
     );
 };
