@@ -1,3 +1,5 @@
+import { RouteComponentProps } from 'react-router-dom';
+
 export const enum PageLinks {
     home = '/',
     auth = '/auth',
@@ -5,3 +7,10 @@ export const enum PageLinks {
     register = '/register',
     profile = '/profile',
 }
+
+export interface MatchParams {
+    name: string;
+    id: string;
+}
+
+export type MatchProps = RouteComponentProps<MatchParams>;
