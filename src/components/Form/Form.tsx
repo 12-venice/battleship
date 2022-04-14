@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
+import cn from 'classnames';
 import { Button } from '../Button';
 import { Input } from '../Input';
 import styles from './Form.scss';
@@ -11,6 +12,7 @@ export const Form = ({
     inputs,
     setData,
     submitTitle,
+    disabled = false,
 }: formProps): JSX.Element => {
     const [fields, setFields] = useState(inputs);
     let formValues = fields.reduce(
@@ -60,8 +62,12 @@ export const Form = ({
             </div>
             <Button
                 type="submit"
+                disabled={disabled}
                 title={submitTitle}
-                className={stylesButton.wide}
+                className={cn(
+                    stylesButton.wide,
+                    disabled && stylesButton.disable,
+                )}
             />
         </form>
     );

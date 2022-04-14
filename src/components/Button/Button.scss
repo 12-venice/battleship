@@ -3,7 +3,7 @@
     border-radius: 13px;
     color: #ffffff;
     margin: 10px;
-    padding: 10px 50px;
+    padding: 10px 25px;
     font-size: 3vh;
     font-family: 'Titan One';
 
@@ -15,9 +15,18 @@
         background: radial-gradient(100% 100% at 50.31% 100%, #C8FC77 0%, #58B034 45.83%, #58B034 100%);
     }
 
+    &.blue {
+        background: radial-gradient(100% 100% at 50.31% 100%, #BADFFF 0%, #6FABFF 45.83%, #3A8DFF 100%);
+        border-radius: 26.778px;
+    }
+
     &.big {
         padding: 20px 100px;
         font-size: 7vh;
+    }
+
+    &.slim {
+        padding: 10px 20px;
     }
 
     &.wide {

@@ -1,3 +1,47 @@
-  input {
-    color: #eeeeee;
-  }
+input[type=text]:not([readonly]) {
+  color: #2F80ED;
+  border: 1px solid #2F80ED;
+  border-radius: 13px;
+  background: #ffffff;
+  padding-left: 10px;
+}
+
+input[type=text]+label {
+  color: #2F80ED;
+  left: 10px
+}
+
+input[type=text]:not(.browser-default):focus:not([readonly]) {
+  border: 1px solid #2F80ED;
+  border-radius: 13px;
+  background: #ffffff;
+  box-shadow: 0 1px 0 0 #2F80ED;
+}
+
+input[type=text]:not(.browser-default):focus:not([readonly])+label {
+  color: #ffffff;
+}
+
+input[type=password]:not([readonly]) {
+  color: #2F80ED;
+  border: 1px solid #2F80ED;
+  border-radius: 13px;
+  background: #ffffff;
+  padding-left: 10px;
+}
+
+input[type=password]+label {
+  color: #2F80ED;
+  left: 10px
+}
+
+input[type=password]:not(.browser-default):focus:not([readonly]) {
+  border: 1px solid #2F80ED;
+  border-radius: 13px;
+  background: #ffffff;
+  box-shadow: 0 1px 0 0 #2F80ED;
+}
+
+input[type=password]:not(.browser-default):focus:not([readonly])+label {
+  color: #ffffff;
+}

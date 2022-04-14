@@ -1,52 +1,53 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useHttp } from './http.hook';
 
-const storageName = 'userData';
+const storageName = 'bShip';
 
 export const useAuth = () => {
-    const [token, setToken] = useState(null);
-    const [ready, setReady] = useState(false);
-    const [userId, setUserId] = useState(null);
+    const { request } = useHttp();
+    const [isAuth, setIsAuth] = useState(false);
+    const [user, setUser] = useState({
+        id: '',
+        first_name: '',
+        second_name: '',
+        display_name: '',
+        login: '',
+        email: '',
+        phone: '',
+        avatar: '',
+    });
 
-    const login = useCallback((jwtToken, id) => {
-        setToken(jwtToken);
-        setUserId(id);
-
+    const login = useCallback(async () => {
+        setIsAuth(true);
+        const fetched = await request('/auth/user', 'GET', null);
+        setUser(fetched);
         localStorage.setItem(
             storageName,
             JSON.stringify({
-                userId: id,
-                token: jwtToken,
+                isAuth: true,
             }),
         );
-    }, []);
+    }, [request]);
 
-    const logout = useCallback((jwtToken, id) => {
-        setToken(null);
-        setUserId(null);
-
-        localStorage.removeItem(
-            storageName,
-            JSON.stringify({
-                userId: id,
-                token: jwtToken,
-            }),
-        );
-    }, []);
+    const logout = useCallback(async () => {
+        await request('/auth/logout', 'POST', null);
+        setIsAuth(false);
+        localStorage.removeItem(storageName);
+    }, [request]);
 
     useEffect(() => {
-        const data = JSON.parse(localStorage.getItem(storageName));
+        const data = JSON.parse(localStorage.getItem(storageName) || '{}');
 
-        if (data && data.token) {
-            login(data.token, data.userId);
+        if (data && data.isAuth) {
+            login();
         }
-        setReady(true);
     }, [login]);
 
     return {
         login,
         logout,
-        token,
-        userId,
-        ready,
+        isAuth,
+        user,
+        setUser,
     };
 };

@@ -16,7 +16,7 @@ export const Input = ({
     return (
         <div className="input-field">
             <input
-                style={{ width: '250px' }}
+                style={{ width: '200px' }}
                 id={name}
                 type={type}
                 name={name}
@@ -25,11 +25,7 @@ export const Input = ({
                 className={className}
                 autoComplete="new-password"
             />
-            <label
-                className={defaultValue ? 'active' : ''}
-                style={{ color: '#eeeeee' }}
-                htmlFor={name}
-            >
+            <label className={defaultValue ? 'active' : ''} htmlFor={name}>
                 {title}
             </label>
             {validateMsgFalse || validateMsgTrue ? (

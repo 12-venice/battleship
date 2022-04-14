@@ -1,7 +1,8 @@
 import cn from 'classnames';
 import { Button } from 'src/components/Button';
-import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useAuth } from 'src/hooks/auth.hook';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
@@ -9,24 +10,70 @@ import styles from './HomePage.scss';
 import stylesButton from '../../components/Button/Button.scss';
 
 export const HomePage = (): JSX.Element => {
+    const history = useHistory();
+    const { isAuth, logout } = useAuth();
     const [typeOfGame, setTypeOfGame] = useState(false);
+    const [leftBlock, setLeftBlock] = useState(<div />);
+    const [rightBlock, setRightBlock] = useState(<div />);
 
+    useEffect(() => {
+        if (isAuth) {
+            setLeftBlock(
+                <Button
+                    onClick={() => history.push('/profile')}
+                    title="PROFILE"
+                />,
+            );
+            setRightBlock(
+                <Button
+                    onClick={() => logout()}
+                    className={stylesButton.blue}
+                    title="LOG OUT"
+                />,
+            );
+        } else {
+            setLeftBlock(<div />);
+            setRightBlock(
+                <>
+                    <span
+                        aria-hidden="true"
+                        className={styles['home__button-span']}
+                        onClick={() => history.push('/auth')}
+                    >
+                        LOG IN
+                    </span>
+                    <Button
+                        onClick={() => history.push('/register')}
+                        className={stylesButton.green}
+                        title="SIGN UP"
+                    />
+                </>,
+            );
+        }
+    }, [history, isAuth, logout]);
     return (
         <Layout>
             <div className={styles.home__main}>
                 <div className={styles.home__buttons}>
-                    <NavLink to="/">
-                        <Button title="FORUM" />
-                    </NavLink>
-                    <NavLink to="/">
-                        <Button title="LEADERS" />
-                    </NavLink>
-                    <NavLink to="/profile">
-                        <Button title="PROFILE" />
-                    </NavLink>
-                    <NavLink to="/auth">
-                        <Button className={stylesButton.red} title="X" />
-                    </NavLink>
+                    <div className={styles['home__buttons-block']}>
+                        <Button
+                            onClick={() => history.push('/')}
+                            title="FORUM"
+                        />
+                        <Button
+                            onClick={() => history.push('/')}
+                            title="LEADERS"
+                        />
+                        {leftBlock}
+                        <Button
+                            onClick={() => history.push('/')}
+                            className={stylesButton.slim}
+                            title="i"
+                        />
+                    </div>
+                    <div className={styles['home__buttons-block']}>
+                        {rightBlock}
+                    </div>
                 </div>
                 <img
                     className={styles['home__image-left']}
@@ -78,15 +125,11 @@ export const HomePage = (): JSX.Element => {
                                 </span>
                             </div>
                         </div>
-                        <NavLink to="/auth">
-                            <Button
-                                className={cn(
-                                    stylesButton.green,
-                                    stylesButton.big,
-                                )}
-                                title="PLAY"
-                            />
-                        </NavLink>
+                        <Button
+                            className={cn(stylesButton.green, stylesButton.big)}
+                            onClick={() => history.push('/battleship')}
+                            title="PLAY"
+                        />
                     </div>
                     <img
                         className={styles['home__image-right']}
