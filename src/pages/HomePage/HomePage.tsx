@@ -1,8 +1,14 @@
 import cn from 'classnames';
 import { Button } from 'src/components/Button';
+<<<<<<< HEAD
 import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'src/hooks/auth.hook';
+=======
+import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { PageLinks } from 'src/components/utils/Routes/types';
+>>>>>>> main
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
@@ -55,6 +61,7 @@ export const HomePage = (): JSX.Element => {
         <Layout>
             <div className={styles.home__main}>
                 <div className={styles.home__buttons}>
+<<<<<<< HEAD
                     <div className={styles['home__buttons-block']}>
                         <Button
                             onClick={() => history.push('/')}
@@ -74,6 +81,20 @@ export const HomePage = (): JSX.Element => {
                     <div className={styles['home__buttons-block']}>
                         {rightBlock}
                     </div>
+=======
+                    <NavLink to={PageLinks.forum}>
+                        <Button title="FORUM" />
+                    </NavLink>
+                    <NavLink to="/">
+                        <Button title="LEADERS" />
+                    </NavLink>
+                    <NavLink to={PageLinks.profile}>
+                        <Button title="PROFILE" />
+                    </NavLink>
+                    <NavLink to={PageLinks.auth}>
+                        <Button className={stylesButton.red} title="X" />
+                    </NavLink>
+>>>>>>> main
                 </div>
                 <img
                     className={styles['home__image-left']}
@@ -125,11 +146,23 @@ export const HomePage = (): JSX.Element => {
                                 </span>
                             </div>
                         </div>
+<<<<<<< HEAD
                         <Button
                             className={cn(stylesButton.green, stylesButton.big)}
                             onClick={() => history.push('/battleship')}
                             title="PLAY"
                         />
+=======
+                        <NavLink to={PageLinks.auth}>
+                            <Button
+                                className={cn(
+                                    stylesButton.green,
+                                    stylesButton.big,
+                                )}
+                                title="PLAY"
+                            />
+                        </NavLink>
+>>>>>>> main
                     </div>
                     <img
                         className={styles['home__image-right']}
