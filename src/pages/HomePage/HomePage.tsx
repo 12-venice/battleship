@@ -8,7 +8,7 @@ import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
 import stylesButton from '../../components/Button/Button.scss';
-import { Information } from '../GamePage/components/Area/components/information';
+import { Information } from '../../components/Information';
 
 export const HomePage = (): JSX.Element => {
     const [typeOfGame, setTypeOfGame] = useState(false);
