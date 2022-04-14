@@ -12,6 +12,7 @@ export const Button = ({
     skin = 'regular',
     color,
     noFill,
+    className,
 }: ButtonProps): JSX.Element => (
     <button
         className={cn(
@@ -20,6 +21,7 @@ export const Button = ({
             color && styles[`button-color_${color}`],
             noFill && styles['button_no-fill'],
             disabled && styles.button_disable,
+            className,
         )}
         disabled={disabled}
         type={type}
