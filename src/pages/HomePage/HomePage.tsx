@@ -13,22 +13,22 @@ export const HomePage = (): JSX.Element => {
     const [typeOfGame, setTypeOfGame] = useState(false);
     const [info, setInfo] = useState(false);
 
-    const getInfo = () => setInfo(true);
+    const getInfo = () => setInfo(!info);
 
     return (
         <Layout>
-            {info && <Information />}
+            {info && <Information close={getInfo} />}
             <div className={styles.home__main}>
                 <div className={styles.home__buttons}>
                     <NavLink to={PageLinks.forum}>
                         <Button title="FORUM" />
                     </NavLink>
-                    <Button title="LEADERS" onClick={getInfo} />
+                    <Button title="LEADERS" />
                     <NavLink to={PageLinks.profile}>
                         <Button title="PROFILE" />
                     </NavLink>
                     <NavLink to="/">
-                        <Button title="i" skin="quad" />
+                        <Button title="i" skin="quad" onClick={getInfo} />
                     </NavLink>
                     <NavLink to={PageLinks.auth}>
                         <Button skin="auth" title="LOG OUT" color="blue" />

@@ -1,25 +1,10 @@
 @import 'src/styles/colors.css';
 @import 'src/styles/variables.css';
 
-.information__btn {
-    width: 249px;
-    height: 78px;
-    font-size: 36px;
-    border: 6px solid;
-    border-bottom: none;
-    border-left: none;
-    border-right: none;
-    margin-bottom: 50px;
-    &_green {
-        border-color: var(--light-green);
-        background: radial-gradient(100% 100% at 50.31% 100%, #C8FC77 0%, #58B034 45.83%, #58B034 100%);
-    }
-}
 .information__label {
     color: var(--white);
     font-size: 41px;
     margin: 0;
-    margin-top: 50px;
 }
 .information__description {
     font-family: var(--font-family-second);
