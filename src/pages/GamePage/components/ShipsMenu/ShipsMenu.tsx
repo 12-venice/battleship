@@ -1,3 +1,5 @@
+// надо разобраться с преттиер
+/* eslint-disable */
 import { useMemo } from 'react';
 import { getCurrentShips } from './helpers/getCurrentShips';
 import { CONTAINER_WIDTH, CONTAINER_HEIGHT } from './data';
