@@ -1,35 +1,63 @@
+import { v4 as uuidv4 } from 'uuid';
+import { useState } from 'react';
+import { Button } from '../Button';
 import { Input } from '../Input';
-import { formProps } from '../utils/ErrorBoundary/types';
 import styles from './Form.scss';
+import { formProps } from './types';
+import { validation } from '../utils/Validation/validation';
 
 export const Form = ({
-    form,
-    setForm,
-    childrensUp,
-    childrensDown,
+    inputs,
+    setData,
+    submitTitle,
 }: formProps): JSX.Element => {
+    const [fields, setFields] = useState(inputs);
+    let formValues = fields.reduce(
+        (obj, item) => ({
+            ...obj,
+            ...{ [item.name]: item.defaultValue ? item.defaultValue : '' },
+        }),
+        {},
+    );
+
     const changeHandler = (
         event: React.ChangeEvent<HTMLInputElement>,
     ): void => {
-        setForm({ ...form, [event.target.name]: event.target.value });
+        formValues = {
+            ...formValues,
+            ...{ [event.target.name]: event.target.value },
+        };
     };
+
+    const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const { valid, newFields } = validation(fields, formValues);
+        if (valid) {
+            setData(formValues);
+        }
+        setFields(newFields);
+    };
+
     return (
-        <div className={styles.form__main}>
-            {childrensUp}
-            <form className={styles.form__block}>
-                {Object.keys(form).map(
-                    (key: string, index: number): JSX.Element => (
+        <form className={styles.form__main} onSubmit={handleSubmit}>
+            <div className={styles.form__block}>
+                {fields.map(
+                    (field): JSX.Element => (
                         <Input
-                            key={index as any}
-                            value={(form as any)[key]}
-                            title={key}
-                            name={key}
+                            defaultValue={field.defaultValue}
+                            className={field.className}
+                            validateMsgTrue={field.validateMsgTrue}
+                            validateMsgFalse={field.validateMsgFalse}
+                            key={uuidv4()}
+                            type={field.type}
+                            title={field.title}
+                            name={field.name}
                             onChange={changeHandler}
                         />
                     ),
                 )}
-            </form>
-            {childrensDown}
-        </div>
+            </div>
+            <Button type="submit" title={submitTitle} skin="wide" />
+        </form>
     );
 };

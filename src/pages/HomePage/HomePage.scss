@@ -1,55 +1,59 @@
 @import 'src/styles/colors.css';
 
-.block__main {
+.home__main {
     position: absolute;
-    left: 500px;
-    width: 65%;
-    height: 80vh;
+    left: 38vw;
+    width: 60vw;
+    height: 85vh;
     border-radius: 38px;
     background: var(--blue);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding: 1vh;
 }
 
-.block__buttons {
+.home__buttons {
+    padding: 40px;
     display: flex;
     flex-direction: row;
+    flex-wrap:wrap-reverse;
     align-items: center;
     justify-content: space-between;
 }
 
-.block__header {
-    font-size: 130px;
-    color: var(--white);
+.home__header {
+    font-size: 15vh;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
 }
 
-.block__menu {
+.home__menu {
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
 }
 
-.block__select {
-    height: 25vh;
-    width: 90%;
+.home__select {
+    margin-left: 10vw;
+    height: 40vh;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     justify-content: space-between;
-    align-items: flex-end;
 }
 
-.block__select-toggle-logotype {
-    font-size: 30px;
-    color: var(--white);
+.home__select-toggle-logotype {
+    font-size: 3vh;
+    color: #ffffff
 }
 
-.block__select-type-logotype {
-    font-size: 40px;
-    color: var(--white);
+.home__select-type-logotype {
+    font-size: 4vh;
+    color: #ffffff;
     margin: 20px;
     opacity: 0.5;
 
@@ -58,15 +62,16 @@
     }
 }
 
-.image__left {
+.home__image-left {
     z-index: 2;
     position: absolute;
-    left: -500px;
-    width: 60%;
-    height: 60vh;
+    top: calc(50vh - 400px);
+    left: -33vw;
+    width: 75vh;
+    height: 75vh;
 }
 
-.image__right {
-    height: 100%;
-    transform: scale(-1, 1);
+.home__image-right {
+    margin-left: 5vw;
+    height: 45vh;
 }

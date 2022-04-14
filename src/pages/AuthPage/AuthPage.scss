@@ -1,4 +1,18 @@
+.auth__main {
+    border-radius: 38px;
+    padding: 40px 30px;
+    background: #1E61BE;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .auth__header {
     font-size: 30px;
-    color: #ffffff
+}
+
+.auth__link {
+    color: #ffffff;
+    font-size: 20px;
 }

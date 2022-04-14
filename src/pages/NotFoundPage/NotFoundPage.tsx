@@ -6,18 +6,19 @@ import { Layout } from '../../components/Layout';
 import styles from './NotFoundPage.scss';
 import background from '../../../images/error_img.png';
 
-export const NotFoundPage = (): JSX.Element => {
-    return (
-        <Layout>
-            <div className={styles.bg}>
-                <div className={styles.defeat_bg} style={{
+export const NotFoundPage = (): JSX.Element => (
+    <Layout>
+        <div className={styles.bg}>
+            <div
+                className={styles.defeat_bg}
+                style={{
                     backgroundImage: `url(${background})`,
-                }}>
-                        <NavLink to="/">
-                            <Button className={`${styles.btn} ${styles.btn_yellow}`} title="back" />
-                        </NavLink>
-                </div>
+                }}
+            >
+                <NavLink to="/">
+                    <Button skin="high" title="back" />
+                </NavLink>
             </div>
-        </Layout>
-    );
-};
+        </div>
+    </Layout>
+);

@@ -1,0 +1,25 @@
+@import 'src/styles/colors.css';
+@import 'src/styles/variables.css';
+
+.modal__background {
+    position: absolute;
+    z-index: 10;
+    height: 100vh;
+    width: 100vw;
+    background: var(--bg-dark-gray);
+    display: flex;
+    align-items: center;
+}
+.modal__plate {
+    background: var(--blue);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0 auto;
+    border-radius: 38px;
+    align-items: center;
+    padding: 45px;
+}
+.modal__plate-no-bg {
+    background: none;
+}
