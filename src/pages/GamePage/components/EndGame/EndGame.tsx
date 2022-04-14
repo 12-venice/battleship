@@ -4,7 +4,7 @@ import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
 import { Props } from './types';
 
-import styles from './EndGameModule.scss';
+import styles from './EndGame.scss';
 import defeatImg from '../../../../../images/defeat_img.png';
 import victoryImg from '../../../../../images/victory_img.png';
 
