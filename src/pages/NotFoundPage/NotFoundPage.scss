@@ -1,31 +1,15 @@
 @import 'src/styles/colors.css';
 
-.bg {
-    height: 100vh;
-    width: 100vw;
-    background: var(--bg-dark-gray);
-    .defeat_bg {
-        width: 600px;
-        height: 849px;
-        display: flex;
-        margin: 40px auto;
-        align-items: center;
-        flex-direction: column-reverse;
-        .btn {
-            margin-bottom: 100px;
-            padding: 0;
-            width: 380px;
-            height: 57px;
-            font-size: 36px;
-            line-height: 36px;
-            border: 6px solid;
-            border-bottom: none;
-            border-left: none;
-            border-right: none;
-            &_yellow {
-                border-color: var(--light-yellow);
-                background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #FDBB28 50%, #FDBB28 100%);
-            }
-        }
-    }
+.error__logo {
+    display: flex;
+    margin: 40px auto;
+    align-items: center;
+    flex-direction: column-reverse;
+    width: 90%;
+}
+
+.error__button {
+    position: absolute;
+    left: calc(50vw - 175px/2);
+    top: calc(50vh + 210px);
 }

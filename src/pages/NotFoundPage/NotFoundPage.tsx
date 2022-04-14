@@ -1,24 +1,19 @@
 import { NavLink } from 'react-router-dom';
 
 import { Button } from 'src/components/Button';
+import { ModalWindow } from 'src/components/ModalWindow';
 import { Layout } from '../../components/Layout';
 
 import styles from './NotFoundPage.scss';
-import background from '../../../images/error_img.png';
+import errorBg from '../../../images/error_img.png';
 
 export const NotFoundPage = (): JSX.Element => (
     <Layout>
-        <div className={styles.bg}>
-            <div
-                className={styles.defeat_bg}
-                style={{
-                    backgroundImage: `url(${background})`,
-                }}
-            >
-                <NavLink to="/">
-                    <Button skin="high" title="back" />
-                </NavLink>
-            </div>
-        </div>
+        <ModalWindow noBackground>
+            <img className={styles.error__logo} src={errorBg} alt="error img" />
+            <NavLink to="/" className={styles.error__button}>
+                <Button skin="high" title="HOME" color="yellow" />
+            </NavLink>
+        </ModalWindow>
     </Layout>
 );
