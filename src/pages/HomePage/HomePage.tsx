@@ -8,20 +8,23 @@ import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
 import stylesButton from '../../components/Button/Button.scss';
+import { Information } from '../GamePage/components/Area/components/information';
 
 export const HomePage = (): JSX.Element => {
     const [typeOfGame, setTypeOfGame] = useState(false);
+    const [info, setInfo] = useState(false);
+
+    const getInfo = () => setInfo(true);
 
     return (
         <Layout>
+            {info && <Information />}
             <div className={styles.home__main}>
                 <div className={styles.home__buttons}>
                     <NavLink to={PageLinks.forum}>
                         <Button title="FORUM" />
                     </NavLink>
-                    <NavLink to="/">
-                        <Button title="LEADERS" />
-                    </NavLink>
+                    <Button title="LEADERS" onClick={getInfo} />
                     <NavLink to={PageLinks.profile}>
                         <Button title="PROFILE" />
                     </NavLink>

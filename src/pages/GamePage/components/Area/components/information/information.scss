@@ -1,24 +1,7 @@
 @import 'src/styles/colors.css';
+@import 'src/styles/variables.css';
 
-.bg {
-    position: absolute;
-    z-index: 10;
-    height: 100vh;
-    width: 100vw;
-    background: var(--bg-dark-gray);
-}
-.plate {
-    background: var(--blue);
-    width: 516px;
-    height: 655px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: 150px auto 0;
-    border-radius: 38px;
-    align-items: center;
-}
-.btn {
+.information__btn {
     width: 249px;
     height: 78px;
     font-size: 36px;
@@ -32,13 +15,13 @@
         background: radial-gradient(100% 100% at 50.31% 100%, #C8FC77 0%, #58B034 45.83%, #58B034 100%);
     }
 }
-.label {
+.information__label {
     color: var(--white);
     font-size: 41px;
     margin: 0;
     margin-top: 50px;
 }
-.description {
+.information__description {
     font-family: var(--font-family-second);
     color: var(--white);
     font-size: 24px;
