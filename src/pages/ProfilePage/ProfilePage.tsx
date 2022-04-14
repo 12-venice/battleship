@@ -2,7 +2,6 @@ import { NavLink } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { Layout } from '../../components/Layout';
 import styles from './ProfilePage.scss';
-import stylesButton from '../../components/Button/Button.scss';
 
 export const ProfilePage = (): JSX.Element => {
     const user = {
@@ -17,7 +16,7 @@ export const ProfilePage = (): JSX.Element => {
             <div className={styles.profile__main}>
                 <div className={styles['profile__block-up']}>
                     <NavLink to="/">
-                        <Button className={stylesButton.red} title="X" />
+                        <Button skin="quad" color="red" title="X" />
                     </NavLink>
                 </div>
                 <div className={styles['profile__block-center']}>
@@ -31,14 +30,8 @@ export const ProfilePage = (): JSX.Element => {
                     <span>{user.phone}</span>
                 </div>
                 <div className={styles['profile__block-down']}>
-                    <Button
-                        title="edit profile"
-                        className={stylesButton.wide}
-                    />
-                    <Button
-                        title="edit password"
-                        className={stylesButton.wide}
-                    />
+                    <Button title="EDIT PROFILE" skin="wide" />
+                    <Button title="EDIT PASSWORD" skin="wide" />
                 </div>
             </div>
         </Layout>

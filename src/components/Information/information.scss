@@ -1,0 +1,16 @@
+@import 'src/styles/colors.css';
+@import 'src/styles/variables.css';
+
+.information__label {
+    color: var(--white);
+    font-size: 41px;
+    margin: 0;
+}
+.information__description {
+    font-family: var(--font-family-second);
+    color: var(--white);
+    font-size: 24px;
+    line-height: 28px;
+    text-align: center;
+    width: 368px;
+}

@@ -16,4 +16,4 @@ export const inputs = [
     },
 ];
 
-export const submitTitle = 'sign in!';
+export const submitTitle = 'SIGN IN!';

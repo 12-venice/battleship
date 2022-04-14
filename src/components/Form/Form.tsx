@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Button } from '../Button';
 import { Input } from '../Input';
 import styles from './Form.scss';
-import stylesButton from '../Button/Button.scss';
 import { formProps } from './types';
 import { validation } from '../utils/Validation/validation';
 
@@ -58,11 +57,7 @@ export const Form = ({
                     ),
                 )}
             </div>
-            <Button
-                type="submit"
-                title={submitTitle}
-                className={stylesButton.wide}
-            />
+            <Button type="submit" title={submitTitle} skin="wide" />
         </form>
     );
 };

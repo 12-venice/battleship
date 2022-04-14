@@ -20,7 +20,7 @@ export const ForumPage = (): JSX.Element => (
                     </h2>
                 </div>
                 <NavLink to={PageLinks.home}>
-                    <Button className={styles.forum__btn} title="x" />
+                    <Button skin="quad" title="X" />
                 </NavLink>
             </div>
             <div className={styles.forum__main}>
@@ -42,7 +42,7 @@ export const ForumPage = (): JSX.Element => (
                     type="text"
                     placeholder="Send comment..."
                 />
-                <Button className={styles.forum__btn} title="send" />
+                <Button skin="short" title="SEND" />
             </div>
         </div>
     </Layout>
