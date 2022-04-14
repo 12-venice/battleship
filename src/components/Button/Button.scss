@@ -1,32 +1,100 @@
+@import 'src/styles/colors.css';
+@import 'src/styles/variables.css';
+
 .button {
     background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #F1972B 38.02%, #E37D00 100%);
     border-radius: 13px;
-    color: #ffffff;
-    margin: 10px;
-    padding: 10px 50px;
-    font-size: 3vh;
-    font-family: 'Titan One';
+    color: var(--white);
+    font-family: var(--font-family);
+    font-size: 36px;
+    line-height: 36px;
+    border: 6px solid var(--light-yellow);
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    padding: 0 15px 0 15px;
+    height: 57px;
+    width: 235px;
+    margin: 10px 0;
+}
+.button:focus {
+    background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #F1972B 38.02%, #E37D00 100%);
+}
 
-    &.red {
-        background: radial-gradient(100% 100% at 50.31% 100%, #F7B1A2 0%, #EE4727 45.83%, #EE4727 100%);
-    }
 
-    &.green {
-        background: radial-gradient(100% 100% at 50.31% 100%, #C8FC77 0%, #58B034 45.83%, #58B034 100%);
-    }
+.button_short {
+    width: 151px;
+}
 
-    &.big {
-        padding: 20px 100px;
-        font-size: 7vh;
-    }
+.button_quad {
+    width: 57px;
+}
 
-    &.wide {
-        width: 100%;
-    }
+.button_wide {
+    width: 380px;
+}
 
-    &.disable {
-        background: #cccccc;
-        color: #666666;
-    }
+.button_large {
+    width: 392px;
+    height: 135px;
+    font-size: 67px;
+}
 
+.button_high {
+    width: 175px;
+    height: 78px;
+}
+
+.button_auth {
+    width: 150px;
+    height: 58px;
+    border-radius: 27px;
+    font-size: 25px;
+}
+
+
+.button_no-fill {
+    background: none;
+    border: none;
+}
+.button_no-fill:focus {
+    background: none;
+    border: none;
+}
+
+
+.button-color_red {
+    background: radial-gradient(100% 100% at 50.31% 100%, #F7B1A2 0%, #EE4727 45.83%, #EE4727 100%);
+    border-color: var(--light-red);
+}
+.button-color_red:focus {
+    background: radial-gradient(100% 100% at 50.31% 100%, #F7B1A2 0%, #EE4727 45.83%, #EE4727 100%);
+}
+.button-color_green {
+    background: radial-gradient(100% 100% at 50.31% 100%, #C8FC77 0%, #58B034 45.83%, #58B034 100%);
+    border-color: var(--light-green);
+}
+.button-color_green:focus {
+    background: radial-gradient(100% 100% at 50.31% 100%, #C8FC77 0%, #58B034 45.83%, #58B034 100%);
+}
+.button-color_yellow {
+    background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #FDBB28 50%, #FDBB28 100%);
+    border-color: var(--light-yellow);
+}
+.button-color_yellow:focus {
+    background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #FDBB28 50%, #FDBB28 100%);
+}
+.button-color_blue {
+    background: radial-gradient(100% 100% at 50.31% 100%, #BADFFF 0%, #6FABFF 45.83%, #3A8DFF 100%);
+    border-color: var(--light-blue);
+}
+.button-color_blue:focus {
+    background: radial-gradient(100% 100% at 50.31% 100%, #BADFFF 0%, #6FABFF 45.83%, #3A8DFF 100%);
+}
+
+
+.button_disable {
+    border: none;
+    background: var(--light-gray);
+    color: var(--gray);
 }

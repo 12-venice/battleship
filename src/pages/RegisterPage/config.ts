@@ -38,4 +38,4 @@ export const inputs = [
     },
 ];
 
-export const submitTitle = 'sign up!';
+export const submitTitle = 'SIGN UP!';
