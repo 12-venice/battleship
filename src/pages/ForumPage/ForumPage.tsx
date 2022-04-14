@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import cn from 'classnames';
 
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
@@ -38,7 +39,7 @@ export const ForumPage = (): JSX.Element => (
             </div>
             <div className={styles.forum__footer}>
                 <input
-                    className={styles.forum__input}
+                    className={cn(styles.forum__input, 'browser-default')}
                     type="text"
                     placeholder="Send comment..."
                 />

@@ -20,8 +20,6 @@ export const Information: Props = ({ close }): JSX.Element => (
             о нашей игре. Это информация о нашей игре. Это информация о нашей
             игре.
         </p>
-        <NavLink to={PageLinks.home}>
-            <Button skin="high" color="green" title="BACK" onClick={close} />
-        </NavLink>
+        <Button skin="high" color="green" title="BACK" onClick={close} />
     </ModalWindow>
 );

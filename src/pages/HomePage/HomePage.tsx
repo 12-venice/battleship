@@ -84,7 +84,7 @@ export const HomePage = (): JSX.Element => {
                                 </span>
                             </div>
                         </div>
-                        <NavLink to={PageLinks.auth}>
+                        <NavLink to={PageLinks.game}>
                             <Button skin="large" color="green" title="PLAY" />
                         </NavLink>
                     </div>
