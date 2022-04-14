@@ -2,7 +2,6 @@ import { NavLink } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { Layout } from '../../components/Layout';
 import styles from './ProfilePage.scss';
-import stylesButton from '../../components/Button/Button.scss';
 
 export const ProfilePage = (): JSX.Element => {
     const user = {
