@@ -7,7 +7,6 @@ import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
-import stylesButton from '../../components/Button/Button.scss';
 import { Information } from '../../components/Information';
 
 export const HomePage = (): JSX.Element => {
@@ -28,8 +27,11 @@ export const HomePage = (): JSX.Element => {
                     <NavLink to={PageLinks.profile}>
                         <Button title="PROFILE" />
                     </NavLink>
+                    <NavLink to="/">
+                        <Button title="i" skin="quad" />
+                    </NavLink>
                     <NavLink to={PageLinks.auth}>
-                        <Button className={stylesButton.red} title="X" />
+                        <Button skin="auth" title="LOG OUT" color="blue" />
                     </NavLink>
                 </div>
                 <img
@@ -83,13 +85,7 @@ export const HomePage = (): JSX.Element => {
                             </div>
                         </div>
                         <NavLink to={PageLinks.auth}>
-                            <Button
-                                className={cn(
-                                    stylesButton.green,
-                                    stylesButton.big,
-                                )}
-                                title="PLAY"
-                            />
+                            <Button skin="large" color="green" title="PLAY" />
                         </NavLink>
                     </div>
                     <img
