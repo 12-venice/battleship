@@ -1,3 +1,5 @@
+import { Dispatch } from 'react';
+
 export type fieldsProps = {
     type?: string;
     title?: string;
@@ -9,8 +11,11 @@ export type fieldsProps = {
     validateMsgFalse?: string;
 };
 
+type SetStateAction<S> = S | ((prevState: S) => S);
+
 export type formProps = {
     inputs: fieldsProps[];
-    setData: (data: {}) => void;
+    setData: Dispatch<SetStateAction<{}>>;
     submitTitle: string;
+    disabled?: boolean;
 };

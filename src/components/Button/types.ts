@@ -9,4 +9,5 @@ export type ButtonProps = {
     skin?: 'short' | 'wide' | 'regular' | 'quad' | 'large' | 'high' | 'auth';
     color?: 'red' | 'yellow' | 'orange' | 'blue' | 'green';
     noFill?: boolean;
+    href?: string;
 };
