@@ -1,36 +1,41 @@
-import { Button } from 'src/components/Button';
-
 export const headers = {
     title: 'BATTLESHIP',
     page: 'REGISTRATION',
     navigation: 'sign in',
 };
 
-export const fields = [
+export const inputs = [
     {
-        type: 'first_name',
+        validateType: 'name',
         title: 'First name',
+        name: 'first_name',
     },
     {
-        type: 'second_name',
+        validateType: 'name',
         title: 'Second name',
+        name: 'second_name',
     },
     {
-        type: 'login',
+        validateType: 'login',
         title: 'Login',
+        name: 'login',
     },
     {
-        type: 'email',
+        validateType: 'email',
         title: 'E-mail',
+        name: 'email',
     },
     {
-        type: 'phone',
+        validateType: 'phone',
         title: 'Phone',
+        name: 'phone',
     },
     {
-        type: 'password',
+        validateType: 'password',
         title: 'Password',
+        name: 'password',
+        type: 'password',
     },
 ];
 
-export const submit = Button({ type: 'submit', title: 'sign up!' });
+export const submitTitle = 'SIGN UP!';

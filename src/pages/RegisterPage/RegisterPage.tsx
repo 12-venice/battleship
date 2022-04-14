@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Form } from 'src/components/Form';
 import { Layout } from '../../components/Layout';
-import { fields, headers, submit } from './config';
+import { inputs, headers, submitTitle } from './config';
 import styles from './RegisterPage.scss';
 
 export const RegisterPage = (): JSX.Element => {
@@ -12,7 +12,11 @@ export const RegisterPage = (): JSX.Element => {
             <div className={styles.register__main}>
                 <span className={styles.register__link}>{headers.title}</span>
                 <span className={styles.register__header}>{headers.page}</span>
-                <Form fields={fields} setData={setData} submit={submit} />
+                <Form
+                    inputs={inputs}
+                    setData={setData}
+                    submitTitle={submitTitle}
+                />
                 <NavLink to="/auth">
                     <span className={styles.register__link}>
                         {headers.navigation}

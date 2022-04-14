@@ -1,0 +1,80 @@
+<svg width="1980" height="1080" viewBox="0 0 1980 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>
+    @keyframes change_pos_1 {
+        0% {
+            transform: translateY(0) rotate(0deg);
+        }
+        25% {
+            transform: translateY(-10px) rotate(1deg);
+        }
+        50% {
+            transform: translateY(0px) rotate(0deg);
+        }
+        75% {
+            transform: translateY(-40px) rotate(1deg);
+        }
+        100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+    }
+    @keyframes change_pos_2 {
+        0% {
+            transform: translateY(0) rotate(0deg);
+        }
+        25% {
+            transform: translateY(-10px) rotate(1deg);
+        }
+        50% {
+            transform: translateY(0px) rotate(0deg);
+        }
+        75% {
+            transform: translateY(-40px) rotate(1deg);
+        }
+        100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+    }
+    @keyframes change_pos_3 {
+        0% {
+            transform: translateY(0) rotate(0deg);
+        }
+        25% {
+            transform: translateY(-5px) rotate(1deg);
+        }
+        50% {
+            transform: translateY(5px) rotate(0deg);
+        }
+        75% {
+            transform: translateY(-20px) rotate(1deg);
+        }
+        100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+    }
+    .first-wave {
+        animation: change_pos_1 7s infinite ease-in-out;
+    }
+    .second-wave {
+        animation: change_pos_2 6s infinite ease-in-out;
+    }
+    .third-wave {
+        animation: change_pos_3 5s infinite ease-in-out;
+    }
+</style>
+<rect width="1980" height="1080" fill="white"/>
+<rect width="1980" height="1080" fill="#35A1FF"/>
+
+<path class="first-wave" fill-rule="evenodd" clip-rule="evenodd" d="M220.621 0L113 187L242.5 560.5L640 458.5L813 143.5L741.341 0H220.621Z" fill="#2097FF"/>
+<path class="first-wave" fill-rule="evenodd" clip-rule="evenodd" d="M1841.74 1079.52L1910 960.906L1827.86 724L1575.73 788.697L1466 988.497L1511.45 1079.52L1841.74 1079.52Z" fill="#2097FF"/>
+<path class="second-wave" fill-rule="evenodd" clip-rule="evenodd" d="M1114.19 0L1049.64 445.886L1582.83 591.143L1978.27 355.572L1979.89 150.638L1704.4 0H1114.19Z" fill="#138FFC"/>
+<path class="second-wave" fill-rule="evenodd" clip-rule="evenodd" d="M0 1080H848.576L241.093 747.82L0.505067 884.475L0 887.964V1080Z" fill="#138FFC"/>
+
+<path class="first-wave" d="M26.2624 657.161L137.266 634.18L143.857 686.769L31.7336 700.82L26.2624 657.161Z" fill="#81D9E3"/>
+<path class="third-wave" d="M213.244 622.958L326.585 624.898L321.473 677.651L209 666.753L213.244 622.958Z" fill="#81D9E3"/>
+<path class="second-wave" d="M393.12 615.991L504.122 593L510.717 645.588L398.595 659.649L393.12 615.991Z" fill="#81D9E3"/>
+<path class="first-wave" d="M687.777 656.259L576 637.396L588.941 586L698.521 613.591L687.777 656.259Z" fill="#81D9E3"/>
+<path class="second-wave" d="M820.248 752.429L728 686.549L762.129 646L848.582 718.766L820.248 752.429Z" fill="#81D9E3"/>
+<path class="third-wave" d="M941.248 865.429L849 799.549L883.129 759L969.582 831.766L941.248 865.429Z" fill="#81D9E3"/>
+<path class="first-wave" d="M1012.72 847.708L1114.14 898.343L1086.77 943.732L990 885.389L1012.72 847.708Z" fill="#81D9E3"/>
+<path class="third-wave" d="M1170.06 948.85L1238.54 1039.18L1193.9 1067.75L1133 972.564L1170.06 948.85Z" fill="#81D9E3"/>
+</svg>

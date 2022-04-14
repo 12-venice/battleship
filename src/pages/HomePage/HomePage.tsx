@@ -2,30 +2,36 @@ import cn from 'classnames';
 import { Button } from 'src/components/Button';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
+import { PageLinks } from 'src/components/utils/Routes/types';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
-import menuLogoWithPirates from '../../../images/menuLogoWithPirates.svg';
+import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
-import stylesButton from '../../components/Button/Button.scss';
+import { Information } from '../../components/Information';
 
 export const HomePage = (): JSX.Element => {
     const [typeOfGame, setTypeOfGame] = useState(false);
+    const [info, setInfo] = useState(false);
+
+    const getInfo = () => setInfo(!info);
 
     return (
         <Layout>
+            {info && <Information close={getInfo} />}
             <div className={styles.home__main}>
                 <div className={styles.home__buttons}>
-                    <NavLink to="/">
-                        <Button title="forum" />
+                    <NavLink to={PageLinks.forum}>
+                        <Button title="FORUM" />
+                    </NavLink>
+                    <Button title="LEADERS" />
+                    <NavLink to={PageLinks.profile}>
+                        <Button title="PROFILE" />
                     </NavLink>
                     <NavLink to="/">
-                        <Button title="leaders" />
+                        <Button title="i" skin="quad" onClick={getInfo} />
                     </NavLink>
-                    <NavLink to="/profile">
-                        <Button title="profile" />
-                    </NavLink>
-                    <NavLink to="/auth">
-                        <Button className={stylesButton.red} title="x" />
+                    <NavLink to={PageLinks.auth}>
+                        <Button skin="auth" title="LOG OUT" color="blue" />
                     </NavLink>
                 </div>
                 <img
@@ -37,7 +43,7 @@ export const HomePage = (): JSX.Element => {
                 <div className={styles.home__menu}>
                     <div className={styles.home__select}>
                         <div>
-                            <div>
+                            <div className="switch">
                                 <label htmlFor="toggle">
                                     <input
                                         id="toggle"
@@ -63,7 +69,7 @@ export const HomePage = (): JSX.Element => {
                                 <span
                                     className={cn(
                                         styles['home__select-type-logotype'],
-                                        { selected: !typeOfGame },
+                                        !typeOfGame ? styles.selected : '',
                                     )}
                                 >
                                     CLASSIC
@@ -71,21 +77,15 @@ export const HomePage = (): JSX.Element => {
                                 <span
                                     className={cn(
                                         styles['home__select-type-logotype'],
-                                        { selected: !typeOfGame },
+                                        typeOfGame ? styles.selected : '',
                                     )}
                                 >
                                     ONLINE
                                 </span>
                             </div>
                         </div>
-                        <NavLink to="/auth">
-                            <Button
-                                className={cn(
-                                    stylesButton.green,
-                                    stylesButton.big,
-                                )}
-                                title="play"
-                            />
+                        <NavLink to={PageLinks.auth}>
+                            <Button skin="large" color="green" title="PLAY" />
                         </NavLink>
                     </div>
                     <img
