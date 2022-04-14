@@ -2,29 +2,36 @@
 
 .home__main {
     position: relative;
-    left: 15vw;
-    width: 60vw;
-    height: 85vh;
+    left: 212px;
+    width: 1164px;
+    height: 849px;
     border-radius: 38px;
     background: var(--blue);
     display: flex;
     flex-direction: column;
-    padding: 1vh;
+    padding: 20px;
 }
 
 .home__buttons {
+    width: 100%;
     padding: 40px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.home__buttons-block {
+.home__buttons-block-left {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap-reverse;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+}
+
+.home__buttons-block-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .home__button-span {
@@ -48,8 +55,9 @@
 }
 
 .home__select {
-    margin-left: 10vw;
-    height: 40vh;
+    margin-left: 200px;
+    width: 450px;
+    height: 400px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -77,12 +85,12 @@
     z-index: 2;
     position: absolute;
     top: calc(50vh - 400px);
-    left: -33vw;
-    width: 75vh;
-    height: 75vh;
+    left: -600px;
+    width: 700px;
+    height: 700px;
 }
 
 .home__image-right {
-    margin-left: 5vw;
-    height: 45vh;
+    margin-left: 50px;
+    height: 436;
 }

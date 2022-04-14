@@ -1,13 +1,12 @@
-import { useHistory } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { useContext } from 'react';
 import { AuthContext } from 'src/context/Authcontext';
+import { PageLinks } from 'src/components/utils/Routes/types';
 import { Layout } from '../../components/Layout';
 import styles from './ProfilePage.scss';
 import { Avatar } from './Avatar';
 
 export const ProfilePage = (): JSX.Element => {
-    const history = useHistory();
     const { user } = useContext(AuthContext);
 
     return (
@@ -15,9 +14,7 @@ export const ProfilePage = (): JSX.Element => {
             <div className={styles.profile__main}>
                 <div className={styles['profile__block-up']}>
                     <Button
-                        onClick={() => {
-                            history.push('/');
-                        }}
+                        href={PageLinks.home}
                         skin="quad"
                         color="red"
                         title="X"
@@ -34,16 +31,12 @@ export const ProfilePage = (): JSX.Element => {
                 </div>
                 <div className={styles['profile__block-down']}>
                     <Button
-                        onClick={() => {
-                            history.push('/profileupdate');
-                        }}
+                        href={PageLinks.profileUpdate}
                         title="EDIT PROFILE"
                         skin="wide"
                     />
                     <Button
-                        onClick={() => {
-                            history.push('/passupdate');
-                        }}
+                        href={PageLinks.profilePassUpdate}
                         title="EDIT PASSWORD"
                         skin="wide"
                     />

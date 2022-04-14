@@ -11,4 +11,4 @@ export const inputs = [
     },
 ];
 
-export const submitTitle = 'change password';
+export const submitTitle = 'CONFIRM';

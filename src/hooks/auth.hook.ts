@@ -1,10 +1,13 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from './http.hook';
 
 const storageName = 'bShip';
 
 export const useAuth = () => {
     const { request } = useHttp();
+    const history = useHistory();
     const [isAuth, setIsAuth] = useState(false);
     const [user, setUser] = useState({
         id: '',
@@ -27,13 +30,15 @@ export const useAuth = () => {
                 isAuth: true,
             }),
         );
-    }, [request]);
+        history.push(PageLinks.home);
+    }, [request, history]);
 
     const logout = useCallback(async () => {
-        await request('/auth/logout', 'POST', null);
         setIsAuth(false);
         localStorage.removeItem(storageName);
-    }, [request]);
+        await request('/auth/logout', 'POST', null);
+        history.push(PageLinks.home);
+    }, [request, history]);
 
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem(storageName) || '{}');

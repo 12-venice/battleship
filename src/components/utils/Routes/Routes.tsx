@@ -30,13 +30,13 @@ export const Routes = (): JSX.Element => {
                     <ProfilePage />
                 </Route>
             )}
-            <Route exact path={PageLinks.profilePassChange}>
+            <Route exact path={PageLinks.profilePassUpdate}>
                 <ChangePassPage />
             </Route>
             <Route exact path={PageLinks.forum}>
                 <ForumPage />
             </Route>
-            <Route exact path={PageLinks.profileChange}>
+            <Route exact path={PageLinks.profileUpdate}>
                 <EditProfilePage />
             </Route>
             {isAuth && (

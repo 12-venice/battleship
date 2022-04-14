@@ -16,7 +16,7 @@ export const Input = ({
     return (
         <div className="input-field">
             <input
-                style={{ width: '200px' }}
+                style={{ width: '250px' }}
                 id={name}
                 type={type}
                 name={name}

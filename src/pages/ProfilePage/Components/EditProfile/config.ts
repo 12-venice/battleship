@@ -30,4 +30,4 @@ export const inputs = [
     },
 ];
 
-export const submitTitle = 'change profile';
+export const submitTitle = 'CONFIRM';

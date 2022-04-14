@@ -5,13 +5,12 @@ import { Button } from 'src/components/Button';
 import { useHttp } from 'src/hooks/http.hook';
 import { useCallback, useContext, useEffect } from 'react';
 import { Preloader } from 'src/components/Preloader';
-import cn from 'classnames';
 import { Form } from 'src/components/Form';
 import { useMessage } from 'src/hooks/message.hook';
 import { AuthContext } from 'src/context/Authcontext';
+import { PageLinks } from 'src/components/utils/Routes/types';
 import { Layout } from '../../../../components/Layout';
 import styles from '../../ProfilePage.scss';
-import stylesButton from '../../../../components/Button/Button.scss';
 import { inputs, submitTitle } from './config';
 import { Avatar } from '../../Avatar';
 
@@ -24,7 +23,7 @@ export const ChangePassPage = (): JSX.Element => {
         async (data) => {
             try {
                 await request('/user/password', 'PUT', data);
-                history.push('/profile');
+                history.push(PageLinks.profile);
             } catch (e) {
                 throw new SyntaxError('Что-то пошло не так');
             }
@@ -46,13 +45,9 @@ export const ChangePassPage = (): JSX.Element => {
                     <>
                         <div className={styles['profile__block-up']}>
                             <Button
-                                onClick={() => {
-                                    history.push('/profile');
-                                }}
-                                className={cn(
-                                    stylesButton.red,
-                                    stylesButton.slim,
-                                )}
+                                skin="quad"
+                                color="red"
+                                href={PageLinks.profile}
                                 title="X"
                             />
                         </div>
