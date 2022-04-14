@@ -3,11 +3,12 @@ import { Button } from 'src/components/Button';
 import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'src/hooks/auth.hook';
+import { PageLinks } from 'src/components/utils/Routes/types';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
-import stylesButton from '../../components/Button/Button.scss';
+import { Information } from '../../components/Information';
 
 export const HomePage = (): JSX.Element => {
     const history = useHistory();
@@ -15,19 +16,22 @@ export const HomePage = (): JSX.Element => {
     const [typeOfGame, setTypeOfGame] = useState(false);
     const [leftBlock, setLeftBlock] = useState(<div />);
     const [rightBlock, setRightBlock] = useState(<div />);
+    const [info, setInfo] = useState(false);
+    const getInfo = () => setInfo(!info);
 
     useEffect(() => {
         if (isAuth) {
             setLeftBlock(
                 <Button
-                    onClick={() => history.push('/profile')}
+                    onClick={() => history.push(PageLinks.profile)}
                     title="PROFILE"
                 />,
             );
             setRightBlock(
                 <Button
-                    onClick={() => logout()}
-                    className={stylesButton.blue}
+                    onClick={logout}
+                    skin="auth"
+                    color="blue"
                     title="LOG OUT"
                 />,
             );
@@ -38,13 +42,13 @@ export const HomePage = (): JSX.Element => {
                     <span
                         aria-hidden="true"
                         className={styles['home__button-span']}
-                        onClick={() => history.push('/auth')}
+                        onClick={() => history.push(PageLinks.auth)}
                     >
                         LOG IN
                     </span>
                     <Button
-                        onClick={() => history.push('/register')}
-                        className={stylesButton.green}
+                        onClick={() => history.push(PageLinks.profile)}
+                        color="green"
                         title="SIGN UP"
                     />
                 </>,
@@ -53,23 +57,20 @@ export const HomePage = (): JSX.Element => {
     }, [history, isAuth, logout]);
     return (
         <Layout>
+            {info && <Information close={getInfo} />}
             <div className={styles.home__main}>
                 <div className={styles.home__buttons}>
                     <div className={styles['home__buttons-block']}>
                         <Button
-                            onClick={() => history.push('/forum')}
+                            onClick={() => history.push(PageLinks.forum)}
                             title="FORUM"
                         />
                         <Button
-                            onClick={() => history.push('/')}
+                            onClick={() => history.push(PageLinks.home)}
                             title="LEADERS"
                         />
                         {leftBlock}
-                        <Button
-                            onClick={() => history.push('/')}
-                            className={stylesButton.slim}
-                            title="i"
-                        />
+                        <Button skin="quad" onClick={getInfo} title="i" />
                     </div>
                     <div className={styles['home__buttons-block']}>
                         {rightBlock}
@@ -126,8 +127,9 @@ export const HomePage = (): JSX.Element => {
                             </div>
                         </div>
                         <Button
-                            className={cn(stylesButton.green, stylesButton.big)}
-                            onClick={() => history.push('/battleship')}
+                            skin="large"
+                            color="green"
+                            onClick={() => history.push(PageLinks.auth)}
                             title="PLAY"
                         />
                     </div>

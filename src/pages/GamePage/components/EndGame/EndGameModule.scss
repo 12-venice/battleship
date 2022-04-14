@@ -1,0 +1,17 @@
+@import 'src/styles/colors.css';
+
+.endGame__logo {
+    display: flex;
+    align-items: center;
+    flex-direction: column-reverse;
+    width: 97%;
+}
+
+.endGame__buttons {
+    position: absolute;
+    left: calc(50vw - 376px/2);
+    top: calc(50vh + 280px);
+    width: 370px;
+    display: flex;
+    justify-content: space-between;
+}

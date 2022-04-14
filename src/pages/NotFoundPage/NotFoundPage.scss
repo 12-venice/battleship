@@ -1,0 +1,15 @@
+@import 'src/styles/colors.css';
+
+.error__logo {
+    display: flex;
+    margin: 40px auto;
+    align-items: center;
+    flex-direction: column-reverse;
+    width: 90%;
+}
+
+.error__button {
+    position: absolute;
+    left: calc(50vw - 175px/2);
+    top: calc(50vh + 210px);
+}

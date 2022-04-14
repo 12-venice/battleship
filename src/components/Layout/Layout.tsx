@@ -1,4 +1,4 @@
-import background from '../../../images/background.png';
+import background from '../../../images/background.svg';
 import styles from './Layout.scss';
 
 export const Layout = ({

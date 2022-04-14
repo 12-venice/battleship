@@ -1,11 +1,9 @@
 import { useHistory } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { useContext } from 'react';
-import cn from 'classnames';
 import { AuthContext } from 'src/context/Authcontext';
 import { Layout } from '../../components/Layout';
 import styles from './ProfilePage.scss';
-import stylesButton from '../../components/Button/Button.scss';
 import { Avatar } from './Avatar';
 
 export const ProfilePage = (): JSX.Element => {
@@ -20,7 +18,8 @@ export const ProfilePage = (): JSX.Element => {
                         onClick={() => {
                             history.push('/');
                         }}
-                        className={cn(stylesButton.red, stylesButton.slim)}
+                        skin="quad"
+                        color="red"
                         title="X"
                     />
                 </div>
@@ -38,15 +37,15 @@ export const ProfilePage = (): JSX.Element => {
                         onClick={() => {
                             history.push('/profileupdate');
                         }}
-                        title="edit profile"
-                        className={stylesButton.wide}
+                        title="EDIT PROFILE"
+                        skin="wide"
                     />
                     <Button
                         onClick={() => {
                             history.push('/passupdate');
                         }}
-                        title="edit password"
-                        className={stylesButton.wide}
+                        title="EDIT PASSWORD"
+                        skin="wide"
                     />
                 </div>
             </div>

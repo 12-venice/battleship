@@ -73,7 +73,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'style-[hash].css',
         }),
-        new FaviconsWebpackPlugin('./images/menuLogoWithPirates.png'),
+        new FaviconsWebpackPlugin('./images/favicon.ico'),
     ],
     devServer: {
         static: {
