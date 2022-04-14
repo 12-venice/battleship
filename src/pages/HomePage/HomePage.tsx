@@ -7,25 +7,28 @@ import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
+import { Information } from '../../components/Information';
 
 export const HomePage = (): JSX.Element => {
     const [typeOfGame, setTypeOfGame] = useState(false);
+    const [info, setInfo] = useState(false);
+
+    const getInfo = () => setInfo(!info);
 
     return (
         <Layout>
+            {info && <Information close={getInfo} />}
             <div className={styles.home__main}>
                 <div className={styles.home__buttons}>
                     <NavLink to={PageLinks.forum}>
                         <Button title="FORUM" />
                     </NavLink>
-                    <NavLink to="/">
-                        <Button title="LEADERS" />
-                    </NavLink>
+                    <Button title="LEADERS" />
                     <NavLink to={PageLinks.profile}>
                         <Button title="PROFILE" />
                     </NavLink>
                     <NavLink to="/">
-                        <Button title="i" skin="quad" />
+                        <Button title="i" skin="quad" onClick={getInfo} />
                     </NavLink>
                     <NavLink to={PageLinks.auth}>
                         <Button skin="auth" title="LOG OUT" color="blue" />
