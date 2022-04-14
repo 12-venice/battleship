@@ -1,3 +1,3 @@
-import './EndGameModule.scss';
+import './EndGame.scss';
 
-export * from './EndGameModule';
+export * from './EndGame';

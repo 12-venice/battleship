@@ -1,8 +1,5 @@
-import { NavLink } from 'react-router-dom';
-
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
-import { PageLinks } from '../utils/Routes/types';
 
 import styles from './information.scss';
 
@@ -20,8 +17,6 @@ export const Information: Props = ({ close }): JSX.Element => (
             о нашей игре. Это информация о нашей игре. Это информация о нашей
             игре.
         </p>
-        <NavLink to={PageLinks.home}>
-            <Button skin="high" color="green" title="BACK" onClick={close} />
-        </NavLink>
+        <Button skin="high" color="green" title="BACK" onClick={close} />
     </ModalWindow>
 );
