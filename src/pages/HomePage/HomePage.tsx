@@ -2,6 +2,7 @@ import cn from 'classnames';
 import { Button } from 'src/components/Button';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
+import { PageLinks } from 'src/components/utils/Routes/types';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
@@ -15,16 +16,16 @@ export const HomePage = (): JSX.Element => {
         <Layout>
             <div className={styles.home__main}>
                 <div className={styles.home__buttons}>
-                    <NavLink to="/">
+                    <NavLink to={PageLinks.forum}>
                         <Button title="FORUM" />
                     </NavLink>
                     <NavLink to="/">
                         <Button title="LEADERS" />
                     </NavLink>
-                    <NavLink to="/profile">
+                    <NavLink to={PageLinks.profile}>
                         <Button title="PROFILE" />
                     </NavLink>
-                    <NavLink to="/auth">
+                    <NavLink to={PageLinks.auth}>
                         <Button className={stylesButton.red} title="X" />
                     </NavLink>
                 </div>
@@ -78,7 +79,7 @@ export const HomePage = (): JSX.Element => {
                                 </span>
                             </div>
                         </div>
-                        <NavLink to="/auth">
+                        <NavLink to={PageLinks.auth}>
                             <Button
                                 className={cn(
                                     stylesButton.green,
