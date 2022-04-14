@@ -33,6 +33,9 @@ export const Routes = (): JSX.Element => {
             <Route exact path={PageLinks.profilePassChange}>
                 <ChangePassPage />
             </Route>
+            <Route exact path={PageLinks.forum}>
+                <ForumPage />
+            </Route>
             <Route exact path={PageLinks.profileChange}>
                 <EditProfilePage />
             </Route>

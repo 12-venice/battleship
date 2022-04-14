@@ -6,4 +6,5 @@ export const enum PageLinks {
     profile = '/profile',
     profileChange = '/profileupdate',
     profilePassChange = '/passupdate',
+    forum = '/forum',
 }
