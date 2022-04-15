@@ -1,4 +1,4 @@
-.forum__background {
+.game__background {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -6,4 +6,43 @@
     height: 849px;
     background: var(--blue);
     border-radius: 38px;
+    padding: 43px 75px 60px 75px;
+}
+
+.game__battlefields {
+    background: var(--light-dark-blue);
+    display: flex;
+    justify-content: space-between;
+    border-radius: 16px;
+    padding: 13px;
+}
+
+.game__docs {
+    background: var(--light-dark-blue);
+    display: inline-block;
+    padding: 10px;
+    border-radius: 16px;
+}
+
+.game__header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.game__footer-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 50px;
+    margin-top: 10px;
+}
+
+.game__footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.game__header-text {
+    font-size: 34px;
+    margin: 0;
 }
