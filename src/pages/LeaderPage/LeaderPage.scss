@@ -1,0 +1,112 @@
+@import '../../styles/colors.css';
+
+.leader__background {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 1092px;
+    height: 849px;
+    background: var(--blue);
+    border-radius: 38px;
+}
+
+.leader__footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 90px;
+    padding: 10px;
+    width: 100%;
+    border-radius: 0px 0px 38px 38px;
+    background: var(--dark-blue);
+}
+
+.leader__table {
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    font-size: 30px;
+}
+
+.leader__table-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 90px;
+    border-radius: 38px 38px 0px 0px;
+    background: var(--dark-blue);
+    margin-bottom: 5px;
+    padding: 0 20px;
+}
+
+.leader__table-field {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 90px;
+    background: var(--light-dark-blue);
+    margin-bottom: 5px;
+    padding: 0 20px;
+}
+
+.leader__header {
+    margin: 36px 50px 0px 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leader__label {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    color: var(--white);
+}
+
+.leader__label-tag {
+    margin: 0 auto;
+    font-size: 20px;
+}
+
+.leader__label-description {
+    margin: 0 auto;
+    font-size: 40px;
+    line-height: 40px;
+}
+
+.leader__table-column-wide {
+    width: 40%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.leader__table-column-standart {
+    width: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.leader__table-block {
+    height: 475px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.leader__table-block-empty {
+    flex-grow: 1;
+    background: var(--light-dark-blue);
+    margin-bottom: 5px;
+}
+
+.leader__table-selected {
+    color: var(--dark-yellow)
+}
