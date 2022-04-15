@@ -7,16 +7,17 @@ import { NavLink } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { Layout } from '../../components/Layout';
+import { config } from './config';
 import { leaders } from './data';
 
 import styles from './LeaderPage.scss';
 
 export const LeaderPage = (): JSX.Element => {
     const [sortType, setSortType] = useState('display_name');
-    const [sortBtn, setSortBtn] = useState(false);
+    const [sortDirection, setSortDirection] = useState(false);
     leaders.sort(
         (a: {}, b: {}) => {
-            if (sortBtn) {
+            if (sortDirection) {
                 return b[sortType as keyof typeof b] - a[sortType as keyof typeof a];
             }
             return a[sortType as keyof typeof a] - b[sortType as keyof typeof b];
@@ -28,7 +29,7 @@ export const LeaderPage = (): JSX.Element => {
     ): void => {
         const sortName = (event.target as HTMLDivElement).getAttribute('data-sort');
         if (sortName === sortType) {
-            setSortBtn(!sortBtn);
+            setSortDirection(!sortDirection);
         }
         setSortType(sortName || '');
     };
@@ -52,95 +53,38 @@ export const LeaderPage = (): JSX.Element => {
                 </div>
                 <div className={styles.leader__table}>
                     <div className={styles['leader__table-header']}>
-                        <div
-                            className={cn(
-                                styles['leader__table-column-wide'],
-                                sortType === 'display_name' && styles['leader__table-selected'],
-                            )}
-                            data-sort="display_name"
-                            aria-hidden="true"
-                            onClick={(event) => handlerClick(event)}
-                        >
-                            PLAYER
-                        </div>
-                        <div
-                            className={cn(
-                                styles['leader__table-column-standart'],
-                                sortType === 'wins' && styles['leader__table-selected'],
-                            )}
-                            data-sort="wins"
-                            aria-hidden="true"
-                            onClick={(event) => handlerClick(event)}
-                        >
-                            <i className="medium material-icons">
-                                {`arrow_drop_${sortBtn ? 'up' : 'down'}`}
-                            </i>
-                            WINS
-                        </div>
-                        <div
-                            className={cn(
-                                styles['leader__table-column-standart'],
-                                sortType === 'defeats' && styles['leader__table-selected'],
-                            )}
-                            data-sort="defeats"
-                            aria-hidden="true"
-                            onClick={(event) => handlerClick(event)}
-                        >
-                            <i className="medium material-icons">
-                                {`arrow_drop_${sortBtn ? 'up' : 'down'}`}
-                            </i>
-                            DEFEATS
-                        </div>
-                        <div
-                            className={cn(
-                                styles['leader__table-column-standart'],
-                                sortType === 'points' && styles['leader__table-selected'],
-                            )}
-                            data-sort="points"
-                            aria-hidden="true"
-                            onClick={(event) => handlerClick(event)}
-                        >
-                            <i className="medium material-icons">
-                                {`arrow_drop_${sortBtn ? 'up' : 'down'}`}
-                            </i>
-                            POINTS
-                        </div>
+                        {config.map((element, index) => (
+                            <div
+                                className={cn(
+                                    styles[`leader__table-column-${index === 0 ? 'wide' : 'standart'}`],
+                                    sortType === element.type && styles['leader__table-selected'],
+                                )}
+                                data-sort={element.type}
+                                aria-hidden="true"
+                                onClick={(event) => handlerClick(event)}
+                            >
+                                {index > 0 && (
+                                    <i className="medium material-icons">
+                                        {`arrow_drop_${sortDirection ? 'up' : 'down'}`}
+                                    </i>
+                                )}
+                                {element.title}
+                            </div>
+                        ))}
                     </div>
                     <div className={styles['leader__table-block']}>
                         {leaders.map((element) => (
                             <div className={styles['leader__table-field']}>
-                                <div
-                                    className={cn(
-                                        styles['leader__table-column-wide'],
-                                        sortType === 'display_name' && styles['leader__table-selected'],
-                                    )}
-                                >
-                                    {element.display_name}
-                                </div>
-                                <div
-                                    className={cn(
-                                        styles['leader__table-column-standart'],
-                                        sortType === 'wins' && styles['leader__table-selected'],
-                                    )}
-                                >
-                                    {element.wins}
-                                </div>
-                                <div
-                                    className={cn(
-                                        styles['leader__table-column-standart'],
-                                        sortType === 'defeats' && styles['leader__table-selected'],
-                                    )}
-                                >
-                                    {element.defeats}
-                                </div>
-                                <div
-                                    className={cn(
-                                        styles['leader__table-column-standart'],
-                                        sortType === 'points' && styles['leader__table-selected'],
-                                    )}
-                                >
-                                    {element.points}
-                                </div>
+                                {config.map((elementConfig, index) => (
+                                    <div
+                                        className={cn(
+                                            styles[`leader__table-column-${index === 0 ? 'wide' : 'standart'}`],
+                                            sortType === elementConfig.type && styles['leader__table-selected'],
+                                        )}
+                                    >
+                                        {element[elementConfig.type as keyof typeof element]}
+                                    </div>
+                                ))}
                             </div>
                         ))}
                         {leaders.length < 5 && (

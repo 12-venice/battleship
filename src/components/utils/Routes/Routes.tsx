@@ -7,10 +7,10 @@ import { RegisterPage } from 'src/pages/RegisterPage';
 import { Area } from 'src/pages/GamePage/components/Area';
 import { useContext } from 'react';
 import { AuthContext } from 'src/context/Authcontext';
-import { ChangePassPage } from 'src/pages/ProfilePage/components/ChangePass';
-import { EditProfilePage } from 'src/pages/ProfilePage/components/EditProfile';
+import { UpdatePassPage } from 'src/pages/UpdatePassPage';
 import { LeaderPage } from 'src/pages/LeaderPage';
 import { ForumPage } from 'src/pages/ForumPage';
+import { UpdateProfilePage } from 'src/pages/UpdateProfilePage';
 import { PageLinks } from './types';
 
 export const Routes = (): JSX.Element => {
@@ -35,13 +35,13 @@ export const Routes = (): JSX.Element => {
                 </Route>
             )}
             <Route exact path={PageLinks.profilePassUpdate}>
-                <ChangePassPage />
+                <UpdatePassPage />
+            </Route>
+            <Route exact path={PageLinks.profileUpdate}>
+                <UpdateProfilePage />
             </Route>
             <Route exact path={PageLinks.forum}>
                 <ForumPage />
-            </Route>
-            <Route exact path={PageLinks.profileUpdate}>
-                <EditProfilePage />
             </Route>
             {isAuth && (
                 <Route exact path={PageLinks.game}>
