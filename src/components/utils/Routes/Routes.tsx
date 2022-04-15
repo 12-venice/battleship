@@ -1,6 +1,5 @@
 import { Route, Switch } from 'react-router-dom';
 import { AuthPage } from 'src/pages/AuthPage';
-import { ForumPage } from 'src/pages/ForumPage';
 import { HomePage } from 'src/pages/HomePage';
 import { NotFoundPage } from 'src/pages/NotFoundPage';
 import { ProfilePage } from 'src/pages/ProfilePage';
@@ -8,8 +7,10 @@ import { RegisterPage } from 'src/pages/RegisterPage';
 import { Area } from 'src/pages/GamePage/components/Area';
 import { useContext } from 'react';
 import { AuthContext } from 'src/context/Authcontext';
-import { ChangePassPage } from 'src/pages/ProfilePage/Components/ChangePass';
-import { EditProfilePage } from 'src/pages/ProfilePage/Components/EditProfile';
+import { ChangePassPage } from 'src/pages/ProfilePage/components/ChangePass';
+import { EditProfilePage } from 'src/pages/ProfilePage/components/EditProfile';
+import { LeaderPage } from 'src/pages/LeaderPage';
+import { ForumPage } from 'src/pages/ForumPage';
 import { PageLinks } from './types';
 
 export const Routes = (): JSX.Element => {
@@ -21,6 +22,9 @@ export const Routes = (): JSX.Element => {
             </Route>
             <Route exact path={PageLinks.auth}>
                 <AuthPage />
+            </Route>
+            <Route exact path={PageLinks.leaderboard}>
+                <LeaderPage />
             </Route>
             <Route exact path={PageLinks.register}>
                 <RegisterPage />
