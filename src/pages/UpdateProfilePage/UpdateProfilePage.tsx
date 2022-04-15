@@ -10,12 +10,12 @@ import { useMessage } from 'src/hooks/message.hook';
 import { AuthContext } from 'src/context/Authcontext';
 import { fieldsProps } from 'src/components/Form/types';
 import { PageLinks } from 'src/components/utils/Routes/types';
-import { Layout } from '../../../../components/Layout';
-import styles from '../../ProfilePage.scss';
+import { Layout } from 'src/components/Layout';
+import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs, submitTitle } from './config';
-import { Avatar } from '../../Avatar';
+import { Avatar } from '../ProfilePage/Avatar';
 
-export const EditProfilePage = (): JSX.Element => {
+export const UpdateProfilePage = (): JSX.Element => {
     const { user, setUser } = useContext(AuthContext);
     const inputsWithDefaultsValue: fieldsProps[] = [];
     inputs.forEach((input) => {

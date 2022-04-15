@@ -9,12 +9,12 @@ import { Form } from 'src/components/Form';
 import { useMessage } from 'src/hooks/message.hook';
 import { AuthContext } from 'src/context/Authcontext';
 import { PageLinks } from 'src/components/utils/Routes/types';
-import { Layout } from '../../../../components/Layout';
-import styles from '../../ProfilePage.scss';
+import { Layout } from '../../components/Layout';
+import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs, submitTitle } from './config';
-import { Avatar } from '../../Avatar';
+import { Avatar } from '../ProfilePage/Avatar';
 
-export const ChangePassPage = (): JSX.Element => {
+export const UpdatePassPage = (): JSX.Element => {
     const { user } = useContext(AuthContext);
     const message = useMessage();
     const { request, loading, error, clearError } = useHttp();
