@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 // Конфликт
 /* eslint-disable prettier/prettier */
 import cn from 'classnames';
@@ -14,7 +15,12 @@ export const LeaderPage = (): JSX.Element => {
     const [sortType, setSortType] = useState('display_name');
     const [sortBtn, setSortBtn] = useState(false);
     leaders.sort(
-        (a: {}, b: {}) => a[sortType as keyof typeof a] - b[sortType as keyof typeof b],
+        (a: {}, b: {}) => {
+            if (sortBtn) {
+                return b[sortType as keyof typeof b] - a[sortType as keyof typeof a];
+            }
+            return a[sortType as keyof typeof a] - b[sortType as keyof typeof b];
+        },
     );
 
     const handlerClick = (
