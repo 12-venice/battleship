@@ -10,6 +10,7 @@ export const Form = ({
     inputs,
     setData,
     submitTitle,
+    disabled,
 }: formProps): JSX.Element => {
     const [fields, setFields] = useState(inputs);
     let formValues = fields.reduce(
@@ -57,7 +58,12 @@ export const Form = ({
                     ),
                 )}
             </div>
-            <Button type="submit" title={submitTitle} skin="wide" />
+            <Button
+                disabled={disabled}
+                type="submit"
+                title={submitTitle}
+                skin="wide"
+            />
         </form>
     );
 };

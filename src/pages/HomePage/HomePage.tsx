@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import { Button } from 'src/components/Button';
-import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
+import { useAuth } from 'src/hooks/auth.hook';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
@@ -10,29 +10,59 @@ import styles from './HomePage.scss';
 import { Information } from '../../components/Information';
 
 export const HomePage = (): JSX.Element => {
+    const { isAuth, logout } = useAuth();
     const [typeOfGame, setTypeOfGame] = useState(false);
     const [info, setInfo] = useState(false);
-
     const getInfo = () => setInfo(!info);
+    const leftBlock = () => {
+        if (isAuth) {
+            return <Button href={PageLinks.profile} title="PROFILE" />;
+        }
+        return null;
+    };
+
+    const rightBlock = () => {
+        if (isAuth) {
+            return (
+                <Button
+                    onClick={logout}
+                    skin="auth"
+                    color="blue"
+                    title="LOG OUT"
+                />
+            );
+        }
+        return (
+            <>
+                <Button
+                    href={PageLinks.auth}
+                    skin="auth"
+                    noFill
+                    title="LOG IN"
+                />
+                <Button
+                    href={PageLinks.register}
+                    color="green"
+                    title="SIGN UP"
+                />
+            </>
+        );
+    };
 
     return (
         <Layout>
             {info && <Information close={getInfo} />}
             <div className={styles.home__main}>
                 <div className={styles.home__buttons}>
-                    <NavLink to={PageLinks.forum}>
-                        <Button title="FORUM" />
-                    </NavLink>
-                    <Button title="LEADERS" />
-                    <NavLink to={PageLinks.profile}>
-                        <Button title="PROFILE" />
-                    </NavLink>
-                    <NavLink to="/">
-                        <Button title="i" skin="quad" onClick={getInfo} />
-                    </NavLink>
-                    <NavLink to={PageLinks.auth}>
-                        <Button skin="auth" title="LOG OUT" color="blue" />
-                    </NavLink>
+                    <div className={styles['home__buttons-block-left']}>
+                        <Button href={PageLinks.forum} title="FORUM" />
+                        <Button href={PageLinks.leaderboard} title="LEADERS" />
+                        {leftBlock()}
+                        <Button skin="quad" onClick={getInfo} title="i" />
+                    </div>
+                    <div className={styles['home__buttons-block-right']}>
+                        {rightBlock()}
+                    </div>
                 </div>
                 <img
                     className={styles['home__image-left']}
@@ -84,9 +114,12 @@ export const HomePage = (): JSX.Element => {
                                 </span>
                             </div>
                         </div>
-                        <NavLink to={PageLinks.auth}>
-                            <Button skin="large" color="green" title="PLAY" />
-                        </NavLink>
+                        <Button
+                            skin="large"
+                            color="green"
+                            href={PageLinks.game}
+                            title="PLAY"
+                        />
                     </div>
                     <img
                         className={styles['home__image-right']}

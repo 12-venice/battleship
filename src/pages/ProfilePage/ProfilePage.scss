@@ -10,7 +10,7 @@
 
 .profile__block-up {
     width: 350px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -18,7 +18,7 @@
 }
 
 .profile__block-center {
-    height: 400px;
+    position: relative;
     width: 100%;
     border-radius: 38px;
     margin: 10px;
@@ -40,7 +40,7 @@
 
 .profile__avatar {
     position: absolute;
-    top: calc(50vh - 280px);
+    top: -100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -48,7 +48,7 @@
     border-radius: 50%;
     background: #ffffff;
     color: #9DC0F0;
-    width: 150px;
-    height: 150px;
+    width: 180px;
+    height: 180px;
     font-size: 55px;
 }

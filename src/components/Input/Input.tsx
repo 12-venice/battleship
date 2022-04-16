@@ -25,11 +25,7 @@ export const Input = ({
                 className={className}
                 autoComplete="new-password"
             />
-            <label
-                className={defaultValue ? 'active' : ''}
-                style={{ color: '#eeeeee' }}
-                htmlFor={name}
-            >
+            <label className={defaultValue ? 'active' : ''} htmlFor={name}>
                 {title}
             </label>
             {validateMsgFalse || validateMsgTrue ? (
