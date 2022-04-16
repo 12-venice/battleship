@@ -11,7 +11,7 @@ router.post('/create', async (req, res) => {
         const { id } = req.body;
         const isExist = await User.findOne({ id });
         if (isExist) {
-            res.status(400).json();
+            res.status(200).json();
             return;
         }
         const user = new User(req.body);

@@ -30,8 +30,8 @@ export const useAuth = () => {
                 isAuth: true,
             }),
         );
-        await request('/api/user/create', 'POST', fetched, {}, true);
         history.push(PageLinks.home);
+        await request('/api/user/create', 'POST', fetched, {}, true);
     }, [request, history]);
 
     const logout = useCallback(async () => {
