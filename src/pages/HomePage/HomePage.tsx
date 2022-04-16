@@ -10,7 +10,7 @@ import styles from './HomePage.scss';
 import { Information } from '../../components/Information';
 
 export const HomePage = (): JSX.Element => {
-    const { isAuth, logout } = useAuth();
+    const { logout, isAuth } = useAuth();
     const [typeOfGame, setTypeOfGame] = useState(false);
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
