@@ -1,0 +1,49 @@
+@import 'src/styles/variables.css';
+@import "src/styles/colors.css";
+
+.container {
+  display: flex;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.avatarLeft {
+  flex-direction: row-reverse;
+}
+
+.avatarLeft .name {
+  flex-grow: 1;
+  margin: 0 18px 0 0;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--white);
+  font-size: 34px;
+}
+
+.avatar img {
+  width: 100%;
+}
+
+.name {
+  font-size: 34px;
+  font-family: var(--font-family);
+  color: var(--white);
+  margin: 0 0 0 18px;
+}
+
+.nameCharacter {
+  color: var(--light-blue);
+  margin: 0;
+  user-select: none;
+}
