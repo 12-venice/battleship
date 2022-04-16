@@ -34,8 +34,6 @@ router.post('/create', async (req, res) => {
 router.post('/read', async (req, res) => {
     try {
         const topic = await Topic.find();
-        const users = await User.find();
-        console.log(users);
         for (let index = 0; index < topic.length; index++) {
             const { _id, user } = topic[index].toJSON();
             const userFind = await User.findOne({ _id: user });
