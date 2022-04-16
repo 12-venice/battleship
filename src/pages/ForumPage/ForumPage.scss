@@ -19,19 +19,19 @@
 }
 
 .forum__input {
-    margin: 0 !important;
-    width: 820px !important;
-    height: 57px !important;
-    background: var(--dark-blue) !important;
-    border-radius: 15px !important;
-    border-style: none !important;
-    padding-left: 20px !important;
-    font-family: var(--font-family-second) !important;
-    font-style: normal !important;
-    font-weight: 400 !important;
-    font-size: 20px !important;
-    line-height: 23px !important;
-    color: var(--white) !important;
+    margin: 0; 
+    width: 820px;
+    height: 57px;
+    background: var(--dark-blue);
+    border-radius: 15px;
+    border-style: none;
+    padding-left: 20px;
+    font-family: var(--font-family-second);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    color: var(--white);
 }
 
 .forum__main {
