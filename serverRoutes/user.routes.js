@@ -11,7 +11,8 @@ router.post('/create', async (req, res) => {
         const { id } = req.body;
         const isExist = await User.findOne({ id });
         if (isExist) {
-            res.status(200).json();
+            await User.findOneAndUpdate(id, { $set: req.body });
+            res.status(201).json({ message: 'OK' });
             return;
         }
         const user = new User(req.body);
