@@ -4,13 +4,13 @@ import { HomePage } from 'src/pages/HomePage';
 import { NotFoundPage } from 'src/pages/NotFoundPage';
 import { ProfilePage } from 'src/pages/ProfilePage';
 import { RegisterPage } from 'src/pages/RegisterPage';
-import { Area } from 'src/pages/GamePage/components/Area';
 import { useContext } from 'react';
 import { AuthContext } from 'src/context/Authcontext';
 import { UpdatePassPage } from 'src/pages/UpdatePassPage';
 import { LeaderPage } from 'src/pages/LeaderPage';
 import { ForumPage } from 'src/pages/ForumPage';
 import { UpdateProfilePage } from 'src/pages/UpdateProfilePage';
+import { GamePage } from 'src/pages/GamePage';
 import { PageLinks } from './types';
 
 export const Routes = (): JSX.Element => {
@@ -45,7 +45,7 @@ export const Routes = (): JSX.Element => {
             </Route>
             {isAuth && (
                 <Route exact path={PageLinks.game}>
-                    <Area areaWidth={300} fillColor="#9DC0F0" />
+                    <GamePage />
                 </Route>
             )}
             <Route>{NotFoundPage}</Route>

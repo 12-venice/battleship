@@ -1,6 +1,7 @@
 /* eslint-disable object-curly-newline */
 // Не нравиться обозначени _id из монгодб
 /* eslint-disable no-underscore-dangle */
+import cn from 'classnames';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
@@ -110,7 +111,7 @@ export const ForumPage = (): JSX.Element => {
                 </div>
                 <div className={styles.forum__footer}>
                     <input
-                        className={styles.forum__input}
+                        className={cn(styles.forum__input, 'browser-default')}
                         type="text"
                         placeholder="Send comment..."
                         value={textComment}
