@@ -1,18 +1,21 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable no-unused-expressions */
 // Конфликт
 /* eslint-disable prettier/prettier */
 import cn from 'classnames';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
+import { useHttp } from 'src/hooks/http.hook';
 import { Layout } from '../../components/Layout';
 import { config } from './config';
-import { leaders } from './data';
 
 import styles from './LeaderPage.scss';
 
 export const LeaderPage = (): JSX.Element => {
+    const { request } = useHttp();
+    const [leaders, setLeaders] = useState([]);
     const [sortType, setSortType] = useState('display_name');
     const [sortDirection, setSortDirection] = useState(false);
     leaders.sort(
@@ -23,6 +26,14 @@ export const LeaderPage = (): JSX.Element => {
             return a[sortType as keyof typeof a] - b[sortType as keyof typeof b];
         },
     );
+    const getLeaders = useCallback(async () => {
+        const users = await request('/api/user/read', 'POST', null, {}, true);
+        setLeaders(users);
+    }, [request]);
+
+    useEffect(() => {
+        getLeaders();
+    }, [getLeaders]);
 
     const handlerClick = (
         event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,

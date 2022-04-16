@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 export type CommentProps = {
-    name?: string;
+    user?: { display_name: string };
     date?: string;
     description?: string;
 };

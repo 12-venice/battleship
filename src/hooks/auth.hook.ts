@@ -30,6 +30,7 @@ export const useAuth = () => {
                 isAuth: true,
             }),
         );
+        await request('/api/user/create', 'POST', fetched, {}, true);
         history.push(PageLinks.home);
     }, [request, history]);
 
@@ -42,7 +43,6 @@ export const useAuth = () => {
 
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem(storageName) || '{}');
-
         if (data && data.isAuth) {
             login();
         }
