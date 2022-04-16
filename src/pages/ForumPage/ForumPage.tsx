@@ -7,6 +7,7 @@ import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Preloader } from 'src/components/Preloader';
+import { v4 as uuidv4 } from 'uuid';
 import { AuthContext } from 'src/context/Authcontext';
 import { DateParser } from 'src/components/utils/DateParse/DateParser';
 import { Layout } from '../../components/Layout';
@@ -73,6 +74,7 @@ export const ForumPage = (): JSX.Element => {
         if (topics.length > 0) {
             return topics.map((item) => (
                 <Topic
+                    key={uuidv4()}
                     theme={item.theme}
                     date={DateParser(item.date)}
                     description={item.description}

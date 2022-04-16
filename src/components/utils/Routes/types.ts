@@ -1,3 +1,5 @@
+import { FC, ReactElement } from 'react';
+
 export const enum PageLinks {
     home = '/',
     auth = '/auth',
@@ -9,3 +11,9 @@ export const enum PageLinks {
     forum = '/forum',
     leaderboard = '/leaderboard',
 }
+
+type RouteProps = {
+    children: ReactElement;
+    isAuth: boolean;
+};
+export type Props = FC<RouteProps>;

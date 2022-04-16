@@ -1,13 +1,8 @@
-import { useState, useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { PageLinks } from 'src/components/utils/Routes/types';
+import { useState, useCallback } from 'react';
 import { useHttp } from './http.hook';
-
-const storageName = 'bShip';
 
 export const useAuth = () => {
     const { request } = useHttp();
-    const history = useHistory();
     const [isAuth, setIsAuth] = useState(false);
     const [user, setUser] = useState({
         id: '',
@@ -21,32 +16,18 @@ export const useAuth = () => {
     });
 
     const login = useCallback(async () => {
-        setIsAuth(true);
         const fetched = await request('/auth/user', 'GET', null);
-        setUser(fetched);
-        localStorage.setItem(
-            storageName,
-            JSON.stringify({
-                isAuth: true,
-            }),
-        );
-        history.push(PageLinks.home);
-        await request('/api/user/create', 'POST', fetched, {}, true);
-    }, [request, history]);
+        if (fetched) {
+            setIsAuth(true);
+            setUser(fetched);
+            await request('/api/user/create', 'POST', fetched, {}, true);
+        }
+    }, [request]);
 
     const logout = useCallback(async () => {
         setIsAuth(false);
-        localStorage.removeItem(storageName);
         await request('/auth/logout', 'POST', null);
-        history.push(PageLinks.home);
-    }, [request, history]);
-
-    useEffect(() => {
-        const data = JSON.parse(localStorage.getItem(storageName) || '{}');
-        if (data && data.isAuth) {
-            login();
-        }
-    }, [login]);
+    }, [request]);
 
     return {
         login,

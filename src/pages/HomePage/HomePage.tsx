@@ -1,8 +1,8 @@
 import cn from 'classnames';
 import { Button } from 'src/components/Button';
-import { useState } from 'react';
-import { useAuth } from 'src/hooks/auth.hook';
+import { useContext, useState } from 'react';
 import { PageLinks } from 'src/components/utils/Routes/types';
+import { AuthContext } from 'src/context/Authcontext';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
@@ -10,7 +10,7 @@ import styles from './HomePage.scss';
 import { Information } from '../../components/Information';
 
 export const HomePage = (): JSX.Element => {
-    const { logout, isAuth } = useAuth();
+    const { isAuth, logout } = useContext(AuthContext);
     const [typeOfGame, setTypeOfGame] = useState(false);
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);

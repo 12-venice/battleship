@@ -11,6 +11,11 @@ const Topic = require('../serverModels/topic.ts');
 const Comment = require('../serverModels/comment.ts');
 
 const router = Router();
+const cleanerBase = async () => {
+    await User.collection.drop();
+    await Topic.collection.drop();
+    await Comment.collection.drop();
+};
 
 router.post('/create', async (req, res) => {
     try {
