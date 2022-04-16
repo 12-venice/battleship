@@ -1,6 +1,6 @@
 /* eslint-disable operator-linebreak */
 import { useState } from 'react';
-
+import { v4 as uuidv4 } from 'uuid';
 import { DateParser } from 'src/components/utils/DateParse/DateParser';
 import { Props, handleClickType } from './types';
 import { Comment } from '../comment';
@@ -46,6 +46,7 @@ export const Topic: Props = ({
                 comments &&
                 comments.map((comment) => (
                     <Comment
+                        key={uuidv4()}
                         user={comment.user}
                         date={DateParser(comment.date)}
                         description={comment.description}

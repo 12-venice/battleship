@@ -1,6 +1,6 @@
 /// Ошибка деструктуризации
 /* eslint-disable object-curly-newline */
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { AuthContext } from 'src/context/Authcontext';
 import { useAuth } from 'src/hooks/auth.hook';
 import { Routes } from '../utils/Routes/Routes';
@@ -18,6 +18,10 @@ export const App = (): JSX.Element => {
         }),
         [login, logout, isAuth, user, setUser],
     );
+
+    useEffect(() => {
+        login();
+    }, [login]);
 
     return (
         <AuthContext.Provider value={appDataProviderValue}>
