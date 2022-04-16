@@ -37,6 +37,7 @@ router.post('/read', async (req, res) => {
                 const userComment = await User.findOne({
                     _id: comments[i].toJSON().user,
                 });
+                console.log(userComment)
                 comments[i] = {
                     ...comments[i].toJSON(),
                     ...{ user: userComment },

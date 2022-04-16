@@ -7,7 +7,7 @@
     "clean": "rimraf ./dist",
     "dev": "webpack serve --mode development --open --hot",
     "build": "npm run clean && webpack --mode production",
-    "start": "node server",
+    "start": "node app.js",
     "server": "nodemon app.js",
     "stylelint": "stylelint src/**/*.css",
     "stylelint:fix": "stylelint src/**/*.css --fix",
