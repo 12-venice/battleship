@@ -8,6 +8,7 @@ import { NavLink } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
+import { v4 as uuidv4 } from 'uuid';
 import { Layout } from '../../components/Layout';
 import { config } from './config';
 
@@ -68,6 +69,7 @@ export const LeaderPage = (): JSX.Element => {
                     <div className={styles['leader__table-header']}>
                         {config.map((element, index) => (
                             <div
+                                key={uuidv4()}
                                 className={cn(
                                     styles[`leader__table-column-${index === 0 ? 'wide' : 'standart'}`],
                                     sortType === element.type && styles['leader__table-selected'],
@@ -87,9 +89,10 @@ export const LeaderPage = (): JSX.Element => {
                     </div>
                     <div className={styles['leader__table-block']}>
                         {leaders.map((element) => (
-                            <div className={styles['leader__table-field']}>
+                            <div key={uuidv4()} className={styles['leader__table-field']}>
                                 {config.map((elementConfig, index) => (
                                     <div
+                                        key={uuidv4()}
                                         className={cn(
                                             styles[`leader__table-column-${index === 0 ? 'wide' : 'standart'}`],
                                             sortType === elementConfig.type && styles['leader__table-selected'],
