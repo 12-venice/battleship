@@ -3,12 +3,11 @@
   --light-dark-blue: #1653a9;
   --dark-blue: #09469a;
   --white: #fff;
-  --dark-yellow: #febc29;
   --light-yellow: #fdde4f;
   --light-red: #f7b1a2;
   --light-green: #c8fc77;
   --light-blue: #66b2f9;
   --light-gray: #ccc;
   --gray: #666;
-  --bg-dark-gray: #000000ad;
+  --bg-dark-gray: rgba(0, 0, 0, 0.68);
 }
