@@ -12,12 +12,12 @@ router.post('/create', async (req, res) => {
         const isExist = await User.findOne({ id });
         if (isExist) {
             await User.findOneAndUpdate(id, { $set: req.body });
+            res.status(200).json({ message: 'OK' });
+        } else {
+            const user = new User(req.body);
+            await user.save();
             res.status(201).json({ message: 'OK' });
-            return;
         }
-        const user = new User(req.body);
-        await user.save();
-        res.status(201).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
