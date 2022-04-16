@@ -18,18 +18,15 @@ export const LeaderPage = (): JSX.Element => {
     const [leaders, setLeaders] = useState([]);
     const [sortType, setSortType] = useState('display_name');
     const [sortDirection, setSortDirection] = useState(false);
-    leaders.sort(
-        (a: {}, b: {}) => {
-            if (sortDirection) {
-                return b[sortType as keyof typeof b] - a[sortType as keyof typeof a];
-            }
-            return a[sortType as keyof typeof a] - b[sortType as keyof typeof b];
-        },
-    );
+    const [page, setPage] = useState(0);
     const getLeaders = useCallback(async () => {
-        const users = await request('/api/user/read', 'POST', null, {}, true);
+        const users = await request('/api/user/read', 'POST', {
+            sortType,
+            sortDirection,
+            page,
+        }, {}, true);
         setLeaders(users);
-    }, [request]);
+    }, [page, request, sortDirection, sortType]);
 
     useEffect(() => {
         getLeaders();
@@ -43,6 +40,11 @@ export const LeaderPage = (): JSX.Element => {
             setSortDirection(!sortDirection);
         }
         setSortType(sortName || '');
+    };
+
+    const handlerPage = (p: number) => {
+        setPage(page + p);
+        getLeaders();
     };
 
     return (
@@ -105,7 +107,11 @@ export const LeaderPage = (): JSX.Element => {
                         )}
                         <div />
                     </div>
-                    <div className={styles.leader__footer} />
+                    <div className={styles.leader__footer}>
+                        {page > 0 && <span aria-hidden onClick={() => handlerPage(-1)}>prev</span>}
+                        {leaders.length === 10
+                            && <span aria-hidden onClick={() => handlerPage(1)}>prev</span>}
+                    </div>
                 </div>
             </div>
         </Layout>

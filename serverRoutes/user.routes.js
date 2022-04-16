@@ -26,13 +26,11 @@ router.post('/create', async (req, res) => {
 
 router.post('/read', async (req, res) => {
     try {
-        const { id } = req.body;
-        let user;
-        if (id) {
-            user = await User.findOne({ id });
-        } else {
-            user = await User.find();
-        }
+        const { sortType, sortDirection, page } = req.body;
+        const user = await User.find()
+            .sort({ [sortType]: sortDirection ? 1 : -1 })
+            .skip(page * 10)
+            .limit(10);
         res.json(user);
     } catch (e) {
         res.status(500).json({
