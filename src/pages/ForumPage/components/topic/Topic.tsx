@@ -1,6 +1,7 @@
 /* eslint-disable operator-linebreak */
 import { useState } from 'react';
 
+import { DateParser } from 'src/components/utils/DateParse/DateParser';
 import { Props, handleClickType } from './types';
 import { Comment } from '../comment';
 
@@ -12,13 +13,15 @@ export const Topic: Props = ({
     theme = 'Topic',
     description = 'Default description...',
     comments,
+    _id,
+    setTopicId,
 }): JSX.Element => {
     const [state, toggleState] = useState(false);
 
     const handleClick: handleClickType = () => {
         toggleState(!state);
+        setTopicId(_id);
     };
-
     return (
         <div>
             <div
@@ -43,8 +46,8 @@ export const Topic: Props = ({
                 comments &&
                 comments.map((comment) => (
                     <Comment
-                        name={comment.name}
-                        date={comment.date}
+                        user={comment.user}
+                        date={DateParser(comment.date)}
                         description={comment.description}
                     />
                 ))}

@@ -10,12 +10,14 @@
     background: var(--blue);
     border-radius: 38px;
 }
+
 .forum__footer {
     margin: 0px 50px 36px 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
 .forum__input {
     margin: 0; 
     width: 820px;
@@ -31,6 +33,7 @@
     line-height: 23px;
     color: var(--white);
 }
+
 .forum__main {
     display: flex;
     justify-content: center;
@@ -39,20 +42,22 @@
 .forum__header {
     margin: 36px 50px 0px 50px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
 }
+
 .forum__label {
     display: flex;
     justify-content: center;
     flex-direction: column;
     color: var(--white);
-    margin-right: 367px;
 }
+
 .forum__label-tag {
     margin: 0 auto;
     font-size: 20px;
 }
+
 .forum__label-description {
     margin: 0 auto;
     font-size: 40px;
@@ -64,10 +69,13 @@
     height: 550px;
     overflow-y: scroll;
     margin: 0 50px;
+
     &::-webkit-scrollbar {
         width: 10px;
-        background-color: var(--blue);;
+        background-color: var(--blue);
+        ;
     }
+
     &::-webkit-scrollbar-thumb {
         border-radius: 10px;
         background-color: var(--dark-blue);

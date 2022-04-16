@@ -31,6 +31,7 @@ export const useAuth = () => {
             }),
         );
         history.push(PageLinks.home);
+        await request('/api/user/create', 'POST', fetched, {}, true);
     }, [request, history]);
 
     const logout = useCallback(async () => {
@@ -42,7 +43,6 @@ export const useAuth = () => {
 
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem(storageName) || '{}');
-
         if (data && data.isAuth) {
             login();
         }
