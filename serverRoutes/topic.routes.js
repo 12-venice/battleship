@@ -30,23 +30,22 @@ router.post('/read', async (req, res) => {
     try {
         const topic = await Topic.find();
         for (let index = 0; index < topic.length; index++) {
-            const { _id, _doc } = topic[index];
-            const user = await User.findOne({ _id: _doc.user });
+            const { _id, user } = topic[index].toJSON();
+            const userFind = await User.findOne({ _id: user });
             const comments = await Comment.find({ topic: _id });
-            const commentsWithUser = [];
-            await comments.forEach(async (element) => {
+            for (let i = 0; i < comments.length; i++) {
                 const userComment = await User.findOne({
-                    _id: element.user,
+                    _id: comments[i].toJSON().user,
                 });
-                commentsWithUser.push({
-                    ...element._doc,
-                    ...{ user: userComment._doc },
-                });
-            });
+                comments[i] = {
+                    ...comments[i].toJSON(),
+                    ...{ user: userComment },
+                };
+            }
             topic[index] = {
-                ..._doc,
-                ...{ comments: commentsWithUser },
-                ...{ user: user._doc },
+                ...topic[index].toJSON(),
+                ...{ comments },
+                ...{ user: userFind },
             };
         }
         res.json(topic);

@@ -9,8 +9,8 @@ const router = Router();
 router.post('/create', async (req, res) => {
     try {
         const { id } = req.body;
-        const soiskatel = await User.findOne({ id });
-        if (soiskatel) {
+        const isExist = await User.findOne({ id });
+        if (isExist) {
             res.status(400).json();
             return;
         }
