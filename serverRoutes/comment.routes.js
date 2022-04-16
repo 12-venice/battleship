@@ -11,12 +11,12 @@ const router = Router();
 
 router.post('/create', async (req, res) => {
     try {
-        const { id, _id } = req.body;
+        const { id, topic } = req.body;
         const user = await User.findOne({ id });
-        const topic = await Topic.findOne({ _id });
+        const topicFind = await Topic.findOne({ topic });
         const comment = new Comment({
             ...{ user: user._id },
-            ...topic,
+            ...{ topic: topicFind },
             ...req.body,
         });
         await comment.save();
