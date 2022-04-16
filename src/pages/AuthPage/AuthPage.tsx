@@ -38,7 +38,7 @@ export const AuthPage = (): JSX.Element => {
         }
         message(error);
         clearError();
-    }, [error, message, clearError, login]);
+    }, [error, message, clearError, login, history]);
 
     return (
         <Layout>
