@@ -1,28 +1,36 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable no-unused-expressions */
 // Конфликт
 /* eslint-disable prettier/prettier */
 import cn from 'classnames';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
+import { useHttp } from 'src/hooks/http.hook';
 import { Layout } from '../../components/Layout';
 import { config } from './config';
-import { leaders } from './data';
 
 import styles from './LeaderPage.scss';
 
 export const LeaderPage = (): JSX.Element => {
+    const { request } = useHttp();
+    const [leaders, setLeaders] = useState([]);
     const [sortType, setSortType] = useState('display_name');
     const [sortDirection, setSortDirection] = useState(false);
-    leaders.sort(
-        (a: {}, b: {}) => {
-            if (sortDirection) {
-                return b[sortType as keyof typeof b] - a[sortType as keyof typeof a];
-            }
-            return a[sortType as keyof typeof a] - b[sortType as keyof typeof b];
-        },
-    );
+    const [page, setPage] = useState(0);
+    const getLeaders = useCallback(async () => {
+        const users = await request('/api/user/read', 'POST', {
+            sortType,
+            sortDirection,
+            page,
+        }, {}, true);
+        setLeaders(users);
+    }, [page, request, sortDirection, sortType]);
+
+    useEffect(() => {
+        getLeaders();
+    }, [getLeaders]);
 
     const handlerClick = (
         event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
@@ -32,6 +40,11 @@ export const LeaderPage = (): JSX.Element => {
             setSortDirection(!sortDirection);
         }
         setSortType(sortName || '');
+    };
+
+    const handlerPage = (p: number) => {
+        setPage(page + p);
+        getLeaders();
     };
 
     return (
@@ -94,7 +107,11 @@ export const LeaderPage = (): JSX.Element => {
                         )}
                         <div />
                     </div>
-                    <div className={styles.leader__footer} />
+                    <div className={styles.leader__footer}>
+                        {page > 0 && <span aria-hidden onClick={() => handlerPage(-1)}>prev</span>}
+                        {leaders.length === 10
+                            && <span aria-hidden onClick={() => handlerPage(1)}>prev</span>}
+                    </div>
                 </div>
             </div>
         </Layout>

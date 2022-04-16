@@ -8,14 +8,14 @@ export const useHttp = () => {
     const { logout } = useContext(AuthContext);
     const baseUrl = 'https://ya-praktikum.tech/api/v2';
     const request = useCallback(
-        async (url, method = 'GET', body = null, headers = {}) => {
+        async (url, method = 'GET', body = null, headers = {}, DB = false) => {
             setLoading(true);
             try {
                 if (body) {
                     body = JSON.stringify(body);
                     headers['Content-Type'] = 'application/json';
                 }
-                const response = await fetch(baseUrl + url, {
+                const response = await fetch((DB ? '' : baseUrl) + url, {
                     method,
                     body,
                     headers,

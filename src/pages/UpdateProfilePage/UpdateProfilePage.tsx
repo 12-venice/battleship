@@ -32,6 +32,7 @@ export const UpdateProfilePage = (): JSX.Element => {
         async (data) => {
             try {
                 const fetched = await request('/user/profile', 'PUT', data);
+                await request('/api/user/update', 'POST', fetched, {}, true);
                 setUser(fetched);
                 history.push(PageLinks.profile);
             } catch (e) {
