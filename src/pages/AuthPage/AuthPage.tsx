@@ -1,7 +1,7 @@
 // Ошибка деструктуризации
 /* eslint-disable object-curly-newline */
 import { useCallback, useContext, useEffect } from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Form } from 'src/components/Form';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { AuthContext } from 'src/context/Authcontext';
@@ -13,32 +13,31 @@ import { inputs, headers, submitTitle } from './config';
 
 export const AuthPage = (): JSX.Element => {
     const message = useMessage();
+    const location = useLocation();
+    const from = location?.state?.from?.pathname;
     const { login } = useContext(AuthContext);
-    const history = useHistory();
     const { request, loading, error, clearError } = useHttp();
     const auth = useCallback(
         async (user) => {
             try {
                 const fetched = await request('/auth/signin', 'POST', user);
                 if (fetched === 'OK') {
-                    login();
-                    history.push(PageLinks.home);
+                    login(from || PageLinks.home);
                 }
             } catch (e) {
                 throw new SyntaxError('Что-то пошло не так');
             }
         },
-        [history, login, request],
+        [from, login, request],
     );
 
     useEffect(() => {
         if (error === 'User already in system') {
-            login();
-            history.push(PageLinks.home);
+            login(from || PageLinks.home);
         }
         message(error);
         clearError();
-    }, [error, message, clearError, login, history]);
+    }, [error, message, clearError, login, from]);
 
     return (
         <Layout>

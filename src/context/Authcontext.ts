@@ -1,21 +1,18 @@
 /* eslint-disable no-unused-expressions */
 // Не понимаю как указать пусту функцию
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { createContext } from 'react';
+import { createContext, Dispatch, SetStateAction } from 'react';
 
-export const AuthContext = createContext({
-    login: (): void => {},
-    logout: (): void => {},
-    setUser: (): void => {},
-    isAuth: false,
-    user: {
-        id: '',
-        first_name: '',
-        second_name: '',
-        display_name: '',
-        login: '',
-        email: '',
-        phone: '',
-        avatar: '',
-    },
+interface AuthContextType {
+    user: {} | null;
+    login: (from?: string) => void;
+    logout: () => void;
+    setUser: (value?: {}) => Dispatch<SetStateAction<{} | undefined>> | void;
+}
+
+export const AuthContext = createContext<AuthContextType>({
+    user: {},
+    login: () => {},
+    logout: () => {},
+    setUser: () => {},
 });

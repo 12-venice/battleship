@@ -1,4 +1,5 @@
-import { Route, Switch, Redirect } from 'react-router-dom';
+/* eslint-disable object-curly-newline */
+import { Route, Navigate, Routes, useLocation } from 'react-router-dom';
 import { AuthPage } from 'src/pages/AuthPage';
 import { HomePage } from 'src/pages/HomePage';
 import { NotFoundPage } from 'src/pages/NotFoundPage';
@@ -13,49 +14,37 @@ import { useContext } from 'react';
 import { AuthContext } from 'src/context/Authcontext';
 import { PageLinks, Props } from './types';
 
-const ProtectedRoute: Props = ({ children, isAuth }) => {
-    if (!isAuth) {
-        return <Redirect to={PageLinks.auth} />;
+const ProtectedRoute: Props = ({ childrens }) => {
+    const { user } = useContext(AuthContext);
+    const location = useLocation();
+    if (!user) {
+        return (
+            <Navigate to={PageLinks.auth} state={{ from: location }} replace />
+        );
     }
-    return children;
+    return childrens;
 };
 
-export const Routes = (): JSX.Element => {
-    const { isAuth } = useContext(AuthContext);
-    return (
-        <Switch>
-            <Route exact path={PageLinks.home}>
-                <HomePage />
-            </Route>
-            <Route exact path={PageLinks.auth}>
-                <AuthPage />
-            </Route>
-            <Route exact path={PageLinks.leaderboard}>
-                <LeaderPage />
-            </Route>
-            <Route exact path={PageLinks.register}>
-                <RegisterPage />
-            </Route>
-            <Route exact path={PageLinks.profile}>
-                <ProtectedRoute isAuth={isAuth}>
-                    <ProfilePage />
-                </ProtectedRoute>
-            </Route>
-            <Route exact path={PageLinks.profilePassUpdate}>
-                <UpdatePassPage />
-            </Route>
-            <Route exact path={PageLinks.profileUpdate}>
-                <UpdateProfilePage />
-            </Route>
-            <Route exact path={PageLinks.forum}>
-                <ForumPage />
-            </Route>
-            <Route exact path={PageLinks.game}>
-                <ProtectedRoute isAuth={isAuth}>
-                    <GamePage />
-                </ProtectedRoute>
-            </Route>
-            <Route>{NotFoundPage}</Route>
-        </Switch>
-    );
-};
+export const useRoutes = (): JSX.Element => (
+    <Routes>
+        <Route path={PageLinks.home} element={<HomePage />} />
+        <Route path={PageLinks.auth} element={<AuthPage />} />
+        <Route path={PageLinks.leaderboard} element={<LeaderPage />} />
+        <Route path={PageLinks.register} element={<RegisterPage />} />
+        <Route
+            path={PageLinks.profile}
+            element={<ProtectedRoute childrens={<ProfilePage />} />}
+        />
+        <Route
+            path={PageLinks.profilePassUpdate}
+            element={<UpdatePassPage />}
+        />
+        <Route path={PageLinks.profileUpdate} element={<UpdateProfilePage />} />
+        <Route path={PageLinks.forum} element={<ForumPage />} />
+        <Route
+            path={PageLinks.game}
+            element={<ProtectedRoute childrens={<GamePage />} />}
+        />
+        <Route>{NotFoundPage}</Route>
+    </Routes>
+);

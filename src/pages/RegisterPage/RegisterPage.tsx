@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect } from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Form } from 'src/components/Form';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { AuthContext } from 'src/context/Authcontext';
@@ -12,21 +12,21 @@ import styles from './RegisterPage.scss';
 export const RegisterPage = (): JSX.Element => {
     const message = useMessage();
     const { login } = useContext(AuthContext);
-    const history = useHistory();
+    const location = useLocation();
+    const from = location?.state?.from?.pathname;
     const { request, error, clearError } = useHttp();
     const createUser = useCallback(
         async (user) => {
             try {
                 const fetched = await request('/auth/signup', 'POST', user);
                 if (fetched.id) {
-                    login();
-                    history.push(PageLinks.home);
+                    login(from || PageLinks.home);
                 }
             } catch (e) {
                 throw new SyntaxError('Что-то пошло не так');
             }
         },
-        [history, login, request],
+        [request, login, from],
     );
     useEffect(() => {
         message(error);
