@@ -10,19 +10,19 @@ import styles from './HomePage.scss';
 import { Information } from '../../components/Information';
 
 export const HomePage = (): JSX.Element => {
-    const { isAuth, logout } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const [typeOfGame, setTypeOfGame] = useState(false);
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
     const leftBlock = () => {
-        if (isAuth) {
+        if (user) {
             return <Button href={PageLinks.profile} title="PROFILE" />;
         }
         return null;
     };
 
     const rightBlock = () => {
-        if (isAuth) {
+        if (user) {
             return (
                 <Button
                     onClick={logout}

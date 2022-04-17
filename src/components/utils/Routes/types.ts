@@ -13,7 +13,6 @@ export const enum PageLinks {
 }
 
 type RouteProps = {
-    children: ReactElement;
-    isAuth: boolean;
+    childrens: ReactElement;
 };
 export type Props = FC<RouteProps>;
