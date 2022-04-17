@@ -1,7 +1,7 @@
 // Линтер требует указать в качестве типа строку или тернераное выражение
 /* eslint-disable react/button-has-type */
 import cn from 'classnames';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './Button.scss';
 import { ButtonProps } from './types';
 
@@ -15,10 +15,10 @@ export const Button = ({
     noFill,
     href,
 }: ButtonProps): JSX.Element => {
-    const history = useHistory();
+    const navigate = useNavigate();
     let handlerClick;
     if (href) {
-        handlerClick = () => history.push(href);
+        handlerClick = () => navigate(href);
     }
     if (onClick) {
         handlerClick = onClick;

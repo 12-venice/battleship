@@ -1,6 +1,6 @@
 /// Ошибка деструктуризации
 /* eslint-disable object-curly-newline */
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { useHttp } from 'src/hooks/http.hook';
 import { useCallback, useContext, useEffect } from 'react';
@@ -18,17 +18,17 @@ export const UpdatePassPage = (): JSX.Element => {
     const { user } = useContext(AuthContext);
     const message = useMessage();
     const { request, loading, error, clearError } = useHttp();
-    const history = useHistory();
+    const navigate = useNavigate();
     const changePass = useCallback(
         async (data) => {
             try {
                 await request('/user/password', 'PUT', data);
-                history.push(PageLinks.profile);
+                navigate(PageLinks.profile);
             } catch (e) {
                 throw new SyntaxError('Что-то пошло не так');
             }
         },
-        [history, request],
+        [navigate, request],
     );
 
     useEffect(() => {

@@ -1,6 +1,6 @@
 /// Ошибка деструктуризации
 /* eslint-disable object-curly-newline */
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { useHttp } from 'src/hooks/http.hook';
 import { useCallback, useContext, useEffect } from 'react';
@@ -27,19 +27,19 @@ export const UpdateProfilePage = (): JSX.Element => {
     });
     const message = useMessage();
     const { request, loading, error, clearError } = useHttp();
-    const history = useHistory();
+    const navigate = useNavigate();
     const changeProfile = useCallback(
         async (data) => {
             try {
                 const fetched = await request('/user/profile', 'PUT', data);
                 await request('/api/user/update', 'POST', fetched, {}, true);
                 setUser(fetched);
-                history.push(PageLinks.profile);
+                navigate(PageLinks.profile);
             } catch (e) {
                 throw new SyntaxError('Что-то пошло не так');
             }
         },
-        [history, request, setUser],
+        [navigate, request, setUser],
     );
 
     useEffect(() => {
