@@ -18,7 +18,7 @@ import { DeleteTopicWindow } from './components/deleteTopic';
 import { EditTopicWindow } from './components/editTopic';
 
 export const ForumPage = (): JSX.Element => {
-    const { user, isAuth } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const [topicId, setTopicId] = useState('');
     const [topicTheme, setTopicTheme] = useState('');
     const [topicDesc, setTopicDesc] = useState('');
@@ -26,16 +26,7 @@ export const ForumPage = (): JSX.Element => {
     const [openDeleteWindow, setWindowDelete] = useState(false);
     const [editDeleteWindow, setWindowEdit] = useState(false);
     const [textComment, setTextComment] = useState('');
-    const [topics, setTopics] = useState([
-        {
-            theme: '',
-            date: new Date(),
-            description: '',
-            user: { display_name: '' },
-            comments: [],
-            _id: '',
-        },
-    ]);
+    const [topics, setTopics] = useState([]);
     const { request, loading } = useHttp();
 
     const getTopics = useCallback(async () => {
@@ -127,7 +118,7 @@ export const ForumPage = (): JSX.Element => {
                     />
                 </div>
             </div>
-            {openCreateWindow && isAuth && (
+            {openCreateWindow && user && (
                 <AddTopicWindow
                     close={() => {
                         setWindowCreate(false);

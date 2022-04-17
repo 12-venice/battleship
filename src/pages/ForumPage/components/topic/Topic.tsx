@@ -39,7 +39,7 @@ export const Topic: Props = ({
                         <h2 className={styles['topic__header-theme']}>
                             {theme}
                         </h2>
-                        {name === user.display_name && (
+                        {name === user?.display_name && (
                             <div className={styles.topic__controls}>
                                 <i
                                     key={uuidv4()}
