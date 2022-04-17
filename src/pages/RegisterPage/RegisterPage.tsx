@@ -36,7 +36,7 @@ export const RegisterPage = (): JSX.Element => {
     return (
         <Layout>
             <div className={styles.register__main}>
-                <span className={styles.register__link}>{headers.title}</span>
+                <span className={styles.register__logo}>{headers.title}</span>
                 <span className={styles.register__header}>{headers.page}</span>
                 <Form
                     inputs={inputs}

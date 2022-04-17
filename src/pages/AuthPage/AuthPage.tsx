@@ -43,7 +43,7 @@ export const AuthPage = (): JSX.Element => {
     return (
         <Layout>
             <div className={styles.auth__main}>
-                <span className={styles.auth__link}>{headers.title}</span>
+                <span className={styles.auth__logo}>{headers.title}</span>
                 <span className={styles.auth__header}>{headers.page}</span>
                 <Form
                     inputs={inputs}
