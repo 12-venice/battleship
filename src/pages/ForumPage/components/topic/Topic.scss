@@ -40,4 +40,10 @@
     font-family: var(--font-family), var(--font-family-ru);
     font-size: 30px;
     margin: 0;
+    display: inline-block;
+}
+.topic__controls {
+    margin-left: 10px;
+    display: inline-block;
+    cursor: pointer;
 }
