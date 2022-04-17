@@ -10,15 +10,15 @@ ReactDOM.render(
     document.getElementById('root'),
 );
 
-window.addEventListener('load', async () => {
-    if ('serviceWorker' in navigator) {
-        try {
-            const registration = await navigator.serviceWorker.register(
-                '../sw.js',
-            );
-            console.log('SW registered: ', registration);
-        } catch (e) {
-            console.log('SW registration failed: ', e);
-        }
-    }
-});
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker
+            .register('/service-worker.js')
+            .then(() => {
+                console.log('SW registered');
+            })
+            .catch((registrationError) => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}
