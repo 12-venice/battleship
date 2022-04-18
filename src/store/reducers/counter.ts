@@ -1,3 +1,4 @@
+/* eslint-disable default-param-last */
 /* eslint-disable indent */
 const actions = {
     INCREMENT: 'INCREMENT',
@@ -5,8 +6,8 @@ const actions = {
 };
 
 export function countReducer(
-    action: { type: keyof action },
     state = 0,
+    action: { type: 'INCREMENT' | 'DECREMENT' },
 ): number {
     const { type } = action;
     switch (type) {

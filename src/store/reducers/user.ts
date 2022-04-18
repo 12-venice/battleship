@@ -1,3 +1,4 @@
+/* eslint-disable default-param-last */
 /* eslint-disable indent */
 type LoadStatus = 'success' | 'pending' | 'failed' | 'error';
 
@@ -6,10 +7,6 @@ type Nullable<T> = T | null;
 interface User {
     name: string;
     birthday: number;
-}
-
-interface BaseActionType<T> {
-    type: T;
 }
 
 type UserState = {
@@ -21,8 +18,9 @@ const actions = {
     SET_STATUS: 'SET_STATUS',
 };
 
-interface ItemActionType extends BaseActionType<keyof actions> {
+interface ItemActionType {
     status: LoadStatus;
+    type: 'SET_STATUS';
 }
 
 const defaultState: UserState = {
@@ -32,7 +30,7 @@ const defaultState: UserState = {
 
 export function userReducer(
     state: UserState = defaultState,
-    { type, status }: ItemActionType = {},
+    { type, status }: ItemActionType,
 ): UserState {
     switch (type) {
         case actions.SET_STATUS:
