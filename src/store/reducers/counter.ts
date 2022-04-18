@@ -19,3 +19,11 @@ export function countReducer(
             return state;
     }
 }
+
+export function incCount() {
+    return { type: actions.INCREMENT };
+}
+
+export function decCount() {
+    return { type: actions.DECREMENT };
+}
