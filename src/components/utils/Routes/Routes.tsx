@@ -45,6 +45,6 @@ export const useRoutes = (): JSX.Element => (
             path={PageLinks.game}
             element={<ProtectedRoute childrens={<GamePage />} />}
         />
-        <Route>{NotFoundPage}</Route>
+        <Route path="*" element={<NotFoundPage />} />
     </Routes>
 );
