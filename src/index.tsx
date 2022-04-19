@@ -4,9 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { App } from './components/App';
 import { configureStore } from './store/store';
 
-const store = configureStore({});
-
-console.log(store.getState());
+export const store = configureStore({});
 
 ReactDOM.render(
     <Provider store={store}>

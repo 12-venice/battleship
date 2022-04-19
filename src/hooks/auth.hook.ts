@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { userService } from 'src/store/services/userService';
 import { useHttp } from './http.hook';
 
 export const useAuth = () => {
@@ -9,8 +10,12 @@ export const useAuth = () => {
 
     const login = useCallback(
         async (from?) => {
+            userService.pending();
             const fetched = await request('/auth/user', 'GET', null);
             if (fetched) {
+                userService.success();
+                userService.setUser(fetched);
+
                 setUser(fetched);
                 await request('/api/user/create', 'POST', fetched, {}, true);
                 if (from) {

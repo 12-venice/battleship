@@ -4,23 +4,34 @@ type LoadStatus = 'success' | 'pending' | 'failed' | 'error';
 
 type Nullable<T> = T | null;
 
-interface User {
-    name: string;
-    birthday: number;
+export interface User {
+    id: number;
+    avatar: Nullable<string>;
+    first_name: string;
+    second_name: string;
+    display_name: Nullable<string>;
+    email: string;
+    login: string;
+    phone: string;
 }
 
-type UserState = {
+export type UserState = {
     item: Nullable<User>;
     status: LoadStatus;
 };
 
-const actions = {
-    SET_STATUS: 'SET_STATUS',
+const actions: Record<string, string> = {
+    PENDING: 'PENDING',
+    SUCCESS: 'SUCCESS',
+    FAILED: 'FAILED',
+    SET_USER_ITEM: 'SET_USER_ITEM',
 };
 
-interface ItemActionType {
-    status: LoadStatus;
-    type: 'SET_STATUS';
+interface BaseActionType<T> {
+    type: T;
+}
+interface ItemActionType extends BaseActionType<keyof typeof actions> {
+    item: Nullable<User>;
 }
 
 const defaultState: UserState = {
@@ -30,16 +41,32 @@ const defaultState: UserState = {
 
 export function userReducer(
     state: UserState = defaultState,
-    { type, status }: ItemActionType,
+    { type, item }: ItemActionType,
 ): UserState {
     switch (type) {
-        case actions.SET_STATUS:
-            return { ...state, status };
+        case actions.PENDING:
+            return { ...state, status: 'pending' };
+        case actions.SUCCESS:
+            return { ...state, status: 'success' };
+        case actions.FAILED:
+            return { ...state, status: 'failed' };
+        case actions.SET_USER_ITEM:
+            return { ...state, item };
         default:
             return state;
     }
 }
 
-export function setLoadingStatus(status: LoadStatus) {
-    return { type: actions.SET_STATUS, status };
+export function loadSuccess(): ItemActionType {
+    return { type: actions.SUCCESS, item: null };
+}
+export function loadFailed(): ItemActionType {
+    return { type: actions.FAILED, item: null };
+}
+export function loadPending(): ItemActionType {
+    return { type: actions.PENDING, item: null };
+}
+
+export function setUser(user: User): ItemActionType {
+    return { type: actions.SET_USER_ITEM, item: user };
 }

@@ -16,6 +16,7 @@ import { AddTopicWindow } from './components/addTopic';
 import styles from './ForumPage.scss';
 import { DeleteTopicWindow } from './components/deleteTopic';
 import { EditTopicWindow } from './components/editTopic';
+import { TopicProps } from './components/topic/types';
 
 export const ForumPage = (): JSX.Element => {
     const { user } = useContext(AuthContext);
@@ -53,7 +54,7 @@ export const ForumPage = (): JSX.Element => {
             return <Preloader />;
         }
         if (topics.length > 0) {
-            return topics.map((item) => (
+            return topics.map((item: TopicProps) => (
                 <Topic
                     key={uuidv4()}
                     theme={item.theme}
