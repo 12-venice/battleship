@@ -1,6 +1,8 @@
+/* eslint-disable prettier/prettier */
+
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
-import { useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useHttp } from 'src/hooks/http.hook';
 import { Props } from './types';
@@ -10,15 +12,19 @@ import image2 from '../../../../images/avatars/ma.png';
 import image3 from '../../../../images/avatars/w.png';
 import image4 from '../../../../images/avatars/wa.png';
 
+type Url = string;
+type File = Blob | string | undefined;
+type FileInput = HTMLInputElement;
+
 export const UpdateAvatar: Props = ({ close }): JSX.Element => {
-    const fileInput = useRef(null);
-    const [file, setFile] = useState();
-    const [preview, setPreview] = useState();
+    const fileInput = useRef<FileInput>(null);
+    const [file, setFile] = useState<File>();
+    const [preview, setPreview] = useState<Url>('');
     const { request, loading } = useHttp();
     const updateAvatar = async () => {
         try {
             const formData = new FormData();
-            formData.append('avatar', file);
+            formData.append('avatar', file ?? '');
             await request(
                 '/user/profile/avatar',
                 'PUT',
@@ -31,16 +37,17 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
             throw new SyntaxError('Что-то пошло не так');
         }
     };
-    const handlerImageCustom = (e: { target: { files: Blob[] } }) => {
-        const img = URL.createObjectURL(e.target?.files[0]);
-        setPreview(img);
+    const handlerImageCustom = (e: ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) return;
+        const url = URL.createObjectURL(e.target.files[0]);
+        setPreview(url);
         setFile(e.target.files[0]);
     };
 
-    const handlerImageDefault = async (image: URL) => {
-        const img = await fetch(image);
-        const blob = await img.blob();
-        setPreview(image);
+    const handlerImageDefault = async (url: string) => {
+        const image = await fetch(url);
+        const blob = await image.blob();
+        setPreview(url);
         setFile(blob);
     };
 
@@ -103,7 +110,7 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
                         {preview ? (
                             <img
                                 aria-hidden
-                                onClick={() => fileInput.current.click()}
+                                onClick={() => fileInput.current && fileInput.current.click()}
                                 className={
                                     styles['update-avatar__select-custom']
                                 }
@@ -113,7 +120,7 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
                         ) : (
                             <div
                                 aria-hidden
-                                onClick={() => fileInput.current.click()}
+                                onClick={() => fileInput.current && fileInput.current.click()}
                                 className={
                                     styles['update-avatar__select-custom']
                                 }
