@@ -5,16 +5,14 @@ import { ModalWindow } from 'src/components/ModalWindow';
 import { ChangeEvent, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useHttp } from 'src/hooks/http.hook';
-import { Props } from './types';
+import {
+    File, FileInput, Props, Url,
+} from './types';
 import styles from './UpdateAvatar.scss';
 import image1 from '../../../../images/avatars/m.png';
 import image2 from '../../../../images/avatars/ma.png';
 import image3 from '../../../../images/avatars/w.png';
 import image4 from '../../../../images/avatars/wa.png';
-
-type Url = string;
-type File = Blob | string | undefined;
-type FileInput = HTMLInputElement;
 
 export const UpdateAvatar: Props = ({ close }): JSX.Element => {
     const fileInput = useRef<FileInput>(null);
@@ -33,6 +31,7 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
                 false,
                 formData,
             );
+            close();
         } catch (e) {
             throw new SyntaxError('Что-то пошло не так');
         }
@@ -88,7 +87,7 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
                                 style={{
                                     borderColor:
                                         preview === element.src
-                                            ? '#09469a'
+                                            ? '#febc29'
                                             : '#ffffff',
                                 }}
                                 className={
