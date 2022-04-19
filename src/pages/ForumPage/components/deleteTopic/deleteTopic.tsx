@@ -25,6 +25,7 @@ export const DeleteTopicWindow: Props = ({ close, _id }): JSX.Element => {
                     skin="high"
                     color="red"
                     title="DELETE"
+                    disabled={loading}
                     onClick={deleteTopic}
                 />
                 <Button
