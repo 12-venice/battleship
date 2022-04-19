@@ -3,7 +3,6 @@ import { ModalWindow } from 'src/components/ModalWindow';
 import { useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useHttp } from 'src/hooks/http.hook';
-import { PageLinks } from 'src/components/utils/Routes/types';
 import { Props } from './types';
 import styles from './UpdateAvatar.scss';
 import image1 from '../../../../images/avatars/m.png';
