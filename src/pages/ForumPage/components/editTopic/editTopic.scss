@@ -1,0 +1,55 @@
+@import 'src/styles/colors.css';
+@import 'src/styles/variables.css';
+
+.add-topic__label {
+    color: var(--white);
+    font-size: 41px;
+    margin: 0;
+}
+.add-topic__buttons {
+    width: 370px;
+    display: flex;
+    justify-content: space-between;
+}
+.add-topic__input {
+    margin: 40px 0 20px; 
+    width: 620px;
+    height: 57px;
+    background: var(--dark-blue);
+    border-radius: 15px;
+    border-style: none;
+    padding-left: 20px;
+    font-family: var(--font-family-second);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    color: var(--white);
+}
+.add-topic__textarea {
+    margin: 0;
+    margin-bottom: 40px; 
+    width: 620px;
+    height: 150px;
+    background: var(--light-dark-blue);
+    border-radius: 15px;
+    border-style: none;
+    padding: 10px;
+    padding-top: 15px;
+    font-family: var(--font-family-second);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    color: var(--white);
+    resize: none;
+    &::-webkit-scrollbar {
+        width: 10px;
+        background-color: var(--blue);
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: var(--dark-blue);
+    }
+}

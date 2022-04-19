@@ -1,7 +1,10 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable operator-linebreak */
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { DateParser } from 'src/components/utils/DateParse/DateParser';
+import { AuthContext } from 'src/context/Authcontext';
 import { Props, handleClickType } from './types';
 import { Comment } from '../comment';
 
@@ -15,9 +18,11 @@ export const Topic: Props = ({
     comments,
     _id,
     setTopicId,
+    deleteFunc,
+    editFunc,
 }): JSX.Element => {
     const [state, toggleState] = useState(false);
-
+    const { user } = useContext(AuthContext);
     const handleClick: handleClickType = () => {
         toggleState(!state);
         setTopicId(_id);
@@ -30,7 +35,31 @@ export const Topic: Props = ({
                 aria-hidden="true"
             >
                 <div className={styles.topic__header}>
-                    <h2 className={styles['topic__header-theme']}>{theme}</h2>
+                    <div>
+                        <h2 className={styles['topic__header-theme']}>
+                            {theme}
+                        </h2>
+                        {name === user?.display_name && (
+                            <div className={styles.topic__controls}>
+                                <i
+                                    key={uuidv4()}
+                                    className="small material-icons"
+                                    onClick={() => {
+                                        editFunc(_id, theme, description);
+                                    }}
+                                >
+                                    edit
+                                </i>
+                                <i
+                                    key={uuidv4()}
+                                    className="small material-icons"
+                                    onClick={() => deleteFunc(_id)}
+                                >
+                                    delete
+                                </i>
+                            </div>
+                        )}
+                    </div>
                     <div className={styles['topic__header-author']}>
                         <h3 className={styles['topic__header-author-name']}>
                             {name}
