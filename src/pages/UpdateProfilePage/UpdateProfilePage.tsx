@@ -13,7 +13,7 @@ import { PageLinks } from 'src/components/utils/Routes/types';
 import { Layout } from 'src/components/Layout';
 import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs, submitTitle } from './config';
-import { Avatar } from '../ProfilePage/Avatar';
+import { Avatar } from '../ProfilePage/components/Avatar';
 
 export const UpdateProfilePage = (): JSX.Element => {
     const { user, setUser } = useContext(AuthContext);

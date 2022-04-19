@@ -18,16 +18,7 @@ export const ForumPage = (): JSX.Element => {
     const { user } = useContext(AuthContext);
     const [topicId, setTopicId] = useState('');
     const [textComment, setTextComment] = useState('');
-    const [topics, setTopics] = useState([
-        {
-            theme: '',
-            date: new Date(),
-            description: '',
-            user: { display_name: '' },
-            comments: [],
-            _id: '',
-        },
-    ]);
+    const [topics, setTopics] = useState([]);
     const { request, loading } = useHttp();
 
     const getTopics = useCallback(async () => {
