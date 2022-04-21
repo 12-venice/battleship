@@ -1,12 +1,10 @@
-// Надо убрать ограничение на оператор ++
-/* eslint-disable no-plusplus */
 import { fieldsProps } from 'src/components/Form/types';
 import { validationPatterns } from './validationPatterns';
 
 export const validation = (fields: fieldsProps[], values: {}) => {
     let valid = true;
     const newFields = fields.slice();
-    for (let index = 0; index < newFields.length; index++) {
+    for (let index = 0; index < newFields.length; index + 1) {
         const { validateType, name } = newFields[index];
         const value = values[name as keyof typeof values];
         if (validateType) {

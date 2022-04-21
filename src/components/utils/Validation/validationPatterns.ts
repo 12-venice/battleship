@@ -1,6 +1,3 @@
-// Линтер считает, что указанны не используемые значения, в регулярном выражении - email
-/* eslint-disable no-useless-escape */
-
 export const validationPatterns: Record<
     string,
     { pattern: RegExp; error: string }
@@ -15,7 +12,7 @@ export const validationPatterns: Record<
     },
     email: {
         pattern:
-            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
         error: 'The e-mail is incorrect',
     },
     password: {

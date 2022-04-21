@@ -1,5 +1,3 @@
-/// Ошибка деструктуризации
-/* eslint-disable object-curly-newline */
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { useHttp } from 'src/hooks/http.hook';
