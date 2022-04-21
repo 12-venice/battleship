@@ -45,6 +45,7 @@ export const AddTopicWindow: Props = ({ close }): JSX.Element => {
                     skin="high"
                     color="green"
                     title="ADD"
+                    disabled={loading}
                     onClick={createTopic}
                 />
                 <Button

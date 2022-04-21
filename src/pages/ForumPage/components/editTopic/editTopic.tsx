@@ -53,6 +53,7 @@ export const EditTopicWindow: Props = ({
                     skin="high"
                     color="green"
                     title="EDIT"
+                    disabled={loading}
                     onClick={editTopic}
                 />
                 <Button
