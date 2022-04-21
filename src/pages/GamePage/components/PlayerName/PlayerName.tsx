@@ -15,7 +15,10 @@ export const PlayerName = ({
         >
             {avatarSrc ? (
                 <div className={styles.avatar}>
-                    <img src={avatarSrc} alt="" />
+                    <img
+                        src={`https://ya-praktikum.tech/api/v2/resources${avatarSrc}`}
+                        alt="Player avatar"
+                    />
                 </div>
             ) : (
                 <div className={styles.avatar}>

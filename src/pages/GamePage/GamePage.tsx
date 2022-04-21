@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
+import { AuthContext } from 'src/context/Authcontext';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
@@ -26,13 +27,18 @@ const data: Props = {
 
 export const GamePage = (): JSX.Element => {
     const [info, setInfo] = useState(false);
+    const { user } = useContext(AuthContext);
     const getInfo = () => setInfo(!info);
     return (
         <Layout>
             <div className={styles.game__background}>
                 <div className={styles.game__header}>
                     <Button skin="quad" title="i" onClick={getInfo} />
-                    <PlayerName name="Player 1" avatarPosition="right" />
+                    <PlayerName
+                        avatarSrc={user.avatar ?? ''}
+                        name={user.display_name ?? ''}
+                        avatarPosition="right"
+                    />
                     <p className={styles['game__header-text']}>VS</p>
                     <PlayerName name="Player 2" />
                     <Button href="/" skin="quad" title="X" color="red" />
