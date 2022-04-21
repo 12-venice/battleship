@@ -3,22 +3,22 @@
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
 import { ChangeEvent, useRef, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { useHttp } from 'src/hooks/http.hook';
+import { PageLinks } from 'src/components/utils/Routes/types';
+import { useNavigate } from 'react-router-dom';
 import {
     File, FileInput, Props, Url,
 } from './types';
 import styles from './UpdateAvatar.scss';
-import image1 from '../../../../images/avatars/m.png';
-import image2 from '../../../../images/avatars/ma.png';
-import image3 from '../../../../images/avatars/w.png';
-import image4 from '../../../../images/avatars/wa.png';
+import { config } from './config';
 
 export const UpdateAvatar: Props = ({ close }): JSX.Element => {
     const fileInput = useRef<FileInput>(null);
     const [file, setFile] = useState<File>();
     const [preview, setPreview] = useState<Url>('');
+    const [defAvatar, setDefAvatar] = useState<Url>('');
     const { request, loading } = useHttp();
+    const navigate = useNavigate();
     const updateAvatar = async () => {
         try {
             const formData = new FormData();
@@ -32,42 +32,27 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
                 formData,
             );
             close();
+            navigate(PageLinks.profile);
         } catch (e) {
-            throw new SyntaxError('Что-то пошло не так');
+            throw new Error('Что-то пошло не так');
         }
     };
     const handlerImageCustom = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
+        if (e.target.files.length === 0) return;
         const url = URL.createObjectURL(e.target.files[0]);
         setPreview(url);
+        setDefAvatar('');
         setFile(e.target.files[0]);
     };
 
     const handlerImageDefault = async (url: string) => {
         const image = await fetch(url);
         const blob = await image.blob();
-        setPreview(url);
+        setDefAvatar(url);
+        setPreview('');
         setFile(blob);
     };
-
-    const config = [
-        {
-            src: image1,
-            alt: 'Avatar#1',
-        },
-        {
-            src: image2,
-            alt: 'Avatar#2',
-        },
-        {
-            src: image3,
-            alt: 'Avatar#3',
-        },
-        {
-            src: image4,
-            alt: 'Avatar#4',
-        },
-    ];
 
     return (
         <ModalWindow>
@@ -82,11 +67,11 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
                     <div className={styles['update-avatar__block']}>
                         {config.map((element) => (
                             <img
-                                key={uuidv4()}
+                                key={element.src}
                                 aria-hidden
                                 style={{
                                     borderColor:
-                                        preview === element.src
+                                        defAvatar === element.src
                                             ? '#febc29'
                                             : '#ffffff',
                                 }}

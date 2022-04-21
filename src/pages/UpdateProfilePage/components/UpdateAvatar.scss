@@ -48,13 +48,15 @@
     width: 178px;
     height: 178px;
     background: var(--white);
-    border: 2px solid var(--white);
+    border: 5px solid var(--white);
     border-radius: 50%;
 }
 
 .update-avatar__select-default {
+    width: 130px;
+    height: 130px;
     background: var(--white);
-    border: 2px solid var(--white);
+    border: 5px solid var(--white);
     border-radius: 50%;
     margin: 15px;
 }

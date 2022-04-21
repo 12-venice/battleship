@@ -3,7 +3,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { useHttp } from 'src/hooks/http.hook';
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Preloader } from 'src/components/Preloader';
 import { Form } from 'src/components/Form';
 import { useMessage } from 'src/hooks/message.hook';
@@ -14,6 +14,7 @@ import { Layout } from 'src/components/Layout';
 import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs, submitTitle } from './config';
 import { Avatar } from '../ProfilePage/components/Avatar';
+import { UpdateAvatar } from './components/UpdateAvatar';
 
 export const UpdateProfilePage = (): JSX.Element => {
     const { user, setUser } = useContext(AuthContext);
@@ -28,6 +29,8 @@ export const UpdateProfilePage = (): JSX.Element => {
     const message = useMessage();
     const { request, loading, error, clearError } = useHttp();
     const navigate = useNavigate();
+    const [updateAvatar, setUpdateAvatar] = useState(false);
+    const getUpdateAvatar = () => setUpdateAvatar(!updateAvatar);
     const changeProfile = useCallback(
         async (data) => {
             try {
@@ -63,7 +66,7 @@ export const UpdateProfilePage = (): JSX.Element => {
                             />
                         </div>
                         <div className={styles['profile__block-center']}>
-                            {Avatar(user)}
+                            {Avatar(user, getUpdateAvatar)}
                             <Form
                                 inputs={inputsWithDefaultsValue}
                                 setData={changeProfile}
@@ -74,6 +77,7 @@ export const UpdateProfilePage = (): JSX.Element => {
                     </>
                 )}
             </div>
+            {updateAvatar && <UpdateAvatar close={getUpdateAvatar} />}
         </Layout>
     );
 };
