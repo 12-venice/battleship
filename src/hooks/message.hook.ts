@@ -1,5 +1,3 @@
-// Возникает конфликт
-/* eslint-disable implicit-arrow-linebreak */
 import { useCallback } from 'react';
 import M from 'materialize-css';
 

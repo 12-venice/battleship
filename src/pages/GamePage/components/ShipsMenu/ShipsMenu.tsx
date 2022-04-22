@@ -1,5 +1,3 @@
-// надо разобраться с преттиер
-/* eslint-disable */
 import { useMemo } from 'react';
 import { getCurrentShips } from './helpers/getCurrentShips';
 import { CONTAINER_WIDTH, CONTAINER_HEIGHT } from './data';
@@ -15,7 +13,7 @@ export const ShipsMenu = ({ ships }: Props) => {
             style={{ width: CONTAINER_WIDTH, height: CONTAINER_HEIGHT }}
         >
             {currentShips.map(({ id, src, bottom, left }) => (
-    <img
+                <img
                     alt=""
                     key={id}
                     data-test-id={id}

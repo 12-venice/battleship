@@ -1,7 +1,3 @@
-// надо разобраться с преттиер
-/* eslint-disable */
-// ошибка в reduce
-// @ts-nocheck
 import { shipsSrcMap } from 'src/pages/GamePage/data';
 import {
     IMG_WIDTH,

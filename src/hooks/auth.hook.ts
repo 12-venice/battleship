@@ -12,10 +12,10 @@ export const useAuth = () => {
             const fetched = await request('/auth/user', 'GET', null);
             if (fetched) {
                 setUser(fetched);
-                await request('/api/user/create', 'POST', fetched, {}, true);
                 if (from) {
                     navigate(from, { replace: true });
                 }
+                await request('/api/user/create', 'POST', fetched, {}, true);
             }
         },
         [navigate, request],

@@ -1,13 +1,14 @@
-// Требует деструктуризацию user
-/* eslint-disable react/destructuring-assignment */
 import styles from './ProfilePage.scss';
 
-export const Avatar = (user: {
+export const Avatar = ({
+    avatar,
+    login,
+}: {
     avatar: string;
     login: string;
 }): JSX.Element => {
-    if (user.avatar) {
-        const imageUrl = `https://ya-praktikum.tech/api/v2/resources${user.avatar}`;
+    if (avatar) {
+        const imageUrl = `https://ya-praktikum.tech/api/v2/resources${avatar}`;
         return (
             <img
                 className={styles.profile__avatar}
@@ -16,5 +17,5 @@ export const Avatar = (user: {
             />
         );
     }
-    return <div className={styles.profile__avatar}>{user.login[0]}</div>;
+    return <div className={styles.profile__avatar}>{login[0]}</div>;
 };

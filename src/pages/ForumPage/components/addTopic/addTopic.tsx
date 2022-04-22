@@ -11,7 +11,7 @@ import { Props } from './types';
 import styles from './addTopic.scss';
 
 export const AddTopicWindow: Props = ({ close }): JSX.Element => {
-    const { request, loading } = useHttp();
+    const { request } = useHttp();
     const { user } = useContext(AuthContext);
     const [theme, setTheme] = useState('');
     const [description, setDescription] = useState('');
@@ -45,6 +45,7 @@ export const AddTopicWindow: Props = ({ close }): JSX.Element => {
                     skin="high"
                     color="green"
                     title="ADD"
+                    disabled={loading}
                     onClick={createTopic}
                 />
                 <Button

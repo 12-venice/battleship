@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import { Route, Navigate, Routes, useLocation } from 'react-router-dom';
 import { AuthPage } from 'src/pages/AuthPage';
 import { HomePage } from 'src/pages/HomePage';
