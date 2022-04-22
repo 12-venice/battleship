@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
@@ -25,6 +25,8 @@ const data: Props = {
 };
 
 export const GamePage = (): JSX.Element => {
+    const playerCanvasRef = useRef<HTMLCanvasElement | null>(null);
+    const botCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
     return (
@@ -38,8 +40,12 @@ export const GamePage = (): JSX.Element => {
                     <Button href="/" skin="quad" title="X" color="red" />
                 </div>
                 <div className={styles.game__battlefields}>
-                    <Area areaWidth={425} />
-                    <Area areaWidth={425} fillColor="#9DC0F0" />
+                    <Area canvasRef={playerCanvasRef} areaWidth={425} />
+                    <Area
+                        canvasRef={botCanvasRef}
+                        areaWidth={425}
+                        fillColor="#9DC0F0"
+                    />
                 </div>
                 <div className={styles.game__footer}>
                     <div className={styles.game__docs}>
