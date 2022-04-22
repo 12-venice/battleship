@@ -1,5 +1,3 @@
-// Ошибка деструктуризации
-/* eslint-disable object-curly-newline */
 import { useCallback, useContext, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Form } from 'src/components/Form';

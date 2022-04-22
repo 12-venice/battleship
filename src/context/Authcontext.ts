@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-// Не понимаю как указать пусту функцию
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { createContext, Dispatch, SetStateAction } from 'react';
 
 export type User = {
@@ -21,9 +18,13 @@ interface AuthContextType {
     setUser: (value?: {}) => Dispatch<SetStateAction<{} | undefined>> | void;
 }
 
+const emptyFunction = () => {
+    // do nothing.
+};
+
 export const AuthContext = createContext<AuthContextType>({
     user: {},
-    login: () => {},
-    logout: () => {},
-    setUser: () => {},
+    login: emptyFunction,
+    logout: emptyFunction,
+    setUser: emptyFunction,
 });

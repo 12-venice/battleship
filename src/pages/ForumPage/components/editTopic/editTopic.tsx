@@ -16,7 +16,7 @@ export const EditTopicWindow: Props = ({
     oldDescription,
     oldTheme,
 }): JSX.Element => {
-    const { request, loading } = useHttp();
+    const { request } = useHttp();
     const { user } = useContext(AuthContext);
     const [theme, setTheme] = useState(oldTheme);
     const [description, setDescription] = useState(oldDescription);

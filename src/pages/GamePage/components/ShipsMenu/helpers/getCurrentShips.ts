@@ -1,7 +1,3 @@
-// надо разобраться с преттиер
-/* eslint-disable */
-// ошибка в reduce
-// @ts-nocheck
 import ship1Img from 'images/ships/ship1.png';
 import ship2Img from 'images/ships/ship2.png';
 import ship3Img from 'images/ships/ship3.png';

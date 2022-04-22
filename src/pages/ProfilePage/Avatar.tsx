@@ -1,6 +1,6 @@
-import styles from './LeaderPage.scss';
+import styles from './ProfilePage.scss';
 
-export const LeaderAvatar = ({
+export const Avatar = ({
     avatar,
     login,
 }: {
@@ -11,11 +11,11 @@ export const LeaderAvatar = ({
         const imageUrl = `https://ya-praktikum.tech/api/v2/resources${avatar}`;
         return (
             <img
-                className={styles.leader__avatar}
+                className={styles.profile__avatar}
                 src={imageUrl}
                 alt="Avatar"
             />
         );
     }
-    return <div className={styles.leader__avatar}>{login[0]}</div>;
+    return <div className={styles.profile__avatar}>{login[0]}</div>;
 };

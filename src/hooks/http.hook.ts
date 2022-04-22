@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { useState, useCallback, useContext } from 'react';
 import { AuthContext } from 'src/context/Authcontext';
 
@@ -8,27 +7,22 @@ export const useHttp = () => {
     const { logout } = useContext(AuthContext);
     const baseUrl = 'https://ya-praktikum.tech/api/v2';
     const request = useCallback(
-        async (
-            url,
-            method = 'GET',
-            body = null,
-            headers = {},
-            DB = false,
-            image = null,
-        ) => {
+        async (url, method, body, headers = {}, DB = false, image = null) => {
             setLoading(true);
             try {
+                let currentBody = null;
+                const currentHeaders = { ...headers };
                 if (body) {
-                    body = JSON.stringify(body);
-                    headers['Content-Type'] = 'application/json';
+                    currentBody = JSON.stringify(body);
+                    currentHeaders['Content-Type'] = 'application/json';
                 }
                 if (image) {
-                    body = image;
+                    currentBody = image;
                 }
                 const response = await fetch((DB ? '' : baseUrl) + url, {
-                    method,
-                    body,
-                    headers,
+                    method: method || 'GET',
+                    body: currentBody,
+                    headers: currentHeaders,
                     credentials: 'include',
                 });
 

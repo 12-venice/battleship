@@ -1,5 +1,3 @@
-// Линтер требует указать в качестве типа строку или тернераное выражение
-/* eslint-disable react/button-has-type */
 import cn from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import styles from './Button.scss';

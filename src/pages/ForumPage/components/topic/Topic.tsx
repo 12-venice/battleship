@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable operator-linebreak */
 import { useContext, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { DateParser } from 'src/components/utils/DateParse/DateParser';
@@ -16,7 +13,7 @@ export const Topic: Props = ({
     theme = 'Topic',
     description = 'Default description...',
     comments,
-    _id,
+    id,
     setTopicId,
     deleteFunc,
     editFunc,
@@ -25,7 +22,7 @@ export const Topic: Props = ({
     const { user } = useContext(AuthContext);
     const handleClick: handleClickType = () => {
         toggleState(!state);
-        setTopicId(_id);
+        setTopicId(id);
     };
     return (
         <div>
@@ -45,7 +42,10 @@ export const Topic: Props = ({
                                     key={uuidv4()}
                                     className="small material-icons"
                                     onClick={() => {
-                                        editFunc(_id, theme, description);
+                                        editFunc(id, theme, description);
+                                    }}
+                                    onKeyDown={() => {
+                                        // do nothing.
                                     }}
                                 >
                                     edit
@@ -53,7 +53,10 @@ export const Topic: Props = ({
                                 <i
                                     key={uuidv4()}
                                     className="small material-icons"
-                                    onClick={() => deleteFunc(_id)}
+                                    onClick={() => deleteFunc(id)}
+                                    onKeyDown={() => {
+                                        // do nothing.
+                                    }}
                                 >
                                     delete
                                 </i>
