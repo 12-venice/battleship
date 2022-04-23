@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 import { useCallback, useEffect } from 'react';
 import { drawMatrix } from './helpers/drawMatrix';
 import { emptyMatrix } from './data';
