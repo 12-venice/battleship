@@ -115,7 +115,7 @@ export const HomePage = (): JSX.Element => {
                             </div>
                         </div>
                         <Button
-                            skin={window.innerWidth < 450 ? undefined : 'large'}
+                            skin={window.innerWidth < 450 ? 'regular' : 'large'}
                             color="green"
                             href={PageLinks.game}
                             title="PLAY"
