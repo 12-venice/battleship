@@ -13,6 +13,9 @@ export interface User {
     email: string;
     login: string;
     phone: string;
+    points?: number;
+    wins?: number;
+    defeats?: number;
 }
 
 export type UserState = {
