@@ -1,4 +1,3 @@
-/* eslint-disable import/no-default-export */
 import { NavLink } from 'react-router-dom';
 
 import { Button } from 'src/components/Button';

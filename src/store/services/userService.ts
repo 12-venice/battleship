@@ -8,7 +8,7 @@ import {
 import { store } from '../../index';
 
 export const userService = {
-    setUser: (user: User) => store.dispatch(setUser(user)),
+    setUser: (user: User | null) => store.dispatch(setUser(user)),
     failed: () => store.dispatch(loadFailed()),
     pending: () => store.dispatch(loadPending()),
     success: () => store.dispatch(loadSuccess()),

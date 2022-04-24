@@ -67,6 +67,6 @@ export function loadPending(): ItemActionType {
     return { type: actions.PENDING, item: null };
 }
 
-export function setUser(user: User): ItemActionType {
+export function setUser(user: User | null): ItemActionType {
     return { type: actions.SET_USER_ITEM, item: user };
 }

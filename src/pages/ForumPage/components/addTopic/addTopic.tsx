@@ -6,13 +6,16 @@ import { ModalWindow } from 'src/components/ModalWindow';
 import { useCallback, useContext, useState } from 'react';
 import { useHttp } from 'src/hooks/http.hook';
 import { AuthContext } from 'src/context/Authcontext';
+import { useSelector } from 'react-redux';
+import { AllStateTypes } from 'src/store/reducers';
 import { Props } from './types';
 
 import styles from './addTopic.scss';
 
 export const AddTopicWindow: Props = ({ close }): JSX.Element => {
     const { request, loading } = useHttp();
-    const { user } = useContext(AuthContext);
+    // const { user } = useContext(AuthContext);
+    const user = useSelector((state: AllStateTypes) => state.user.item);
     const [theme, setTheme] = useState('');
     const [description, setDescription] = useState('');
     const createTopic = useCallback(async () => {

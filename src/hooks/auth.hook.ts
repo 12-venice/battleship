@@ -1,45 +1,45 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { AllStateTypes } from 'src/store/reducers';
 import { userService } from 'src/store/services/userService';
 import { useHttp } from './http.hook';
 
 export const useAuth = () => {
     const { request } = useHttp();
     const navigate = useNavigate();
-    const [user, setUser] = useState(undefined);
-
+    // const [user, setUser] = useState(undefined);
+    // const user = useSelector((state: AllStateTypes) => state.user.item);
     const login = useCallback(
         async (from?) => {
             userService.pending();
-            const fetched = await request('/auth/user', 'GET', null);
-            if (fetched) {
+            const response = await request('/auth/user', 'GET', null);
+            if (response) {
                 userService.success();
-                userService.setUser(fetched);
+                userService.setUser(response);
 
-                setUser(fetched);
+                // setUser(response);
                 if (from) {
                     navigate(from, { replace: true });
                 }
-                await request('/api/user/create', 'POST', fetched, {}, true);
+                await request('/api/user/create', 'POST', response, {}, true);
             }
         },
         [navigate, request],
     );
 
     const logout = useCallback(async () => {
-        setUser(undefined);
+        userService.setUser(null);
         await request('/auth/logout', 'POST', null);
     }, [request]);
 
-    useEffect(() => {
-        login();
-    }, [login]);
+    // useEffect(() => {
+    //     login();
+    // }, [login]);
 
     const value = {
         login,
         logout,
-        user,
-        setUser,
     };
 
     return value;

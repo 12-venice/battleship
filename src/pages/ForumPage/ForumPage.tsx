@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
@@ -6,6 +7,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Preloader } from 'src/components/Preloader';
 import { AuthContext } from 'src/context/Authcontext';
 import { DateParser } from 'src/components/utils/DateParse/DateParser';
+import { AllStateTypes } from 'src/store/reducers';
 import { Layout } from '../../components/Layout';
 import { Topic } from './components/topic';
 import { AddTopicWindow } from './components/addTopic';
@@ -15,7 +17,8 @@ import { EditTopicWindow } from './components/editTopic';
 import { TopicProps } from './components/topic/types';
 
 export const ForumPage = (): JSX.Element => {
-    const { user } = useContext(AuthContext);
+    const user = useSelector((state: AllStateTypes) => state.user.item);
+    // const { user } = useContext(AuthContext);
     const [topicId, setTopicId] = useState('');
     const [topicTheme, setTopicTheme] = useState('');
     const [topicDesc, setTopicDesc] = useState('');

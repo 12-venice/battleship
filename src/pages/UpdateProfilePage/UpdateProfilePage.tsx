@@ -9,13 +9,17 @@ import { AuthContext } from 'src/context/Authcontext';
 import { fieldsProps } from 'src/components/Form/types';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { Layout } from 'src/components/Layout';
+import { userService } from 'src/store/services/userService';
+import { useSelector } from 'react-redux';
+import { AllStateTypes } from 'src/store/reducers';
 import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs, submitTitle } from './config';
 import { Avatar } from '../ProfilePage/components/Avatar';
 import { UpdateAvatar } from './components/UpdateAvatar';
 
 export const UpdateProfilePage = (): JSX.Element => {
-    const { user, setUser } = useContext(AuthContext);
+    // const { user, setUser } = useContext(AuthContext);
+    const user = useSelector((state: AllStateTypes) => state.user.item);
     const inputsWithDefaultsValue: fieldsProps[] = [];
     inputs.forEach((input) => {
         const element = {
@@ -34,13 +38,13 @@ export const UpdateProfilePage = (): JSX.Element => {
             try {
                 const fetched = await request('/user/profile', 'PUT', data);
                 await request('/api/user/update', 'POST', fetched, {}, true);
-                setUser(fetched);
+                userService.setUser(fetched);
                 navigate(PageLinks.profile);
             } catch (e) {
                 throw new SyntaxError('Что-то пошло не так');
             }
         },
-        [navigate, request, setUser],
+        [navigate, request],
     );
 
     useEffect(() => {
