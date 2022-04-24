@@ -1,40 +1,35 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { userService } from 'src/store/services/userService';
 import { useHttp } from './http.hook';
 
 export const useAuth = () => {
     const { request } = useHttp();
     const navigate = useNavigate();
-    const [user, setUser] = useState(undefined);
-
     const login = useCallback(
         async (from?) => {
-            const fetched = await request('/auth/user', 'GET', null);
-            if (fetched) {
-                setUser(fetched);
+            userService.pending();
+            const response = await request('/auth/user', 'GET', null);
+            if (response) {
+                userService.success();
+                userService.setUser(response);
                 if (from) {
                     navigate(from, { replace: true });
                 }
-                await request('/api/user/create', 'POST', fetched, {}, true);
+                await request('/api/user/create', 'POST', response, {}, true);
             }
         },
         [navigate, request],
     );
 
     const logout = useCallback(async () => {
-        setUser(undefined);
+        userService.setUser(null);
         await request('/auth/logout', 'POST', null);
     }, [request]);
-
-    useEffect(() => {
-        login();
-    }, [login]);
 
     const value = {
         login,
         logout,
-        user,
-        setUser,
     };
 
     return value;

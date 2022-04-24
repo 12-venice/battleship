@@ -1,10 +1,8 @@
-import { useState, useCallback, useContext } from 'react';
-import { AuthContext } from 'src/context/Authcontext';
+import { useState, useCallback } from 'react';
 
 export const useHttp = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const { logout } = useContext(AuthContext);
     const baseUrl = 'https://ya-praktikum.tech/api/v2';
     const request = useCallback(
         async (url, method, body, headers = {}, DB = false, image = null) => {
@@ -26,10 +24,6 @@ export const useHttp = () => {
                     credentials: 'include',
                 });
 
-                if (response.status === 401) {
-                    logout();
-                }
-
                 const contentType = response.headers
                     .get('content-type')
                     ?.split(';')[0];
@@ -50,7 +44,7 @@ export const useHttp = () => {
                 throw e;
             }
         },
-        [logout],
+        [],
     );
     const clearError = useCallback(() => setError(''), []);
 

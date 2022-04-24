@@ -1,20 +1,22 @@
 import cn from 'classnames';
+import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Preloader } from 'src/components/Preloader';
-import { AuthContext } from 'src/context/Authcontext';
 import { DateParser } from 'src/components/utils/DateParse/DateParser';
+import { AllStateTypes } from 'src/store/reducers';
 import { Layout } from '../../components/Layout';
 import { Topic } from './components/topic';
 import { AddTopicWindow } from './components/addTopic';
 import styles from './ForumPage.scss';
 import { DeleteTopicWindow } from './components/deleteTopic';
 import { EditTopicWindow } from './components/editTopic';
+import { TopicProps } from './components/topic/types';
 
 export const ForumPage = (): JSX.Element => {
-    const { user } = useContext(AuthContext);
+    const user = useSelector((state: AllStateTypes) => state.user.item);
     const [topicId, setTopicId] = useState('');
     const [topicTheme, setTopicTheme] = useState('');
     const [topicDesc, setTopicDesc] = useState('');
@@ -49,7 +51,7 @@ export const ForumPage = (): JSX.Element => {
             return <Preloader />;
         }
         if (topics.length > 0) {
-            return topics.map((item) => (
+            return topics.map((item: TopicProps) => (
                 <Topic
                     key={item._id}
                     theme={item.theme}
@@ -57,6 +59,7 @@ export const ForumPage = (): JSX.Element => {
                     description={item.description}
                     name={item.user?.display_name || ''}
                     comments={item.comments}
+                    isActiveTopic={topicId}
                     setTopicId={setTopicId}
                     id={item._id}
                     deleteFunc={(_id) => {

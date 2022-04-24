@@ -3,9 +3,10 @@ import cn from 'classnames';
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
 
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useHttp } from 'src/hooks/http.hook';
-import { AuthContext } from 'src/context/Authcontext';
+import { useSelector } from 'react-redux';
+import { AllStateTypes } from 'src/store/reducers';
 import { Props } from './types';
 
 import styles from './editTopic.scss';
@@ -16,8 +17,8 @@ export const EditTopicWindow: Props = ({
     oldDescription,
     oldTheme,
 }): JSX.Element => {
-    const { request } = useHttp();
-    const { user } = useContext(AuthContext);
+    const { request, loading } = useHttp();
+    const user = useSelector((state: AllStateTypes) => state.user.item);
     const [theme, setTheme] = useState(oldTheme);
     const [description, setDescription] = useState(oldDescription);
     const editTopic = useCallback(async () => {

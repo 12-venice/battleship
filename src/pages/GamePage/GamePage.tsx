@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { useRef, useState } from 'react';
 import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
@@ -8,6 +9,7 @@ import { ShipsMenu } from './components/ShipsMenu';
 import type { Props } from './components/ShipsMenu/types';
 
 import styles from './GamePage.scss';
+import { mapStateToProps } from './mapState';
 
 const data: Props = {
     ships: [
@@ -25,6 +27,7 @@ const data: Props = {
 };
 
 export const GamePage = (): JSX.Element => {
+    const store = useSelector(mapStateToProps);
     const playerCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const botCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const [info, setInfo] = useState(false);
@@ -34,7 +37,10 @@ export const GamePage = (): JSX.Element => {
             <div className={styles.game__background}>
                 <div className={styles.game__header}>
                     <Button skin="quad" title="i" onClick={getInfo} />
-                    <PlayerName name="Player 1" avatarPosition="right" />
+                    <PlayerName
+                        name={store.display_name ?? 'Player 1'}
+                        avatarPosition="right"
+                    />
                     <p className={styles['game__header-text']}>VS</p>
                     <PlayerName name="Player 2" />
                     <Button href="/" skin="quad" title="X" color="red" />

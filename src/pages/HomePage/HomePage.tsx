@@ -1,8 +1,10 @@
 import cn from 'classnames';
+import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { PageLinks } from 'src/components/utils/Routes/types';
-import { AuthContext } from 'src/context/Authcontext';
+import { useAuth } from 'src/hooks/auth.hook';
+import { AllStateTypes } from 'src/store/reducers';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import { Layout } from '../../components/Layout';
@@ -10,7 +12,8 @@ import styles from './HomePage.scss';
 import { Information } from '../../components/Information';
 
 export const HomePage = (): JSX.Element => {
-    const { user, logout } = useContext(AuthContext);
+    const user = useSelector((state: AllStateTypes) => state.user.item);
+    const { logout } = useAuth();
     const [typeOfGame, setTypeOfGame] = useState(false);
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
