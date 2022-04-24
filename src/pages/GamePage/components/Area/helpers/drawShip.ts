@@ -13,7 +13,7 @@ export const drawShip = ({
     image.onload = () => {
         if (isHorizontal) {
             ctx.save();
-            ctx.translate(y, x);
+            ctx.translate(x, y);
             ctx.rotate((Math.PI / 180) * 90);
             ctx.drawImage(image, -5, -(cellSize * type - 3));
             ctx.restore();

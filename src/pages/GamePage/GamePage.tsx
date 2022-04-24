@@ -1,8 +1,9 @@
 import { useSelector } from 'react-redux';
-import { useRef, useState } from 'react';
+import { createRef, useState, useCallback, useMemo } from 'react';
 import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
+import { Field } from 'src/gameCore/Field';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
@@ -26,12 +27,44 @@ const data: Props = {
     ],
 };
 
+const getCurrentShips = (ships) =>
+    Object.entries(ships).map(([name, { type, x, y, ky }]) => ({
+        id: name,
+        deckCount: type,
+        x,
+        y,
+        isHorizontal: ky === 1,
+    }));
+
 export const GamePage = (): JSX.Element => {
     const store = useSelector(mapStateToProps);
-    const playerCanvasRef = useRef<HTMLCanvasElement | null>(null);
-    const botCanvasRef = useRef<HTMLCanvasElement | null>(null);
+    const playerCanvasRef = createRef<HTMLCanvasElement>();
+    const botCanvasRef = createRef<HTMLCanvasElement>();
+    const [playerMatrix, setPlayerMatrix] = useState();
+    const [playerShips, setPlayerShips] = useState([]);
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
+
+    const playerArea = useMemo(
+        () =>
+            new Field({
+                isPlayer: true,
+            }),
+        [],
+    );
+
+    const handleClickAuto = useCallback(() => {
+        playerArea.randomLocationShips();
+        setPlayerMatrix(playerArea.getMatrix());
+        setPlayerShips(getCurrentShips(playerArea.getSquadron()));
+    }, []);
+
+    const handleClickReset = useCallback(() => {
+        playerArea.cleanField();
+        setPlayerMatrix(playerArea.getMatrix());
+        setPlayerShips(getCurrentShips(playerArea.getSquadron()));
+    }, []);
+
     return (
         <Layout>
             <div className={styles.game__background}>
@@ -46,7 +79,12 @@ export const GamePage = (): JSX.Element => {
                     <Button href="/" skin="quad" title="X" color="red" />
                 </div>
                 <div className={styles.game__battlefields}>
-                    <Area canvasRef={playerCanvasRef} areaWidth={425} />
+                    <Area
+                        canvasRef={playerCanvasRef}
+                        areaWidth={425}
+                        matrix={playerMatrix}
+                        ships={playerShips}
+                    />
                     <Area
                         canvasRef={botCanvasRef}
                         areaWidth={425}
@@ -59,8 +97,18 @@ export const GamePage = (): JSX.Element => {
                     </div>
                     <div className={styles['game__footer-buttons']}>
                         <div>
-                            <Button href="/" skin="short" title="AUTO" />
-                            <Button href="/" skin="short" title="RESET" />
+                            <Button
+                                href="/"
+                                skin="short"
+                                title="AUTO"
+                                onClick={handleClickAuto}
+                            />
+                            <Button
+                                href="/"
+                                skin="short"
+                                title="RESET"
+                                onClick={handleClickReset}
+                            />
                         </div>
                         <Button
                             href="/"

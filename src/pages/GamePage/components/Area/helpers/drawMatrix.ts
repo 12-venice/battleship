@@ -25,8 +25,8 @@ export const drawMatrix = ({
     const hitCoordinates: [number, number][] = [];
 
     if (matrix) {
-        matrix.forEach((arrRow, y) => {
-            arrRow.forEach((cellValue, x) => {
+        matrix.forEach((arrRow, x) => {
+            arrRow.forEach((cellValue, y) => {
                 // отрисовка ячейки
                 if ([MatrixCell.empty, MatrixCell.deck].includes(cellValue)) {
                     drawCell({
@@ -62,8 +62,8 @@ export const drawMatrix = ({
         ships.forEach(({ x, y, deckCount, isHorizontal }) => {
             drawShip({
                 ctx,
-                x: x * cellSize,
-                y: y * cellSize,
+                x: y * cellSize,
+                y: x * cellSize,
                 type: deckCount,
                 isHorizontal,
                 cellSize,
