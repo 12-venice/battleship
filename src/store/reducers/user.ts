@@ -75,8 +75,9 @@ export function setUser(user: User | null): ItemActionType {
 }
 
 export const getTest = () => (dispatch: any) => {
+    dispatch(loadPending());
     setTimeout(() => {
         console.log('I got it after 2 second');
-        dispatch({ type: actions.SUCCESS, item: null });
+        dispatch(loadSuccess());
     }, 2000);
 };
