@@ -1,7 +1,7 @@
 // Требует деструктуризацию user
 /* eslint-disable react/destructuring-assignment */
 import { MouseEventHandler } from 'react';
-import { User } from 'src/context/Authcontext';
+import { User } from 'src/store/reducers/user';
 import styles from '../ProfilePage.scss';
 
 export const Avatar = (

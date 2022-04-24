@@ -1,8 +1,7 @@
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Form } from 'src/components/Form';
 import { PageLinks } from 'src/components/utils/Routes/types';
-import { AuthContext } from 'src/context/Authcontext';
 import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
 import { useMessage } from 'src/hooks/message.hook';
@@ -12,7 +11,6 @@ import styles from './RegisterPage.scss';
 
 export const RegisterPage = (): JSX.Element => {
     const message = useMessage();
-    // const { login } = useContext(AuthContext);
     const { login } = useAuth();
     const location = useLocation();
     const from = location?.state?.from?.pathname;

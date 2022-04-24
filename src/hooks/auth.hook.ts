@@ -1,15 +1,11 @@
-import { useState, useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AllStateTypes } from 'src/store/reducers';
 import { userService } from 'src/store/services/userService';
 import { useHttp } from './http.hook';
 
 export const useAuth = () => {
     const { request } = useHttp();
     const navigate = useNavigate();
-    // const [user, setUser] = useState(undefined);
-    // const user = useSelector((state: AllStateTypes) => state.user.item);
     const login = useCallback(
         async (from?) => {
             userService.pending();
@@ -17,8 +13,6 @@ export const useAuth = () => {
             if (response) {
                 userService.success();
                 userService.setUser(response);
-
-                // setUser(response);
                 if (from) {
                     navigate(from, { replace: true });
                 }
@@ -32,10 +26,6 @@ export const useAuth = () => {
         userService.setUser(null);
         await request('/auth/logout', 'POST', null);
     }, [request]);
-
-    // useEffect(() => {
-    //     login();
-    // }, [login]);
 
     const value = {
         login,

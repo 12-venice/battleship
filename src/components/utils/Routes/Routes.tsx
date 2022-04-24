@@ -10,14 +10,10 @@ import { LeaderPage } from 'src/pages/LeaderPage';
 import { ForumPage } from 'src/pages/ForumPage';
 import { UpdateProfilePage } from 'src/pages/UpdateProfilePage';
 import { GamePage } from 'src/pages/GamePage';
-import { useContext, useEffect } from 'react';
-import { AuthContext } from 'src/context/Authcontext';
 import { AllStateTypes } from 'src/store/reducers';
-import { useAuth } from 'src/hooks/auth.hook';
 import { PageLinks, Props } from './types';
 
 const ProtectedRoute: Props = ({ childrens }) => {
-    // const { user } = useContext(AuthContext);
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const location = useLocation();
     if (!user) {
