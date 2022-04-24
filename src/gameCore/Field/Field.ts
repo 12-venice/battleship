@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Ship } from '../Ship';
 import { getRandom } from '../helpers/getRandom';
 import { IShipData, ShipType } from './types';

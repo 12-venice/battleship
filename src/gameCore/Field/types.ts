@@ -26,7 +26,7 @@ export enum ShipType {
 
 export enum ShipDirection {
     horizontal,
-    vertical
+    vertical,
 }
 
 /** тип корабля */

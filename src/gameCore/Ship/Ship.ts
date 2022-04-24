@@ -1,3 +1,4 @@
+/* eslint-disable */
 export class Ship {
     constructor(self, { x, y, kx, ky, decks, shipname }) {
         // с каким экземпляром работаем
@@ -23,7 +24,7 @@ export class Ship {
     }
 
     createShip() {
-        let {
+        const {
             player,
             field,
             shipname,
