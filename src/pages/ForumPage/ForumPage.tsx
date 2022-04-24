@@ -1,6 +1,3 @@
-/* eslint-disable object-curly-newline */
-// Не нравиться обозначени _id из монгодб
-/* eslint-disable no-underscore-dangle */
 import cn from 'classnames';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
@@ -63,7 +60,7 @@ export const ForumPage = (): JSX.Element => {
                     name={item.user?.display_name || ''}
                     comments={item.comments}
                     setTopicId={setTopicId}
-                    _id={item._id}
+                    id={item._id}
                     deleteFunc={(_id) => {
                         setTopicId(_id);
                         setWindowDelete(true);

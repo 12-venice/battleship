@@ -17,10 +17,10 @@ export const useAuth = () => {
                 userService.setUser(fetched);
 
                 setUser(fetched);
-                await request('/api/user/create', 'POST', fetched, {}, true);
                 if (from) {
                     navigate(from, { replace: true });
                 }
+                await request('/api/user/create', 'POST', fetched, {}, true);
             }
         },
         [navigate, request],

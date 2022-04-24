@@ -1,5 +1,3 @@
-// Конфликт линтеров
-/* eslint-disable object-curly-newline */
 import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
 
 import { CommentProps } from '../comment/types';
@@ -11,8 +9,8 @@ export type TopicProps = {
     theme?: string;
     description?: string;
     comments?: CommentProps[];
-    _id: string;
     user?: User;
+    id: string;
     setTopicId: Dispatch<SetStateAction<string>>;
     deleteFunc: (_id: string) => void;
     editFunc: (_id: string, theme: string, description: string) => void;
