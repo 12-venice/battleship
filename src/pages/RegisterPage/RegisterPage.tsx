@@ -23,7 +23,7 @@ export const RegisterPage = (): JSX.Element => {
                     login(from || PageLinks.home);
                 }
             } catch (e) {
-                throw new SyntaxError('Что-то пошло не так');
+                throw new Error('Что-то пошло не так');
             }
         },
         [request, login, from],

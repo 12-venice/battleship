@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { DateParser } from 'src/components/utils/DateParse/DateParser';
 import { AuthContext } from 'src/context/Authcontext';
 import { Props, handleClickType } from './types';
@@ -39,7 +38,6 @@ export const Topic: Props = ({
                         {name === user?.display_name && (
                             <div className={styles.topic__controls}>
                                 <i
-                                    key={uuidv4()}
                                     className="small material-icons"
                                     onClick={() => {
                                         editFunc(id, theme, description);
@@ -51,7 +49,6 @@ export const Topic: Props = ({
                                     edit
                                 </i>
                                 <i
-                                    key={uuidv4()}
                                     className="small material-icons"
                                     onClick={() => deleteFunc(id)}
                                     onKeyDown={() => {
@@ -78,7 +75,7 @@ export const Topic: Props = ({
                 comments &&
                 comments.map((comment) => (
                     <Comment
-                        key={uuidv4()}
+                        key={comment._id}
                         user={comment.user}
                         date={DateParser(comment.date)}
                         description={comment.description}
