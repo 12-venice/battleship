@@ -73,3 +73,10 @@ export function loadPending(): ItemActionType {
 export function setUser(user: User | null): ItemActionType {
     return { type: actions.SET_USER_ITEM, item: user };
 }
+
+export const getTest = () => (dispatch: any) => {
+    setTimeout(() => {
+        console.log('I got it after 2 second');
+        dispatch({ type: actions.SUCCESS, item: null });
+    }, 2000);
+};

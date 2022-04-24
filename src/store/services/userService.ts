@@ -4,6 +4,7 @@ import {
     loadFailed,
     loadPending,
     loadSuccess,
+    getTest,
 } from '../reducers/user';
 import { store } from '../../index';
 
@@ -12,4 +13,5 @@ export const userService = {
     failed: () => store.dispatch(loadFailed()),
     pending: () => store.dispatch(loadPending()),
     success: () => store.dispatch(loadSuccess()),
+    onGetTest: () => store.dispatch(getTest()),
 };
