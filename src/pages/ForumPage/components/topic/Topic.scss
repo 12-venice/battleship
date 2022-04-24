@@ -3,11 +3,16 @@
 
 .topic {
     padding: 20px 30px;
-    background: var(--dark-blue);
     margin-right: 10px;
     margin-bottom: 10px;
     border-radius: 15px;
     color: var(--white);
+}
+.topic_active {
+    background: var(--light-blue);
+}
+.topic_unactive {
+    background: var(--dark-blue);
 }
 .topic__description {
     font-family: var(--font-family-second);

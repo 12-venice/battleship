@@ -11,6 +11,7 @@ export type TopicProps = {
     comments?: CommentProps[];
     user?: User;
     id: string;
+    isActiveTopic: string;
     setTopicId: Dispatch<SetStateAction<string>>;
     deleteFunc: (_id: string) => void;
     editFunc: (_id: string, theme: string, description: string) => void;

@@ -8,7 +8,7 @@ import { Props } from './types';
 import styles from './deleteTopic.scss';
 
 export const DeleteTopicWindow: Props = ({ close, _id }): JSX.Element => {
-    const { request } = useHttp();
+    const { request, loading } = useHttp();
     const deleteTopic = useCallback(async () => {
         await request('/api/topic/delete', 'POST', { _id }, {}, true);
         close();

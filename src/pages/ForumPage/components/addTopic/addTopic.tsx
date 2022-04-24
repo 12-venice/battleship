@@ -11,7 +11,7 @@ import { Props } from './types';
 import styles from './addTopic.scss';
 
 export const AddTopicWindow: Props = ({ close }): JSX.Element => {
-    const { request } = useHttp();
+    const { request, loading } = useHttp();
     const { user } = useContext(AuthContext);
     const [theme, setTheme] = useState('');
     const [description, setDescription] = useState('');

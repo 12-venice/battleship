@@ -58,6 +58,7 @@ export const ForumPage = (): JSX.Element => {
                     description={item.description}
                     name={item.user?.display_name || ''}
                     comments={item.comments}
+                    isActiveTopic={topicId}
                     setTopicId={setTopicId}
                     id={item._id}
                     deleteFunc={(_id) => {
