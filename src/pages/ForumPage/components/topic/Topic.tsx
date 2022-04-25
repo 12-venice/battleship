@@ -1,7 +1,8 @@
-import { useContext, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { DateParser } from 'src/components/utils/DateParse/DateParser';
 import { AuthContext } from 'src/context/Authcontext';
+import { useHttp } from 'src/hooks/http.hook';
+import { Preloader } from 'src/components/Preloader';
 import { Props, handleClickType } from './types';
 import { Comment } from '../comment';
 
@@ -12,18 +13,37 @@ export const Topic: Props = ({
     name = 'Noname',
     theme = 'Topic',
     description = 'Default description...',
-    comments,
     id,
     setTopicId,
     deleteFunc,
     editFunc,
 }): JSX.Element => {
     const [state, toggleState] = useState(false);
+    const [comments, setComments] = useState([]);
     const { user } = useContext(AuthContext);
+    const { request, loading } = useHttp();
     const handleClick: handleClickType = () => {
         toggleState(!state);
         setTopicId(id);
     };
+
+    const getComments = useCallback(async () => {
+        const data = await request(
+            '/api/comment/read',
+            'POST',
+            { _id: id },
+            {},
+            true,
+        );
+        setComments(data);
+    }, [id, request]);
+
+    useEffect(() => {
+        if (state) {
+            getComments();
+        }
+    }, [getComments, state]);
+
     return (
         <div>
             <div
@@ -39,7 +59,6 @@ export const Topic: Props = ({
                         {name === user?.display_name && (
                             <div className={styles.topic__controls}>
                                 <i
-                                    key={uuidv4()}
                                     className="small material-icons"
                                     onClick={() => {
                                         editFunc(id, theme, description);
@@ -51,7 +70,6 @@ export const Topic: Props = ({
                                     edit
                                 </i>
                                 <i
-                                    key={uuidv4()}
                                     className="small material-icons"
                                     onClick={() => deleteFunc(id)}
                                     onKeyDown={() => {
@@ -74,16 +92,26 @@ export const Topic: Props = ({
                 </div>
                 <p className={styles.topic__description}>{description}</p>
             </div>
-            {state &&
-                comments &&
-                comments.map((comment) => (
-                    <Comment
-                        key={uuidv4()}
-                        user={comment.user}
-                        date={DateParser(comment.date)}
-                        description={comment.description}
-                    />
-                ))}
+            {!loading ? (
+                state &&
+                (comments.length > 0 ? (
+                    comments.map((comment) => (
+                        <Comment
+                            key={comment._id}
+                            user={comment.user}
+                            date={DateParser(comment.date)}
+                            description={comment.description}
+                            _id={comment._id}
+                        />
+                    ))
+                ) : (
+                    <div className={styles.topic}>
+                        There are no comments yet...
+                    </div>
+                ))
+            ) : (
+                <Preloader />
+            )}
         </div>
     );
 };

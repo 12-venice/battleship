@@ -1,13 +1,10 @@
 import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
 
-import { CommentProps } from '../comment/types';
-
 type TopicProps = {
-    name?: string;
-    date?: string;
-    theme?: string;
+    name: string;
+    date: string;
+    theme: string;
     description?: string;
-    comments?: CommentProps[];
     id: string;
     setTopicId: Dispatch<SetStateAction<string>>;
     deleteFunc: (_id: string) => void;

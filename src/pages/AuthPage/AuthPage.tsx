@@ -13,6 +13,7 @@ export const AuthPage = (): JSX.Element => {
     const message = useMessage();
     const location = useLocation();
     const from = location?.state?.from?.pathname;
+    console.log(from);
     const { login } = useContext(AuthContext);
     const { request, loading, error, clearError } = useHttp();
     const auth = useCallback(

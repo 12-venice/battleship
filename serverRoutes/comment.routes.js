@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/extensions */
 /* eslint-disable consistent-return */
@@ -31,13 +33,17 @@ router.post('/create', async (req, res) => {
 router.post('/read', async (req, res) => {
     try {
         const { _id } = req.body;
-        let comment;
-        if (_id) {
-            comment = await Comment.findOne({ _id });
-        } else {
-            comment = await Comment.find();
+        const comments = await Comment.find({ topic: _id });
+        for (let i = 0; i < comments.length; i++) {
+            const userComment = await User.findOne({
+                _id: comments[i].toJSON().user,
+            });
+            comments[i] = {
+                ...comments[i].toJSON(),
+                ...{ user: userComment },
+            };
         }
-        res.json(comment);
+        res.json(comments);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
