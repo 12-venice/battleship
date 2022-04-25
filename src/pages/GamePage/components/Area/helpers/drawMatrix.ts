@@ -24,6 +24,9 @@ export const drawMatrix = ({
 
     const hitCoordinates: [number, number][] = [];
 
+    // очистить весь холст
+    ctx.clearRect(0, 0, areaWidth, areaWidth);
+
     if (matrix) {
         matrix.forEach((arrRow, x) => {
             arrRow.forEach((cellValue, y) => {
