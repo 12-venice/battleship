@@ -31,11 +31,11 @@ export const drawMatrix = ({
         matrix.forEach((arrRow, x) => {
             arrRow.forEach((cellValue, y) => {
                 // отрисовка ячейки
-                if ([MatrixCell.empty, MatrixCell.deck].includes(cellValue)) {
+                if ([MatrixCell.empty].includes(cellValue)) {
                     drawCell({
                         ctx,
-                        x: x * cellSize,
-                        y: y * cellSize,
+                        x: y * cellSize,
+                        y: x * cellSize,
                         size: cellSize - padding,
                         radius,
                         fillColor,
@@ -46,8 +46,8 @@ export const drawMatrix = ({
                 if (MatrixCell.miss === cellValue) {
                     drawMiss({
                         ctx,
-                        x: x * cellSize,
-                        y: y * cellSize,
+                        x: y * cellSize,
+                        y: x * cellSize,
                         size: cellSize - padding,
                     });
                 }
