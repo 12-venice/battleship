@@ -1,3 +1,5 @@
+import { Props } from 'src/pages/GamePage/components/ShipsMenu/types';
+
 /** отступ между кораблями */
 export const MARGIN = 9;
 /** ширина картинок кораблей */
@@ -7,7 +9,7 @@ export const CONTAINER_WIDTH = IMG_WIDTH * 8 + MARGIN * 6;
 /** высота картинки с однопалубной лодкой */
 export const SHIP_1_HEIGHT = 50;
 /** высота картинки с четырехпалубной лодкой */
-export const SHIP_4_HEIGHT = 200;
+export const SHIP_4_HEIGHT = 170;
 /** высота контейнера с кораблями и отступами */
 export const CONTAINER_HEIGHT = SHIP_4_HEIGHT;
 

@@ -14,21 +14,6 @@ import { AREA_WIDTH, AREA_CELL_WIDTH } from './data';
 import styles from './GamePage.scss';
 import { mapStateToProps } from './mapState';
 
-const data: Props = {
-    ships: [
-        { id: '1', type: 4, visible: true },
-        { id: '5', type: 3, visible: true },
-        { id: '6', type: 3, visible: true },
-        { id: '7', type: 2, visible: true },
-        { id: '2', type: 2, visible: true },
-        { id: '8', type: 2, visible: true },
-        { id: '9', type: 1, visible: true },
-        { id: '3', type: 1, visible: true },
-        { id: '10', type: 1, visible: true },
-        { id: '4', type: 1, visible: true },
-    ],
-};
-
 const getCurrentShips = (ships) =>
     Object.entries(ships).map(([name, { type, x, y, ky }]) => ({
         id: name,
@@ -56,21 +41,21 @@ export const GamePage = (): JSX.Element => {
     );
 
     const placement = useMemo(
-        () => new Placement({ field: playerCanvasRef }),
-        [playerCanvasRef],
+        () => new Placement({ field: playerCanvasRef, self: playerArea }),
+        [playerCanvasRef, playerArea],
     );
 
     const handleClickAuto = useCallback(() => {
         playerArea.randomLocationShips();
         setPlayerMatrix(playerArea.getMatrix());
         setPlayerShips(getCurrentShips(playerArea.getSquadron()));
-    }, []);
+    }, [playerArea]);
 
     const handleClickReset = useCallback(() => {
         playerArea.cleanField();
         setPlayerMatrix(playerArea.getMatrix());
         setPlayerShips(getCurrentShips(playerArea.getSquadron()));
-    }, []);
+    }, [playerArea]);
 
     return (
         <Layout>
@@ -102,7 +87,6 @@ export const GamePage = (): JSX.Element => {
                     <div className={styles.game__docs}>
                         <ShipsMenu
                             imgWidth={AREA_CELL_WIDTH}
-                            ships={data.ships}
                             onDragStart={placement.handlerShipDragStart}
                             onDrop={placement.handlerShipDragEnd}
                             onDragOver={placement.handlerShipOver}

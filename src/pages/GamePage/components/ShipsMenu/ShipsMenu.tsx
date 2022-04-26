@@ -1,11 +1,11 @@
 import { useMemo, useCallback, useEffect } from 'react';
 import { getCurrentShips } from './helpers/getCurrentShips';
-import { CONTAINER_WIDTH, CONTAINER_HEIGHT } from './data';
+import { CONTAINER_HEIGHT, shipsData, MARGIN } from './data';
 import styles from './ShipsMenu.scss';
 import type { Props } from './types';
 
 export const ShipsMenu = ({
-    ships,
+    ships = shipsData,
     imgWidth,
     onDragStart,
     onDragEnter,
@@ -84,7 +84,10 @@ export const ShipsMenu = ({
     return (
         <div
             className={styles.container}
-            style={{ width: CONTAINER_WIDTH, height: CONTAINER_HEIGHT }}
+            style={{
+                width: imgWidth * 8 + MARGIN * 7,
+                height: CONTAINER_HEIGHT,
+            }}
         >
             {currentShips.map(({ id, type, src, bottom, left, width }) => (
                 <img

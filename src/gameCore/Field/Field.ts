@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Ship } from '../Ship';
 import { getRandom } from '../helpers/getRandom';
-import { IShipData, ShipType } from './types';
+import { IShipData, ShipType, MatrixCell } from './types';
 
 export class Field {
     private SHIP_DATA: IShipData = {
@@ -104,14 +104,14 @@ export class Field {
 
     /** проверяем валидность координат всех палуб корабля */
     checkLocationShip(obj, decks) {
-        let { x, y, kx, ky, fromX, toX, fromY, toY } = obj;
+        let { x, y, kx, ky, toX, toY } = obj;
 
         // формируем индексы, ограничивающие двумерный массив по оси X (строки)
         // если координата 'x' равна нулю, то это значит, что палуба расположена в самой
         // верхней строке, т. е. примыкает к верхней границе и началом цикла будет строка
         // с индексом 0, в противном случае, нужно начать проверку со строки с индексом
         // на единицу меньшим, чем у исходной, т.е. находящейся выше исходной строки
-        fromX = x === 0 ? x : x - 1;
+        const fromX = x === 0 ? x : x - 1;
         // если условие истинно - это значит, что корабль расположен вертикально и его
         // последняя палуба примыкает к нижней границе игрового поля
         // поэтому координата 'x' последней палубы будет индексом конца цикла
@@ -127,7 +127,7 @@ export class Field {
 
         // формируем индексы начала и конца выборки по столбцам
         // принцип такой же, как и для строк
-        fromY = y === 0 ? y : y - 1;
+        const fromY = y === 0 ? y : y - 1;
         if (y + ky * decks === 10 && ky === 1) toY = y + ky * decks;
         else if (y + ky * decks < 10 && ky === 1) toY = y + ky * decks + 1;
         else if (y === 9 && ky === 0) toY = y + 1;
@@ -146,5 +146,12 @@ export class Field {
         }
 
         return true;
+    }
+
+    removeShipFromSquadron(name) {
+        if (!this.squadron[name]) return;
+
+        this.squadron[name].arrDecks.forEach(([x, y]) => { this.matrix[x][y] = MatrixCell.empty });
+        this.squadron = Object.fromEntries(Object.entries(this.squadron).filter(([shipName]) => shipName !== name));
     }
 }
