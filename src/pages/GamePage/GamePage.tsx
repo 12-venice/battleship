@@ -1,8 +1,9 @@
+import { useRef, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { useRef, useState } from 'react';
 import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
+import { Placement } from 'src/gameCore/Placement';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
@@ -32,6 +33,10 @@ export const GamePage = (): JSX.Element => {
     const botCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
+    const placement = useMemo(
+        () => new Placement({ field: playerCanvasRef }),
+        [playerCanvasRef],
+    );
     return (
         <Layout>
             <div className={styles.game__background}>
@@ -46,16 +51,21 @@ export const GamePage = (): JSX.Element => {
                     <Button href="/" skin="quad" title="X" color="red" />
                 </div>
                 <div className={styles.game__battlefields}>
-                    <Area canvasRef={playerCanvasRef} areaWidth={425} />
+                    <Area ref={playerCanvasRef} areaWidth={425} />
                     <Area
-                        canvasRef={botCanvasRef}
+                        ref={botCanvasRef}
                         areaWidth={425}
                         fillColor="#9DC0F0"
                     />
                 </div>
                 <div className={styles.game__footer}>
                     <div className={styles.game__docs}>
-                        <ShipsMenu ships={data.ships} />
+                        <ShipsMenu
+                            ships={data.ships}
+                            onDragStart={placement.handlerShipDragStart}
+                            onDrop={placement.handlerShipDragEnd}
+                            onDragOver={placement.handlerShipOver}
+                        />
                     </div>
                     <div className={styles['game__footer-buttons']}>
                         <div>

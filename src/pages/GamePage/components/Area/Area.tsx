@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, forwardRef } from 'react';
 import { drawMatrix } from './helpers/drawMatrix';
 import { emptyMatrix } from './data';
 import type { Props } from './types';
 
-export const Area = ({
+const Component = ({
     areaWidth,
     fillColor,
     canvasRef,
@@ -43,3 +43,8 @@ export const Area = ({
 
     return <>{renderCanvas()}</>;
 };
+
+export const Area = forwardRef((props, canvasRef) => (
+
+    <Component {...props} canvasRef={canvasRef} />
+));
