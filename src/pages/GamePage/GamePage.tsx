@@ -9,6 +9,7 @@ import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
 import type { Props } from './components/ShipsMenu/types';
+import { AREA_WIDTH, AREA_CELL_WIDTH } from './data';
 
 import styles from './GamePage.scss';
 import { mapStateToProps } from './mapState';
@@ -87,19 +88,20 @@ export const GamePage = (): JSX.Element => {
                 <div className={styles.game__battlefields}>
                     <Area
                         ref={playerCanvasRef}
-                        areaWidth={425}
+                        areaWidth={AREA_WIDTH}
                         matrix={playerMatrix}
                         ships={playerShips}
                     />
                     <Area
                         ref={botCanvasRef}
-                        areaWidth={425}
+                        areaWidth={AREA_WIDTH}
                         fillColor="#9DC0F0"
                     />
                 </div>
                 <div className={styles.game__footer}>
                     <div className={styles.game__docs}>
                         <ShipsMenu
+                            imgWidth={AREA_CELL_WIDTH}
                             ships={data.ships}
                             onDragStart={placement.handlerShipDragStart}
                             onDrop={placement.handlerShipDragEnd}

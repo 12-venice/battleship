@@ -45,6 +45,5 @@ const Component = ({
 };
 
 export const Area = forwardRef((props, canvasRef) => (
-
     <Component {...props} canvasRef={canvasRef} />
 ));

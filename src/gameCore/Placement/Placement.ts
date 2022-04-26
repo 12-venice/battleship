@@ -19,6 +19,7 @@ export class Placement {
         if (event.target?.dataset?.shipId) {
             this.selectedShipElement = event.target;
             this.dragObject = this.getDragObjectFromEvent(event);
+            console.log(this.dragObject);
         }
     }
 
@@ -39,57 +40,34 @@ export class Placement {
     handlerShipDragEnd(event: DragImageEvent) {
         if (this.selectedShipElement) {
             if (!this.checkShipInFrame(event.target)) {
-                this.moveShipToStartPosition(event.target);
+                this.moveShipToStartPosition();
             } else {
-                const {x, y, left, bottom} = this.getCoordsCloneInMatrix(event.target);
+                const shipCoords = getCoordinates(event.target);
+                const frameCoords = getCoordinates(this.field.current);
+                const shipMenuCoords = getCoordinates(this.dragObject.parent);
+                const cellSize = this.field.current.width / 10;
+                const x = Math.round(
+                    (shipCoords.top - frameCoords.top) / cellSize,
+                );
+                const y = Math.round(
+                    (shipCoords.left - frameCoords.left) / cellSize,
+                );
+                const left =
+                    frameCoords.left + cellSize * y - shipMenuCoords.left;
+                const bottom =
+                    shipMenuCoords.bottom -
+                    (frameCoords.top + cellSize * (x + this.dragObject.deck));
 
-                this.selectedShipElement.style.left = `${left}px`;
-                this.selectedShipElement.style.bottom = `${bottom}px`;
+                this.moveShipToPosition({
+                    shipElement: event.target,
+                    left,
+                    bottom,
+                });
             }
 
             this.selectedShipElement = null;
             this.dragObject = {};
         }
-    }
-
-    getCoordsCloneInMatrix(shipElement) {
-        const shipCoords = getCoordinates(shipElement);
-        const frameCoords = getCoordinates(this.field.current);
-        const fieldSize = this.field.current.width;
-        const cellSize = fieldSize / 10;
-
-        // вычисляем разницу координат соотвествующих сторон
-        // клона и игрового поля
-        const computedLeft = shipCoords.left - frameCoords.left;
-        const computedRight = shipCoords.right - frameCoords.left;
-        const computedTop = shipCoords.top - frameCoords.top;
-        const computedBottom = shipCoords.bottom - frameCoords.top;
-        debugger
-
-        // создаём объект, куда поместим итоговые значения
-        const obj = {};
-
-        // в результате выполнения условия, убираем неточности позиционирования клона
-        const ft =
-            computedTop < 0
-                ? 0
-                : computedBottom > fieldSize
-                    ? fieldSize - cellSize
-                    : computedTop;
-        const fl =
-            computedLeft < 0
-                ? 0
-                : computedRight > fieldSize
-                ? fieldSize - cellSize * this.dragObject.el.dataset.shipId
-                : computedLeft;
-
-        obj.top = Math.round(ft / cellSize) * cellSize;
-        obj.left = Math.round(fl / cellSize) * cellSize;
-        // переводим значение в координатах матрицы
-        obj.x = obj.top / cellSize;
-        obj.y = obj.left / cellSize;
-
-        return obj;
     }
 
     checkShipInFrame(shipElement) {
@@ -105,17 +83,27 @@ export class Placement {
         );
     }
 
-    moveShipToStartPosition(shipElement) {
-        this.selectedShipElement.style.left = `${shipElement.dataset.left}px`;
-        this.selectedShipElement.style.bottom = `${shipElement.dataset.bottom}px`;
+    moveShipToStartPosition() {
+        this.moveShipToPosition({
+            shipElement: this.dragObject.el,
+            left: this.dragObject.initialLeft,
+            bottom: this.dragObject.initialBottom,
+        });
+    }
+
+    moveShipToPosition({ shipElement, left, bottom }) {
+        shipElement.style.left = `${left.toFixed(3)}px`;
+        shipElement.style.bottom = `${bottom.toFixed(3)}px`;
     }
 
     getDragObjectFromEvent(event) {
         const el = event.target;
         return {
             el,
+            deck: parseInt(el.dataset.deck, 10),
+            // coords: getCoordinates(el),
             parent: el.parentElement,
-            next: el.nextElementSibling,
+            // next: el.nextElementSibling,
             // координаты, с которых начат перенос
             pageX: event.pageX,
             pageY: event.pageY,
@@ -123,6 +111,8 @@ export class Placement {
             // положения корабля на игровом поле
             left: parseInt(el.style.left, 10),
             bottom: parseInt(el.style.bottom, 10),
+            initialLeft: parseInt(el.dataset.left, 10),
+            initialBottom: parseInt(el.dataset.bottom, 10),
             // горизонтальное положение корабля
             kx: 0,
             ky: 1,

@@ -1,7 +1,7 @@
 /** отступ между кораблями */
 export const MARGIN = 9;
 /** ширина картинок кораблей */
-export const IMG_WIDTH = 50;
+export const IMG_WIDTH = 40;
 /** ширина контейнера с кораблями и отступами */
 export const CONTAINER_WIDTH = IMG_WIDTH * 8 + MARGIN * 6;
 /** высота картинки с однопалубной лодкой */

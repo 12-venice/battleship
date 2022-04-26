@@ -6,13 +6,17 @@ import type { Props } from './types';
 
 export const ShipsMenu = ({
     ships,
+    imgWidth,
     onDragStart,
     onDragEnter,
     onDrop,
     onDragEnd,
     onDragOver,
 }: Props) => {
-    const currentShips = useMemo(() => getCurrentShips(ships), [ships]);
+    const currentShips = useMemo(
+        () => getCurrentShips({ ships, imgWidth }),
+        [ships, imgWidth],
+    );
 
     /** Начало перемещения */
     const handlerDragStart = useCallback(
@@ -82,13 +86,14 @@ export const ShipsMenu = ({
             className={styles.container}
             style={{ width: CONTAINER_WIDTH, height: CONTAINER_HEIGHT }}
         >
-            {currentShips.map(({ id, src, bottom, left, width }) => (
+            {currentShips.map(({ id, type, src, bottom, left, width }) => (
                 <img
                     alt=""
                     key={id}
                     width={width}
                     data-test-id={id}
                     data-ship-id={id}
+                    data-deck={type}
                     data-left={left}
                     data-bottom={bottom}
                     src={src}
