@@ -26,6 +26,7 @@ export const getCurrentShips = (ships: Props['ships']) =>
             src,
             bottom,
             left,
+            width: IMG_WIDTH,
         });
 
         return acc;
