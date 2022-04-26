@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { userService } from 'src/store/services/userService';
 import { useHttp } from './http.hook';
 
