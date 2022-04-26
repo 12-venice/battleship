@@ -28,7 +28,7 @@ const Component = ({
 
     const renderCanvas = useCallback(
         () => (
-            <>
+            <div>
                 {canvasRef && (
                     <canvas
                         ref={canvasRef}
@@ -36,7 +36,7 @@ const Component = ({
                         height={areaWidth}
                     />
                 )}
-            </>
+            </div>
         ),
         [canvasRef, areaWidth],
     );
