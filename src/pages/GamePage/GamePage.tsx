@@ -57,13 +57,13 @@ export const GamePage = (): JSX.Element => {
         playerArea.randomLocationShips();
         setPlayerMatrix(playerArea.getMatrix());
         setPlayerShips(getCurrentShips(playerArea.getSquadron()));
-    }, []);
+    }, [playerArea]);
 
     const handleClickReset = useCallback(() => {
         playerArea.cleanField();
         setPlayerMatrix(playerArea.getMatrix());
         setPlayerShips(getCurrentShips(playerArea.getSquadron()));
-    }, []);
+    }, [playerArea]);
 
     return (
         <Layout>
