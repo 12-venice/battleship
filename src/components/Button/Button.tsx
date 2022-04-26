@@ -12,6 +12,7 @@ export const Button = ({
     color,
     noFill,
     href,
+    className,
 }: ButtonProps): JSX.Element => {
     const navigate = useNavigate();
     let handlerClick;
@@ -30,6 +31,7 @@ export const Button = ({
                 color && styles[`button-color_${color}`],
                 noFill && styles['button_no-fill'],
                 disabled && styles.button_disable,
+                className,
             )}
             disabled={disabled}
             type={type}
