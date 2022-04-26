@@ -1,11 +1,12 @@
 import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
 
-type TopicProps = {
-    name: string;
+export type TopicProps = {
+    user: { display_name: string };
     date: string;
     theme: string;
     description?: string;
-    id: string;
+    _id: string;
+    isActiveTopic: string;
     setTopicId: Dispatch<SetStateAction<string>>;
     deleteFunc: (_id: string) => void;
     editFunc: (_id: string, theme: string, description: string) => void;
