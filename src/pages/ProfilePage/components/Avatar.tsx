@@ -5,7 +5,7 @@ import { User } from 'src/store/reducers/user';
 import styles from '../ProfilePage.scss';
 
 export const Avatar = (
-    user: User,
+    user: User | null,
     onClick?: MouseEventHandler<HTMLImageElement> | undefined,
 ): JSX.Element => {
     if (user?.avatar) {
@@ -22,7 +22,7 @@ export const Avatar = (
     }
     return (
         <div aria-hidden className={styles.profile__avatar} onClick={onClick}>
-            {user.login ? user?.login[0] : ''}
+            {user?.login ? user?.login[0] : ''}
         </div>
     );
 };

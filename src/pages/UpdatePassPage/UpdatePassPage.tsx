@@ -51,7 +51,7 @@ export const UpdatePassPage = (): JSX.Element => {
                             />
                         </div>
                         <div className={styles['profile__block-center']}>
-                            {Avatar(user!)}
+                            {Avatar(user)}
                             <Form
                                 inputs={inputs}
                                 setData={changePass}
