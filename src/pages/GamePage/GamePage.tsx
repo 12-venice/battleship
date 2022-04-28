@@ -4,6 +4,7 @@ import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
 import { Field } from 'src/gameCore/Field';
+import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
@@ -68,65 +69,58 @@ export const GamePage = (): JSX.Element => {
     return (
         <Layout>
             <div className={styles.game__background}>
-                <div className={styles.game__header}>
-                    <Button skin="quad" title="i" onClick={getInfo} />
-                    <PlayerName
-                        name={store.display_name ?? 'Player 1'}
-                        avatarPosition="right"
-                    />
-                    <p className={styles['game__header-text']}>VS</p>
-                    <PlayerName name="Player 2" />
-                    <Button href="/" skin="quad" title="X" color="red" />
-                </div>
-                <div className={styles.game__battlefields}>
-                    <div className={styles['game__battlefield-player']}>
+                <FullScreenView>
+                    <div className={styles.game__header}>
+                        <Button skin="quad" title="i" onClick={getInfo} />
+                        <PlayerName
+                            name={store.display_name ?? 'Player 1'}
+                            avatarPosition="right"
+                        />
+                        <p className={styles['game__header-text']}>VS</p>
+                        <PlayerName name="Player 2" />
+                        <Button href="/" skin="quad" title="X" color="red" />
+                    </div>
+                    <div className={styles.game__battlefields}>
                         <Area
                             canvasRef={playerCanvasRef}
                             areaWidth={425}
                             matrix={playerMatrix}
                             ships={playerShips}
                         />
-                    </div>
-                    <div className={styles['game__battlefield-bot']}>
                         <Area
                             canvasRef={botCanvasRef}
                             areaWidth={425}
                             fillColor="#9DC0F0"
                         />
                     </div>
-                </div>
-                <div className={styles.game__footer}>
-                    <div className={styles.game__docs}>
-                        <ShipsMenu ships={data.ships} />
-                    </div>
-                    <div className={styles['game__footer-buttons']}>
-                        <div
-                            className={styles['game__footer-buttons_controls']}
-                        >
+                    <div className={styles.game__footer}>
+                        <div className={styles.game__docs}>
+                            <ShipsMenu ships={data.ships} />
+                        </div>
+                        <div className={styles['game__footer-buttons']}>
+                            <div>
+                                <Button
+                                    href="/"
+                                    skin="short"
+                                    title="AUTO"
+                                    onClick={handleClickAuto}
+                                />
+                                <Button
+                                    href="/"
+                                    skin="short"
+                                    title="RESET"
+                                    onClick={handleClickReset}
+                                />
+                            </div>
                             <Button
                                 href="/"
-                                skin="short"
-                                title="AUTO"
-                                onClick={handleClickAuto}
-                            />
-                            <Button
-                                href="/"
-                                skin="short"
-                                title="RESET"
-                                onClick={handleClickReset}
+                                skin="high"
+                                title="START"
+                                color="green"
                             />
                         </div>
-                        <div className={styles['game__footer-ships-btn']}>
-                            <Button href="/" skin="short" title="SHIPS" />
-                        </div>
-                        <Button
-                            href="/"
-                            skin="high"
-                            title="START"
-                            color="green"
-                        />
                     </div>
-                </div>
+                </FullScreenView>
             </div>
             {info && <Information close={getInfo} />}
         </Layout>
