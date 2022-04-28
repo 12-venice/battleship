@@ -24,13 +24,13 @@ export const AuthPage = (): JSX.Element => {
             try {
                 const fetched = await request('/auth/signin', 'POST', userData);
                 if (fetched === 'OK') {
-                    login();
+                    login(from || PageLinks.home);
                 }
             } catch (e) {
                 throw new SyntaxError('Что-то пошло не так');
             }
         },
-        [login, request],
+        [from, login, request],
     );
 
     useEffect(() => {
@@ -41,7 +41,7 @@ export const AuthPage = (): JSX.Element => {
 
     useEffect(() => {
         if (error === 'User already in system') {
-            login();
+            login(from || PageLinks.home);
         }
         message(error);
         clearError();

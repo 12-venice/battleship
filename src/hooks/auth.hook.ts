@@ -1,18 +1,26 @@
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { userService } from 'src/store/services/userService';
 import { useHttp } from './http.hook';
 
 export const useAuth = () => {
     const { request } = useHttp();
-    const login = useCallback(async () => {
-        userService.pending();
-        const response = await request('/auth/user', 'GET', null);
-        if (response) {
-            userService.success();
-            userService.setUser(response);
-            await request('/api/user/create', 'POST', response, {}, true);
-        }
-    }, [request]);
+    const navigate = useNavigate();
+    const login = useCallback(
+        async (from?) => {
+            userService.pending();
+            const response = await request('/auth/user', 'GET', null);
+            if (response) {
+                userService.success();
+                userService.setUser(response);
+                if (from) {
+                    navigate(from, { replace: true });
+                }
+                await request('/api/user/create', 'POST', response, {}, true);
+            }
+        },
+        [navigate, request],
+    );
 
     const logout = useCallback(async () => {
         userService.setUser(null);
