@@ -21,7 +21,7 @@ export const ProfilePage = (): JSX.Element => {
                     />
                 </div>
                 <div className={styles['profile__block-center']}>
-                    {Avatar(user!)}
+                    {Avatar(user)}
                     <span>{user?.display_name}</span>
                     <span>{user?.first_name}</span>
                     <span>{user?.second_name}</span>

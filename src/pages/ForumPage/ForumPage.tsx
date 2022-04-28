@@ -57,11 +57,10 @@ export const ForumPage = (): JSX.Element => {
                     theme={item.theme}
                     date={DateParser(item.date)}
                     description={item.description}
-                    name={item.user?.display_name || ''}
-                    comments={item.comments}
+                    user={item.user}
                     isActiveTopic={topicId}
                     setTopicId={setTopicId}
-                    id={item._id}
+                    _id={item._id}
                     deleteFunc={(_id) => {
                         setTopicId(_id);
                         setWindowDelete(true);

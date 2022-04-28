@@ -22,7 +22,7 @@ export const UpdateProfilePage = (): JSX.Element => {
     inputs.forEach((input) => {
         const element = {
             ...input,
-            ...{ defaultValue: user![input.name as keyof typeof user] },
+            ...{ defaultValue: user?.[input.name as keyof typeof user] || '' },
         };
         inputsWithDefaultsValue.push(element);
     });
@@ -66,7 +66,7 @@ export const UpdateProfilePage = (): JSX.Element => {
                             />
                         </div>
                         <div className={styles['profile__block-center']}>
-                            {Avatar(user!, getUpdateAvatar)}
+                            {Avatar(user, getUpdateAvatar)}
                             <Form
                                 inputs={inputsWithDefaultsValue}
                                 setData={changeProfile}
