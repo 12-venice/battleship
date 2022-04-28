@@ -1,6 +1,7 @@
 @import '../../styles/colors.css';
 
 .leader__background {
+    font-family: var(--font-family), var(--font-family-ru);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -67,7 +68,6 @@
     justify-content: center;
     flex-direction: column;
     color: var(--white);
-    margin-left: 77px;
 }
 
 .leader__label-tag {

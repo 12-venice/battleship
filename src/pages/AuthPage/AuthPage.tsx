@@ -9,7 +9,7 @@ import { useMessage } from 'src/hooks/message.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import { Layout } from '../../components/Layout';
 import styles from './AuthPage.scss';
-import { inputs, headers, submitTitle } from './config';
+import { inputs, headers } from './config';
 
 export const AuthPage = (): JSX.Element => {
     const message = useMessage();
@@ -17,6 +17,9 @@ export const AuthPage = (): JSX.Element => {
     const navigate = useNavigate();
     const from = location?.from?.pathname;
     const user = useSelector((userState: AllStateTypes) => userState.user.item);
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const { login } = useAuth();
     const { request, loading, error, clearError } = useHttp();
     const auth = useCallback(
@@ -51,11 +54,13 @@ export const AuthPage = (): JSX.Element => {
         <Layout>
             <div className={styles.auth__main}>
                 <span className={styles.auth__logo}>{headers.title}</span>
-                <span className={styles.auth__header}>{headers.page}</span>
+                <span className={styles.auth__header}>
+                    {dataStore.labels.auth}
+                </span>
                 <Form
                     inputs={inputs}
                     setData={auth}
-                    submitTitle={submitTitle}
+                    submitTitle={dataStore.buttons.login}
                     disabled={loading}
                 />
                 <NavLink to={PageLinks.register}>

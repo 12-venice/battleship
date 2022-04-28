@@ -12,9 +12,9 @@
     width: 350px;
     margin-bottom: 20px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-end;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .profile__block-center {

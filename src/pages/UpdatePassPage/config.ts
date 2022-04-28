@@ -10,5 +10,3 @@ export const inputs = [
         title: 'New password',
     },
 ];
-
-export const submitTitle = 'CONFIRM';

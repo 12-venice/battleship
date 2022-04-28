@@ -2,6 +2,7 @@
 @import 'src/styles/variables.css';
 
 .forum__background {
+    font-family: var(--font-family), var(--font-family-ru);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -53,6 +54,7 @@
     justify-content: center;
     flex-direction: column;
     color: var(--white);
+    margin-right: 57px;
 }
 
 .forum__label-tag {
