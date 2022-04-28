@@ -50,68 +50,68 @@ export const GamePage = (): JSX.Element => {
         <Layout>
             <div className={styles.game__background}>
                 <FullScreenView>
-                <div className={styles.game__header}>
-                    <Button skin="quad" title="i" onClick={getInfo} />
-                    <PlayerName
-                        name={store.display_name ?? 'Player 1'}
-                        avatarPosition="right"
-                    />
-                    <p className={styles['game__header-text']}>VS</p>
-                    <PlayerName name="Player 2" />
-                    <Button href="/" skin="quad" title="X" color="red" />
-                </div>
-                <div className={styles.game__battlefields}>
-                    <Area ref={playerCanvasRef} areaWidth={AREA_WIDTH} />
-                    <Area
-                        ref={botCanvasRef}
-                        areaWidth={AREA_WIDTH}
-                        fillColor="#9DC0F0"
-                    />
-                </div>
-                <div className={styles.game__footer}>
-                    <div className={styles.game__docs}>
-                        <ShipsMenu
-                            imgWidth={AREA_CELL_WIDTH}
-                            onDragStart={placement.handlerShipDragStart}
-                            onDrop={placement.handlerShipDragEnd}
-                            onDragOver={placement.handlerShipOver}
-                            onContextMenu={placement.rotationShip}
+                    <div className={styles.game__header}>
+                        <Button skin="quad" title="i" onClick={getInfo} />
+                        <PlayerName
+                            name={store.display_name ?? 'Player 1'}
+                            avatarPosition="right"
+                        />
+                        <p className={styles['game__header-text']}>VS</p>
+                        <PlayerName name="Player 2" />
+                        <Button href="/" skin="quad" title="X" color="red" />
+                    </div>
+                    <div className={styles.game__battlefields}>
+                        <Area ref={playerCanvasRef} areaWidth={AREA_WIDTH} />
+                        <Area
+                            ref={botCanvasRef}
+                            areaWidth={AREA_WIDTH}
+                            fillColor="#9DC0F0"
                         />
                     </div>
-                    <div className={styles['game__footer-buttons']}>
-                        <div
-                            className={
-                                styles['game__footer-buttons_controls']
-                            }
-                        >
-                            <Button
-                                href="/"
-                                skin="short"
-                                title={dataStore.buttons.auto}
-                                onClick={handleClickAuto}
-                            />
-                            <Button
-                                href="/"
-                                skin="short"
-                                title={dataStore.buttons.reset}
-                                onClick={handleClickReset}
+                    <div className={styles.game__footer}>
+                        <div className={styles.game__docs}>
+                            <ShipsMenu
+                                imgWidth={AREA_CELL_WIDTH}
+                                onDragStart={placement.handlerShipDragStart}
+                                onDrop={placement.handlerShipDragEnd}
+                                onDragOver={placement.handlerShipOver}
+                                onContextMenu={placement.rotationShip}
                             />
                         </div>
-                        <div className={styles['game__footer-ships-btn']}>
+                        <div className={styles['game__footer-buttons']}>
+                            <div
+                                className={
+                                    styles['game__footer-buttons_controls']
+                                }
+                            >
+                                <Button
+                                    href="/"
+                                    skin="short"
+                                    title={dataStore.buttons.auto}
+                                    onClick={handleClickAuto}
+                                />
+                                <Button
+                                    href="/"
+                                    skin="short"
+                                    title={dataStore.buttons.reset}
+                                    onClick={handleClickReset}
+                                />
+                            </div>
+                            <div className={styles['game__footer-ships-btn']}>
+                                <Button
+                                    href="/"
+                                    skin="regular"
+                                    title={dataStore.buttons.ships}
+                                />
+                            </div>
                             <Button
                                 href="/"
-                                skin="regular"
-                                title={dataStore.buttons.ships}
+                                skin="high"
+                                title={dataStore.buttons.start}
+                                color="green"
                             />
                         </div>
-                        <Button
-                            href="/"
-                            skin="high"
-                            title={dataStore.buttons.start}
-                            color="green"
-                        />
                     </div>
-                </div>
                 </FullScreenView>
             </div>
             {info && <Information close={getInfo} />}
