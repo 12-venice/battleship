@@ -3,11 +3,16 @@
 
 .topic {
     padding: 20px 30px;
-    background: var(--dark-blue);
     margin-right: 10px;
     margin-bottom: 10px;
     border-radius: 15px;
     color: var(--white);
+}
+.topic_active {
+    background: var(--light-blue);
+}
+.topic_unactive {
+    background: var(--dark-blue);
 }
 .topic__description {
     font-family: var(--font-family-second);
@@ -27,6 +32,7 @@
     align-items: flex-end;
 }
 .topic__header-author-name {
+    font-family: var(--font-family), var(--font-family-ru);
     font-size: 22px;
     margin: 0;
 }
@@ -36,6 +42,28 @@
     margin: 0;
 }
 .topic__header-theme {
+    font-family: var(--font-family), var(--font-family-ru);
     font-size: 30px;
     margin: 0;
+    display: inline-block;
+}
+.topic__controls {
+    margin-left: 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1030px) {
+    .topic__header-theme {
+        font-size: 3vw;
+    }
+    .topic__description {
+        font-size: 2vw;
+    }
+    .topic__header-author-name {
+        font-size: 3vw;
+    }
+    .topic__header-author-date {
+        font-size: 2vw;
+    }
 }

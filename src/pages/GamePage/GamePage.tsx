@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { createRef, useState, useCallback, useMemo } from 'react';
 import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
+import { Field } from 'src/gameCore/Field';
+import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
 import type { Props } from './components/ShipsMenu/types';
 
 import styles from './GamePage.scss';
+import { mapStateToProps } from './mapState';
 
 const data: Props = {
     ships: [
@@ -24,40 +28,99 @@ const data: Props = {
     ],
 };
 
+const getCurrentShips = (ships) =>
+    Object.entries(ships).map(([name, { type, x, y, ky }]) => ({
+        id: name,
+        deckCount: type,
+        x,
+        y,
+        isHorizontal: ky === 1,
+    }));
+
 export const GamePage = (): JSX.Element => {
+    const store = useSelector(mapStateToProps);
+    const playerCanvasRef = createRef<HTMLCanvasElement>();
+    const botCanvasRef = createRef<HTMLCanvasElement>();
+    const [playerMatrix, setPlayerMatrix] = useState();
+    const [playerShips, setPlayerShips] = useState([]);
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
+
+    const playerArea = useMemo(
+        () =>
+            new Field({
+                isPlayer: true,
+            }),
+        [],
+    );
+
+    const handleClickAuto = useCallback(() => {
+        playerArea.randomLocationShips();
+        setPlayerMatrix(playerArea.getMatrix());
+        setPlayerShips(getCurrentShips(playerArea.getSquadron()));
+    }, [playerArea]);
+
+    const handleClickReset = useCallback(() => {
+        playerArea.cleanField();
+        setPlayerMatrix(playerArea.getMatrix());
+        setPlayerShips(getCurrentShips(playerArea.getSquadron()));
+    }, [playerArea]);
+
     return (
         <Layout>
             <div className={styles.game__background}>
-                <div className={styles.game__header}>
-                    <Button skin="quad" title="i" onClick={getInfo} />
-                    <PlayerName name="Player 1" avatarPosition="right" />
-                    <p className={styles['game__header-text']}>VS</p>
-                    <PlayerName name="Player 2" />
-                    <Button href="/" skin="quad" title="X" color="red" />
-                </div>
-                <div className={styles.game__battlefields}>
-                    <Area areaWidth={425} />
-                    <Area areaWidth={425} fillColor="#9DC0F0" />
-                </div>
-                <div className={styles.game__footer}>
-                    <div className={styles.game__docs}>
-                        <ShipsMenu ships={data.ships} />
+                <FullScreenView>
+                    <div className={styles.game__header}>
+                        <Button skin="quad" title="i" onClick={getInfo} />
+                        <PlayerName
+                            name={store.display_name ?? 'Player 1'}
+                            avatarPosition="right"
+                        />
+                        <p className={styles['game__header-text']}>VS</p>
+                        <PlayerName name="Player 2" />
+                        <Button href="/" skin="quad" title="X" color="red" />
                     </div>
-                    <div className={styles['game__footer-buttons']}>
-                        <div>
-                            <Button href="/" skin="short" title="AUTO" />
-                            <Button href="/" skin="short" title="RESET" />
-                        </div>
-                        <Button
-                            href="/"
-                            skin="high"
-                            title="START"
-                            color="green"
+                    <div className={styles.game__battlefields}>
+                        <Area
+                            canvasRef={playerCanvasRef}
+                            areaWidth={425}
+                            matrix={playerMatrix}
+                            ships={playerShips}
+                        />
+                        <Area
+                            canvasRef={botCanvasRef}
+                            areaWidth={425}
+                            fillColor="#9DC0F0"
                         />
                     </div>
-                </div>
+                    <div className={styles.game__footer}>
+                        <div className={styles.game__docs}>
+                            <ShipsMenu ships={data.ships} />
+                        </div>
+                        <div className={styles['game__footer-buttons']}>
+                            <div>
+                                <Button
+                                    href="/"
+                                    skin="short"
+                                    title="AUTO"
+                                    onClick={handleClickAuto}
+                                />
+                                <Button
+                                    href="/"
+                                    skin="short"
+                                    title="RESET"
+                                    onClick={handleClickReset}
+                                />
+                            </div>
+                            <Button
+                                href="/"
+                                skin="high"
+                                title="START"
+                                color="green"
+                            />
+                        </div>
+                    </div>
+                </FullScreenView>
             </div>
             {info && <Information close={getInfo} />}
         </Layout>

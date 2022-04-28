@@ -1,7 +1,3 @@
-/* eslint-disable object-curly-newline */
-/* eslint-disable no-unused-expressions */
-// Конфликт
-/* eslint-disable prettier/prettier */
 import cn from 'classnames';
 import { MouseEvent, useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -21,11 +17,17 @@ export const LeaderPage = (): JSX.Element => {
     const [sortDirection, setSortDirection] = useState(false);
     const [page, setPage] = useState(0);
     const getLeaders = useCallback(async () => {
-        const users = await request('/api/user/read', 'POST', {
-            sortType,
-            sortDirection,
-            page,
-        }, {}, true);
+        const users = await request(
+            '/api/user/read',
+            'POST',
+            {
+                sortType,
+                sortDirection,
+                page,
+            },
+            {},
+            true,
+        );
         setLeaders(users);
     }, [page, request, sortDirection, sortType]);
 
@@ -36,7 +38,9 @@ export const LeaderPage = (): JSX.Element => {
     const handlerClick = (
         event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
     ): void => {
-        const sortName = (event.target as HTMLDivElement).getAttribute('data-sort');
+        const sortName = (event.target as HTMLDivElement).getAttribute(
+            'data-sort',
+        );
         if (sortName === sortType) {
             setSortDirection(!sortDirection);
         }
@@ -71,8 +75,13 @@ export const LeaderPage = (): JSX.Element => {
                             <div
                                 key={uuidv4()}
                                 className={cn(
-                                    styles[`leader__table-column-${index === 0 ? 'wide' : 'standart'}`],
-                                    sortType === element.type && styles['leader__table-selected'],
+                                    styles[
+                                        `leader__table-column-${
+                                            index === 0 ? 'wide' : 'standart'
+                                        }`
+                                    ],
+                                    sortType === element.type &&
+                                        styles['leader__table-selected'],
                                 )}
                                 data-sort={element.type}
                                 aria-hidden="true"
@@ -80,7 +89,9 @@ export const LeaderPage = (): JSX.Element => {
                             >
                                 {index > 0 && (
                                     <i className="medium material-icons">
-                                        {`arrow_drop_${sortDirection ? 'up' : 'down'}`}
+                                        {`arrow_drop_${
+                                            sortDirection ? 'up' : 'down'
+                                        }`}
                                     </i>
                                 )}
                                 {element.title}
@@ -89,16 +100,32 @@ export const LeaderPage = (): JSX.Element => {
                     </div>
                     <div className={styles['leader__table-block']}>
                         {leaders.map((element) => (
-                            <div key={uuidv4()} className={styles['leader__table-field']}>
+                            <div
+                                key={uuidv4()}
+                                className={styles['leader__table-field']}
+                            >
                                 {config.map((elementConfig, index) => (
                                     <div
                                         key={uuidv4()}
                                         className={cn(
-                                            styles[`leader__table-column-${index === 0 ? 'wide' : 'standart'}`],
-                                            sortType === elementConfig.type && styles['leader__table-selected'],
+                                            styles[
+                                                `leader__table-column-${
+                                                    index === 0
+                                                        ? 'wide'
+                                                        : 'standart'
+                                                }`
+                                            ],
+                                            sortType === elementConfig.type &&
+                                                styles[
+                                                    'leader__table-selected'
+                                                ],
                                         )}
                                     >
-                                        {element[elementConfig.type as keyof typeof element]}
+                                        {
+                                            element[
+                                                elementConfig.type as keyof typeof element
+                                            ]
+                                        }
                                     </div>
                                 ))}
                             </div>
@@ -111,9 +138,16 @@ export const LeaderPage = (): JSX.Element => {
                         <div />
                     </div>
                     <div className={styles.leader__footer}>
-                        {page > 0 && <span aria-hidden onClick={() => handlerPage(-1)}>prev</span>}
-                        {leaders.length === 10
-                            && <span aria-hidden onClick={() => handlerPage(1)}>prev</span>}
+                        {page > 0 && (
+                            <span aria-hidden onClick={() => handlerPage(-1)}>
+                                prev
+                            </span>
+                        )}
+                        {leaders.length === 10 && (
+                            <span aria-hidden onClick={() => handlerPage(1)}>
+                                prev
+                            </span>
+                        )}
                     </div>
                 </div>
             </div>

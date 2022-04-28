@@ -1,30 +1,28 @@
-/* eslint-disable no-param-reassign */
-import { useState, useCallback, useContext } from 'react';
-import { AuthContext } from 'src/context/Authcontext';
+import { useState, useCallback } from 'react';
 
 export const useHttp = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const { logout } = useContext(AuthContext);
     const baseUrl = 'https://ya-praktikum.tech/api/v2';
     const request = useCallback(
-        async (url, method = 'GET', body = null, headers = {}, DB = false) => {
+        async (url, method, body, headers = {}, DB = false, image = null) => {
             setLoading(true);
             try {
+                let currentBody = null;
+                const currentHeaders = { ...headers };
                 if (body) {
-                    body = JSON.stringify(body);
-                    headers['Content-Type'] = 'application/json';
+                    currentBody = JSON.stringify(body);
+                    currentHeaders['Content-Type'] = 'application/json';
+                }
+                if (image) {
+                    currentBody = image;
                 }
                 const response = await fetch((DB ? '' : baseUrl) + url, {
-                    method,
-                    body,
-                    headers,
+                    method: method || 'GET',
+                    body: currentBody,
+                    headers: currentHeaders,
                     credentials: 'include',
                 });
-
-                if (response.status === 401) {
-                    logout();
-                }
 
                 const contentType = response.headers
                     .get('content-type')
@@ -46,7 +44,7 @@ export const useHttp = () => {
                 throw e;
             }
         },
-        [logout],
+        [],
     );
     const clearError = useCallback(() => setError(''), []);
 

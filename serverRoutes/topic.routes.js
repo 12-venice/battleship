@@ -35,21 +35,10 @@ router.post('/read', async (req, res) => {
     try {
         const topic = await Topic.find();
         for (let index = 0; index < topic.length; index++) {
-            const { _id, user } = topic[index].toJSON();
+            const { user } = topic[index].toJSON();
             const userFind = await User.findOne({ _id: user });
-            const comments = await Comment.find({ topic: _id });
-            for (let i = 0; i < comments.length; i++) {
-                const userComment = await User.findOne({
-                    _id: comments[i].toJSON().user,
-                });
-                comments[i] = {
-                    ...comments[i].toJSON(),
-                    ...{ user: userComment },
-                };
-            }
             topic[index] = {
                 ...topic[index].toJSON(),
-                ...{ comments },
                 ...{ user: userFind },
             };
         }
@@ -63,7 +52,7 @@ router.post('/read', async (req, res) => {
 
 router.post('/update', async (req, res) => {
     try {
-        await Topic.findOneAndUpdate({ id: req.body.id }, { $set: req.body });
+        await Topic.findOneAndUpdate({ _id: req.body._id }, { $set: req.body });
         res.status(201).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({

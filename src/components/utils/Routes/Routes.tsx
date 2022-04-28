@@ -1,5 +1,5 @@
-/* eslint-disable object-curly-newline */
 import { Route, Navigate, Routes, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { AuthPage } from 'src/pages/AuthPage';
 import { HomePage } from 'src/pages/HomePage';
 import { NotFoundPage } from 'src/pages/NotFoundPage';
@@ -10,12 +10,11 @@ import { LeaderPage } from 'src/pages/LeaderPage';
 import { ForumPage } from 'src/pages/ForumPage';
 import { UpdateProfilePage } from 'src/pages/UpdateProfilePage';
 import { GamePage } from 'src/pages/GamePage';
-import { useContext } from 'react';
-import { AuthContext } from 'src/context/Authcontext';
+import { AllStateTypes } from 'src/store/reducers';
 import { PageLinks, Props } from './types';
 
 const ProtectedRoute: Props = ({ childrens }) => {
-    const { user } = useContext(AuthContext);
+    const user = useSelector((state: AllStateTypes) => state.user.item);
     const location = useLocation();
     if (!user) {
         return (
@@ -45,6 +44,6 @@ export const useRoutes = (): JSX.Element => (
             path={PageLinks.game}
             element={<ProtectedRoute childrens={<GamePage />} />}
         />
-        <Route>{NotFoundPage}</Route>
+        <Route path="*" element={<NotFoundPage />} />
     </Routes>
 );

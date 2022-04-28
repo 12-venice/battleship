@@ -5,7 +5,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 1092px;
+    width: 90%;
+    max-width: 1092px;
     height: 849px;
     background: var(--blue);
     border-radius: 38px;
@@ -21,6 +22,7 @@
 .forum__input {
     margin: 0; 
     width: 820px;
+    min-width: 140px;
     height: 57px;
     background: var(--dark-blue);
     border-radius: 15px;

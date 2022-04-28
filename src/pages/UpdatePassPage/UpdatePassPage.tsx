@@ -1,21 +1,20 @@
-/// Ошибка деструктуризации
-/* eslint-disable object-curly-newline */
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { useHttp } from 'src/hooks/http.hook';
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Preloader } from 'src/components/Preloader';
 import { Form } from 'src/components/Form';
 import { useMessage } from 'src/hooks/message.hook';
-import { AuthContext } from 'src/context/Authcontext';
 import { PageLinks } from 'src/components/utils/Routes/types';
+import { useSelector } from 'react-redux';
+import { AllStateTypes } from 'src/store/reducers';
 import { Layout } from '../../components/Layout';
 import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs, submitTitle } from './config';
-import { Avatar } from '../ProfilePage/Avatar';
+import { Avatar } from '../ProfilePage/components/Avatar';
 
 export const UpdatePassPage = (): JSX.Element => {
-    const { user } = useContext(AuthContext);
+    const user = useSelector((state: AllStateTypes) => state.user.item);
     const message = useMessage();
     const { request, loading, error, clearError } = useHttp();
     const navigate = useNavigate();

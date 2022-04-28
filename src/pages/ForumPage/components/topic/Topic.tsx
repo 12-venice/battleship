@@ -1,39 +1,102 @@
-/* eslint-disable operator-linebreak */
-import { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import cn from 'classnames';
 import { DateParser } from 'src/components/utils/DateParse/DateParser';
+import { AllStateTypes } from 'src/store/reducers';
+import { useHttp } from 'src/hooks/http.hook';
+import { Preloader } from 'src/components/Preloader';
 import { Props, handleClickType } from './types';
 import { Comment } from '../comment';
 
 import styles from './Topic.scss';
+import { CommentProps } from '../comment/types';
 
 export const Topic: Props = ({
     date = '',
-    name = 'Noname',
+    user = { display_name: 'Noname' },
     theme = 'Topic',
     description = 'Default description...',
-    comments,
     _id,
     setTopicId,
+    deleteFunc,
+    editFunc,
+    isActiveTopic,
 }): JSX.Element => {
     const [state, toggleState] = useState(false);
-
+    const [comments, setComments] = useState([]);
+    const [select, toggleSelect] = useState(false);
+    const currenUserser = useSelector(
+        (userState: AllStateTypes) => userState.user.item,
+    );
+    const { request, loading } = useHttp();
     const handleClick: handleClickType = () => {
         toggleState(!state);
+        toggleSelect(!select);
         setTopicId(_id);
     };
+
+    const getComments = useCallback(async () => {
+        const data = await request(
+            '/api/comment/read',
+            'POST',
+            { _id },
+            {},
+            true,
+        );
+        setComments(data);
+    }, [_id, request]);
+
+    useEffect(() => {
+        if (state) {
+            getComments();
+        }
+    }, [getComments, state]);
+
     return (
         <div>
             <div
-                className={styles.topic}
+                className={cn(
+                    styles.topic,
+                    isActiveTopic === _id
+                        ? styles.topic_active
+                        : styles.topic_unactive,
+                )}
                 onClick={handleClick}
                 aria-hidden="true"
             >
                 <div className={styles.topic__header}>
-                    <h2 className={styles['topic__header-theme']}>{theme}</h2>
+                    <div>
+                        <h2 className={styles['topic__header-theme']}>
+                            {theme}
+                        </h2>
+                        {user.display_name === currenUserser?.display_name && (
+                            <div className={styles.topic__controls}>
+                                <i
+                                    className="small material-icons"
+                                    onClick={() => {
+                                        editFunc(_id, theme, description);
+                                    }}
+                                    onKeyDown={() => {
+                                        // do nothing.
+                                    }}
+                                >
+                                    edit
+                                </i>
+                                <i
+                                    className="small material-icons"
+                                    onClick={() => deleteFunc(_id)}
+                                    onKeyDown={() => {
+                                        // do nothing.
+                                    }}
+                                >
+                                    delete
+                                </i>
+                            </div>
+                        )}
+                    </div>
                     <div className={styles['topic__header-author']}>
                         <h3 className={styles['topic__header-author-name']}>
-                            {name}
+                            {user.display_name}
                         </h3>
                         <p className={styles['topic__header-author-date']}>
                             {date}
@@ -42,16 +105,26 @@ export const Topic: Props = ({
                 </div>
                 <p className={styles.topic__description}>{description}</p>
             </div>
-            {state &&
-                comments &&
-                comments.map((comment) => (
-                    <Comment
-                        key={uuidv4()}
-                        user={comment.user}
-                        date={DateParser(comment.date)}
-                        description={comment.description}
-                    />
-                ))}
+            {!loading ? (
+                state &&
+                (comments.length > 0 ? (
+                    comments.map((comment: CommentProps) => (
+                        <Comment
+                            key={comment._id}
+                            user={comment.user}
+                            date={DateParser(comment.date)}
+                            description={comment.description}
+                            _id={comment._id}
+                        />
+                    ))
+                ) : (
+                    <div className={styles.topic}>
+                        There are no comments yet...
+                    </div>
+                ))
+            ) : (
+                <Preloader />
+            )}
         </div>
     );
 };
