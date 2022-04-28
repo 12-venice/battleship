@@ -29,5 +29,3 @@ export const inputs = [
         name: 'phone',
     },
 ];
-
-export const submitTitle = 'CONFIRM';

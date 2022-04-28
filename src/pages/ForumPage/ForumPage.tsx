@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Preloader } from 'src/components/Preloader';
 import { DateParser } from 'src/components/utils/DateParse/DateParser';
 import { AllStateTypes } from 'src/store/reducers';
+import { lngService } from 'src/store/services/lngService';
 import { Layout } from '../../components/Layout';
 import { Topic } from './components/topic';
 import { AddTopicWindow } from './components/addTopic';
@@ -17,6 +18,9 @@ import { TopicProps } from './components/topic/types';
 
 export const ForumPage = (): JSX.Element => {
     const user = useSelector((state: AllStateTypes) => state.user.item);
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const [topicId, setTopicId] = useState('');
     const [topicTheme, setTopicTheme] = useState('');
     const [topicDesc, setTopicDesc] = useState('');
@@ -81,16 +85,23 @@ export const ForumPage = (): JSX.Element => {
         <Layout>
             <div className={styles.forum__background}>
                 <div className={styles.forum__header}>
-                    <Button
-                        skin="quad"
-                        color="green"
-                        title="✚"
-                        onClick={() => setWindowCreate(true)}
-                    />
+                    <div>
+                        <Button
+                            skin="quad"
+                            color="green"
+                            title="✚"
+                            onClick={() => setWindowCreate(true)}
+                        />
+                        <Button
+                            skin="quad"
+                            onClick={() => lngService.changeLng()}
+                            title={dataStore.buttons.change}
+                        />
+                    </div>
                     <div className={styles.forum__label}>
                         <p className={styles['forum__label-tag']}>BATTLESHIP</p>
                         <h2 className={styles['forum__label-description']}>
-                            FORUM
+                            {dataStore.labels.forum}
                         </h2>
                     </div>
                     <Button skin="quad" title="X" href={PageLinks.home} />
@@ -104,13 +115,13 @@ export const ForumPage = (): JSX.Element => {
                     <input
                         className={cn(styles.forum__input, 'browser-default')}
                         type="text"
-                        placeholder="Send comment..."
+                        placeholder={dataStore.text.forum}
                         value={textComment}
                         onChange={(e) => setTextComment(e.target.value)}
                     />
                     <Button
                         skin="short"
-                        title="SEND"
+                        title={dataStore.buttons.send}
                         disabled={!topicId}
                         onClick={createComment}
                     />

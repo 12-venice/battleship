@@ -2,6 +2,7 @@
 @import 'src/styles/variables.css';
 
 .delete-topic__label {
+    font-family: var(--font-family), var(--font-family-ru);
     color: var(--white);
     font-size: 41px;
     margin: 0;
@@ -12,7 +13,7 @@
     justify-content: space-between;
 }
 .delete-topic__description {
-    font-family: var(--font-family-second);
+    font-family: var(--font-family-second), var(--font-family-ru);;
     color: var(--white);
     font-size: 24px;
     line-height: 28px;

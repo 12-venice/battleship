@@ -6,6 +6,8 @@ import { ChangeEvent, useRef, useState } from 'react';
 import { useHttp } from 'src/hooks/http.hook';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { AllStateTypes } from 'src/store/reducers';
 import {
     File, FileInput, Props, Url,
 } from './types';
@@ -13,6 +15,9 @@ import styles from './UpdateAvatar.scss';
 import { config } from './config';
 
 export const UpdateAvatar: Props = ({ close }): JSX.Element => {
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const fileInput = useRef<FileInput>(null);
     const [file, setFile] = useState<File>();
     const [preview, setPreview] = useState<Url>('');
@@ -62,7 +67,7 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
             <div className={styles['update-avatar__main']}>
                 <div>
                     <span className={styles['update-avatar__title']}>
-                        DEFAULT
+                        {dataStore.labels.default}
                     </span>
                     <div className={styles['update-avatar__block']}>
                         {config.map((element) => (
@@ -88,7 +93,7 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
                 <span className={styles['update-avatar__title']}>or</span>
                 <div>
                     <span className={styles['update-avatar__title']}>
-                        CUSTOM
+                        {dataStore.labels.custom}
                     </span>
                     <div className={styles['update-avatar__block']}>
                         {preview ? (
@@ -118,8 +123,8 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
                 </div>
             </div>
             <Button
-                title="CONFIRM"
-                skin="regular"
+                title={dataStore.buttons.confirm}
+                skin="wide"
                 onClick={updateAvatar}
                 disabled={!file || loading}
             />

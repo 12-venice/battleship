@@ -11,13 +11,17 @@ import { Layout } from 'src/components/Layout';
 import { userService } from 'src/store/services/userService';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
+import { lngService } from 'src/store/services/lngService';
 import styles from '../ProfilePage/ProfilePage.scss';
-import { inputs, submitTitle } from './config';
+import { inputs } from './config';
 import { Avatar } from '../ProfilePage/components/Avatar';
 import { UpdateAvatar } from './components/UpdateAvatar';
 
 export const UpdateProfilePage = (): JSX.Element => {
     const user = useSelector((state: AllStateTypes) => state.user.item);
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const inputsWithDefaultsValue: fieldsProps[] = [];
     inputs.forEach((input) => {
         const element = {
@@ -60,6 +64,11 @@ export const UpdateProfilePage = (): JSX.Element => {
                         <div className={styles['profile__block-up']}>
                             <Button
                                 skin="quad"
+                                onClick={() => lngService.changeLng()}
+                                title={dataStore.buttons.change}
+                            />
+                            <Button
+                                skin="quad"
                                 color="red"
                                 href={PageLinks.profile}
                                 title="X"
@@ -70,7 +79,7 @@ export const UpdateProfilePage = (): JSX.Element => {
                             <Form
                                 inputs={inputsWithDefaultsValue}
                                 setData={changeProfile}
-                                submitTitle={submitTitle}
+                                submitTitle={dataStore.buttons.confirm}
                                 disabled={loading}
                             />
                         </div>

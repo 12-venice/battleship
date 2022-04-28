@@ -4,6 +4,7 @@ import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
 import { Field } from 'src/gameCore/Field';
+import { AllStateTypes } from 'src/store/reducers';
 import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
@@ -39,6 +40,9 @@ const getCurrentShips = (ships) =>
 
 export const GamePage = (): JSX.Element => {
     const store = useSelector(mapStateToProps);
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
     const [playerMatrix, setPlayerMatrix] = useState();
@@ -98,24 +102,35 @@ export const GamePage = (): JSX.Element => {
                             <ShipsMenu ships={data.ships} />
                         </div>
                         <div className={styles['game__footer-buttons']}>
-                            <div>
+                            <div
+                                className={
+                                    styles['game__footer-buttons_controls']
+                                }
+                            >
                                 <Button
                                     href="/"
                                     skin="short"
-                                    title="AUTO"
+                                    title={dataStore.buttons.auto}
                                     onClick={handleClickAuto}
                                 />
                                 <Button
                                     href="/"
                                     skin="short"
-                                    title="RESET"
+                                    title={dataStore.buttons.reset}
                                     onClick={handleClickReset}
+                                />
+                            </div>
+                            <div className={styles['game__footer-ships-btn']}>
+                                <Button
+                                    href="/"
+                                    skin="regular"
+                                    title={dataStore.buttons.ships}
                                 />
                             </div>
                             <Button
                                 href="/"
                                 skin="high"
-                                title="START"
+                                title={dataStore.buttons.start}
                                 color="green"
                             />
                         </div>
