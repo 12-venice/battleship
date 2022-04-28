@@ -8,27 +8,15 @@ import { Placement } from 'src/gameCore/Placement';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
-import type { Props } from './components/ShipsMenu/types';
 import { AREA_WIDTH, AREA_CELL_WIDTH } from './data';
 
 import styles from './GamePage.scss';
 import { mapStateToProps } from './mapState';
 
-const getCurrentShips = (ships) =>
-    Object.entries(ships).map(([name, { type, x, y, ky }]) => ({
-        id: name,
-        deckCount: type,
-        x,
-        y,
-        isHorizontal: ky === 1,
-    }));
-
 export const GamePage = (): JSX.Element => {
     const store = useSelector(mapStateToProps);
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
-    const [playerMatrix, setPlayerMatrix] = useState();
-    const [playerShips, setPlayerShips] = useState([]);
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
 
@@ -46,27 +34,12 @@ export const GamePage = (): JSX.Element => {
     );
 
     const handleClickAuto = useCallback(() => {
-        playerArea.randomLocationShips();
-
-        Object.entries(playerArea.getSquadron()).forEach(
-            ([name, { x, y, kx, arrDecks }]) => {
-                const shipElement = document.getElementById(name);
-                const { left, bottom } = placement.calculateShipPositionInFrame(
-                    { shipElement, x, y, kx, deck: arrDecks.length },
-                );
-                console.log({ left, bottom });
-            },
-        );
-
-        // setPlayerMatrix(playerArea.getMatrix());
-        // setPlayerShips(getCurrentShips(playerArea.getSquadron()));
-    }, [playerArea]);
+        placement.randomLocationShips();
+    }, [placement]);
 
     const handleClickReset = useCallback(() => {
-        playerArea.cleanField();
-        // setPlayerMatrix(playerArea.getMatrix());
-        // setPlayerShips(getCurrentShips(playerArea.getSquadron()));
-    }, [playerArea]);
+        placement.resetLocationShips();
+    }, [placement]);
 
     return (
         <Layout>
@@ -82,12 +55,7 @@ export const GamePage = (): JSX.Element => {
                     <Button href="/" skin="quad" title="X" color="red" />
                 </div>
                 <div className={styles.game__battlefields}>
-                    <Area
-                        ref={playerCanvasRef}
-                        areaWidth={AREA_WIDTH}
-                        matrix={playerMatrix}
-                        ships={playerShips}
-                    />
+                    <Area ref={playerCanvasRef} areaWidth={AREA_WIDTH} />
                     <Area
                         ref={botCanvasRef}
                         areaWidth={AREA_WIDTH}

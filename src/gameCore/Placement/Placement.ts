@@ -18,6 +18,8 @@ export class Placement {
         this.handlerShipDragEnd = this.handlerShipDragEnd.bind(this);
         this.handlerShipOver = this.handlerShipOver.bind(this);
         this.rotationShip = this.rotationShip.bind(this);
+        this.randomLocationShips = this.randomLocationShips.bind(this);
+        this.resetLocationShips = this.resetLocationShips.bind(this);
         this.calculateShipPositionInFrame =
             this.calculateShipPositionInFrame.bind(this);
     }
@@ -27,9 +29,6 @@ export class Placement {
             this.selectedShipElement = event.target;
             this.dragObject = this.getDragObjectFromEvent(event);
             this.player.removeShipFromSquadron(this.dragObject.shipId);
-            console.log(this.dragObject);
-            console.log(this.player.getMatrix());
-            console.log(this.player.getSquadron());
         }
     }
 
@@ -79,8 +78,6 @@ export class Placement {
                 },
                 this.dragObject.deck,
             );
-
-            console.log({ isValidLocationShip });
 
             if (!isValidLocationShip) {
                 this.handlerShipDragToInvalidPosition({
@@ -232,8 +229,6 @@ export class Placement {
             deck: deckCount,
         });
 
-        console.log({ left, bottom });
-
         this.moveShipToPosition({
             shipElement: event.target,
             left,
@@ -254,5 +249,42 @@ export class Placement {
             : shipMenuCoords.bottom - (frameCoords.top + cellSize * (x + deck));
 
         return { left, bottom };
+    }
+
+    randomLocationShips() {
+        this.player.randomLocationShips();
+
+        Object.entries(this.player.getSquadron()).forEach(
+            ([name, { x, y, kx, arrDecks }]) => {
+                const shipElement = document.getElementById(name);
+                const { left, bottom } = this.calculateShipPositionInFrame({
+                    shipElement,
+                    x,
+                    y,
+                    kx,
+                    deck: arrDecks.length,
+                });
+
+                shipElement.style.transform = kx
+                    ? 'rotate(0deg)'
+                    : 'rotate(90deg)';
+
+                this.moveShipToPosition({ shipElement, left, bottom });
+            },
+        );
+    }
+
+    resetLocationShips() {
+        Object.entries(this.player.getSquadron()).forEach(([name]) => {
+            const shipElement = document.getElementById(name);
+            const left = parseInt(shipElement.dataset.left, 10);
+            const bottom = parseInt(shipElement.dataset.bottom, 10);
+
+            shipElement.style.transform = 'rotate(0deg)';
+
+            this.moveShipToPosition({ shipElement, left, bottom });
+        });
+
+        this.player.cleanField();
     }
 }
