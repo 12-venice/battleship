@@ -12,10 +12,11 @@ export const ShipsMenu = ({ ships }: Props) => {
             className={styles.container}
             style={{ width: CONTAINER_WIDTH, height: CONTAINER_HEIGHT }}
         >
-            {currentShips.map(({ id, src, bottom, left }) => (
+            {currentShips.map(({ id, src, bottom, left, width }) => (
                 <img
                     alt=""
                     key={id}
+                    width={width}
                     data-test-id={id}
                     data-ship-id={id}
                     src={src}

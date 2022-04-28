@@ -28,7 +28,7 @@ export const Area = ({
 
     const renderCanvas = useCallback(
         () => (
-            <>
+            <div>
                 {canvasRef && (
                     <canvas
                         ref={canvasRef}
@@ -36,7 +36,7 @@ export const Area = ({
                         height={areaWidth}
                     />
                 )}
-            </>
+            </div>
         ),
         [canvasRef, areaWidth],
     );

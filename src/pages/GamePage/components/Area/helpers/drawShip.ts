@@ -1,4 +1,4 @@
-import { shipsSrcMap } from 'src/pages/GamePage/data';
+import { shipsSrcMap, ripShipsSrcMap } from 'src/pages/GamePage/data';
 
 export const drawShip = ({
     ctx,
@@ -7,18 +7,25 @@ export const drawShip = ({
     type,
     cellSize,
     isHorizontal = false,
+    isRip = false,
 }) => {
-    const image = new Image(cellSize, cellSize * type);
-    image.src = shipsSrcMap.get(type);
+    const image: HTMLImageElement = new Image();
+    image.src = isRip ? ripShipsSrcMap.get(type) : shipsSrcMap.get(type);
     image.onload = () => {
         if (isHorizontal) {
             ctx.save();
-            ctx.translate(y, x);
+            ctx.translate(x, y);
             ctx.rotate((Math.PI / 180) * 90);
-            ctx.drawImage(image, -5, -(cellSize * type - 3));
+            ctx.drawImage(
+                image,
+                -2,
+                -(cellSize * type - 1),
+                cellSize,
+                cellSize * type,
+            );
             ctx.restore();
         } else {
-            ctx.drawImage(image, x, y);
+            ctx.drawImage(image, x - 1, y, cellSize, cellSize * type);
         }
     };
 };

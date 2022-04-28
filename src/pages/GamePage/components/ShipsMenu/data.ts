@@ -5,9 +5,9 @@ export const IMG_WIDTH = 50;
 /** ширина контейнера с кораблями и отступами */
 export const CONTAINER_WIDTH = IMG_WIDTH * 8 + MARGIN * 6;
 /** высота картинки с однопалубной лодкой */
-export const SHIP_1_HEIGHT = 42;
+export const SHIP_1_HEIGHT = 50;
 /** высота картинки с четырехпалубной лодкой */
-export const SHIP_4_HEIGHT = 176;
+export const SHIP_4_HEIGHT = 200;
 /** высота контейнера с кораблями и отступами */
 export const CONTAINER_HEIGHT = SHIP_4_HEIGHT;
 
