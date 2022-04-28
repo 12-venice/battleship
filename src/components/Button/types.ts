@@ -1,8 +1,8 @@
-import { MouseEventHandler, ReactElement } from 'react';
+import { FC, MouseEventHandler, ReactElement } from 'react';
 
-export type ButtonProps = {
+type Props = {
     className?: string;
-    title: string | ReactElement;
+    title?: string | ReactElement;
     disabled?: boolean;
     type?: 'button' | 'submit' | 'reset';
     onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -11,3 +11,5 @@ export type ButtonProps = {
     noFill?: boolean;
     href?: string;
 };
+
+export type ButtonProps = FC<Props>;

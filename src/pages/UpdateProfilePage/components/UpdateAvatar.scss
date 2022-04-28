@@ -32,7 +32,6 @@
     width: 341px;
     height: 341px;
     background: var(--light-dark-blue);
-    ;
     border-radius: 38px;
     margin: 10px;
 }
@@ -59,4 +58,17 @@
     border: 5px solid var(--white);
     border-radius: 50%;
     margin: 15px;
+}
+
+@media screen and (max-width: 1030px) {
+    .update-avatar__main {
+        flex-direction: column;
+    }
+    .update-avatar__select-default {
+        width: 100px;
+        height: 100px;
+    }
+    .update-avatar__block {
+        height: 278px;
+    }
 }
