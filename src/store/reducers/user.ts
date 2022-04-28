@@ -1,3 +1,6 @@
+// Отключены для теста
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable default-param-last */
 /* eslint-disable indent */
 type LoadStatus = 'success' | 'pending' | 'failed' | 'error';
