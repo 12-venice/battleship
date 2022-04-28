@@ -16,3 +16,7 @@ type RouteProps = {
     childrens: ReactElement;
 };
 export type Props = FC<RouteProps>;
+
+export type FromProps = {
+    from: { pathname: string };
+};
