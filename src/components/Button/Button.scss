@@ -12,6 +12,7 @@
     height: 57px;
     width: 235px;
     margin: 10px;
+    padding: 0;
 }
 .button:focus {
     background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #F1972B 38.02%, #E37D00 100%);
@@ -93,4 +94,45 @@
     border: none;
     background: var(--light-gray);
     color: var(--gray);
+}
+
+@media screen and (max-width: 1700px) {
+    .button_large {
+        width: 300px;
+    }
+}
+@media screen and (max-width: 1151px) {
+    .button_high {
+        height: 57px;
+        width: 151px;
+        font-size: 36px;
+    }
+}
+
+@media screen and (max-width: 1030px) {
+    .button_large {
+        width: 214px;
+        height: 74px;
+        font-size: 48px;
+    }
+}
+
+
+@media screen and (max-width: 570px) {
+    .button_quad {
+        width: 42px;
+        height: 42px;
+        font-size: 22px;
+        margin: 7px;
+    }
+    .button_short {
+        width: 100px;
+        font-size: 22px;
+        height: 42px;
+    }
+    .button_high {
+        width: 100px;
+        font-size: 22px;
+        height: 42px;
+    }
 }

@@ -2,7 +2,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 1092px;
+    width: 90%;
+    max-width: 1092px;
     height: 849px;
     background: var(--blue);
     border-radius: 38px;
@@ -46,4 +47,71 @@
 .game__header-text {
     font-size: 34px;
     margin: 0;
+}
+
+.game__footer-ships-btn {
+    display: none;
+}
+
+@media screen and (max-width: 1151px) {
+    .game__background {
+        height: 909px;
+    }
+    .game__battlefield-bot {
+        display: none;
+    }
+    .game__battlefields {
+        margin-top: 20px;
+        justify-content: center;
+    }
+    .game__footer-buttons_controls {
+        display: flex;
+        flex-direction: column;
+    }
+    .game__footer {
+        margin: 30px 0;
+    }
+}
+@media screen and (max-width: 866px) {
+    .game__docs {
+        display: none;
+    }
+    .game__footer-ships-btn {
+        display: block;
+    }
+    .game__footer-buttons_controls {
+        display: flex;
+        flex-direction: row;
+    }
+    .game__footer {
+        justify-content: center;
+    }
+    .game__footer-buttons {
+        margin: 0;
+    }
+}
+@media screen and (max-width: 730px) {
+    .game__battlefield-player canvas {
+        width: 300px;
+    }
+    .game__background {
+        height: 825px;
+        padding-bottom: 20px;
+    }
+    .game__header-text {
+        font-size: 24px;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .game__battlefield-player canvas {
+        width: 250px;
+    }
+    .game__background {
+        height: 625px;
+        padding: 10px;
+    }
+    .game__header-text {
+        font-size: 20px;
+    }
 }

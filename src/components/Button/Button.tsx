@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Button.scss';
 import { ButtonProps } from './types';
 
-export const Button = ({
+export const Button: ButtonProps = ({
     title,
     disabled = false,
     onClick,
@@ -12,7 +12,8 @@ export const Button = ({
     color,
     noFill,
     href,
-}: ButtonProps): JSX.Element => {
+    children,
+}) => {
     const navigate = useNavigate();
     let handlerClick;
     if (href) {
@@ -35,7 +36,10 @@ export const Button = ({
             type={type}
             onClick={handlerClick}
         >
-            <span>{title}</span>
+            <span>
+                {title}
+                {children}
+            </span>
         </button>
     );
 };

@@ -52,3 +52,18 @@
     display: inline-block;
     cursor: pointer;
 }
+
+@media screen and (max-width: 1030px) {
+    .topic__header-theme {
+        font-size: 3vw;
+    }
+    .topic__description {
+        font-size: 2vw;
+    }
+    .topic__header-author-name {
+        font-size: 3vw;
+    }
+    .topic__header-author-date {
+        font-size: 2vw;
+    }
+}
