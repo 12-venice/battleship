@@ -12,6 +12,7 @@ export const Button: ButtonProps = ({
     color,
     noFill,
     href,
+    className,
     children,
 }) => {
     const navigate = useNavigate();
@@ -31,6 +32,7 @@ export const Button: ButtonProps = ({
                 color && styles[`button-color_${color}`],
                 noFill && styles['button_no-fill'],
                 disabled && styles.button_disable,
+                className,
             )}
             disabled={disabled}
             type={type}
