@@ -79,24 +79,30 @@ export const GamePage = (): JSX.Element => {
                     <Button href="/" skin="quad" title="X" color="red" />
                 </div>
                 <div className={styles.game__battlefields}>
-                    <Area
-                        canvasRef={playerCanvasRef}
-                        areaWidth={425}
-                        matrix={playerMatrix}
-                        ships={playerShips}
-                    />
-                    <Area
-                        canvasRef={botCanvasRef}
-                        areaWidth={425}
-                        fillColor="#9DC0F0"
-                    />
+                    <div className={styles['game__battlefield-player']}>
+                        <Area
+                            canvasRef={playerCanvasRef}
+                            areaWidth={425}
+                            matrix={playerMatrix}
+                            ships={playerShips}
+                        />
+                    </div>
+                    <div className={styles['game__battlefield-bot']}>
+                        <Area
+                            canvasRef={botCanvasRef}
+                            areaWidth={425}
+                            fillColor="#9DC0F0"
+                        />
+                    </div>
                 </div>
                 <div className={styles.game__footer}>
                     <div className={styles.game__docs}>
                         <ShipsMenu ships={data.ships} />
                     </div>
                     <div className={styles['game__footer-buttons']}>
-                        <div>
+                        <div
+                            className={styles['game__footer-buttons_controls']}
+                        >
                             <Button
                                 href="/"
                                 skin="short"
@@ -109,6 +115,9 @@ export const GamePage = (): JSX.Element => {
                                 title="RESET"
                                 onClick={handleClickReset}
                             />
+                        </div>
+                        <div className={styles['game__footer-ships-btn']}>
+                            <Button href="/" skin="short" title="SHIPS" />
                         </div>
                         <Button
                             href="/"
