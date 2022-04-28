@@ -4,46 +4,41 @@ import { drawMatrix } from './helpers/drawMatrix';
 import { emptyMatrix } from './data';
 import type { Props } from './types';
 
-const Component = ({
-    areaWidth,
-    fillColor,
-    canvasRef,
-    matrix = emptyMatrix,
-    ships,
-}: Props) => {
-    useEffect(() => {
-        if (!canvasRef?.current) return;
+export const Area = forwardRef(
+    (
+        { areaWidth, fillColor, matrix = emptyMatrix, ships }: Props,
+        canvasRef,
+    ) => {
+        useEffect(() => {
+            if (!canvasRef?.current) return;
 
-        const ctx = canvasRef.current.getContext('2d');
-        if (!ctx) return;
+            const ctx = canvasRef.current.getContext('2d');
+            if (!ctx) return;
 
-        drawMatrix({
-            ctx,
-            areaWidth,
-            fillColor,
-            matrix,
-            ships,
-        });
-    }, [canvasRef, areaWidth, fillColor, matrix, ships]);
+            drawMatrix({
+                ctx,
+                areaWidth,
+                fillColor,
+                matrix,
+                ships,
+            });
+        }, [canvasRef, areaWidth, fillColor, matrix, ships]);
 
-    const renderCanvas = useCallback(
-        () => (
-            <div>
-                {canvasRef && (
-                    <canvas
-                        ref={canvasRef}
-                        width={areaWidth}
-                        height={areaWidth}
-                    />
-                )}
-            </div>
-        ),
-        [canvasRef, areaWidth],
-    );
+        const renderCanvas = useCallback(
+            () => (
+                <div>
+                    {canvasRef && (
+                        <canvas
+                            ref={canvasRef}
+                            width={areaWidth}
+                            height={areaWidth}
+                        />
+                    )}
+                </div>
+            ),
+            [canvasRef, areaWidth],
+        );
 
-    return <>{renderCanvas()}</>;
-};
-
-export const Area = forwardRef((props, canvasRef) => (
-    <Component {...props} canvasRef={canvasRef} />
-));
+        return <>{renderCanvas()}</>;
+    },
+);

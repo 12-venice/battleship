@@ -56,7 +56,7 @@ export class Field {
                     // кол-во палуб
                     options.decks = deckCount;
                     // имя корабля, понадобится в дальнейшем для его идентификации
-                    options.shipname = type + String(i + 1);
+                    options.shipname = `${type}${deckCount}${i}`;
                     // создаём экземпляр корабля со свойствами, указанными в
                     // объекте options
                     const ship = new Ship(this, options);

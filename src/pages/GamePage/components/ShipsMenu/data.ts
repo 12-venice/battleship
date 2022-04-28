@@ -1,4 +1,5 @@
 import { Props } from 'src/pages/GamePage/components/ShipsMenu/types';
+import { ShipType } from 'src/gameCore/Field/types';
 
 /** отступ между кораблями */
 export const MARGIN = 9;
@@ -15,14 +16,14 @@ export const CONTAINER_HEIGHT = SHIP_4_HEIGHT;
 
 /** моковые данные для тестов */
 export const shipsData = [
-    { id: '1', type: 4, visible: true },
-    { id: '2', type: 3, visible: true },
-    { id: '3', type: 3, visible: true },
-    { id: '4', type: 2, visible: true },
-    { id: '5', type: 2, visible: true },
-    { id: '6', type: 2, visible: true },
-    { id: '7', type: 1, visible: true },
-    { id: '8', type: 1, visible: true },
-    { id: '9', type: 1, visible: true },
-    { id: '10', type: 1, visible: true },
+    { id: `${ShipType.fourDeck}40`, type: 4, visible: true },
+    { id: `${ShipType.tripleDeck}30`, type: 3, visible: true },
+    { id: `${ShipType.tripleDeck}31`, type: 3, visible: true },
+    { id: `${ShipType.doubleDeck}20`, type: 2, visible: true },
+    { id: `${ShipType.doubleDeck}21`, type: 2, visible: true },
+    { id: `${ShipType.doubleDeck}22`, type: 2, visible: true },
+    { id: `${ShipType.singleDeck}10`, type: 1, visible: true },
+    { id: `${ShipType.singleDeck}11`, type: 1, visible: true },
+    { id: `${ShipType.singleDeck}12`, type: 1, visible: true },
+    { id: `${ShipType.singleDeck}13`, type: 1, visible: true },
 ];

@@ -1,5 +1,4 @@
 import { getCoordinates } from 'src/gameCore/helpers/getCoordinates';
-import { checkLocationShip } from 'src/gameCore/helpers/checkLocationShip';
 import { Ship } from 'src/gameCore/Ship';
 import type { DragImageEvent } from './types';
 
@@ -18,6 +17,9 @@ export class Placement {
         this.handlerShipDragStart = this.handlerShipDragStart.bind(this);
         this.handlerShipDragEnd = this.handlerShipDragEnd.bind(this);
         this.handlerShipOver = this.handlerShipOver.bind(this);
+        this.rotationShip = this.rotationShip.bind(this);
+        this.calculateShipPositionInFrame =
+            this.calculateShipPositionInFrame.bind(this);
     }
 
     handlerShipDragStart(event: DragImageEvent) {
@@ -57,7 +59,9 @@ export class Placement {
                 shipCoords.bottom <= frameCoords.bottom + gap;
 
             if (!isShipInFrame) {
-                this.handlerShipDragToInvalidPosition();
+                this.handlerShipDragToInvalidPosition({
+                    shipElement: event.target,
+                });
                 return;
             }
 
@@ -79,15 +83,19 @@ export class Placement {
             console.log({ isValidLocationShip });
 
             if (!isValidLocationShip) {
-                this.handlerShipDragToInvalidPosition();
+                this.handlerShipDragToInvalidPosition({
+                    shipElement: event.target,
+                });
                 return;
             }
 
-            const shipMenuCoords = getCoordinates(this.dragObject.parent);
-            const left = frameCoords.left + cellSize * y - shipMenuCoords.left;
-            const bottom =
-                shipMenuCoords.bottom -
-                (frameCoords.top + cellSize * (x + this.dragObject.deck));
+            const { left, bottom } = this.calculateShipPositionInFrame({
+                shipElement: event.target,
+                x,
+                y,
+                kx: this.dragObject.kx,
+                deck: this.dragObject.deck,
+            });
 
             this.moveShipToPosition({
                 shipElement: event.target,
@@ -109,7 +117,9 @@ export class Placement {
         }
     }
 
-    handlerShipDragToInvalidPosition() {
+    handlerShipDragToInvalidPosition({ shipElement }) {
+        shipElement.style.transform = 'rotate(0deg)';
+
         this.moveShipToStartPosition();
         this.resetShipData();
     }
@@ -151,8 +161,8 @@ export class Placement {
             initialLeft: parseInt(el.dataset.left, 10),
             initialBottom: parseInt(el.dataset.bottom, 10),
             // горизонтальное положение корабля
-            kx: 1,
-            ky: 0,
+            kx: this.player.squadron[el.dataset.shipId]?.kx === 0 ? 0 : 1,
+            ky: this.player.squadron[el.dataset.shipId]?.ky === 1 ? 1 : 0,
         };
     }
 
@@ -166,5 +176,83 @@ export class Placement {
             shipname,
         });
         ship.createShip();
+    }
+
+    rotationShip(event) {
+        event.preventDefault();
+
+        const shipId = event.target?.dataset?.shipId;
+
+        if (
+            !shipId ||
+            !this.player.squadron[shipId] ||
+            this.player.squadron[shipId].arrDecks.length === 1
+        ) {
+            return;
+        }
+
+        let obj = {
+            kx: this.player.squadron[shipId].kx === 0 ? 1 : 0,
+            ky: this.player.squadron[shipId].ky === 0 ? 1 : 0,
+            x: this.player.squadron[shipId].x,
+            y: this.player.squadron[shipId].y,
+        };
+        const deckCount = this.player.squadron[shipId].arrDecks.length;
+
+        this.player.removeShipFromSquadron(shipId);
+
+        const isValidLocationShip = this.player.checkLocationShip(
+            obj,
+            deckCount,
+        );
+
+        if (!isValidLocationShip) {
+            obj = { ...obj, kx: obj.ky, ky: obj.kx };
+        }
+
+        this.createShipAfterMoving({
+            x: obj.x,
+            y: obj.y,
+            kx: obj.kx,
+            ky: obj.ky,
+            decks: deckCount,
+            shipname: shipId,
+            player: this.player,
+        });
+
+        event.target.style.transform = obj.ky
+            ? 'rotate(90deg)'
+            : 'rotate(0deg)';
+
+        const { left, bottom } = this.calculateShipPositionInFrame({
+            shipElement: event.target,
+            x: obj.x,
+            y: obj.y,
+            kx: obj.kx,
+            deck: deckCount,
+        });
+
+        console.log({ left, bottom });
+
+        this.moveShipToPosition({
+            shipElement: event.target,
+            left,
+            bottom,
+        });
+    }
+
+    calculateShipPositionInFrame({ shipElement, x, y, kx, deck }) {
+        const frameCoords = getCoordinates(this.field.current);
+        const shipMenuCoords = getCoordinates(shipElement.parentElement);
+        const cellSize = this.field.current.width / 10;
+
+        const left = kx
+            ? frameCoords.left + cellSize * y - shipMenuCoords.left
+            : frameCoords.left + cellSize * (y + deck) - shipMenuCoords.left;
+        const bottom = kx
+            ? shipMenuCoords.bottom - (frameCoords.top + cellSize * (x + deck))
+            : shipMenuCoords.bottom - (frameCoords.top + cellSize * (x + deck));
+
+        return { left, bottom };
     }
 }

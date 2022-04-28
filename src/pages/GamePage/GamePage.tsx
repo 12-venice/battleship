@@ -47,14 +47,25 @@ export const GamePage = (): JSX.Element => {
 
     const handleClickAuto = useCallback(() => {
         playerArea.randomLocationShips();
-        setPlayerMatrix(playerArea.getMatrix());
-        setPlayerShips(getCurrentShips(playerArea.getSquadron()));
+
+        Object.entries(playerArea.getSquadron()).forEach(
+            ([name, { x, y, kx, arrDecks }]) => {
+                const shipElement = document.getElementById(name);
+                const { left, bottom } = placement.calculateShipPositionInFrame(
+                    { shipElement, x, y, kx, deck: arrDecks.length },
+                );
+                console.log({ left, bottom });
+            },
+        );
+
+        // setPlayerMatrix(playerArea.getMatrix());
+        // setPlayerShips(getCurrentShips(playerArea.getSquadron()));
     }, [playerArea]);
 
     const handleClickReset = useCallback(() => {
         playerArea.cleanField();
-        setPlayerMatrix(playerArea.getMatrix());
-        setPlayerShips(getCurrentShips(playerArea.getSquadron()));
+        // setPlayerMatrix(playerArea.getMatrix());
+        // setPlayerShips(getCurrentShips(playerArea.getSquadron()));
     }, [playerArea]);
 
     return (
@@ -90,6 +101,7 @@ export const GamePage = (): JSX.Element => {
                             onDragStart={placement.handlerShipDragStart}
                             onDrop={placement.handlerShipDragEnd}
                             onDragOver={placement.handlerShipOver}
+                            onContextMenu={placement.rotationShip}
                         />
                     </div>
                     <div className={styles['game__footer-buttons']}>

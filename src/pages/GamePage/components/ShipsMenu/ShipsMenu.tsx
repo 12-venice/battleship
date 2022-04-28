@@ -12,10 +12,18 @@ export const ShipsMenu = ({
     onDrop,
     onDragEnd,
     onDragOver,
+    onContextMenu,
 }: Props) => {
     const currentShips = useMemo(
         () => getCurrentShips({ ships, imgWidth }),
         [ships, imgWidth],
+    );
+
+    const handlerContextMenu = useCallback(
+        (event) => {
+            if (onContextMenu) onContextMenu(event);
+        },
+        [onContextMenu],
     );
 
     /** Начало перемещения */
@@ -88,13 +96,14 @@ export const ShipsMenu = ({
                 width: imgWidth * 8 + MARGIN * 7,
                 height: CONTAINER_HEIGHT,
             }}
+            onContextMenu={handlerContextMenu}
         >
             {currentShips.map(({ id, type, src, bottom, left, width }) => (
                 <img
                     alt=""
                     key={id}
                     width={width}
-                    data-test-id={id}
+                    id={id}
                     data-ship-id={id}
                     data-deck={type}
                     data-left={left}
