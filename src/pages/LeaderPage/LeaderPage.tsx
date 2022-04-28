@@ -1,9 +1,12 @@
 import cn from 'classnames';
 import { MouseEvent, useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
+import { AllStateTypes } from 'src/store/reducers';
+import { lngService } from 'src/store/services/lngService';
 import { v4 as uuidv4 } from 'uuid';
 import { Layout } from '../../components/Layout';
 import { config } from './config';
@@ -11,6 +14,7 @@ import { config } from './config';
 import styles from './LeaderPage.scss';
 
 export const LeaderPage = (): JSX.Element => {
+    const dataStore = useSelector((state: AllStateTypes) => state.language);
     const { request } = useHttp();
     const [leaders, setLeaders] = useState([]);
     const [sortType, setSortType] = useState('display_name');
@@ -56,13 +60,17 @@ export const LeaderPage = (): JSX.Element => {
         <Layout>
             <div className={styles.leader__background}>
                 <div className={styles.leader__header}>
-                    <div />
+                    <Button
+                        skin="quad"
+                        onClick={() => lngService.changeLng()}
+                        title={dataStore.translate.buttons.change}
+                    />
                     <div className={styles.leader__label}>
                         <p className={styles['leader__label-tag']}>
                             BATTLESHIP
                         </p>
                         <h2 className={styles['leader__label-description']}>
-                            LEADERBOARD
+                            {dataStore.translate.labels.leaders}
                         </h2>
                     </div>
                     <NavLink to={PageLinks.home}>
@@ -94,7 +102,9 @@ export const LeaderPage = (): JSX.Element => {
                                         }`}
                                     </i>
                                 )}
-                                {element.title}
+                                {dataStore.language === 'ru'
+                                    ? element.titleRU
+                                    : element.titleEN}
                             </div>
                         ))}
                     </div>

@@ -5,6 +5,8 @@ import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
 import { Field } from 'src/gameCore/Field';
 import { Placement } from 'src/gameCore/Placement';
+import { AllStateTypes } from 'src/store/reducers';
+import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
@@ -15,6 +17,9 @@ import { mapStateToProps } from './mapState';
 
 export const GamePage = (): JSX.Element => {
     const store = useSelector(mapStateToProps);
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
     const [info, setInfo] = useState(false);
@@ -44,6 +49,7 @@ export const GamePage = (): JSX.Element => {
     return (
         <Layout>
             <div className={styles.game__background}>
+                <FullScreenView>
                 <div className={styles.game__header}>
                     <Button skin="quad" title="i" onClick={getInfo} />
                     <PlayerName
@@ -73,28 +79,40 @@ export const GamePage = (): JSX.Element => {
                         />
                     </div>
                     <div className={styles['game__footer-buttons']}>
-                        <div>
+                        <div
+                            className={
+                                styles['game__footer-buttons_controls']
+                            }
+                        >
                             <Button
                                 href="/"
                                 skin="short"
-                                title="AUTO"
+                                title={dataStore.buttons.auto}
                                 onClick={handleClickAuto}
                             />
                             <Button
                                 href="/"
                                 skin="short"
-                                title="RESET"
+                                title={dataStore.buttons.reset}
                                 onClick={handleClickReset}
+                            />
+                        </div>
+                        <div className={styles['game__footer-ships-btn']}>
+                            <Button
+                                href="/"
+                                skin="regular"
+                                title={dataStore.buttons.ships}
                             />
                         </div>
                         <Button
                             href="/"
                             skin="high"
-                            title="START"
+                            title={dataStore.buttons.start}
                             color="green"
                         />
                     </div>
                 </div>
+                </FullScreenView>
             </div>
             {info && <Information close={getInfo} />}
         </Layout>

@@ -14,6 +14,9 @@ import styles from './addTopic.scss';
 export const AddTopicWindow: Props = ({ close }): JSX.Element => {
     const { request, loading } = useHttp();
     const user = useSelector((state: AllStateTypes) => state.user.item);
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const [theme, setTheme] = useState('');
     const [description, setDescription] = useState('');
     const createTopic = useCallback(async () => {
@@ -27,17 +30,19 @@ export const AddTopicWindow: Props = ({ close }): JSX.Element => {
     }, [close, description, request, theme, user]);
     return (
         <ModalWindow>
-            <h2 className={styles['add-topic__label']}>Add new TOPIC</h2>
+            <h2 className={styles['add-topic__label']}>
+                {dataStore.labels.add}
+            </h2>
             <input
                 className={cn('browser-default', styles['add-topic__input'])}
                 type="text"
-                placeholder="Theme"
+                placeholder={dataStore.labels.theme}
                 maxLength={45}
                 onChange={(e) => setTheme(e.target.value)}
             />
             <textarea
                 className={styles['add-topic__textarea']}
-                placeholder="Describe your topic"
+                placeholder={dataStore.text.add}
                 maxLength={500}
                 onChange={(e) => setDescription(e.target.value)}
             />
@@ -45,14 +50,14 @@ export const AddTopicWindow: Props = ({ close }): JSX.Element => {
                 <Button
                     skin="high"
                     color="green"
-                    title="ADD"
+                    title={dataStore.buttons.add}
                     disabled={loading}
                     onClick={createTopic}
                 />
                 <Button
                     skin="high"
                     color="yellow"
-                    title="BACK"
+                    title={dataStore.buttons.back}
                     onClick={close}
                 />
             </div>
