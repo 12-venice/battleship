@@ -8,13 +8,17 @@ import { useMessage } from 'src/hooks/message.hook';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
+import { lngService } from 'src/store/services/lngService';
 import { Layout } from '../../components/Layout';
 import styles from '../ProfilePage/ProfilePage.scss';
-import { inputs, submitTitle } from './config';
+import { inputs } from './config';
 import { Avatar } from '../ProfilePage/components/Avatar';
 
 export const UpdatePassPage = (): JSX.Element => {
     const user = useSelector((state: AllStateTypes) => state.user.item);
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const message = useMessage();
     const { request, loading, error, clearError } = useHttp();
     const navigate = useNavigate();
@@ -45,6 +49,11 @@ export const UpdatePassPage = (): JSX.Element => {
                         <div className={styles['profile__block-up']}>
                             <Button
                                 skin="quad"
+                                onClick={() => lngService.changeLng()}
+                                title={dataStore.buttons.change}
+                            />
+                            <Button
+                                skin="quad"
                                 color="red"
                                 href={PageLinks.profile}
                                 title="X"
@@ -55,7 +64,7 @@ export const UpdatePassPage = (): JSX.Element => {
                             <Form
                                 inputs={inputs}
                                 setData={changePass}
-                                submitTitle={submitTitle}
+                                submitTitle={dataStore.buttons.confirm}
                                 disabled={loading}
                             />
                         </div>
