@@ -52,7 +52,7 @@ router.post('/read', async (req, res) => {
 
 router.post('/update', async (req, res) => {
     try {
-        await Topic.findOneAndUpdate({ _id: req.body._id }, { $set: req.body });
+        await Topic.updateOne({ _id: req.body._id }, { $set: req.body });
         res.status(201).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({

@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { socket } from 'src/components/utils/Socket/Socket';
 import { userService } from 'src/store/services/userService';
 import { useHttp } from './http.hook';
 
@@ -11,6 +12,7 @@ export const useAuth = () => {
             userService.pending();
             const response = await request('/auth/user', 'GET', null);
             if (response) {
+                socket.emit('auth', response.id);
                 userService.success();
                 userService.setUser(response);
                 if (from) {
@@ -24,6 +26,7 @@ export const useAuth = () => {
 
     const logout = useCallback(async () => {
         userService.setUser(null);
+        socket.emit('!auth');
         await request('/auth/logout', 'POST', null);
     }, [request]);
 

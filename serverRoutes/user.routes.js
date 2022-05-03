@@ -11,12 +11,12 @@ router.post('/create', async (req, res) => {
         const { id } = req.body;
         const isExist = await User.findOne({ id });
         if (isExist) {
-            await User.updateOne({ id }, { $set: req.body });
-            res.status(200).json({ message: 'UPDATE' });
+            await User.updateOne(id, { $set: req.body });
+            res.status(200).json(isExist);
         } else {
             const user = new User(req.body);
             await user.save();
-            res.status(201).json({ message: 'OK' });
+            res.status(201).json(user);
         }
     } catch (e) {
         res.status(500).json({
@@ -42,7 +42,7 @@ router.post('/read', async (req, res) => {
 
 router.post('/update', async (req, res) => {
     try {
-        await User.findOneAndUpdate({ id: req.body.id }, { $set: req.body });
+        await User.updateOne({ id: req.body.id }, { $set: req.body });
         res.status(201).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({

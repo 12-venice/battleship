@@ -35,7 +35,7 @@ export const RegisterPage = (): JSX.Element => {
     );
     useEffect(() => {
         message(error);
-        clearError();
+        return () => clearError();
     }, [error, message, clearError]);
 
     return (

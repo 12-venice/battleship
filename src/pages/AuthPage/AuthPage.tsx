@@ -30,7 +30,7 @@ export const AuthPage = (): JSX.Element => {
                     login(from || PageLinks.home);
                 }
             } catch (e) {
-                throw new SyntaxError('Что-то пошло не так');
+                throw new Error('Что-то пошло не так');
             }
         },
         [from, login, request],
@@ -47,7 +47,7 @@ export const AuthPage = (): JSX.Element => {
             login(from || PageLinks.home);
         }
         message(error);
-        clearError();
+        return () => clearError();
     }, [error, message, clearError, login, from]);
 
     return (

@@ -1,0 +1,47 @@
+@import 'src/styles/colors.css';
+
+.finder__main {
+    font-family: var(--font-family), var(--font-family-ru);
+    border-radius: 38px;
+    background: var(--blue);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.finder__block {
+    font-family: var(--font-family), var(--font-family-ru);
+    position: relative;
+    width: 100%;
+    border-radius: 38px;
+    padding: 10px 20px;
+    background: #1653A9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.finder__header {
+    font-size: 50px;
+}
+
+.finder__close {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.finder__line {
+    width: 350px;
+    margin-top: 20px;
+    font-size: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

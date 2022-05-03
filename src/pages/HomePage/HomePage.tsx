@@ -139,6 +139,8 @@ export const HomePage = (): JSX.Element => {
                             </div>
                             <div className="home__select-type">
                                 <span
+                                    aria-hidden
+                                    onClick={() => setTypeOfGame(false)}
                                     className={cn(
                                         styles['home__select-type-logotype'],
                                         !typeOfGame ? styles.selected : '',
@@ -147,6 +149,8 @@ export const HomePage = (): JSX.Element => {
                                     {data.labels.classic}
                                 </span>
                                 <span
+                                    aria-hidden
+                                    onClick={() => setTypeOfGame(true)}
                                     className={cn(
                                         styles['home__select-type-logotype'],
                                         typeOfGame ? styles.selected : '',
@@ -163,20 +167,32 @@ export const HomePage = (): JSX.Element => {
                                 Toggle play mode!
                             </span>
                             <p
-                                className={
-                                    styles['home__select-tablet_classic']
-                                }
+                                aria-hidden
+                                onClick={() => setTypeOfGame(false)}
+                                className={cn(
+                                    styles['home__select-tablet_classic'],
+                                    typeOfGame ? styles.selected : '',
+                                )}
                             >
-                                CLASSIC
+                                {data.labels.classic}
                             </p>
-                            <p className={styles['home__select-tablet_online']}>
-                                ONLINE
+                            <p
+                                aria-hidden
+                                onClick={() => setTypeOfGame(true)}
+                                className={cn(
+                                    styles['home__select-tablet_online'],
+                                    typeOfGame ? styles.selected : '',
+                                )}
+                            >
+                                {data.labels.online}
                             </p>
                         </div>
                         <Button
                             skin={window.innerWidth < 450 ? 'regular' : 'large'}
                             color="green"
-                            href={PageLinks.game}
+                            href={
+                                typeOfGame ? PageLinks.finder : PageLinks.game
+                            }
                             title={data.buttons.play}
                         />
                     </div>

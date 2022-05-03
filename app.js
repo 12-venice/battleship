@@ -12,7 +12,15 @@ const mongoBase = 'mongodb://usw2m9pivmflt8e3fgvc:DvcQrZQiBITI5QAR5zKK@blcazg7ve
 const PORT = 5000;
 
 const app = express();
-const server = require('http').createServer(app);
+const httpServer = require('http').createServer(app);
+
+const io = require('socket.io')(httpServer, {
+    cors: {
+        origin: '*',
+    },
+});
+
+require('./socketRoutes/socket.js')(io);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
@@ -29,7 +37,7 @@ app.get('*', (req, res) => {
 async function start() {
     try {
         mongoose.connect(mongoBase);
-        server.listen(process.env.PORT || PORT, () => {
+        httpServer.listen(process.env.PORT || PORT, () => {
             console.log(`Сервер запущен на порту: ${PORT}`);
         });
     } catch (e) {

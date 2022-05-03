@@ -6,6 +6,7 @@ import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
 import { AllStateTypes } from 'src/store/reducers';
+import { User } from 'src/store/reducers/user';
 import { lngService } from 'src/store/services/lngService';
 import { v4 as uuidv4 } from 'uuid';
 import { Layout } from '../../components/Layout';
@@ -109,14 +110,14 @@ export const LeaderPage = (): JSX.Element => {
                         ))}
                     </div>
                     <div className={styles['leader__table-block']}>
-                        {leaders.map((element) => (
+                        {leaders.map((element: User) => (
                             <div
-                                key={uuidv4()}
+                                key={element.id}
                                 className={styles['leader__table-field']}
                             >
                                 {config.map((elementConfig, index) => (
                                     <div
-                                        key={uuidv4()}
+                                        key={elementConfig.type}
                                         className={cn(
                                             styles[
                                                 `leader__table-column-${
