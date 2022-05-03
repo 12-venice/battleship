@@ -17,6 +17,13 @@ module.exports = (socket) => {
         });
     };
 
+    const cancelInvite = async (socketId) => {
+        socket.to(socketId).emit('invite:cancel', {
+            user: await getUser(socket.id),
+        });
+    };
+
     socket.on('invite:send', sendInvite);
     socket.on('invite:accept', acceptInvite);
+    socket.on('invite:cancel', cancelInvite);
 };

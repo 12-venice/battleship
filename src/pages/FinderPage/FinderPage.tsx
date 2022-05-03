@@ -33,6 +33,7 @@ export const FinderPage = () => {
                             (element: User) =>
                                 user?.id !== element.id && (
                                     <div
+                                        key={element.id}
                                         aria-hidden
                                         className={styles.finder__line}
                                         onClick={() => sendInvite(element.id)}

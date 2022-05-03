@@ -8,7 +8,7 @@ module.exports = (io) => {
         console.log(socket.id);
         require('./auth.routes')(socket);
         require('./message.routes')(socket);
-        require('./game.routes')(socket);
+        require('./invite.routes')(socket);
     });
 
     io.engine.on('connection_error', (err) => {

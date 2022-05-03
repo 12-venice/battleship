@@ -13,16 +13,18 @@
 }
 
 .finder__block {
+    height: 600px;
+    width: 350px;
+    overflow-y: scroll;
     font-family: var(--font-family), var(--font-family-ru);
     position: relative;
-    width: 100%;
     border-radius: 38px;
     padding: 10px 20px;
     background: #1653A9;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     font-size: 25px;
 }
 
@@ -38,7 +40,7 @@
 }
 
 .finder__line {
-    width: 350px;
+    width: 100%;
     margin-top: 20px;
     font-size: 30px;
     display: flex;
