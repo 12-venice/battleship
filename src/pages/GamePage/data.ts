@@ -20,3 +20,7 @@ export const ripShipsSrcMap = new Map([
     [3, ripShip3Img],
     [4, ripShip4Img],
 ]);
+
+export const AREA_WIDTH = 418;
+export const AREA_CELL_WIDTH = AREA_WIDTH / 10;
+export const AREA_CELL_GAP = 2;

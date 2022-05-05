@@ -1,42 +1,8 @@
-/* eslint-disable */
 export class Ship {
-    constructor(self, { x, y, kx, ky, decks, shipname }) {
-        // с каким экземпляром работаем
-        this.player = self;
-        // this.player = self;
-        // на каком поле создаётся данный корабль
-        this.field = self.field;
-        // уникальное имя корабля
-        this.shipname = shipname;
-        // количество палуб
-        this.decks = decks;
-        // координата X первой палубы
-        this.x = x;
-        // координата Y первой палубы
-        this.y = y;
-        // направлении расположения палуб
-        this.kx = kx;
-        this.ky = ky;
-        // счётчик попаданий
-        this.hits = 0;
-        // массив с координатами палуб корабля, является элементом squadron
-        this.arrDecks = [];
-    }
-
-    createShip() {
-        const {
-            player,
-            field,
-            shipname,
-            decks,
-            x,
-            y,
-            kx,
-            ky,
-            hits,
-            arrDecks,
-            k = 0,
-        } = this;
+    // eslint-disable-next-line class-methods-use-this
+    createShip({ x, y, kx, ky, decks }) {
+        const arrDecks = [];
+        let k = 0;
 
         while (k < decks) {
             // записываем координаты корабля в двумерный массив игрового поля
@@ -49,18 +15,16 @@ export class Ship {
             const i = x + k * kx;
             const j = y + k * ky;
 
-            // значение 1, записанное в ячейку двумерного массива, говорит о том, что
-            // по данным координатам находится палуба некого корабля
-            player.matrix[i][j] = 1;
             // записываем координаты палубы
             arrDecks.push([i, j]);
+            // eslint-disable-next-line no-plusplus
             k++;
         }
 
         // заносим информацию о созданном корабле в объект эскадры
-        player.squadron[shipname] = {
+        return {
             arrDecks,
-            hits,
+            hits: 0,
             type: decks,
             x,
             y,
