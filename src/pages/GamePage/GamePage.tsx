@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
-import { Field } from 'src/gameCore/Field';
 import { Placement } from 'src/gameCore/Placement';
 import { AllStateTypes } from 'src/store/reducers';
 import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
@@ -25,26 +24,18 @@ export const GamePage = (): JSX.Element => {
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
 
-    const playerArea = useMemo(
-        () =>
-            new Field({
-                isPlayer: true,
-            }),
-        [],
-    );
-
-    const placement = useMemo(
-        () => new Placement({ field: playerCanvasRef, self: playerArea }),
-        [playerCanvasRef, playerArea],
+    const placementArea = useMemo(
+        () => new Placement({ field: playerCanvasRef }),
+        [playerCanvasRef],
     );
 
     const handleClickAuto = useCallback(() => {
-        placement.randomLocationShips();
-    }, [placement]);
+        placementArea.randomLocationShips();
+    }, [placementArea]);
 
     const handleClickReset = useCallback(() => {
-        placement.resetLocationShips();
-    }, [placement]);
+        placementArea.resetLocationShips();
+    }, [placementArea]);
 
     return (
         <Layout>
@@ -72,10 +63,10 @@ export const GamePage = (): JSX.Element => {
                         <div className={styles.game__docs}>
                             <ShipsMenu
                                 imgWidth={AREA_CELL_WIDTH}
-                                onDragStart={placement.handlerShipDragStart}
-                                onDrop={placement.handlerShipDragEnd}
-                                onDragOver={placement.handlerShipOver}
-                                onContextMenu={placement.rotationShip}
+                                onDragStart={placementArea.handlerShipDragStart}
+                                onDrop={placementArea.handlerShipDragEnd}
+                                onDragOver={placementArea.handlerShipOver}
+                                onContextMenu={placementArea.rotationShip}
                             />
                         </div>
                         <div className={styles['game__footer-buttons']}>

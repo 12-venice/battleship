@@ -1,5 +1,4 @@
-import { Props } from 'src/pages/GamePage/components/ShipsMenu/types';
-import { ShipType } from 'src/gameCore/Field/types';
+import { ShipType } from 'src/gameCore/types';
 
 /** отступ между кораблями */
 export const MARGIN = 9;

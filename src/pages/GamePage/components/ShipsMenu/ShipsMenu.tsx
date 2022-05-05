@@ -109,7 +109,7 @@ export const ShipsMenu = ({
                     data-left={left}
                     data-bottom={bottom}
                     src={src}
-                    style={{ bottom, left }}
+                    style={{ bottom, left, transform: 'rotate(0deg)' }}
                     draggable
                 />
             ))}
