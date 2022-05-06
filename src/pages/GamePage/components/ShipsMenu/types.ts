@@ -1,3 +1,7 @@
+import { DragEvent } from 'react';
+
+export type DragImageEvent = DragEvent<HTMLImageElement>;
+
 export type Props = {
     ships: {
         /** уникальный ключ */
@@ -7,4 +11,14 @@ export type Props = {
         /** показать/скрыть */
         visible: boolean;
     }[];
+    /** Начало перемещения */
+    onDragStart?: (e: DragImageEvent) => void;
+    /** Попадание блока в какую то область */
+    onDragEnter?: (e: DragImageEvent) => void;
+    /** Прекращение перемещения. Срабатывает раньше события dragend */
+    onDrop?: (e: DragImageEvent) => void;
+    /** Прекращение перемещения */
+    onDragEnd?: (e: DragImageEvent) => void;
+    /** Перемещение блока по окну */
+    onDragOver?: (e: DragImageEvent) => void;
 };
