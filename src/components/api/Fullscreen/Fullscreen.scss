@@ -1,9 +1,18 @@
 .fullscreen__background {
- background-color: var(--blue);
+    background-color: var(--blue);
 }
 
 .fullscreen__button {
     position:absolute;
+    z-index: 12;
     left: 10px;
     top: 92vh;
+}
+
+.fullscreen__content {
+    height: 94vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }

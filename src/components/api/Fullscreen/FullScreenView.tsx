@@ -37,7 +37,7 @@ export const FullScreenView: Props = ({ children }) => {
                         : setIsFullscreen) as MouseEventHandler
                 }
             />
-            <div>{children}</div>
+            <div className={styles.fullscreen__content}>{children}</div>
         </div>
     );
 };

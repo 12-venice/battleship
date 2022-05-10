@@ -1,11 +1,13 @@
 import { useSelector } from 'react-redux';
-import { createRef, useState, useCallback, useMemo } from 'react';
+import cn from 'classnames';
+import { createRef, useState, useCallback, useMemo, useEffect } from 'react';
 import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
 import { Field } from 'src/gameCore/Field';
 import { AllStateTypes } from 'src/store/reducers';
 import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
+import e from 'express';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
@@ -50,6 +52,8 @@ export const GamePage = (): JSX.Element => {
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
 
+    const [test, setTest] = useState(false);
+
     const playerArea = useMemo(
         () =>
             new Field({
@@ -70,6 +74,62 @@ export const GamePage = (): JSX.Element => {
         setPlayerShips(getCurrentShips(playerArea.getSquadron()));
     }, [playerArea]);
 
+    const [areaWidthSize, setareaWidthSize] = useState(
+        window.screen.availWidth < 480 ? window.screen.availWidth * 0.8 : 425,
+    );
+    useEffect(() => {
+        function winResize() {
+            const width = window.screen.availWidth;
+            if (width < 480) setareaWidthSize(width * 0.8);
+        }
+        window.addEventListener('resize', winResize);
+        return () => window.removeEventListener('resize', winResize);
+    }, []);
+
+    const [trnslX, setTrnslX] = useState(true);
+    const sliderRef = createRef<HTMLDivElement>();
+    useEffect(() => {
+        let tuchX = 0;
+        let delt = false;
+        const tStart = (e) => {
+            tuchX = e.changedTouches[0].clientX;
+            console.log('start');
+        };
+        const tEnd = (e) => {
+            console.log('end');
+            if (Math.abs(tuchX - e.changedTouches[0].clientX) > 40) {
+                delt = !delt;
+                setTrnslX(!delt);
+            }
+        };
+        if (sliderRef.current) {
+            sliderRef.current.addEventListener('touchstart', tStart);
+            sliderRef.current.addEventListener('touchend', tEnd);
+        }
+    }, []);
+
+    const video = createRef<HTMLDivElement>();
+    useEffect(() => {
+        let timer;
+        const onlongtouch = function () {
+            console.log('1s');
+            setTrnslX(false);
+        };
+        function touchstart() {
+            timer = setTimeout(onlongtouch, 1000);
+        }
+
+        function touchend() {
+            if (timer) {
+                clearTimeout(timer);
+            }
+        }
+
+        if (video.current) {
+            video.current.addEventListener('touchstart', touchstart);
+            video.current.addEventListener('touchend', touchend);
+        }
+    }, []);
     return (
         <Layout>
             <div className={styles.game__background}>
@@ -84,23 +144,136 @@ export const GamePage = (): JSX.Element => {
                         <PlayerName name="Player 2" />
                         <Button href="/" skin="quad" title="X" color="red" />
                     </div>
-                    <div className={styles.game__battlefields}>
-                        <Area
-                            canvasRef={playerCanvasRef}
-                            areaWidth={425}
-                            matrix={playerMatrix}
-                            ships={playerShips}
-                        />
-                        <Area
-                            canvasRef={botCanvasRef}
-                            areaWidth={425}
-                            fillColor="#9DC0F0"
-                        />
+                    <div className={styles.container}>
+                        <div
+                            className={cn(
+                                styles.slider,
+                                trnslX ? styles.right : styles.left,
+                            )}
+                            ref={sliderRef}
+                        >
+                            <div>
+                                <div
+                                    className={cn(
+                                        styles.disabled,
+                                        test ? styles.active : '',
+                                    )}
+                                >
+                                    <Area
+                                        canvasRef={botCanvasRef}
+                                        areaWidth={areaWidthSize}
+                                    />
+                                </div>
+                                <div
+                                    className={cn(
+                                        styles.disabled,
+                                        test ? '' : styles.active,
+                                    )}
+                                >
+                                    <Area
+                                        canvasRef={playerCanvasRef}
+                                        areaWidth={areaWidthSize}
+                                        matrix={playerMatrix}
+                                        ships={playerShips}
+                                        fillColor="#C1DBFF"
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.game__statistics}>
+                                <div>
+                                    <h5
+                                        className={
+                                            styles['game__statistics-label']
+                                        }
+                                    >
+                                        HITS
+                                    </h5>
+                                    <span
+                                        className={
+                                            styles[
+                                                'game__statistics-description'
+                                            ]
+                                        }
+                                    >
+                                        8 / 17
+                                    </span>
+                                </div>
+                                <div>
+                                    <h5
+                                        className={
+                                            styles['game__statistics-label']
+                                        }
+                                    >
+                                        MISS
+                                    </h5>
+                                    <span
+                                        className={
+                                            styles[
+                                                'game__statistics-description'
+                                            ]
+                                        }
+                                    >
+                                        17 / 3
+                                    </span>
+                                </div>
+                                <div>
+                                    <h5
+                                        className={
+                                            styles['game__statistics-label']
+                                        }
+                                    >
+                                        ALIVE
+                                    </h5>
+                                    <span
+                                        className={
+                                            styles[
+                                                'game__statistics-description'
+                                            ]
+                                        }
+                                    >
+                                        3 / 8
+                                    </span>
+                                </div>
+                                <div>
+                                    <h5
+                                        className={
+                                            styles['game__statistics-label']
+                                        }
+                                    >
+                                        DESTROYED
+                                    </h5>
+                                    <span
+                                        className={
+                                            styles[
+                                                'game__statistics-description'
+                                            ]
+                                        }
+                                    >
+                                        2 / 7
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        className={cn(
+                            styles.game__docs,
+                            test ? styles.disabled : '',
+                        )}
+                    >
+                        {/* <ShipsMenu ships={data.ships} /> */}
+                    </div>
+                    <div className={styles.wrapper}>
+                        <div
+                            className={cn(
+                                styles.test,
+                                test ? styles.active : '',
+                            )}
+                        >
+                            <p>test</p>
+                        </div>
                     </div>
                     <div className={styles.game__footer}>
-                        <div className={styles.game__docs}>
-                            <ShipsMenu ships={data.ships} />
-                        </div>
                         <div className={styles['game__footer-buttons']}>
                             <div
                                 className={
@@ -115,24 +288,22 @@ export const GamePage = (): JSX.Element => {
                                 />
                                 <Button
                                     href="/"
-                                    skin="short"
-                                    title={dataStore.buttons.reset}
+                                    skin="quad"
                                     onClick={handleClickReset}
-                                />
+                                >
+                                    <i className="small material-icons">
+                                        replay
+                                    </i>
+                                </Button>
+                                <div ref={video}>
+                                    <Button
+                                        skin="high"
+                                        title={dataStore.buttons.start}
+                                        color="green"
+                                        onClick={() => setTest(!test)}
+                                    />
+                                </div>
                             </div>
-                            <div className={styles['game__footer-ships-btn']}>
-                                <Button
-                                    href="/"
-                                    skin="regular"
-                                    title={dataStore.buttons.ships}
-                                />
-                            </div>
-                            <Button
-                                href="/"
-                                skin="high"
-                                title={dataStore.buttons.start}
-                                color="green"
-                            />
                         </div>
                     </div>
                 </FullScreenView>
