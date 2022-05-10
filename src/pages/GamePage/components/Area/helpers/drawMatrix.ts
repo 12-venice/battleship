@@ -1,4 +1,4 @@
-import { MatrixCell } from 'src/gameCore/Field/types';
+import { MatrixCell } from 'src/gameCore/types';
 import { drawCell } from './drawCell';
 import { drawMiss } from './drawMiss';
 import { drawHit } from './drawHit';

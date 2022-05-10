@@ -1,44 +1,20 @@
-import { useSelector } from 'react-redux';
 import cn from 'classnames';
 import { createRef, useState, useCallback, useMemo, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
-import { Field } from 'src/gameCore/Field';
+import { Placement } from 'src/gameCore/Placement';
 import { AllStateTypes } from 'src/store/reducers';
 import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
 import e from 'express';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
-import type { Props } from './components/ShipsMenu/types';
+import { AREA_WIDTH, AREA_CELL_WIDTH } from './data';
 
 import styles from './GamePage.scss';
 import { mapStateToProps } from './mapState';
-
-const data: Props = {
-    ships: [
-        { id: '1', type: 4, visible: true },
-        { id: '5', type: 3, visible: true },
-        { id: '6', type: 3, visible: true },
-        { id: '7', type: 2, visible: true },
-        { id: '2', type: 2, visible: true },
-        { id: '8', type: 2, visible: true },
-        { id: '9', type: 1, visible: true },
-        { id: '3', type: 1, visible: true },
-        { id: '10', type: 1, visible: true },
-        { id: '4', type: 1, visible: true },
-    ],
-};
-
-const getCurrentShips = (ships) =>
-    Object.entries(ships).map(([name, { type, x, y, ky }]) => ({
-        id: name,
-        deckCount: type,
-        x,
-        y,
-        isHorizontal: ky === 1,
-    }));
 
 export const GamePage = (): JSX.Element => {
     const store = useSelector(mapStateToProps);
@@ -47,32 +23,23 @@ export const GamePage = (): JSX.Element => {
     );
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
-    const [playerMatrix, setPlayerMatrix] = useState();
-    const [playerShips, setPlayerShips] = useState([]);
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
 
     const [test, setTest] = useState(false);
 
-    const playerArea = useMemo(
-        () =>
-            new Field({
-                isPlayer: true,
-            }),
-        [],
+    const placementArea = useMemo(
+        () => new Placement({ field: playerCanvasRef }),
+        [playerCanvasRef],
     );
 
     const handleClickAuto = useCallback(() => {
-        playerArea.randomLocationShips();
-        setPlayerMatrix(playerArea.getMatrix());
-        setPlayerShips(getCurrentShips(playerArea.getSquadron()));
-    }, [playerArea]);
+        placementArea.randomLocationShips();
+    }, [placementArea]);
 
     const handleClickReset = useCallback(() => {
-        playerArea.cleanField();
-        setPlayerMatrix(playerArea.getMatrix());
-        setPlayerShips(getCurrentShips(playerArea.getSquadron()));
-    }, [playerArea]);
+        placementArea.resetLocationShips();
+    }, [placementArea]);
 
     const [areaWidthSize, setareaWidthSize] = useState(
         window.screen.availWidth < 480 ? window.screen.availWidth * 0.8 : 425,
@@ -159,9 +126,14 @@ export const GamePage = (): JSX.Element => {
                                         test ? styles.active : '',
                                     )}
                                 >
-                                    <Area
+                                    {/* <Area
                                         canvasRef={botCanvasRef}
                                         areaWidth={areaWidthSize}
+                                    /> */}
+                                    <Area
+                                        ref={botCanvasRef}
+                                        areaWidth={areaWidthSize}
+                                        fillColor="#9DC0F0"
                                     />
                                 </div>
                                 <div
@@ -170,12 +142,16 @@ export const GamePage = (): JSX.Element => {
                                         test ? '' : styles.active,
                                     )}
                                 >
-                                    <Area
+                                    {/* <Area
                                         canvasRef={playerCanvasRef}
                                         areaWidth={areaWidthSize}
                                         matrix={playerMatrix}
                                         ships={playerShips}
                                         fillColor="#C1DBFF"
+                                    /> */}
+                                    <Area
+                                        ref={playerCanvasRef}
+                                        areaWidth={areaWidthSize}
                                     />
                                 </div>
                             </div>
@@ -261,7 +237,13 @@ export const GamePage = (): JSX.Element => {
                             test ? styles.disabled : '',
                         )}
                     >
-                        {/* <ShipsMenu ships={data.ships} /> */}
+                        <ShipsMenu
+                            imgWidth={AREA_CELL_WIDTH}
+                            onDragStart={placementArea.handlerShipDragStart}
+                            onDrop={placementArea.handlerShipDragEnd}
+                            onDragOver={placementArea.handlerShipOver}
+                            onContextMenu={placementArea.rotationShip}
+                        />
                     </div>
                     <div className={styles.wrapper}>
                         <div
