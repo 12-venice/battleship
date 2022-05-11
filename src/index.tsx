@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -16,3 +17,16 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root'),
 );
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker
+            .register('/service-worker.js')
+            .then(() => {
+                console.log('SW registered');
+            })
+            .catch((registrationError) => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    });
+}

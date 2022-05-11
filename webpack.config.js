@@ -5,14 +5,18 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
-    entry: './src/index.tsx',
+    entry: {
+        bundle: './src/index.tsx',
+    },
+
     output: {
         path: path.join(__dirname, '/dist'),
-        filename: 'bundle.js',
+        filename: '[name].js',
     },
     resolve: {
         plugins: [new TsconfigPathsPlugin()],
@@ -75,11 +79,27 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'style-[hash].css',
         }),
-        new FaviconsWebpackPlugin('./images/favicon.png'),
+        new FaviconsWebpackPlugin({
+            logo: './images/favicon.png',
+            inject: true,
+            mode: 'webapp',
+            manifest: './manifest.json',
+        }),
+        new WorkboxPlugin.GenerateSW({
+            mode: process.env.NODE_ENV,
+            disableDevLogs: true,
+            maximumFileSizeToCacheInBytes: 3000000,
+            clientsClaim: true,
+            skipWaiting: true,
+            cleanupOutdatedCaches: true,
+        }),
     ],
     devServer: {
+        client: {
+            overlay: false,
+        },
         static: {
-            directory: path.join(__dirname, 'dist'),
+            directory: path.join(__dirname),
         },
         historyApiFallback: true,
         compress: true,
