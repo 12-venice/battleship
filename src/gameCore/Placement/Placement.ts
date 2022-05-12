@@ -25,7 +25,7 @@ export class Placement extends Field {
     shipFactory;
 
     constructor({ field }) {
-        super();
+        super({});
 
         this.field = field;
         this.shipFactory = new Ship();

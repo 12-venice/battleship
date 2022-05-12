@@ -54,7 +54,7 @@ export const drawMatrix = ({
 
                 // собираем попадания в массив для отрисовки над кораблями
                 if (MatrixCell.hit === cellValue) {
-                    hitCoordinates.push([x, y]);
+                    hitCoordinates.push([y, x]);
                 }
             });
         });

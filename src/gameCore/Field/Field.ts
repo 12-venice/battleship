@@ -8,12 +8,13 @@ export class Field {
      * морского боя, координаты попаданий, промахов и заведомо пустых клеток */
     private matrix;
 
-    constructor() {
-        this.matrix = getEmptyMatrix();
-        this.squadron = {};
+    constructor({ matrix, squadron }) {
+        this.matrix = matrix || getEmptyMatrix();
+        this.squadron = squadron || {};
     }
 
     setMatrix(matrix) {
+        // debugger
         if (!matrix || !Array.isArray(matrix)) return;
 
         this.matrix = matrix;
@@ -24,6 +25,7 @@ export class Field {
     }
 
     setSquadron(squadron) {
+        // debugger
         if (!squadron) return;
 
         this.squadron = squadron;
