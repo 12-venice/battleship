@@ -40,16 +40,10 @@ export class Controller {
             squadron: playerSquadron,
         });
         this.opponent = new Field(getRandomLocationShipsAndMatrix());
-        this.handlerChangePlayerField({
-            matrix: this.player.getMatrix(),
-            squadron: this.player.getSquadron(),
-        });
-        this.handlerChangeOpponentField({
-            matrix: this.opponent.getMatrix(),
-            squadron: this.opponent.getSquadron(),
-        });
+
         // this.shotQueue = getRandom(1);
         this.shotQueue = 1;
+        this.onChangeField();
     }
 
     handlerPlayerShot(e) {
@@ -66,17 +60,15 @@ export class Controller {
 
     makeShot(e) {
         const [x, y] = this.transformCoordsInMatrix(e);
-        const v =
-            this.shotQueue === 0
-                ? this.opponent.matrix[x][y]
-                : this.player.matrix[x][y];
+        const activeField = this.shotQueue === 0 ? this.opponent : this.player;
+        const v = activeField.matrix[x][y];
         // debugger;
         switch (v) {
             case MatrixCell.empty: // промах
-                this.miss({ x, y });
+                this.miss({ x, y, activeField });
                 break;
             case MatrixCell.deck: // попадание
-                this.hit({ x, y });
+                this.hit({ x, y, activeField });
                 break;
             case MatrixCell.hit:
             case MatrixCell.miss:
@@ -85,59 +77,36 @@ export class Controller {
         }
     }
 
-    hit({ x, y }) {
+    hit({ x, y, activeField }) {
         // debugger;
-        if (this.shotQueue === 0) {
-            const matrix = this.opponent.getMatrix();
-            matrix[x][y] = MatrixCell.hit;
-            this.opponent.setMatrix(matrix);
+        const matrix = activeField.getMatrix();
+        matrix[x][y] = MatrixCell.hit;
+        activeField.setMatrix(matrix);
 
-            const squadron = this.opponent.getSquadron();
-            Object.entries(squadron).map(([shipName, ship]) => {});
-
-            this.handlerChangeOpponentField({
-                matrix: this.opponent.getMatrix(),
-                squadron: this.opponent.getSquadron(),
-            });
-        } else {
-            const matrix = this.player.getMatrix();
-            matrix[x][y] = MatrixCell.hit;
-            this.player.setMatrix(matrix);
-
-            const squadron = this.opponent.getSquadron();
-            console.log(
-                Object.entries(squadron).find(([shipName, { arrDecks }]) =>
-                    arrDecks.includes([x, y]),),
-            );
-
-            this.handlerChangePlayerField({
-                matrix: this.player.getMatrix(),
-                squadron: this.player.getSquadron(),
-            });
-        }
+        this.onChangeField();
     }
 
-    miss({ x, y }) {
+    miss({ x, y, activeField }) {
         // debugger;
-        if (this.shotQueue === 0) {
-            const matrix = this.opponent.getMatrix();
-            matrix[x][y] = MatrixCell.miss;
-            this.opponent.setMatrix(matrix);
-            this.handlerChangeOpponentField({
-                matrix: this.opponent.getMatrix(),
-                squadron: this.opponent.getSquadron(),
-            });
-            this.shotQueue = 1;
-        } else {
-            const matrix = this.player.getMatrix();
-            matrix[x][y] = MatrixCell.miss;
-            this.player.setMatrix(matrix);
-            this.handlerChangePlayerField({
-                matrix: this.player.getMatrix(),
-                squadron: this.player.getSquadron(),
-            });
-            this.shotQueue = 0;
-        }
+        const matrix = activeField.getMatrix();
+        matrix[x][y] = MatrixCell.miss;
+        activeField.setMatrix(matrix);
+
+        this.onChangeField();
+
+        this.shotQueue = this.shotQueue === 0 ? 1 : 0;
+    }
+
+    onChangeField() {
+        this.handlerChangeOpponentField({
+            matrix: this.opponent.getMatrix(),
+            squadron: this.opponent.getSquadron(),
+        });
+
+        this.handlerChangePlayerField({
+            matrix: this.player.getMatrix(),
+            squadron: this.player.getSquadron(),
+        });
     }
 
     transformCoordsInMatrix(areaEvent) {
