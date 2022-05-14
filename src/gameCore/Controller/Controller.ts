@@ -83,6 +83,26 @@ export class Controller {
         matrix[x][y] = MatrixCell.hit;
         activeField.setMatrix(matrix);
 
+        const squadron = Object.fromEntries(
+            Object.entries(activeField.getSquadron()).map(
+                ([shipId, shipData]) => {
+                    if (
+                        shipData.arrDecks.find(
+                            ([deckX, deckY]) => deckX === x && deckY === y,
+                        )
+                    ) {
+                        return [
+                            shipId,
+                            { ...shipData, hits: shipData.hits + 1 },
+                        ];
+                    }
+
+                    return [shipId, shipData];
+                },
+            ),
+        );
+        activeField.setSquadron(squadron);
+
         this.onChangeField();
     }
 

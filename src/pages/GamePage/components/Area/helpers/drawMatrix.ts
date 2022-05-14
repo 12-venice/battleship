@@ -62,13 +62,14 @@ export const drawMatrix = ({
 
     // отрисовка кораблей
     if (ships?.length) {
-        ships.forEach(({ x, y, deckCount, isHorizontal }) => {
+        ships.forEach(({ x, y, deckCount, isHorizontal, isRip }) => {
             drawShip({
                 ctx,
                 x: y * cellSize,
                 y: x * cellSize,
                 type: deckCount,
                 isHorizontal,
+                isRip,
                 cellSize,
             });
         });

@@ -33,29 +33,39 @@ export const GamePage = (): JSX.Element => {
 
     const handlerChangePlayerField = useCallback(({ matrix, squadron }) => {
         const ships = Object.entries(squadron).map(
-            ([shipName, { arrDecks, x, y, kx }]) => ({
+            ([shipName, { arrDecks, x, y, kx, hits }]) => ({
                 id: shipName,
                 deckCount: arrDecks.length,
                 x,
                 y,
                 isHorizontal: !kx,
+                isRip: hits === arrDecks.length,
             }),
         );
         // debugger
         setPlayerField({ matrix, ships });
     }, []);
 
-    const handlerChangeOpponentField = useCallback(
-({ matrix, squadron }) => {
+    const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
         const currentMatrix = matrix.map(
             (row) => row.map(
                 (cell) => (cell === MatrixCell.deck ? MatrixCell.empty : cell)
             )
         );
-        setOpponentField({ matrix: currentMatrix, ships: {} });
-    },
-    []
-);
+
+        const ships = Object.entries(squadron)
+            .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)
+            .map(([shipName, { arrDecks, x, y, kx, hits }]) => ({
+                id: shipName,
+                deckCount: arrDecks.length,
+                x,
+                y,
+                isHorizontal: !kx,
+                isRip: hits === arrDecks.length,
+            }));
+
+            setOpponentField({ matrix: currentMatrix, ships });
+        }, []);
 
     const placementArea = useMemo(
         () => new Placement({ field: playerCanvasRef }),
