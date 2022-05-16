@@ -5,6 +5,7 @@ import {
     getRandomLocationShipsAndMatrix,
 } from 'src/gameCore/helpers';
 import { MatrixCell } from 'src/gameCore/types';
+import { activeFieldIds } from 'src/gameCore/Controller/types';
 
 const mockHandlerChangeField = ({ matrix, squadron }) => {};
 
@@ -40,19 +41,22 @@ export class Controller {
         });
         this.opponent = new BotField(getRandomLocationShipsAndMatrix());
 
-        this.shotQueue = 0;
+        this.shotQueue = activeFieldIds.player;
         this.onChangeField();
     }
 
     handlerPlayerShot(e) {
-        if (this.shotQueue === 0) {
+        if (this.shotQueue === activeFieldIds.player) {
             const [x, y] = this.transformCoordsInMatrix(e);
             this.makeShot({ x, y });
         }
     }
 
     makeShot({ x, y }) {
-        const activeField = this.shotQueue === 0 ? this.opponent : this.player;
+        const activeField =
+            this.shotQueue === activeFieldIds.player
+                ? this.opponent
+                : this.player;
         const v = activeField.matrix[x][y];
         switch (v) {
             case MatrixCell.empty: // промах
@@ -95,7 +99,7 @@ export class Controller {
 
         this.onChangeField();
 
-        if (this.shotQueue === 1) {
+        if (this.shotQueue === activeFieldIds.opponent) {
             this.opponent.setHitCoords({ x, y });
             this.opponent.nextShot(this.makeShot.bind(this));
         }
@@ -108,11 +112,14 @@ export class Controller {
 
         this.onChangeField();
 
-        if (this.shotQueue === 0) {
+        if (this.shotQueue === activeFieldIds.player) {
             this.opponent.nextShot(this.makeShot.bind(this));
         }
 
-        this.shotQueue = this.shotQueue === 0 ? 1 : 0;
+        this.shotQueue =
+            this.shotQueue === activeFieldIds.player
+                ? activeFieldIds.opponent
+                : activeFieldIds.player;
     }
 
     onChangeField() {
