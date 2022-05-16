@@ -1,8 +1,8 @@
 import { Field } from 'src/gameCore/Field';
+import { BotField } from 'src/gameCore/BotField';
 import {
     getCoordinates,
     getRandomLocationShipsAndMatrix,
-    getRandom,
 } from 'src/gameCore/helpers';
 import { MatrixCell } from 'src/gameCore/types';
 
@@ -28,7 +28,6 @@ export class Controller {
         handlerChangePlayerField,
         handlerChangeOpponentField,
     }) {
-        // debugger
         this.opponentField = opponentFieldRef;
         this.handlerChangePlayerField =
             handlerChangePlayerField || mockHandlerChangeField;
@@ -39,30 +38,22 @@ export class Controller {
             matrix: playerMatrix,
             squadron: playerSquadron,
         });
-        this.opponent = new Field(getRandomLocationShipsAndMatrix());
+        this.opponent = new BotField(getRandomLocationShipsAndMatrix());
 
-        // this.shotQueue = getRandom(1);
-        this.shotQueue = 1;
+        this.shotQueue = 0;
         this.onChangeField();
     }
 
     handlerPlayerShot(e) {
         if (this.shotQueue === 0) {
-            this.makeShot(e);
+            const [x, y] = this.transformCoordsInMatrix(e);
+            this.makeShot({ x, y });
         }
     }
 
-    handlerOpponentShot(e) {
-        if (this.shotQueue === 1) {
-            this.makeShot(e);
-        }
-    }
-
-    makeShot(e) {
-        const [x, y] = this.transformCoordsInMatrix(e);
+    makeShot({ x, y }) {
         const activeField = this.shotQueue === 0 ? this.opponent : this.player;
         const v = activeField.matrix[x][y];
-        // debugger;
         switch (v) {
             case MatrixCell.empty: // промах
                 this.miss({ x, y, activeField });
@@ -78,7 +69,6 @@ export class Controller {
     }
 
     hit({ x, y, activeField }) {
-        // debugger;
         const matrix = activeField.getMatrix();
         matrix[x][y] = MatrixCell.hit;
         activeField.setMatrix(matrix);
@@ -104,15 +94,23 @@ export class Controller {
         activeField.setSquadron(squadron);
 
         this.onChangeField();
+
+        if (this.shotQueue === 1) {
+            this.opponent.setHitCoords({ x, y });
+            this.opponent.nextShot(this.makeShot.bind(this));
+        }
     }
 
     miss({ x, y, activeField }) {
-        // debugger;
         const matrix = activeField.getMatrix();
         matrix[x][y] = MatrixCell.miss;
         activeField.setMatrix(matrix);
 
         this.onChangeField();
+
+        if (this.shotQueue === 0) {
+            this.opponent.nextShot(this.makeShot.bind(this));
+        }
 
         this.shotQueue = this.shotQueue === 0 ? 1 : 0;
     }

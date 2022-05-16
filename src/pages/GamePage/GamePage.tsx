@@ -42,7 +42,6 @@ export const GamePage = (): JSX.Element => {
                 isRip: hits === arrDecks.length,
             }),
         );
-        // debugger
         setPlayerField({ matrix, ships });
     }, []);
 
@@ -74,7 +73,6 @@ export const GamePage = (): JSX.Element => {
 
     const gameController = useMemo(() => {
         if (gameStep === 1) {
-            // debugger
             return new Controller({
                 opponentFieldRef: botCanvasRef,
                 playerSquadron,
@@ -90,15 +88,6 @@ export const GamePage = (): JSX.Element => {
         (event) => {
             if (gameController?.handlerPlayerShot) {
                 gameController.handlerPlayerShot(event);
-            }
-        },
-        [gameController],
-    );
-
-    const handlerBotShot = useCallback(
-        (event) => {
-            if (gameController?.handlerOpponentShot) {
-                gameController.handlerOpponentShot(event);
             }
         },
         [gameController],
@@ -136,7 +125,6 @@ export const GamePage = (): JSX.Element => {
                         <Area
                             ref={playerCanvasRef}
                             areaWidth={AREA_WIDTH}
-                            onClick={handlerBotShot}
                             {...playerField}
                         />
                         <Area
