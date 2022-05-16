@@ -59,15 +59,15 @@ export class Controller {
                 : this.player;
         const v = activeField.matrix[x][y];
         switch (v) {
-            case MatrixCell.empty: // промах
+            // промах
+            case MatrixCell.empty:
                 this.miss({ x, y, activeField });
                 break;
-            case MatrixCell.deck: // попадание
+            // попадание
+            case MatrixCell.deck:
                 this.hit({ x, y, activeField });
                 break;
-            case MatrixCell.hit:
-            case MatrixCell.miss:
-                // Controller.showServiceText('По этим координатам вы уже стреляли!');
+            default:
                 break;
         }
     }

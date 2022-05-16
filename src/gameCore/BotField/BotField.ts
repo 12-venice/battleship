@@ -29,7 +29,7 @@ export class BotField extends Field {
     nextShot(callback) {
         const [x, y] = this.getCoordsForShot();
         setTimeout(() => {
-            callback({x, y});
+            callback({ x, y });
         }, 500);
     }
 }
