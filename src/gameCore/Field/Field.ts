@@ -14,7 +14,6 @@ export class Field {
     }
 
     setMatrix(matrix) {
-        // debugger
         if (!matrix || !Array.isArray(matrix)) return;
 
         this.matrix = matrix;
@@ -25,7 +24,6 @@ export class Field {
     }
 
     setSquadron(squadron) {
-        // debugger
         if (!squadron) return;
 
         this.squadron = squadron;
