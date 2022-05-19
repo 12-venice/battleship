@@ -1,5 +1,9 @@
 @import '../../styles/colors.css';
 
+.test1 {
+    font-size: min(4vw, 4rem);
+}
+
 .leader__background {
     font-family: var(--font-family), var(--font-family-ru);
     display: flex;

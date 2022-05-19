@@ -96,7 +96,12 @@ export const LeaderPage = (): JSX.Element => {
                                 onClick={(event) => handlerClick(event)}
                             >
                                 {index > 0 && (
-                                    <i className="medium material-icons">
+                                    <i
+                                        className={cn(
+                                            styles.test1,
+                                            'material-icons',
+                                        )}
+                                    >
                                         {`arrow_drop_${
                                             sortDirection ? 'up' : 'down'
                                         }`}
