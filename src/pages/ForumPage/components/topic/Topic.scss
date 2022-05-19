@@ -2,7 +2,7 @@
 @import 'src/styles/variables.css';
 
 .topic {
-    padding: 20px 30px;
+    padding: min(2vw, 20px) min(3vw, 30px);
     margin-right: 10px;
     margin-bottom: 10px;
     border-radius: 15px;
@@ -24,7 +24,7 @@
     display: flex;
     justify-content: space-between;
     align-items: top;
-    height: 50px;
+    // height: 50px;
 }
 .topic__header-author {
     display: flex;
@@ -53,7 +53,7 @@
     cursor: pointer;
 }
 
-@media screen and (max-width: 1030px) {
+@media screen and (max-width: 800px) {
     .topic__header-theme {
         font-size: 3vw;
     }

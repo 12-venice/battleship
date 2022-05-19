@@ -1,5 +1,7 @@
 @import 'src/styles/colors.css';
-
+.icon {
+    height: 65%;
+}
 
 .home__main {
     font-family: var(--font-family), var(--font-family-ru);
@@ -205,11 +207,6 @@
     .home__buttons {
         padding: 0;
     }
-    
-
-
-
-
     .home__select-label {
         display: flex;
         align-items: center;

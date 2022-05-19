@@ -8,3 +8,12 @@
     color: #ffffff;
     background-size: auto 110vh;
 }
+
+@media screen and (max-width: 1500px) {
+    .layout__left {
+        display: none;
+    }
+    .layout__right {
+        display: none;
+    }
+}

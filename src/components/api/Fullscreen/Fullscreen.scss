@@ -1,5 +1,6 @@
 .fullscreen__background {
     background-color: var(--blue);
+    height: 100%;
 }
 
 .fullscreen__button {
@@ -10,7 +11,7 @@
 }
 
 .fullscreen__content {
-    height: 94vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

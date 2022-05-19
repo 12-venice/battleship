@@ -8,13 +8,17 @@ import { PageLinks } from 'src/components/utils/Routes/types';
 import { useAuth } from 'src/hooks/auth.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
+import { opponentService } from 'src/store/services/opponentService';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
+import exitIcon from '../../../images/exit.svg';
+import profileIcon from '../../../images/profile.svg';
+import loginIcon from '../../../images/login.svg';
+import registrationIcon from '../../../images/registration.svg';
 import bigShip from '../../../images/4-ship.png';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
 import { Information } from '../../components/Information';
-import { DropMenu } from './components/dropMenu';
 
 export const HomePage = (): JSX.Element => {
     const user = useSelector((state: AllStateTypes) => state.user.item);
@@ -24,9 +28,7 @@ export const HomePage = (): JSX.Element => {
     const { logout } = useAuth();
     const [typeOfGame, setTypeOfGame] = useState(true);
     const [info, setInfo] = useState(false);
-    const [dropDown, setDropDown] = useState(false);
     const getInfo = () => setInfo(!info);
-    const getMenu = () => setDropDown(!dropDown);
     const leftBlock = () => {
         if (user) {
             return (
@@ -38,15 +40,41 @@ export const HomePage = (): JSX.Element => {
     const authBtn = () => {
         if (user) {
             return (
-                <Button skin="quad" onClick={logout}>
-                    <i className="small material-icons">exit_to_app</i>
-                </Button>
+                <>
+                    <Button skin="quad" onClick={logout} color="red">
+                        <img
+                            className={styles.icon}
+                            src={exitIcon}
+                            alt="Exit"
+                        />
+                    </Button>
+                    <Button skin="quad" href={PageLinks.profile}>
+                        <img
+                            className={styles.icon}
+                            src={profileIcon}
+                            alt="Profile"
+                        />
+                    </Button>
+                </>
             );
         }
         return (
-            <Button skin="quad" href={PageLinks.auth}>
-                <i className="small material-icons">lock</i>
-            </Button>
+            <>
+                <Button skin="quad" href={PageLinks.auth}>
+                    <img
+                        className={styles.icon}
+                        src={loginIcon}
+                        alt="Profile"
+                    />
+                </Button>
+                <Button skin="quad" href={PageLinks.register} color="green">
+                    <img
+                        className={styles.icon}
+                        src={registrationIcon}
+                        alt="Profile"
+                    />
+                </Button>
+            </>
         );
     };
 
@@ -78,7 +106,7 @@ export const HomePage = (): JSX.Element => {
         );
     };
     return (
-        <Layout>
+        <Layout decor={false}>
             <div className={styles.home__main}>
                 <img
                     className={styles['home__image-left']}
@@ -116,9 +144,6 @@ export const HomePage = (): JSX.Element => {
                     </div>
                     <div className={styles['home__right-button-bar']}>
                         {authBtn()}
-                        <Button skin="quad" onClick={getMenu}>
-                            <i className="small material-icons">menu</i>
-                        </Button>
                     </div>
                 </div>
                 <div className={styles.home__section}>
@@ -152,6 +177,7 @@ export const HomePage = (): JSX.Element => {
                                         )}
                                         onClick={() => {
                                             setTypeOfGame(!typeOfGame);
+                                            opponentService.setOpponent(null);
                                         }}
                                     >
                                         CLASSIC
@@ -165,6 +191,9 @@ export const HomePage = (): JSX.Element => {
                                         )}
                                         onClick={() => {
                                             setTypeOfGame(!typeOfGame);
+                                            opponentService.setOpponent({
+                                                display_name: 'test',
+                                            });
                                         }}
                                     >
                                         ONLINE
@@ -188,27 +217,17 @@ export const HomePage = (): JSX.Element => {
                 <div className={styles['home__select-footer']}>
                     <Button
                         skin="regular"
-                        href={PageLinks.game}
+                        href={PageLinks.leaderboard}
                         title="LEADERS"
                     />
                     <Button
                         skin="regular"
-                        href={PageLinks.game}
+                        href={PageLinks.forum}
                         title="FORUM"
                     />
                 </div>
             </div>
             {info && <Information close={getInfo} />}
-            {dropDown && (
-                <DropMenu close={getMenu}>
-                    <Button href={PageLinks.forum} title={data.buttons.forum} />
-                    <Button
-                        href={PageLinks.leaderboard}
-                        title={data.buttons.leaders}
-                    />
-                    {leftBlock()}
-                </DropMenu>
-            )}
         </Layout>
     );
 };

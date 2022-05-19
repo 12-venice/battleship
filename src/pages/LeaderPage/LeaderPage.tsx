@@ -102,9 +102,24 @@ export const LeaderPage = (): JSX.Element => {
                                         }`}
                                     </i>
                                 )}
-                                {dataStore.language === 'ru'
-                                    ? element.titleRU
-                                    : element.titleEN}
+                                <p
+                                    className={
+                                        styles['leader__table-column_text']
+                                    }
+                                >
+                                    {dataStore.language === 'ru'
+                                        ? element.titleRU
+                                        : element.titleEN}
+                                </p>
+                                <p
+                                    className={
+                                        styles['leader__table-column_short']
+                                    }
+                                >
+                                    {dataStore.language === 'ru'
+                                        ? element.titleRU.charAt(0)
+                                        : element.titleEN.charAt(0)}
+                                </p>
                             </div>
                         ))}
                     </div>
