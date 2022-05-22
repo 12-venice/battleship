@@ -20,7 +20,7 @@ export const HomePage = (): JSX.Element => {
         (state: AllStateTypes) => state.language.translate,
     );
     const { logout } = useAuth();
-    const [typeOfGame, setTypeOfGame] = useState(true);
+    const [typeOfGame, setTypeOfGame] = useState(false);
     const [info, setInfo] = useState(false);
     const [dropDown, setDropDown] = useState(false);
     const getInfo = () => setInfo(!info);
@@ -191,7 +191,9 @@ export const HomePage = (): JSX.Element => {
                             skin={window.innerWidth < 450 ? 'regular' : 'large'}
                             color="green"
                             href={
-                                typeOfGame ? PageLinks.finder : PageLinks.game
+                                typeOfGame
+                                    ? PageLinks.finder
+                                    : `${PageLinks.game}/bot`
                             }
                             title={data.buttons.play}
                         />

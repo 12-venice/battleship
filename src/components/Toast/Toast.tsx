@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { Avatar } from '../Avatar';
 import { Button } from '../Button';
+import { ButtonProps } from '../Button/types';
 import { PageLinks } from '../utils/Routes/types';
 import { socket } from '../utils/Socket/Socket';
 import styles from './Toast.scss';
@@ -65,7 +66,6 @@ export const Toast = (): JSX.Element => {
         list.push({
             id: uuidv4(),
             message: `${data.user.display_name} invites you to play`,
-            socketId: data.socketId,
             user: data.user,
         });
         setList([...list]);
@@ -76,24 +76,16 @@ export const Toast = (): JSX.Element => {
                 <div key={toast.id} className={styles.toast__block}>
                     {Avatar(toast.user)}
                     <span>{toast.message}</span>
-                    {toast.socketId && (
+                    {toast.buttons && (
                         <div className={styles['toast__block-buttons']}>
-                            <Button
-                                title="Accept"
-                                skin="short"
-                                color="green"
-                                className={styles.toast__button}
-                                onClick={() => acceptInvite(toast.socketId)}
-                            />
-                            <Button
-                                title="Decline"
-                                skin="short"
-                                color="red"
-                                className={styles.toast__button}
-                                onClick={() =>
-                                    cancelInvite(index, toast.socketId)
-                                }
-                            />
+                            {toast.buttons.map((button: ButtonProps) => (
+                                <Button
+                                    title={button.title}
+                                    skin={button.skin}
+                                    color={button.color}
+                                    onClick={button.onClick}
+                                />
+                            ))}
                         </div>
                     )}
                 </div>
