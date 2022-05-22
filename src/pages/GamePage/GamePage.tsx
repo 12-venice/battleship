@@ -4,15 +4,19 @@ import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
 import { Information } from 'src/components/Information';
 import { Layout } from 'src/components/Layout';
+import { Controller } from 'src/gameCore/Controller';
 import { Placement } from 'src/gameCore/Placement';
 import { AllStateTypes } from 'src/store/reducers';
 import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
+
 import fsIcon from '../../../images/fs.svg';
 import fsExitIcon from '../../../images/fs_exit.svg';
 import arrowIcon from '../../../images/round_arrow.svg';
 import sendIcon from '../../../images/send.svg';
 import closeIcon from '../../../images/close.svg';
-import videoIcon from '../../../images/video.svg';
+import videoIcon from '../../../images/video.svg'
+
+import { MatrixCell } from 'src/gameCore/types';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
@@ -34,18 +38,78 @@ export const GamePage = (): JSX.Element => {
     );
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
+    const [gameStep, setGameStep] = useState(0);
     const [info, setInfo] = useState(false);
+    const [playerField, setPlayerField] = useState();
+    const [opponentField, setOpponentField] = useState();
+    const [info, setInfo] = useState(false);
+    const [playerMatrix, setPlayerMatrix] = useState();
+    const [playerSquadron, setPlayerSquadron] = useState();
     const getInfo = () => setInfo(!info);
-
     const [startGame, setStartGame] = useState(false);
     const [inviteAccept, setInviteAccept] = useState(
         !!store.opponent_display_name,
     );
     const [videoCall, setVideoCall] = useState(false);
+    const handlerChangePlayerField = useCallback(({ matrix, squadron }) => {
+        const ships = Object.entries(squadron).map(
+            ([shipName, { arrDecks, x, y, kx, hits }]) => ({
+                id: shipName,
+                deckCount: arrDecks.length,
+                x,
+                y,
+                isHorizontal: !kx,
+                isRip: hits === arrDecks.length,
+            }),
+        );
+        setPlayerField({ matrix, ships });
+    }, []);
 
+    const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
+        const currentMatrix = matrix.map(
+            (row) => row.map(
+                (cell) => (cell === MatrixCell.deck ? MatrixCell.empty : cell)
+            )
+        );
+
+        const ships = Object.entries(squadron)
+            .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)
+            .map(([shipName, { arrDecks, x, y, kx, hits }]) => ({
+                id: shipName,
+                deckCount: arrDecks.length,
+                x,
+                y,
+                isHorizontal: !kx,
+                isRip: hits === arrDecks.length,
+            }));
+
+            setOpponentField({ matrix: currentMatrix, ships });
+        }, []);
     const placementArea = useMemo(
         () => new Placement({ field: playerCanvasRef }),
         [playerCanvasRef],
+    );
+
+    const gameController = useMemo(() => {
+        if (gameStep === 1) {
+            return new Controller({
+                opponentFieldRef: botCanvasRef,
+                playerSquadron,
+                playerMatrix,
+                handlerChangePlayerField,
+                handlerChangeOpponentField,
+            });
+        }
+        return null;
+    }, [gameStep, handlerChangePlayerField, handlerChangeOpponentField]);
+
+    const handlerPlayerShot = useCallback(
+        (event) => {
+            if (gameController?.handlerPlayerShot) {
+                gameController.handlerPlayerShot(event);
+            }
+        },
+        [gameController],
     );
 
     const handleClickAuto = useCallback(() => {
@@ -143,6 +207,12 @@ export const GamePage = (): JSX.Element => {
         };
     }, [inviteAccept, startGame, videoCall]);
     const [isFull, setIsFull] = useState(false);
+    const handleGameStart = useCallback(() => {
+        setPlayerMatrix(placementArea.getMatrix());
+        setPlayerSquadron(placementArea.getSquadron());
+        setGameStep(1);
+        setStartGame(!startGame);
+    }, [placementArea]);
     return (
         <Layout>
             <div className={styles.game__background}>
@@ -192,6 +262,8 @@ export const GamePage = (): JSX.Element => {
                                                 ref={botCanvasRef}
                                                 areaWidth={areaWidthSize}
                                                 fillColor="#9DC0F0"
+                                                onClick={handlerPlayerShot}
+                                                {...opponentField}
                                             />
                                         </div>
                                         <div
@@ -204,6 +276,7 @@ export const GamePage = (): JSX.Element => {
                                             <Area
                                                 ref={playerCanvasRef}
                                                 areaWidth={areaWidthSize}
+                                                {...playerField}
                                             />
                                         </div>
                                     </div>
@@ -280,86 +353,6 @@ export const GamePage = (): JSX.Element => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={cn(styles['game__chat-row'], styles.notme)}>
-                                        <div className={cn(styles['game__chat-msg'])}>
-                                            <div className={cn(styles['game__chat-text'])}>
-                                                Some msg 3asdas dasd asdsadasd asdasdassd asd asdasd asd asdasdasd asda sd asd asd asd asdasdasdsad
-                                            </div>
-                                            <div className={cn(styles['game__chat-date'])}>
-                                                23:37
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={cn(styles['game__chat-row'], styles.notme)}>
-                                        <div className={cn(styles['game__chat-msg'])}>
-                                            <div className={cn(styles['game__chat-text'])}>
-                                                Some msg 3
-                                            </div>
-                                            <div className={cn(styles['game__chat-date'])}>
-                                                23:37
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={cn(styles['game__chat-row'], styles.notme)}>
-                                        <div className={cn(styles['game__chat-msg'])}>
-                                            <div className={cn(styles['game__chat-text'])}>
-                                                Some msg 3
-                                            </div>
-                                            <div className={cn(styles['game__chat-date'])}>
-                                                23:37
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={cn(styles['game__chat-row'], styles.notme)}>
-                                        <div className={cn(styles['game__chat-msg'])}>
-                                            <div className={cn(styles['game__chat-text'])}>
-                                                Some msg 3
-                                            </div>
-                                            <div className={cn(styles['game__chat-date'])}>
-                                                23:37
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={cn(styles['game__chat-row'], styles.notme)}>
-                                        <div className={cn(styles['game__chat-msg'])}>
-                                            <div className={cn(styles['game__chat-text'])}>
-                                                Some msg 3
-                                            </div>
-                                            <div className={cn(styles['game__chat-date'])}>
-                                                23:37
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={cn(styles['game__chat-row'], styles.notme)}>
-                                        <div className={cn(styles['game__chat-msg'])}>
-                                            <div className={cn(styles['game__chat-text'])}>
-                                                Some msg 3
-                                            </div>
-                                            <div className={cn(styles['game__chat-date'])}>
-                                                23:37
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={cn(styles['game__chat-row'], styles.notme)}>
-                                        <div className={cn(styles['game__chat-msg'])}>
-                                            <div className={cn(styles['game__chat-text'])}>
-                                                Some msg 3
-                                            </div>
-                                            <div className={cn(styles['game__chat-date'])}>
-                                                23:37
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={cn(styles['game__chat-row'], styles.notme)}>
-                                        <div className={cn(styles['game__chat-msg'])}>
-                                            <div className={cn(styles['game__chat-text'])}>
-                                                Some msg 3
-                                            </div>
-                                            <div className={cn(styles['game__chat-date'])}>
-                                                23:37
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             )}
                         </div>
@@ -374,7 +367,6 @@ export const GamePage = (): JSX.Element => {
                                         href="/"
                                         skin="quad"
                                         color="green"
-                                        // title="fs"
                                         onClick={() => setIsFull(!isFull)}
                                     >
                                         <img
@@ -496,7 +488,7 @@ export const GamePage = (): JSX.Element => {
                                         skin="short"
                                         title={dataStore.buttons.start}
                                         color="green"
-                                        onClick={() => setStartGame(!startGame)}
+                                        onClick={handleGameStart}
                                     />
                                 </>
                             )}
