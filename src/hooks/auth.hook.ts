@@ -13,12 +13,18 @@ export const useAuth = () => {
             const response = await request('/auth/user', 'GET', null);
             if (response) {
                 socket.emit('auth', response.id);
-                userService.success();
-                userService.setUser(response);
                 if (from) {
                     navigate(from, { replace: true });
                 }
-                await request('/api/user/create', 'POST', response, {}, true);
+                const responseServer = await request(
+                    '/api/user/create',
+                    'POST',
+                    response,
+                    {},
+                    true,
+                );
+                userService.success();
+                userService.setUser(responseServer);
             }
         },
         [navigate, request],

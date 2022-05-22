@@ -42,7 +42,7 @@ export const useRoutes = (): JSX.Element => (
         <Route path={PageLinks.profileUpdate} element={<UpdateProfilePage />} />
         <Route path={PageLinks.forum} element={<ForumPage />} />
         <Route
-            path={PageLinks.game}
+            path={`${PageLinks.game}/:room`}
             element={<ProtectedRoute childrens={<GamePage />} />}
         />
         <Route

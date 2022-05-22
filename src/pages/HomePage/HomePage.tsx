@@ -20,7 +20,7 @@ export const HomePage = (): JSX.Element => {
         (state: AllStateTypes) => state.language.translate,
     );
     const { logout } = useAuth();
-    const [typeOfGame, setTypeOfGame] = useState(false);
+    const [typeOfGame, setTypeOfGame] = useState(true);
     const [info, setInfo] = useState(false);
     const [dropDown, setDropDown] = useState(false);
     const getInfo = () => setInfo(!info);

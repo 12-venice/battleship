@@ -1,10 +1,24 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/extensions */
 const { getUser, getSocket } = require('./usersOnline');
+const User = require('../serverModels/user.ts');
+const Room = require('../serverModels/room.ts');
 
 module.exports = (socket) => {
-    const sendInvite = async (id) => {
-        socket.to(await getSocket(id)).emit('invite:recive', {
+    const createRoom = async ({ createdUserId, invitedUserId }) => {
+        const createdUser = await User.findOne({ _id: createdUserId });
+        const invitedUser = await User.findOne({ _id: invitedUserId });
+        const room = new Room({ users: [createdUser, invitedUser] });
+        await room.save();
+        await User.updateOne(
+            { _id: createdUserId },
+            { $push: { rooms: room } },
+        );
+        await User.updateOne(
+            { _id: invitedUserId },
+            { $push: { rooms: room } },
+        );
+        socket.to(await getSocket(invitedUserId)).emit('invite:recive', {
             user: await getUser(socket.id),
             socketId: socket.id,
         });
@@ -23,7 +37,7 @@ module.exports = (socket) => {
         });
     };
 
-    socket.on('invite:send', sendInvite);
+    socket.on('invite:send', createRoom);
     socket.on('invite:accept', acceptInvite);
     socket.on('invite:cancel', cancelInvite);
 };

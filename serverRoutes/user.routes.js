@@ -11,7 +11,7 @@ router.post('/create', async (req, res) => {
         const { id } = req.body;
         const isExist = await User.findOne({ id });
         if (isExist) {
-            await User.updateOne(id, { $set: req.body });
+            await User.updateOne({ id }, { $set: req.body });
             res.status(200).json(isExist);
         } else {
             const user = new User(req.body);
@@ -32,6 +32,27 @@ router.post('/read', async (req, res) => {
             .sort({ [sortType]: sortDirection ? 1 : -1 })
             .skip(page * 10)
             .limit(10);
+        res.json(user);
+    } catch (e) {
+        res.status(500).json({
+            message: 'Что-то пошло не так, попробуйте еще раз',
+        });
+    }
+});
+
+router.post('/find', async (req, res) => {
+    try {
+        const { str } = req.body;
+        const user = await User.find({
+            $or: [
+                { display_name: { $regex: str, $options: 'i' } },
+                { first_name: { $regex: str, $options: 'i' } },
+                { second_name: { $regex: str, $options: 'i' } },
+                { email: { $regex: str, $options: 'i' } },
+                { phone: { $regex: str, $options: 'i' } },
+                { login: { $regex: str, $options: 'i' } },
+            ],
+        });
         res.json(user);
     } catch (e) {
         res.status(500).json({

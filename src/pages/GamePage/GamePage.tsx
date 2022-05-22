@@ -6,6 +6,7 @@ import { Layout } from 'src/components/Layout';
 import { Placement } from 'src/gameCore/Placement';
 import { AllStateTypes } from 'src/store/reducers';
 import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
+import { useParams } from 'react-router-dom';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
@@ -15,6 +16,8 @@ import styles from './GamePage.scss';
 import { mapStateToProps } from './mapState';
 
 export const GamePage = (): JSX.Element => {
+    const { room } = useParams();
+    console.log(room);
     const store = useSelector(mapStateToProps);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,

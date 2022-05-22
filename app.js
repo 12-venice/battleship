@@ -28,6 +28,8 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use('/api/user', require('./serverRoutes/user.routes'));
 app.use('/api/topic', require('./serverRoutes/topic.routes'));
 app.use('/api/comment', require('./serverRoutes/comment.routes'));
+app.use('/api/room', require('./serverRoutes/room.routes'));
+app.use('/api/message', require('./serverRoutes/message.routes'));
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 app.get('*', (req, res) => {

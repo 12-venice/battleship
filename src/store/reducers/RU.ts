@@ -20,8 +20,10 @@ export const RUSSIAN = {
         edit: 'ОК',
         delete: 'ДА',
         ships: 'КОРАБЛИ',
+        random: 'СЛУЧАЙНЫЙ',
     },
     labels: {
+        finder: 'ДРУЗЬЯ',
         menu: 'МЕНЮ',
         forum: 'ФОРУМ',
         leaders: 'ТАБЛИЦА ЛИДЕРОВ',
@@ -40,6 +42,7 @@ export const RUSSIAN = {
         delete: 'Удалить ТОПИК',
         auth: 'АВТОРИЗАЦИЯ',
         reg: 'РЕГИСТРАЦИЯ',
+        find: 'ПОИСК',
     },
     text: {
         add: 'Опиши свой топик',

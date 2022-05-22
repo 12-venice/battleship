@@ -8,6 +8,7 @@ type LoadStatus = 'success' | 'pending' | 'failed' | 'error';
 type Nullable<T> = T | null;
 
 export interface User {
+    _id: string;
     id: number;
     avatar: Nullable<string>;
     first_name: string;
@@ -19,6 +20,7 @@ export interface User {
     points?: number;
     wins?: number;
     defeats?: number;
+    rooms: string[];
 }
 
 export type UserState = {

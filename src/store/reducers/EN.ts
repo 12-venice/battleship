@@ -20,8 +20,10 @@ export const ENGLISH = {
         edit: 'EDIT',
         delete: 'DELETE',
         ships: 'SHIPS',
+        random: 'RANDOM',
     },
     labels: {
+        finder: 'FRIENDS',
         menu: 'MENU',
         forum: 'FORUM',
         leaders: 'LEADERBOARD',
@@ -40,6 +42,7 @@ export const ENGLISH = {
         delete: 'Delete TOPIC',
         auth: 'AUTHORIZATION',
         reg: 'REGISTRATION',
+        find: 'FIND',
     },
     text: {
         add: 'Describe your topic',
