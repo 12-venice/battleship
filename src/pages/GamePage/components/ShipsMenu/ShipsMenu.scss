@@ -1,8 +1,16 @@
 .container {
     position: relative;
+    height: 150px;
+    margin: 0 auto;
 }
 
 .container img {
     position: absolute;
     transform-origin: left top;
+}
+
+@media screen and (max-width: 480px) {
+    .container {
+        height: 32vw;
+    }
 }

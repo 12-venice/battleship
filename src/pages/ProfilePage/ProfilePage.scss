@@ -29,7 +29,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 25px;
+    font-size: min(25px, 6vw);
 }
 
 .profile__block-down {
@@ -49,7 +49,20 @@
     border-radius: 50%;
     background: #ffffff;
     color: #9DC0F0;
-    width: 180px;
-    height: 180px;
+    width: min(180px, 38vw);
+    height: min(180px, 38vw);
     font-size: 55px;
+}
+
+@media screen and (max-width: 480px) {
+    .profile__main {
+        width: 90%;
+        height: 90%;
+    }
+    .profile__block-up {
+        width: 100%;
+    }
+    .profile__block-center {
+        padding-top: 15vw;
+    }
 }

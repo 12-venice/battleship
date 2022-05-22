@@ -16,15 +16,17 @@
 
 .avatarLeft .name {
   flex-grow: 1;
-  margin: 0 18px 0 0;
+  margin: 0 min(1vw, 10px) 0 0;
 }
 
 .avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 82px;
-  height: 82px;
+  max-width: 82px;
+  max-height: 82px;
+  width: 6vw;
+  height: 6vw;
   border-radius: 50%;
   overflow: hidden;
   background-color: var(--white);
@@ -36,11 +38,13 @@
 }
 
 .name {
-  font-size: 22px;
+  font-size: min(1.8vw, 30px);
   font-family: var(--font-family), var(--font-family-ru);
   color: var(--white);
-  margin: 0 0 0 18px;
-  width: 180px;
+  margin: 0 0 0 min(1vw, 10px);
+  width: min(14vw, 200px);
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-align: center;
 }
 
@@ -50,15 +54,12 @@
   user-select: none;
 }
 
-@media screen and (max-width: 1030px) {
-  .name {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 730px) {
+@media screen and (max-width: 800px) {
   .avatar {
     width: 42px;
     height: 42px;
+  }
+  .name {
+    display: none;
   }
 }
