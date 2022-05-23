@@ -3,17 +3,17 @@
 
 .button {
     background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #F1972B 38.02%, #E37D00 100%);
-    border-radius: 13px;
+    border-radius: 1vw;
     color: var(--white);
     font-family: var(--font-family), var(--font-family-ru);
-    font-size: 36px;
-    line-height: 36px;
+    font-size: 2vw;
     border-top: 6px solid var(--light-yellow);
-    height: 57px;
-    width: 235px;
-    margin: 10px;
+    height: 3.6vw;
+    width: 11vw;
+    margin: 7px;
     padding: 0;
 }
+
 .button:focus {
     background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #F1972B 38.02%, #E37D00 100%);
 }
@@ -24,7 +24,7 @@
 }
 
 .button_quad {
-    width: 57px;
+    width: 3.6vw;
 }
 
 .button_wide {
@@ -32,9 +32,9 @@
 }
 
 .button_large {
-    width: 392px;
-    height: 135px;
-    font-size: 67px;
+    width: 20vw;
+    height: 8vw;
+    font-size: 5vw;
 }
 
 .button_high {
@@ -43,10 +43,17 @@
 }
 
 .button_auth {
-    width: 150px;
-    height: 58px;
-    border-radius: 27px;
-    font-size: 25px;
+    width: 8vw;
+    height: 3.6vw;
+    border-radius: 1.8vw;
+    font-size: 1.5vw;
+}
+
+.button_small {
+    width: 3vw;
+    height: 1vw;
+    border-radius: 5px;
+    font-size: 0.5vw;
 }
 
 
@@ -54,6 +61,7 @@
     background: none;
     border: none;
 }
+
 .button_no-fill:focus {
     background: none;
     border: none;
@@ -64,27 +72,34 @@
     background: radial-gradient(100% 100% at 50.31% 100%, #F7B1A2 0%, #EE4727 45.83%, #EE4727 100%);
     border-color: var(--light-red);
 }
+
 .button-color_red:focus {
     background: radial-gradient(100% 100% at 50.31% 100%, #F7B1A2 0%, #EE4727 45.83%, #EE4727 100%);
 }
+
 .button-color_green {
     background: radial-gradient(100% 100% at 50.31% 100%, #C8FC77 0%, #58B034 45.83%, #58B034 100%);
     border-color: var(--light-green);
 }
+
 .button-color_green:focus {
     background: radial-gradient(100% 100% at 50.31% 100%, #C8FC77 0%, #58B034 45.83%, #58B034 100%);
 }
+
 .button-color_yellow {
     background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #FDBB28 50%, #FDBB28 100%);
     border-color: var(--light-yellow);
 }
+
 .button-color_yellow:focus {
     background: radial-gradient(100% 100% at 50.31% 100%, #FDDE4F 0%, #FDBB28 50%, #FDBB28 100%);
 }
+
 .button-color_blue {
     background: radial-gradient(100% 100% at 50.31% 100%, #BADFFF 0%, #6FABFF 45.83%, #3A8DFF 100%);
     border-color: var(--light-blue);
 }
+
 .button-color_blue:focus {
     background: radial-gradient(100% 100% at 50.31% 100%, #BADFFF 0%, #6FABFF 45.83%, #3A8DFF 100%);
 }
@@ -96,43 +111,120 @@
     color: var(--gray);
 }
 
-@media screen and (max-width: 1700px) {
-    .button_large {
-        width: 300px;
-    }
-}
-@media screen and (max-width: 1151px) {
-    .button_high {
-        height: 57px;
-        width: 151px;
+@media screen and (max-width: 800px) {
+    .button {
         font-size: 36px;
+        line-height: 36px;
+        height: 57px;
+        width: 235px;
+        border-radius: 13px;
     }
-}
 
-@media screen and (max-width: 1030px) {
+    .button_short {
+        width: 151px;
+    }
+
+    .button_quad {
+        width: 57px;
+    }
+
+    .button_wide {
+        width: 100%;
+    }
+
     .button_large {
         width: 214px;
         height: 74px;
         font-size: 48px;
     }
+
+    .button_high {
+        width: 175px;
+        height: 78px;
+    }
+
+    .button_auth {
+        width: 150px;
+        height: 58px;
+        border-radius: 27px;
+        font-size: 25px;
+    }
+
+    .button_no-fill {
+        background: none;
+        border: none;
+    }
+
+    .button_no-fill:focus {
+        background: none;
+        border: none;
+    }
+
+    .button_disable {
+        border: none;
+        background: var(--light-gray);
+        color: var(--gray);
+    }
+
+    .button_small {
+        line-height: normal;
+        margin: 0;
+        width: 100px;
+        height: 30px;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
 }
 
+@media screen and (max-width: 479px) {
+    .button {
+        width: 140px;
+        height: 43px;
+        font-size: 25px;
+    }
 
-@media screen and (max-width: 570px) {
     .button_quad {
         width: 42px;
         height: 42px;
         font-size: 22px;
         margin: 7px;
     }
+
     .button_short {
         width: 100px;
         font-size: 22px;
         height: 42px;
     }
+
     .button_high {
         width: 100px;
         font-size: 22px;
         height: 42px;
+    }
+
+    .button_large {
+        width: 214px;
+        font-size: 48px;
+        height: 74px;
+    }
+
+    .button_wide {
+        width: 100%;
+    }
+
+    .button_small {
+        width: 3vw;
+        height: 1vw;
+        border-radius: 5px;
+        font-size: 0.5vw;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .button_large {
+        width: 60vw;
+        font-size: 14vw;
+        height: 20vw;
     }
 }

@@ -19,7 +19,7 @@ export const UpdatePassPage = (): JSX.Element => {
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const message = useMessage();
+    const { message } = useMessage();
     const { request, loading, error, clearError } = useHttp();
     const navigate = useNavigate();
     const changePass = useCallback(
@@ -35,9 +35,9 @@ export const UpdatePassPage = (): JSX.Element => {
     );
 
     useEffect(() => {
-        message(error);
+        message({ message: error });
         return () => clearError();
-    }, [error, message, clearError]);
+    }, [error, clearError]);
 
     return (
         <Layout>

@@ -30,7 +30,7 @@ export const UpdateProfilePage = (): JSX.Element => {
         };
         inputsWithDefaultsValue.push(element);
     });
-    const message = useMessage();
+    const { message } = useMessage();
     const { request, loading, error, clearError } = useHttp();
     const navigate = useNavigate();
     const [updateAvatar, setUpdateAvatar] = useState(false);
@@ -50,9 +50,9 @@ export const UpdateProfilePage = (): JSX.Element => {
     );
 
     useEffect(() => {
-        message(error);
+        message({ message: error });
         return () => clearError();
-    }, [error, message, clearError]);
+    }, [error, clearError]);
 
     return (
         <Layout>

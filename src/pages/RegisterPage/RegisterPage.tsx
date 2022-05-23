@@ -15,7 +15,7 @@ export const RegisterPage = (): JSX.Element => {
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const message = useMessage();
+    const { message } = useMessage();
     const { login } = useAuth();
     const location = useLocation();
     const from = location?.state?.from?.pathname;
@@ -34,9 +34,9 @@ export const RegisterPage = (): JSX.Element => {
         [request, login, from],
     );
     useEffect(() => {
-        message(error);
+        message({ message: error });
         return () => clearError();
-    }, [error, message, clearError]);
+    }, [error, clearError]);
 
     return (
         <Layout>

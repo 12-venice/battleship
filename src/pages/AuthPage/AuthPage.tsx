@@ -12,7 +12,7 @@ import styles from './AuthPage.scss';
 import { inputs, headers } from './config';
 
 export const AuthPage = (): JSX.Element => {
-    const message = useMessage();
+    const { message } = useMessage();
     const location = useLocation().state as FromProps;
     const navigate = useNavigate();
     const from = location?.from?.pathname;
@@ -45,8 +45,9 @@ export const AuthPage = (): JSX.Element => {
     useEffect(() => {
         if (error === 'User already in system') {
             login(from || PageLinks.home);
+        } else if (error) {
+            message({ message: error });
         }
-        message(error);
         return () => clearError();
     }, [error, message, clearError, login, from]);
 

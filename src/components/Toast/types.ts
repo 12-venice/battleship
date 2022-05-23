@@ -1,9 +1,17 @@
 import { User } from 'src/store/reducers/user';
-import { ButtonProps } from '../Button/types';
+import { btnProps } from '../Button/types';
 
 export type ToastType = {
-    id: string;
+    id?: string;
+    title?: string;
     message?: string;
     user?: User;
-    buttons?: ButtonProps[];
+    buttons?: btnProps[];
+};
+
+export type Props = {
+    toastList: ToastType[];
+    position: string;
+    autoDelete: boolean;
+    autoDeleteTime: number;
 };

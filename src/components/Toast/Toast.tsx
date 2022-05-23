@@ -1,92 +1,80 @@
-/* eslint-disable react/jsx-curly-newline */
-import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { FC, useEffect, useState } from 'react';
+import cn from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { Avatar } from '../Avatar';
 import { Button } from '../Button';
-import { ButtonProps } from '../Button/types';
-import { PageLinks } from '../utils/Routes/types';
-import { socket } from '../utils/Socket/Socket';
 import styles from './Toast.scss';
-import { ToastType } from './types';
+import { Props, ToastType } from './types';
 
-export const Toast = (): JSX.Element => {
-    const navigation = useNavigate();
-    const [list, setList] = useState<ToastType[]>([]);
+export const Toast: FC<Props> = ({
+    toastList,
+    position,
+    autoDelete,
+    autoDeleteTime,
+}) => {
+    const [list, setList] = useState<ToastType[]>(toastList);
 
-    const deleteToast = useCallback(
-        (index: number) => {
-            list.splice(index, 1);
-            setList([...list]);
-        },
-        [list],
-    );
+    const deleteToast = (id: string) => {
+        const listItemIndex = list.findIndex((toast) => toast.id === id);
+        const toastListItem = toastList.findIndex((toast) => toast.id === id);
+        list.splice(listItemIndex, 1);
+        toastList.splice(toastListItem, 1);
+        setList([...list]);
+    };
+
+    useEffect(() => {
+        setList([...toastList]);
+    }, [toastList]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (list.length) {
-                deleteToast(0);
+            if (autoDelete && toastList.length && list.length) {
+                deleteToast(toastList[0].id);
             }
-        }, 5000);
+        }, autoDeleteTime);
         return () => {
             clearInterval(interval);
         };
-    }, [deleteToast, list.length]);
+    }, [toastList, autoDelete, autoDeleteTime, list]);
 
-    const acceptInvite = (socketId?: string) => {
-        socket.emit('invite:accept', socketId);
-        navigation(PageLinks.game);
-    };
-
-    const cancelInvite = (index: number, socketId?: string) => {
-        deleteToast(index);
-        socket.emit('invite:cancel', socketId);
-    };
-
-    socket.on('invite:accept', (data) => {
-        list.push({
-            id: uuidv4(),
-            message: `${data.user.display_name} accepted the invitation`,
-            user: data.user,
-        });
-        setList([...list]);
-        navigation(PageLinks.game);
-    });
-
-    socket.on('invite:cancel', (data) => {
-        list.push({
-            id: uuidv4(),
-            message: `${data.user.display_name} refused the invitation`,
-            user: data.user,
-        });
-        setList([...list]);
-    });
-
-    socket.on('invite:recive', (data) => {
-        list.push({
-            id: uuidv4(),
-            message: `${data.user.display_name} invites you to play`,
-            user: data.user,
-        });
-        setList([...list]);
-    });
     return (
-        <div className={styles.toast__main}>
-            {list.map((toast, index) => (
-                <div key={toast.id} className={styles.toast__block}>
-                    {Avatar(toast.user)}
-                    <span>{toast.message}</span>
-                    {toast.buttons && (
-                        <div className={styles['toast__block-buttons']}>
-                            {toast.buttons.map((button: ButtonProps) => (
+        <div className={cn(styles['notification-container'], styles[position])}>
+            {list.map((toast) => (
+                <div
+                    key={toast.id}
+                    className={cn(styles.notification, styles[position])}
+                >
+                    <button
+                        className={styles['notification-close']}
+                        onClick={() => deleteToast(toast.id)}
+                    >
+                        x
+                    </button>
+                    {toast.user && (
+                        <div className={styles['notification-image']}>
+                            {Avatar(toast.user)}
+                        </div>
+                    )}
+                    {toast.title && (
+                        <p className={styles['notification-title']}>
+                            {toast.title}
+                        </p>
+                    )}
+                    <p className={styles['notification-message']}>
+                        {toast.message}
+                    </p>
+                    {toast.buttons && toast.buttons.length > 0 && (
+                        <p className={styles['notification-buttons']}>
+                            {toast.buttons.map((button) => (
                                 <Button
+                                    key={uuidv4()}
                                     title={button.title}
-                                    skin={button.skin}
-                                    color={button.color}
+                                    skin="small"
                                     onClick={button.onClick}
                                 />
                             ))}
-                        </div>
+                        </p>
                     )}
                 </div>
             ))}

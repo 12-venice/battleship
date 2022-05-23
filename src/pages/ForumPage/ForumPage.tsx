@@ -10,6 +10,8 @@ import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
 import { Layout } from '../../components/Layout';
 import { Topic } from './components/topic';
+import sendIcon from '../../../images/send.svg';
+import plusIcon from '../../../images/plus.svg';
 import { AddTopicWindow } from './components/addTopic';
 import styles from './ForumPage.scss';
 import { DeleteTopicWindow } from './components/deleteTopic';
@@ -89,9 +91,15 @@ export const ForumPage = (): JSX.Element => {
                         <Button
                             skin="quad"
                             color="green"
-                            title="✚"
+                            // title="✚"
                             onClick={() => setWindowCreate(true)}
-                        />
+                        >
+                            <img
+                                className={styles.icon}
+                                src={plusIcon}
+                                alt="Add"
+                            />
+                        </Button>
                         <Button
                             skin="quad"
                             onClick={() => lngService.changeLng()}
@@ -120,11 +128,17 @@ export const ForumPage = (): JSX.Element => {
                         onChange={(e) => setTextComment(e.target.value)}
                     />
                     <Button
-                        skin="short"
-                        title={dataStore.buttons.send}
+                        skin="quad"
+                        // title={dataStore.buttons.send}
                         disabled={!topicId}
                         onClick={createComment}
-                    />
+                    >
+                        <img
+                            className={styles.icon}
+                            src={sendIcon}
+                            alt="Send"
+                        />
+                    </Button>
                 </div>
             </div>
             {openCreateWindow && user && (

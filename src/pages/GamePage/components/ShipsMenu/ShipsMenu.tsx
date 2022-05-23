@@ -94,7 +94,7 @@ export const ShipsMenu = ({
             className={styles.container}
             style={{
                 width: imgWidth * 8 + MARGIN * 7,
-                height: CONTAINER_HEIGHT,
+                // height: CONTAINER_HEIGHT,
             }}
             onContextMenu={handlerContextMenu}
         >
