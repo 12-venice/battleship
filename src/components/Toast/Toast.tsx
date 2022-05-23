@@ -1,53 +1,47 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import cn from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import { Avatar } from '../Avatar';
 import { Button } from '../Button';
 import styles from './Toast.scss';
-import { Props, ToastType } from './types';
+import { Props } from './types';
+import { useSelector } from 'react-redux';
+import { AllStateTypes } from 'src/store/reducers';
+import { notificationService } from 'src/store/services/notificationService';
 
 export const Toast: FC<Props> = ({
-    toastList,
     position,
     autoDelete,
     autoDeleteTime,
 }) => {
-    const [list, setList] = useState<ToastType[]>(toastList);
+    const list = useSelector((state: AllStateTypes) => state.notification);
 
     const deleteToast = (id: string) => {
-        const listItemIndex = list.findIndex((toast) => toast.id === id);
-        const toastListItem = toastList.findIndex((toast) => toast.id === id);
-        list.splice(listItemIndex, 1);
-        toastList.splice(toastListItem, 1);
-        setList([...list]);
+        notificationService.deleteNotification(id);
     };
 
     useEffect(() => {
-        setList([...toastList]);
-    }, [toastList]);
-
-    useEffect(() => {
         const interval = setInterval(() => {
-            if (autoDelete && toastList.length && list.length) {
-                deleteToast(toastList[0].id);
+            if (autoDelete && list.length) {
+                deleteToast(list[0].id as string);
             }
         }, autoDeleteTime);
         return () => {
             clearInterval(interval);
         };
-    }, [toastList, autoDelete, autoDeleteTime, list]);
+    }, [autoDelete, autoDeleteTime, list]);
 
     return (
         <div className={cn(styles['notification-container'], styles[position])}>
             {list.map((toast) => (
                 <div
                     key={toast.id}
-                    className={cn(styles.notification, styles[position])}
+                    className={cn(styles.notification, styles[position], toast.type && styles[toast.type])}
                 >
                     <button
                         className={styles['notification-close']}
-                        onClick={() => deleteToast(toast.id)}
+                        onClick={() => deleteToast(toast.id || '')}
                     >
                         x
                     </button>

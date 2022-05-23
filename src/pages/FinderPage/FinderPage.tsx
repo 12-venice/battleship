@@ -42,11 +42,9 @@ export const FinderPage = () => {
     }, [request, user?._id, user?.rooms]);
 
     useEffect(() => {
-        if (!str) {
-            getRooms();
-        }
+        getRooms();
         return () => setRooms([]);
-    }, [getRooms, str]);
+    }, []);
 
     useEffect(() => {
         const timeOut = setTimeout(() => {
@@ -61,9 +59,10 @@ export const FinderPage = () => {
         setStr(e.target.value);
     };
 
-    const createRoom = (invitedUserId: string) =>
-        navigation(`${PageLinks.game}/1231`);
-    // socket.emit('invite:send', { createdUserId: user?._id, invitedUserId });
+    const createRoom = (invitedUserId: string) => {
+        socket.emit('invite:send', { createdUserId: user?._id, invitedUserId });
+        getRooms()
+    }
 
     return (
         <Layout>
@@ -135,6 +134,7 @@ export const FinderPage = () => {
                 <Button
                     skin="regular"
                     color="green"
+                    disabled
                     title={dataStore.buttons.random}
                 />
             </div>

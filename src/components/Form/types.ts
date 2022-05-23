@@ -7,7 +7,6 @@ export type fieldsProps = {
     name: string;
     className?: string;
     validateType?: string;
-    validateMsgTrue?: string;
     validateMsgFalse?: string;
 };
 
@@ -18,4 +17,5 @@ export type formProps = {
     setData: Dispatch<SetStateAction<{}>>;
     submitTitle: string;
     disabled?: boolean;
+    checking?: boolean; 
 };

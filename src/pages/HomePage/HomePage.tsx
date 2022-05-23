@@ -162,16 +162,14 @@ export const HomePage = (): JSX.Element => {
                                             styles['home__select-tablet_header']
                                         }
                                     >
-                                        Toggle
-                                        <br />
-                                        play mode!
+                                        {data.text.togglemode}
                                     </span>
                                 </div>
                                 <div className={styles['home__select-variant']}>
                                     <p
                                         className={cn(
                                             styles[
-                                                'home__select-tablet_classic'
+                                            'home__select-tablet_classic'
                                             ],
                                             !typeOfGame ? styles.selected : '',
                                         )}
@@ -180,12 +178,12 @@ export const HomePage = (): JSX.Element => {
                                             opponentService.setOpponent(null);
                                         }}
                                     >
-                                        CLASSIC
+                                        {data.labels.classic}
                                     </p>
                                     <p
                                         className={cn(
                                             styles[
-                                                'home__select-tablet_online'
+                                            'home__select-tablet_online'
                                             ],
                                             typeOfGame ? styles.selected : '',
                                         )}
@@ -196,15 +194,15 @@ export const HomePage = (): JSX.Element => {
                                             });
                                         }}
                                     >
-                                        ONLINE
+                                        {data.labels.online}
                                     </p>
                                 </div>
                             </div>
                             <Button
                                 skin="large"
                                 color="green"
-                                href={PageLinks.game}
-                                title="PLAY!"
+                                href={typeOfGame ? PageLinks.finder : PageLinks.game + '/bot'}
+                                title={data.buttons.play}
                             />
                         </div>
                         <img

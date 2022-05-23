@@ -5,8 +5,8 @@ import { Form } from 'src/components/Form';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
-import { useMessage } from 'src/hooks/message.hook';
 import { AllStateTypes } from 'src/store/reducers';
+import { notificationService } from 'src/store/services/notificationService';
 import { Layout } from '../../components/Layout';
 import { inputs, headers } from './config';
 import styles from './RegisterPage.scss';
@@ -15,7 +15,6 @@ export const RegisterPage = (): JSX.Element => {
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const { message } = useMessage();
     const { login } = useAuth();
     const location = useLocation();
     const from = location?.state?.from?.pathname;
@@ -34,7 +33,9 @@ export const RegisterPage = (): JSX.Element => {
         [request, login, from],
     );
     useEffect(() => {
-        message({ message: error });
+        if (error) {
+            notificationService.addNotification({ message: error, type: 'danger' });
+        }
         return () => clearError();
     }, [error, clearError]);
 

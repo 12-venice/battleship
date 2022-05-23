@@ -5,12 +5,14 @@ import { Input } from '../Input';
 import styles from './Form.scss';
 import { formProps } from './types';
 import { validation } from '../utils/Validation/validation';
+import { notificationService } from 'src/store/services/notificationService';
 
 export const Form = ({
     inputs,
     setData,
     submitTitle,
     disabled,
+    checking = true
 }: formProps): JSX.Element => {
     const [fields, setFields] = useState(inputs);
     let formValues = fields.reduce(
@@ -32,11 +34,16 @@ export const Form = ({
 
     const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const { valid, newFields } = validation(fields, formValues);
-        if (valid) {
+        if (!checking) {
             setData(formValues);
+        } else {
+            notificationService.resetNotification();
+            const { valid, newFields } = validation(fields, formValues);
+            if (valid) {
+                setData(formValues);
+            }
+            setFields(newFields);
         }
-        setFields(newFields);
     };
 
     return (
@@ -47,7 +54,6 @@ export const Form = ({
                         <Input
                             defaultValue={field.defaultValue}
                             className={field.className}
-                            validateMsgTrue={field.validateMsgTrue}
                             validateMsgFalse={field.validateMsgFalse}
                             key={uuidv4()}
                             type={field.type}

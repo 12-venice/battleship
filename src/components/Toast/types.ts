@@ -6,11 +6,11 @@ export type ToastType = {
     title?: string;
     message?: string;
     user?: User;
+    type?:  'danger' | 'warning' | 'success',
     buttons?: btnProps[];
 };
 
 export type Props = {
-    toastList: ToastType[];
     position: string;
     autoDelete: boolean;
     autoDeleteTime: number;

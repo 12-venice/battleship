@@ -4,7 +4,6 @@ import { useHttp } from 'src/hooks/http.hook';
 import { useCallback, useEffect } from 'react';
 import { Preloader } from 'src/components/Preloader';
 import { Form } from 'src/components/Form';
-import { useMessage } from 'src/hooks/message.hook';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
@@ -13,13 +12,13 @@ import { Layout } from '../../components/Layout';
 import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs } from './config';
 import { Avatar } from '../ProfilePage/components/Avatar';
+import { notificationService } from 'src/store/services/notificationService';
 
 export const UpdatePassPage = (): JSX.Element => {
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const { message } = useMessage();
     const { request, loading, error, clearError } = useHttp();
     const navigate = useNavigate();
     const changePass = useCallback(
@@ -35,7 +34,9 @@ export const UpdatePassPage = (): JSX.Element => {
     );
 
     useEffect(() => {
-        message({ message: error });
+        if (error) {
+            notificationService.addNotification({ message: error, type: 'danger' });
+        }
         return () => clearError();
     }, [error, clearError]);
 

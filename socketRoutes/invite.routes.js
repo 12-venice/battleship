@@ -8,16 +8,21 @@ module.exports = (socket) => {
     const createRoom = async ({ createdUserId, invitedUserId }) => {
         const createdUser = await User.findOne({ _id: createdUserId });
         const invitedUser = await User.findOne({ _id: invitedUserId });
-        const room = new Room({ users: [createdUser, invitedUser] });
-        await room.save();
-        await User.updateOne(
-            { _id: createdUserId },
-            { $push: { rooms: room } },
-        );
-        await User.updateOne(
-            { _id: invitedUserId },
-            { $push: { rooms: room } },
-        );
+        const isRoomCreate = await Room.findOne({ users: [createdUser, invitedUser] })
+        if (!isRoomCreate) {
+            const room = new Room({ users: [createdUser, invitedUser] });
+            await room.save();
+            await User.updateOne(
+                { _id: createdUserId },
+                { $push: { rooms: room } },
+            );
+            await User.updateOne(
+                { _id: invitedUserId },
+                { $push: { rooms: room } },
+            );
+        } else {
+            console.log('Room is created!')
+        };
         socket.to(await getSocket(invitedUserId)).emit('invite:recive', {
             user: await getUser(socket.id),
             socketId: socket.id,
