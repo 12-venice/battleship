@@ -1,5 +1,5 @@
 import { selectEn, selectRu, changeLng } from '../reducers/lng';
-import { store } from '../../client';
+import { store } from '../../index';
 
 export const lngService = {
     selectEn: () => store.dispatch(selectEn()),

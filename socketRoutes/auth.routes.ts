@@ -3,9 +3,9 @@
 /* eslint-disable no-console */
 /* eslint-disable import/extensions */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { users, getUsers } = require('./usersOnline');
+import { users, getUsers } from './usersOnline';
 
-module.exports = (socket) => {
+export default (socket) => {
     socket.on('auth', async (id) => {
         users[socket.id] = id;
         socket.emit('online', await getUsers());

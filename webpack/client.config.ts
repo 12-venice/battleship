@@ -3,15 +3,10 @@ import path from 'path';
 import webpack, { Configuration, Entry } from 'webpack';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-// import fileLoader from './loaders/file';
-// import cssLoader from './loaders/css';
-// import jsLoader from './loaders/js';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 import { IS_DEV, DIST_DIR, SRC_DIR } from './env';
 
 const config: Configuration = {
-    target: 'web',
     entry: [
         IS_DEV && 'react-hot-loader/patch',
         // Entry для работы HMR
@@ -80,16 +75,9 @@ const config: Configuration = {
     plugins: [
         // new MiniCssExtractPlugin({ filename: '[name].css' }),
         // Plugin для HMR
-        new HtmlWebpackPlugin({
-            template: './www/index.html',
-            filename: 'index.html',
-            minify: {
-                collapseWhitespace: true,
-                removeComments: true,
-                removeRedundantAttributes: true,
-                useShortDoctype: true,
-            },
-        }),
+        new webpack.DefinePlugin({
+            __isBrowser__: "true"
+          }),     
         new MiniCssExtractPlugin({
             filename: 'style-[hash].css',
         }),

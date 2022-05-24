@@ -1,4 +1,4 @@
-module.exports = (socket) => {
+export default (socket) => {
     const createMessage = (room, message) => {
         // ...
     };

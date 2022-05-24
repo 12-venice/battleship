@@ -1,13 +1,12 @@
-import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Request, Response } from 'express';
 import { StaticRouter } from 'react-router-dom/server';
 import { Provider as ReduxProvider } from 'react-redux';
 import { configureStore } from '../../store/store';
 // import { getInitialState } from './store/getInitialState';
-// import { App } from '../App/App';
+import { App } from '../App';
 
-const App: React.FC = () => <div>Hey from server!</div>;
+//const App: React.FC = () => <div>Hey from server!</div>;
 
 function getHtml(reactHtml: string, reduxState = {}) {
     return `
@@ -40,6 +39,7 @@ function getHtml(reactHtml: string, reduxState = {}) {
                     href="https://fonts.googleapis.com/icon?family=Material+Icons"
                     rel="stylesheet"
                 />
+                <script src="/bundle.js" defer></script>
             </head>
             <body>
                 <div id="root">${reactHtml}</div>
@@ -53,17 +53,11 @@ function getHtml(reactHtml: string, reduxState = {}) {
     `;
 }
 
-// В этой middleware мы формируем первичное состояние приложения на стороне сервера
-// Попробуйте её подебажить, чтобы лучше разобраться, как она работает
-// eslint-disable-next-line import/no-default-export
 export default function requestHandler(req: Request, res: Response) {
-    const location = req.url;
-    // const context: StaticRouterProps = {};
     const store = configureStore();
-
     const jsx = (
         <ReduxProvider store={store}>
-            <StaticRouter location={location}>
+            <StaticRouter location={req.url}>
                 <App />
             </StaticRouter>
         </ReduxProvider>
@@ -71,11 +65,5 @@ export default function requestHandler(req: Request, res: Response) {
     const reactHtml = renderToString(jsx);
     const reduxState = store.getState();
 
-    // if (context.url) {
-    //     res.redirect(context.url);
-    //     return;
-    // }
-    // res.write(reactHtml);
-    // res.end();
     res.send(getHtml(reactHtml, reduxState));
 }

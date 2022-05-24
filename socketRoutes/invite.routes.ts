@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/extensions */
-const { getUser, getSocket } = require('./usersOnline');
-const User = require('../serverModels/user.ts');
-const Room = require('../serverModels/room.ts');
+import { getSocket, getUser } from './usersOnline';
+import User from '../serverModels/user';
+import Room from '../serverModels/room';
 
-module.exports = (socket) => {
+export default (socket) => {
     const createRoom = async ({ createdUserId, invitedUserId }) => {
         const createdUser = await User.findOne({ _id: createdUserId });
         const invitedUser = await User.findOne({ _id: invitedUserId });

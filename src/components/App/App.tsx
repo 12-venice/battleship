@@ -8,7 +8,7 @@ const app: React.FC = () => {
     const routes = useRoutes();
     const position = 'top-right';
     const autoDelete = true;
-    const autoDeleteTime = 3000;
+    const autoDeleteTime = 30000;
 
     return (
         <ErrorBoundary>
@@ -21,7 +21,5 @@ const app: React.FC = () => {
         </ErrorBoundary>
     );
 };
-
-
 
 export const App = hot(app);

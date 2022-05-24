@@ -1,4 +1,3 @@
-import M from 'materialize-css';
 import { useEffect } from 'react';
 import { notificationService } from 'src/store/services/notificationService';
 import { inputProps } from './types';
@@ -12,7 +11,6 @@ export const Input = ({
     className = 'validate',
     validateMsgFalse,
 }: inputProps): JSX.Element => {
-    M.updateTextFields();
 
     useEffect(() => {
         if (validateMsgFalse && className === 'validate invalid') {

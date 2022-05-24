@@ -3,7 +3,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-undef */
-const User = require('../serverModels/user.ts');
+import User from '../serverModels/user';
 
 const users = {};
 
@@ -28,4 +28,4 @@ const getUsers = async () => {
     return onlineUsers;
 };
 
-module.exports = { users, getUsers, getUser, getSocket };
+export { users, getUsers, getUser, getSocket };

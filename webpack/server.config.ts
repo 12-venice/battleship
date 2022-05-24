@@ -42,19 +42,7 @@ const config: Configuration = {
             },
             {
                 test: /\.scss$/,
-                use: [
-                    IS_DEV ? 'style-loader' : MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: {
-                                localIdentName: '[local]_[hash:base64:5]',
-                            },
-                            sourceMap: true,
-                        },
-                    },
-                    'sass-loader',
-                ],
+                use: ['null-loader'],
             },
         ],
     },
@@ -62,7 +50,7 @@ const config: Configuration = {
         filename: 'server.js',
         libraryTarget: 'commonjs2',
         path: DIST_DIR,
-        publicPath: '/static/',
+        publicPath: '/',
     },
     resolve: {
         modules: ['src', 'node_modules'],

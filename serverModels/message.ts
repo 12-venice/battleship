@@ -1,6 +1,6 @@
 // Старый синтаксис
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { Schema, model, Types } = require('mongoose');
+import { Schema, model, Types } from 'mongoose';
 
 const schema = new Schema({
     date: { type: Date, default: Date.now() },
@@ -9,4 +9,4 @@ const schema = new Schema({
     text: { type: String, trim: true, required: true },
 });
 
-module.exports = model('Message', schema);
+export default model('Message', schema);

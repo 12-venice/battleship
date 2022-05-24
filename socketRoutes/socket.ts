@@ -1,14 +1,14 @@
-/* eslint-disable import/extensions */
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable global-require */
 /* eslint-disable no-console */
+import authRoutes from './auth.routes';
+import messageRoutes from './message.routes';
+import inviteRoutes from './invite.routes';
 
-module.exports = (io) => {
+export default (io) => {
     io.on('connection', (socket) => {
         console.log(socket.id);
-        require('./auth.routes')(socket);
-        require('./message.routes')(socket);
-        require('./invite.routes')(socket);
+        authRoutes(socket);
+        messageRoutes(socket);
+        inviteRoutes(socket);
     });
 
     io.engine.on('connection_error', (err) => {
