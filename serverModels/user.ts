@@ -1,6 +1,6 @@
 // Старый синтаксис
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 const schema = new Schema({
     id: { type: Number, required: true },
@@ -16,4 +16,4 @@ const schema = new Schema({
     defeats: { type: String, default: 0 },
 });
 
-module.exports = model('User', schema);
+export default model('User', schema);
