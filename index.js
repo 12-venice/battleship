@@ -1,12 +1,15 @@
-const path = require( 'path' );
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable import/no-extraneous-dependencies */
+require('ignore-styles');
 
-// игнорируем импорты `.scss`
-require( 'ignore-styles' );
+require('@babel/register')({
+    ignore: [/(node_module)/],
+    presets: [
+        '@babel/preset-env',
+        '@babel/preset-react',
+        '@babel/preset-typescript',
+    ],
+    plugins: ['@babel/plugin-syntax-dynamic-import'],
+});
 
-// транспилируем на лету импорты
-require( '@babel/register')( {
-    configFile: path.resolve( __dirname, './babel.config.js' ),
-} );
-
-// импортируем express-сервер
-require( './app.js' );
+require('./app.js');

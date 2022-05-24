@@ -2,19 +2,15 @@
 import { FC, useEffect } from 'react';
 import cn from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
+import { useSelector } from 'react-redux';
+import { AllStateTypes } from 'src/store/reducers';
+import { notificationService } from 'src/store/services/notificationService';
 import { Avatar } from '../Avatar';
 import { Button } from '../Button';
 import styles from './Toast.scss';
 import { Props } from './types';
-import { useSelector } from 'react-redux';
-import { AllStateTypes } from 'src/store/reducers';
-import { notificationService } from 'src/store/services/notificationService';
 
-export const Toast: FC<Props> = ({
-    position,
-    autoDelete,
-    autoDeleteTime,
-}) => {
+export const Toast: FC<Props> = ({ position, autoDelete, autoDeleteTime }) => {
     const list = useSelector((state: AllStateTypes) => state.notification);
 
     const deleteToast = (id: string) => {
@@ -37,7 +33,11 @@ export const Toast: FC<Props> = ({
             {list.map((toast) => (
                 <div
                     key={toast.id}
-                    className={cn(styles.notification, styles[position], toast.type && styles[toast.type])}
+                    className={cn(
+                        styles.notification,
+                        styles[position],
+                        toast.type && styles[toast.type],
+                    )}
                 >
                     <button
                         className={styles['notification-close']}

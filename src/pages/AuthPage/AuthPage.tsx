@@ -44,9 +44,12 @@ export const AuthPage = (): JSX.Element => {
     useEffect(() => {
         if (error === 'User already in system') {
             login(from || PageLinks.home);
-        } 
+        }
         if (error) {
-            notificationService.addNotification({ message: error, type: 'danger' });
+            notificationService.addNotification({
+                message: error,
+                type: 'danger',
+            });
         }
         return () => clearError();
     }, [error, clearError, login, from]);
