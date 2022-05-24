@@ -12,26 +12,6 @@ import { ToastType } from './types';
 
 export const Toast = () => {
     const navigation = useNavigate();
-    const [list, setList] = useState<ToastType[]>([]);
-
-    const deleteToast = useCallback(
-        (index: number) => {
-            list.splice(index, 1);
-            setList([...list]);
-        },
-        [list],
-    );
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (list.length) {
-                deleteToast(0);
-            }
-        }, 3000);
-        return () => {
-            clearInterval(interval);
-        };
-    }, [deleteToast, list.length]);
 
     const acceptInvite = (socketId?: string) => {
         socket.emit('invite:accept', socketId);
@@ -39,7 +19,6 @@ export const Toast = () => {
     };
 
     const cancelInvite = (index: number, socketId?: string) => {
-        deleteToast(index);
         socket.emit('invite:cancel', socketId);
     };
 
@@ -71,42 +50,4 @@ export const Toast = () => {
         setList([...list]);
     });
 
-    const addToast = (data: ToastType) => {
-        const newToast = {
-            id: uuidv4(),
-            user: data.user ?? undefined,
-            message: data.message ?? undefined,
-            buttons: data.buttons ?? undefined,
-        };
-        setList([...list, newToast]);
-    };
-
-    const toastBlock = (
-        <div
-            className={cn(
-                styles.toast__main,
-                styles['toast__position__bottom-right'],
-            )}
-        >
-            {list.map((toast) => (
-                <div key={toast.id} className={styles.toast__block}>
-                    {toast.user && Avatar(toast.user)}
-                    {toast.message && <span>{toast.message}</span>}
-                    {toast.buttons && (
-                        <div className={styles['toast__block-buttons']}>
-                            {toast.buttons.map((button) => (
-                                <Button
-                                    title={button.title}
-                                    skin={button.skin}
-                                    color={button.color}
-                                    onClick={button.onClick}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
-            ))}
-        </div>
-    );
-    return { addToast, toastBlock };
 };
