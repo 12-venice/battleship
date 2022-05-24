@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+import { BrowserRouter } from "react-router-dom";
 import 'babel-polyfill';
 import { App } from './components/App';
 import { configureStore } from './store/store';
@@ -17,9 +17,9 @@ declare global {
 
 ReactDOM.hydrate(
     <Provider store={store}>
-        <ConnectedRouter history={history}>
+        <BrowserRouter>
             <App />
-        </ConnectedRouter>
+        </BrowserRouter>
     </Provider>,
     document.getElementById('root'),
 );
