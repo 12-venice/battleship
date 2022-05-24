@@ -4,10 +4,10 @@
 /* eslint-disable import/extensions */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { Router } = require('express');
-const User = require('../serverModels/user.ts');
-const Topic = require('../serverModels/topic.ts');
-const Comment = require('../serverModels/comment.ts');
+import { Router } from 'express';
+import User from '../serverModels/user';
+import Topic from '../serverModels/topic';
+import Comment from '../serverModels/comment';
 
 const router = Router();
 
@@ -74,4 +74,4 @@ router.post('/delete', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

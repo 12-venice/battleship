@@ -1,12 +1,14 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
 import { Configuration } from 'webpack';
 import nodeExternals from 'webpack-node-externals';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { IS_DEV, DIST_DIR, SRC_DIR } from './env';
-import fileLoader from './loaders/file';
-import cssLoader from './loaders/css';
-import jsLoader from './loaders/js';
+// import fileLoader from './loaders/file';
+// import cssLoader from './loaders/css';
+// import jsLoader from './loaders/js';
 
 const config: Configuration = {
     name: 'server',
@@ -14,7 +16,47 @@ const config: Configuration = {
     node: { __dirname: false },
     entry: path.join(SRC_DIR, 'server'),
     module: {
-        rules: [fileLoader.server, cssLoader.server, jsLoader.server],
+        rules: [
+            {
+                test: /\.tsx?$/,
+                use: [
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            transpileOnly: true, // https://github.com/TypeStrong/ts-loader#transpileonly
+                        },
+                    },
+                ],
+                exclude: /node_modules/,
+            },
+            {
+                test: /\.(png|jp(e*)g|svg|gif)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: 'images/[hash]-[name].[ext]',
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    IS_DEV ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                localIdentName: '[local]_[hash:base64:5]',
+                            },
+                            sourceMap: true,
+                        },
+                    },
+                    'sass-loader',
+                ],
+            },
+        ],
     },
     output: {
         filename: 'server.js',

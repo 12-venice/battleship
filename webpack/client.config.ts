@@ -1,31 +1,75 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
-import webpack, { Configuration, Plugin, Entry } from 'webpack';
+import webpack, { Configuration, Entry } from 'webpack';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+// import fileLoader from './loaders/file';
+// import cssLoader from './loaders/css';
+// import jsLoader from './loaders/js';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
-
 import { IS_DEV, DIST_DIR, SRC_DIR } from './env';
-
-import fileLoader from './loaders/file';
-import cssLoader from './loaders/css';
-import jsLoader from './loaders/js';
 
 const config: Configuration = {
     target: 'web',
-    entry: ([
+    entry: [
         IS_DEV && 'react-hot-loader/patch',
         // Entry для работы HMR
         IS_DEV && 'webpack-hot-middleware/client',
-        IS_DEV && 'css-hot-loader/hotModuleReplacement',
-        path.join(SRC_DIR, 'client'),
-    ].filter(Boolean) as unknown) as Entry,
+        // IS_DEV && 'css-hot-loader/hotModuleReplacement',
+        path.join(SRC_DIR, 'index'),
+    ].filter(Boolean) as unknown as Entry,
+    // module: {
+    //     rules: [fileLoader.client, cssLoader.client, jsLoader.client],
+    // },
     module: {
-        rules: [fileLoader.client, cssLoader.client, jsLoader.client],
+        rules: [
+            {
+                test: /\.tsx?$/,
+                use: [
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            transpileOnly: true, // https://github.com/TypeStrong/ts-loader#transpileonly
+                        },
+                    },
+                ],
+                exclude: /node_modules/,
+            },
+            {
+                test: /\.(png|jp(e*)g|svg|gif)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: 'images/[hash]-[name].[ext]',
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    IS_DEV ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                localIdentName: '[local]_[hash:base64:5]',
+                            },
+                            sourceMap: true,
+                        },
+                    },
+                    'sass-loader',
+                ],
+            },
+        ],
     },
     output: {
         path: DIST_DIR,
-        filename: '[name].js',
-        publicPath: '/',
+        filename: 'bundle.js',
+        // filename: '[name].js',
+        // publicPath: '/',
     },
     resolve: {
         modules: ['src', 'node_modules'],
@@ -34,14 +78,24 @@ const config: Configuration = {
         plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
     },
     plugins: [
+        // new MiniCssExtractPlugin({ filename: '[name].css' }),
+        // Plugin для HMR
+        new HtmlWebpackPlugin({
+            template: './www/index.html',
+            filename: 'index.html',
+            minify: {
+                collapseWhitespace: true,
+                removeComments: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+            },
+        }),
         new MiniCssExtractPlugin({
-            filename: '[name].css',
+            filename: 'style-[hash].css',
         }),
         new FaviconsWebpackPlugin('./images/favicon.png'),
-        // Plugin для HMR
         new webpack.HotModuleReplacementPlugin(),
-
-    ].filter(Boolean) as Plugin[],
+    ].filter(Boolean),
 
     devtool: 'source-map',
 

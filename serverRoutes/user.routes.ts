@@ -1,8 +1,9 @@
 /* eslint-disable import/extensions */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { Router } = require('express');
-const User = require('../serverModels/user.ts');
+import { Router } from 'express';
+
+import User from '../serverModels/user';
 
 const router = Router();
 
@@ -84,4 +85,4 @@ router.post('/delete', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
