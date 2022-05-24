@@ -26,7 +26,6 @@ export const GamePage = (): JSX.Element => {
     const [info, setInfo] = useState(false);
     const [playerField, setPlayerField] = useState();
     const [opponentField, setOpponentField] = useState();
-    const [info, setInfo] = useState(false);
     const [playerMatrix, setPlayerMatrix] = useState();
     const [playerSquadron, setPlayerSquadron] = useState();
     const getInfo = () => setInfo(!info);

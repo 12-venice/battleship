@@ -1,7 +1,20 @@
 import { createStore } from 'redux';
+import { createBrowserHistory, createMemoryHistory } from 'history';
 import reducer from './reducers';
+import { State } from './types';
 
-export function configureStore(initialState = {}) {
+export const isServer = !(
+    typeof window !== 'undefined' &&
+    window.document &&
+    window.document.createElement
+);
+
+export function configureStore(initialState: State, url = '/') {
+    const history = isServer
+        ? createMemoryHistory({ initialEntries: [url] })
+        : createBrowserHistory();
+
     const store = createStore(reducer, initialState);
-    return store;
+
+    return { store, history };
 }
