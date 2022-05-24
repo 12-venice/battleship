@@ -6,7 +6,7 @@ import {
     loadSuccess,
     getTest,
 } from '../reducers/user';
-import { store } from '../../index';
+import { store } from '../../client';
 
 export const userService = {
     setUser: (user: User | null) => store.dispatch(setUser(user)),

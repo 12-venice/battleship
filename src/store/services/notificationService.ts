@@ -1,6 +1,6 @@
 
 import { ToastType } from 'src/components/Toast/types';
-import { store } from '../../index';
+import { store } from '../../client';
 import { addNotification, deleteNotification, Notification, resetNotification } from '../reducers/notifications';
 import { v4 as uuidv4 } from 'uuid';
 
