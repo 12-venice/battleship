@@ -1,54 +1,61 @@
-import { renderToString } from 'react-dom/server';
+import React from 'react';
+import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import { Provider as ReduxProvider } from 'react-redux';
 import type { StaticRouterContext } from 'react-router';
 import type { Request, Response } from 'express';
-import { configureStore } from '../../src/store/store';
+import configureStore from '../../src/store';
+import reducers from '../../src/store/reducers';
 import { getInitialState } from '../../src/store/getInitialState';
-import { App } from '../../src/components/App';
+import App from '../../src/EmptyApp';
 
-function getHtml(reactHtml: string, reduxState = {}) {
-    return `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="google-site-verification" content="nLL5VlSAgcKL756luG6o6UwKcvR8miU2duRnhU-agmE" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta http-equiv="X-UA-Compatible" content="ie=edge">
-            <link rel="shortcut icon" type="image/png" href="/images/favicon.png">
-            <title>Sneakers shop</title>
-            <link href="/main.css" rel="stylesheet">
-        </head>
-        <body>
-            <div id="mount">${reactHtml}</div>
-            <script>
-                // Записываем состояние редакса, сформированное на стороне сервера в window
-                // На стороне клиента применим это состояние при старте
-                window.__INITIAL_STATE__ = ${JSON.stringify(reduxState)}
-            </script>
-            <script src="/main.js"></script>
-        </body>
-        </html>
-    `;
+interface PageHtmlParams {
+    bundleHtml: string;
+    reduxState: {};
 }
 
-// В этой middleware мы формируем первичное состояние приложения на стороне сервера
-// Попробуйте её подебажить, чтобы лучше разобраться, как она работает
+function getPageHtml(params: PageHtmlParams) {
+    const { bundleHtml, reduxState } = params;
+
+    const html = renderToStaticMarkup(
+        <html lang="en">
+            <head>
+                {/* TODO: нет сборки стилей */}
+                <link href="/main.css" rel="stylesheet" />
+            </head>
+            <body>
+                <div
+                    id="root"
+                    dangerouslySetInnerHTML={{ __html: bundleHtml }}
+                />
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `window.__INITIAL_STATE__ = ${JSON.stringify(reduxState)}`,
+                    }}
+                />
+                <script src="/main.js" />
+            </body>
+        </html>,
+    );
+
+    return `<!doctype html>${html}`;
+}
+
 // eslint-disable-next-line import/no-default-export
 export default (req: Request, res: Response) => {
     const location = req.url;
     const context: StaticRouterContext = {};
-    const { store } = configureStore(getInitialState(location), location);
+    const { store } = configureStore(reducers, getInitialState(), { isLogger: false });
 
-    const jsx = (
+    const bundleHtml = renderToString(
         <ReduxProvider store={store}>
             <StaticRouter context={context} location={location}>
                 <App />
             </StaticRouter>
-        </ReduxProvider>
+        </ReduxProvider>,
     );
-    const reactHtml = renderToString(jsx);
+
+    // TODO: почему то пустой объект
     const reduxState = store.getState();
 
     if (context.url) {
@@ -56,5 +63,10 @@ export default (req: Request, res: Response) => {
         return;
     }
 
-    res.status(context.statusCode || 200).send(getHtml(reactHtml, reduxState));
+    res.status(context.statusCode || 200).send(
+        getPageHtml({
+            bundleHtml,
+            reduxState,
+        }),
+    );
 };

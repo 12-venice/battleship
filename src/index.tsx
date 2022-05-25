@@ -1,12 +1,12 @@
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from 'react-router-dom';
 import 'babel-polyfill';
-import { App } from './components/App';
 import { configureStore } from './store/store';
 import { State } from './store/types';
+import App from './EmptyApp';
 
-const { store, history } = configureStore(window.__INITIAL_STATE__);
+const { store } = configureStore(window.__INITIAL_STATE__);
 
 declare global {
     interface Window {

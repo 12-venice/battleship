@@ -1,5 +1,5 @@
 import path from 'path';
-import webpack, { Configuration, Entry } from 'webpack';
+import webpack, { Configuration } from 'webpack';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
@@ -11,13 +11,8 @@ import jsLoader from './loaders/js';
 
 const config: Configuration = {
     target: 'web',
-    entry: [
-        IS_DEV && 'react-hot-loader/patch',
-        // Entry для работы HMR
-        IS_DEV && 'webpack-hot-middleware/client',
-        IS_DEV && 'css-hot-loader/hotModuleReplacement',
-        path.join(SRC_DIR, 'index'),
-    ].filter(Boolean) as unknown as Entry,
+    // mode: IS_DEV ? 'development' : 'production',
+    entry: path.join(SRC_DIR, 'bundles', 'desktop.tsx'),
     module: {
         rules: [fileLoader.client, cssLoader.client, jsLoader.client],
     },
