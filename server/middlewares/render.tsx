@@ -55,7 +55,6 @@ export default (req: Request, res: Response) => {
         </ReduxProvider>,
     );
 
-    // TODO: почему то пустой объект
     const reduxState = store.getState();
 
     if (context.url) {
