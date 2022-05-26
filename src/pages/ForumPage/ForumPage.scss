@@ -1,6 +1,10 @@
 @import 'src/styles/colors.css';
 @import 'src/styles/variables.css';
 
+.icon {
+    height: 50%;
+}
+
 .forum__background {
     font-family: var(--font-family), var(--font-family-ru);
     display: flex;
@@ -8,13 +12,14 @@
     justify-content: space-between;
     width: 90%;
     max-width: 1092px;
-    height: 849px;
+    max-height: 849px;
+    height: 90%;
     background: var(--blue);
     border-radius: 38px;
 }
 
 .forum__footer {
-    margin: 0px 50px 36px 50px;
+    margin: 0px 4vw 5vw 4vw;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -22,8 +27,8 @@
 
 .forum__input {
     margin: 0; 
-    width: 820px;
-    min-width: 140px;
+    flex-grow: 2;
+    width: 90%;
     height: 57px;
     background: var(--dark-blue);
     border-radius: 15px;
@@ -43,7 +48,7 @@
 }
 
 .forum__header {
-    margin: 36px 50px 0px 50px;
+    margin: 5vw 4vw 0px 4vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -54,25 +59,26 @@
     justify-content: center;
     flex-direction: column;
     color: var(--white);
-    margin-right: 57px;
+    margin-right: 10vw;
 }
 
 .forum__label-tag {
     margin: 0 auto;
-    font-size: 20px;
+    font-size: min(20px, 2vw);
 }
 
 .forum__label-description {
     margin: 0 auto;
-    font-size: 40px;
+    font-size: min(30px, 4vw);
     line-height: 40px;
 }
 
 .forum__main-field {
     width: 100%;
-    height: 550px;
+    max-height: 550px;
+    height: 51vh;
     overflow-y: scroll;
-    margin: 0 50px;
+    margin: 0 4vw;
 
     &::-webkit-scrollbar {
         width: 10px;

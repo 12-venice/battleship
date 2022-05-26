@@ -3,7 +3,7 @@
 
 .modal__background {
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     height: 100vh;
     width: 100vw;
     background: var(--bg-dark-gray);
@@ -22,4 +22,11 @@
 }
 .modal__plate-no-bg {
     background: none;
+}
+
+@media screen and (max-width: 479px) {
+    .modal__plate {
+        width: 90%;
+        height: 90%;
+    }
 }
