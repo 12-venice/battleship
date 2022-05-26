@@ -3,6 +3,8 @@ import { hydrate } from 'react-dom';
 import { Helmet } from 'react-helmet';
 import { hot } from 'react-hot-loader/root';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider as ReduxProvider } from 'react-redux';
+import { reduxStore } from '../utils/infrastructure/store';
 
 import { EmptyApp as Core } from '../EmptyApp';
 
@@ -29,8 +31,10 @@ const Bundle = ({ data = {} }: Props) => (
 export const DesktopBundle = hot(Bundle);
 
 hydrate(
-    <BrowserRouter>
-        <DesktopBundle />
-    </BrowserRouter>,
+    <ReduxProvider store={reduxStore}>
+        <BrowserRouter>
+            <DesktopBundle />
+        </BrowserRouter>
+    </ReduxProvider>,
     document.getElementById('root'),
 );

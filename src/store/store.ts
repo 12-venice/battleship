@@ -1,20 +1,16 @@
-import { createStore } from 'redux';
-import { createBrowserHistory, createMemoryHistory } from 'history';
-import reducer from './reducers';
-import { State } from './types';
+import { combineReducers, createStore } from 'redux';
 
-export const isServer = !(
-    typeof window !== 'undefined' &&
-    window.document &&
-    window.document.createElement
-);
+function configureStore(reducers = {}, initialState = {}, options = {}) {
+    const store = createStore(combineReducers(reducers), initialState);
 
-export function configureStore(initialState: State, url = '/') {
-    const history = isServer
-        ? createMemoryHistory({ initialEntries: [url] })
-        : createBrowserHistory();
+    // TODO: добавить Redux DevTools для dev сборки
 
-    const store = createStore(reducer, initialState);
+    store.dispatch({ type: '@@redux/INIT' });
 
-    return { store, history };
+    // TODO: добавить hot-reload
+
+    return { store };
 }
+
+// eslint-disable-next-line import/no-default-export
+export default configureStore;

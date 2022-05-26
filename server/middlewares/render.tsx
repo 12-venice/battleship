@@ -4,7 +4,7 @@ import { StaticRouter } from 'react-router-dom/server';
 import { Provider as ReduxProvider } from 'react-redux';
 import type { StaticRouterContext } from 'react-router';
 import type { Request, Response } from 'express';
-import configureStore from '../../src/store';
+import configureStore from '../../src/store/store';
 import reducers from '../../src/store/reducers';
 import { getInitialState } from '../../src/store/getInitialState';
 import App from '../../src/EmptyApp';
