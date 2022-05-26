@@ -1,9 +1,29 @@
-import { combineReducers, createStore } from 'redux';
+import {
+    createStore,
+    combineReducers,
+    applyMiddleware,
+    compose,
+    Middleware,
+} from 'redux';
+import isServer from '../utils/serverSide/isServerEnvChecker';
 
 function configureStore(reducers = {}, initialState = {}, options = {}) {
-    const store = createStore(combineReducers(reducers), initialState);
+    const { isLogger } = options;
 
-    // TODO: добавить Redux DevTools для dev сборки
+    // тут могут быть thunk или saga
+    const middlewares: Middleware[] = [];
+
+    // добавить Redux DevTools для dev сборки. установить расширение в chrome
+    const composeEnhancers =
+        !isServer && isLogger && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+            ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+            : compose;
+
+    const store = createStore(
+        combineReducers(reducers),
+        initialState,
+        composeEnhancers(applyMiddleware(...middlewares)),
+    );
 
     store.dispatch({ type: '@@redux/INIT' });
 
