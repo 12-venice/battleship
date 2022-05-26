@@ -7,7 +7,7 @@ import type { Request, Response } from 'express';
 import configureStore from '../../src/store/store';
 import reducers from '../../src/store/reducers';
 import { getInitialState } from '../../src/store/getInitialState';
-import App from '../../src/EmptyApp';
+import { App } from '../../src/components/App';
 
 interface PageHtmlParams {
     bundleHtml: string;

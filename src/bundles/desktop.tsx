@@ -5,8 +5,7 @@ import { hot } from 'react-hot-loader/root';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider as ReduxProvider } from 'react-redux';
 import { reduxStore } from '../utils/infrastructure/store';
-
-import { EmptyApp as Core } from '../EmptyApp';
+import { App as Core } from '../components/App';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
