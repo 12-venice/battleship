@@ -5,13 +5,13 @@ import {
     compose,
     Middleware,
 } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 import isServer from '../utils/serverSide/isServerEnvChecker';
 
 function configureStore(reducers = {}, initialState = {}, options = {}) {
     const { isLogger } = options;
 
-    // тут могут быть thunk или saga
-    const middlewares: Middleware[] = [];
+    const middlewares: Middleware[] = [thunkMiddleware];
 
     // добавить Redux DevTools для dev сборки. установить расширение в chrome
     const composeEnhancers =
