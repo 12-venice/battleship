@@ -1,4 +1,4 @@
-import M from 'materialize-css';
+// import M from 'materialize-css';
 import { inputProps } from './types';
 
 export const Input = ({
@@ -11,7 +11,7 @@ export const Input = ({
     validateMsgTrue = '',
     validateMsgFalse = '',
 }: inputProps): JSX.Element => {
-    M.updateTextFields();
+    // M.updateTextFields();
 
     return (
         <div className="input-field">
