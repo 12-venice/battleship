@@ -39,6 +39,7 @@ function getHtml(reactHtml: string, reduxState = {}) {
                     href="https://fonts.googleapis.com/icon?family=Material+Icons"
                     rel="stylesheet"
                 />
+                <link rel="stylesheet" href="/main.css"/>
                 <script src="/bundle.js" defer></script>
             </head>
             <body>
