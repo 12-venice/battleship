@@ -17,5 +17,5 @@ export type formProps = {
     setData: Dispatch<SetStateAction<{}>>;
     submitTitle: string;
     disabled?: boolean;
-    checking?: boolean; 
+    checking?: boolean;
 };

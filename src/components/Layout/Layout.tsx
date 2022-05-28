@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { useAuth } from 'src/hooks/auth.hook';
 import background from '../../../images/background.svg';
 import styles from './Layout.scss';

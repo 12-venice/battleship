@@ -61,8 +61,8 @@ export const FinderPage = () => {
 
     const createRoom = (invitedUserId: string) => {
         socket.emit('invite:send', { createdUserId: user?._id, invitedUserId });
-        getRooms()
-    }
+        getRooms();
+    };
 
     return (
         <Layout>

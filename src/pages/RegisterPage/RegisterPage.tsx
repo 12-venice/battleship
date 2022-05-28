@@ -34,7 +34,10 @@ export const RegisterPage = (): JSX.Element => {
     );
     useEffect(() => {
         if (error) {
-            notificationService.addNotification({ message: error, type: 'danger' });
+            notificationService.addNotification({
+                message: error,
+                type: 'danger',
+            });
         }
         return () => clearError();
     }, [error, clearError]);

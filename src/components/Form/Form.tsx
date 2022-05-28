@@ -1,18 +1,18 @@
 import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
+import { notificationService } from 'src/store/services/notificationService';
 import { Button } from '../Button';
 import { Input } from '../Input';
 import styles from './Form.scss';
 import { formProps } from './types';
 import { validation } from '../utils/Validation/validation';
-import { notificationService } from 'src/store/services/notificationService';
 
 export const Form = ({
     inputs,
     setData,
     submitTitle,
     disabled,
-    checking = true
+    checking = true,
 }: formProps): JSX.Element => {
     const [fields, setFields] = useState(inputs);
     let formValues = fields.reduce(

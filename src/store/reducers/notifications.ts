@@ -3,16 +3,18 @@
 /* eslint-disable default-param-last */
 /* eslint-disable indent */
 
-import { btnProps } from "src/components/Button/types";
-import { User } from "./user";
+import { btnProps } from 'src/components/Button/types';
+import { User } from './user';
 
 export interface Notification {
     id?: string;
     title?: string;
     message?: string;
     user?: User;
-    type?: 'danger' | 'warning' | 'success',
+    type?: 'danger' | 'warning' | 'success';
     buttons?: btnProps[];
+    autoDelete?: boolean;
+    autoDeleteTime?: number;
 }
 
 export type NotificationState = Notification[];
@@ -38,16 +40,18 @@ export function notificationReducer(
 ): NotificationState {
     switch (type) {
         case actions.ADD_NOTIFICATION: {
-            state.push(data as Notification)
+            state.push(data as Notification);
             return [...state];
         }
         case actions.DELETE_NOTIFICATION: {
-            const index = state.findIndex((toast) => toast.id === data as string);
+            const index = state.findIndex(
+                (toast) => toast.id === (data as string),
+            );
             state.splice(index, 1);
             return [...state];
         }
         case actions.RESET_NOTIFICATION: {
-            state.length = 0
+            state = defaultState;
             return [...state];
         }
         default:

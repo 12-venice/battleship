@@ -9,7 +9,7 @@ export type AllStateTypes = {
     user: UserState;
     language: LngState;
     opponent: OpponentState;
-    notification: NotificationState
+    notification: NotificationState;
 };
 
 export default combineReducers({

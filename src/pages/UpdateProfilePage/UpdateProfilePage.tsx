@@ -11,11 +11,11 @@ import { userService } from 'src/store/services/userService';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
+import { notificationService } from 'src/store/services/notificationService';
 import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs } from './config';
 import { Avatar } from '../ProfilePage/components/Avatar';
 import { UpdateAvatar } from './components/UpdateAvatar';
-import { notificationService } from 'src/store/services/notificationService';
 
 export const UpdateProfilePage = (): JSX.Element => {
     const user = useSelector((state: AllStateTypes) => state.user.item);
@@ -50,7 +50,10 @@ export const UpdateProfilePage = (): JSX.Element => {
 
     useEffect(() => {
         if (error) {
-            notificationService.addNotification({ message: error, type: 'danger' });
+            notificationService.addNotification({
+                message: error,
+                type: 'danger',
+            });
         }
         return () => clearError();
     }, [error, clearError]);

@@ -15,6 +15,6 @@ if (typeof document !== 'undefined') {
                 <App />
             </BrowserRouter>
         </Provider>,
-        document.getElementById('root')
+        document.getElementById('root'),
     );
 }

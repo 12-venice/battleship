@@ -1,9 +1,10 @@
 import express from 'express';
 import 'babel-polyfill';
 import http from 'http';
-import socketio from '../socketRoutes/socket';
 import path from 'path';
-import serverRenderMiddleware from './components/server/server-render-middleware';
+import { Server } from 'socket.io';
+import socketio from '../socketRoutes/socket';
+import { requestHandler } from './components/server/server-render-middleware';
 import userRouter from '../serverRoutes/user.routes';
 import topicRouter from '../serverRoutes/topic.routes';
 import commentRouter from '../serverRoutes/comment.routes';
@@ -14,7 +15,7 @@ const app = express();
 
 const httpServer = http.createServer(app);
 
-const io = require('socket.io')(httpServer, {
+const io = new Server(httpServer, {
     cors: {
         origin: '*',
     },
@@ -31,7 +32,7 @@ app.use('/api/comment', commentRouter);
 app.use('/api/room', roomRouter);
 app.use('/api/message', messageRouter);
 
-app.use(express.static(path.resolve(__dirname, '../dist')))
-app.get('/*', serverRenderMiddleware);
+app.use(express.static(path.resolve(__dirname, '../dist')));
+app.get('/*', requestHandler);
 
 export { httpServer };

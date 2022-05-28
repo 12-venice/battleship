@@ -33,7 +33,7 @@ const STATISTICS = [
 ];
 
 export const GamePage = (): JSX.Element => {
-    if (typeof window === "undefined") return <></>;
+    if (typeof window === 'undefined') return <></>;
     const { room } = useParams();
     console.log(room);
     const store = useSelector(mapStateToProps);

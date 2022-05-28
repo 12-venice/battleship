@@ -7,7 +7,6 @@ import ripShip2Img from 'images/ships/2-ship-rip.png';
 import ripShip3Img from 'images/ships/3-ship-rip.png';
 import ripShip4Img from 'images/ships/4-ship-rip.png';
 
-
 export const shipsSrcMap = new Map([
     [1, ship1Img],
     [2, ship2Img],
@@ -22,6 +21,7 @@ export const ripShipsSrcMap = new Map([
     [4, ripShip4Img],
 ]);
 
-export const AREA_WIDTH = typeof window !== "undefined" ? window.innerWidth / 2 : 0;
+export const AREA_WIDTH =
+    typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
 export const AREA_CELL_WIDTH = AREA_WIDTH / 10;
 export const AREA_CELL_GAP = 2;

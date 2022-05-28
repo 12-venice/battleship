@@ -11,13 +11,15 @@ export const Input = ({
     className = 'validate',
     validateMsgFalse,
 }: inputProps): JSX.Element => {
-
     useEffect(() => {
         if (validateMsgFalse && className === 'validate invalid') {
-            notificationService.addNotification({ message: validateMsgFalse, type: 'warning' })
+            notificationService.addNotification({
+                message: validateMsgFalse,
+                type: 'warning',
+            });
         }
-    }, [className]);
-    
+    }, [className, validateMsgFalse]);
+
     return (
         <div className="input-field" style={{ margin: '5px 0' }}>
             <input

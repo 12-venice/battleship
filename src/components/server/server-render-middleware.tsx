@@ -6,7 +6,7 @@ import { configureStore } from '../../store/store';
 // import { getInitialState } from './store/getInitialState';
 import { App } from '../App';
 
-//const App: React.FC = () => <div>Hey from server!</div>;
+// const App: React.FC = () => <div>Hey from server!</div>;
 
 function getHtml(reactHtml: string, reduxState = {}) {
     return `
@@ -53,7 +53,7 @@ function getHtml(reactHtml: string, reduxState = {}) {
     `;
 }
 
-export default function requestHandler(req: Request, res: Response) {
+export function requestHandler(req: Request, res: Response) {
     const store = configureStore();
     const jsx = (
         <ReduxProvider store={store}>

@@ -9,68 +9,72 @@ import { Avatar } from '../Avatar';
 import { Button } from '../Button';
 import styles from './Toast.scss';
 import { Props } from './types';
+import { Notification } from 'src/store/reducers/notifications';
 
-export const Toast: FC<Props> = ({ position, autoDelete, autoDeleteTime }) => {
-    const list = useSelector((state: AllStateTypes) => state.notification);
-
+const ToastBlock = (toast: Notification, position: string): JSX.Element => {
     const deleteToast = (id: string) => {
         notificationService.deleteNotification(id);
     };
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (autoDelete && list.length) {
-                deleteToast(list[0].id as string);
-            }
-        }, autoDeleteTime);
-        return () => {
-            clearInterval(interval);
-        };
-    }, [autoDelete, autoDeleteTime, list]);
+    setInterval(() => {
+        if (toast.autoDelete) {
+            deleteToast(toast.id as string);
+        }
+    }, toast.autoDeleteTime);
 
     return (
-        <div className={cn(styles['notification-container'], styles[position])}>
-            {list.map((toast) => (
-                <div
-                    key={toast.id}
-                    className={cn(
-                        styles.notification,
-                        styles[position],
-                        toast.type && styles[toast.type],
-                    )}
-                >
-                    <button
-                        className={styles['notification-close']}
-                        onClick={() => deleteToast(toast.id || '')}
-                    >
-                        x
-                    </button>
-                    {toast.user && (
-                        <div className={styles['notification-image']}>
-                            {Avatar(toast.user)}
-                        </div>
-                    )}
-                    {toast.title && (
-                        <p className={styles['notification-title']}>
-                            {toast.title}
-                        </p>
-                    )}
-                    <p className={styles['notification-message']}>
-                        {toast.message}
-                    </p>
-                    {toast.buttons && toast.buttons.length > 0 && (
-                        <p className={styles['notification-buttons']}>
-                            {toast.buttons.map((button) => (
-                                <Button
-                                    key={uuidv4()}
-                                    title={button.title}
-                                    skin="small"
-                                    onClick={button.onClick}
-                                />
-                            ))}
-                        </p>
-                    )}
+        <div
+            key={toast.id}
+            className={cn(
+                styles.notification,
+                styles[position],
+                toast.type && styles[toast.type],
+            )}
+        >
+            <button
+                className={styles['notification-close']}
+                onClick={() => deleteToast(toast.id || '')}
+            >
+                x
+            </button>
+            {toast.user && (
+                <div className={styles['notification-image']}>
+                    {Avatar(toast.user)}
                 </div>
+            )}
+            {toast.title && (
+                <p className={styles['notification-title']}>
+                    {toast.title}
+                </p>
+            )}
+            <p className={styles['notification-message']}>
+                {toast.message}
+            </p>
+            {toast.buttons && toast.buttons.length > 0 && (
+                <p className={styles['notification-buttons']}>
+                    {toast.buttons.map((button) => (
+                        <Button
+                            key={uuidv4()}
+                            title={button.title}
+                            skin="small"
+                            onClick={button.onClick}
+                        />
+                    ))}
+                </p>
+            )}
+        </div>
+    )
+}
+
+export const Toast: FC<Props> = ({ position }) => {
+    const list = useSelector((state: AllStateTypes) => state.notification);
+
+    return (
+        <div
+            className={cn(styles['notification-containers'], styles[position])}
+        >
+            {list.map((toast) => (
+                ToastBlock(toast, position)
             ))}
         </div>
     );

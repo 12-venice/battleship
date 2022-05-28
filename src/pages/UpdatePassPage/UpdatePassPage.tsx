@@ -8,11 +8,11 @@ import { PageLinks } from 'src/components/utils/Routes/types';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
+import { notificationService } from 'src/store/services/notificationService';
 import { Layout } from '../../components/Layout';
 import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs } from './config';
 import { Avatar } from '../ProfilePage/components/Avatar';
-import { notificationService } from 'src/store/services/notificationService';
 
 export const UpdatePassPage = (): JSX.Element => {
     const user = useSelector((state: AllStateTypes) => state.user.item);
@@ -35,7 +35,10 @@ export const UpdatePassPage = (): JSX.Element => {
 
     useEffect(() => {
         if (error) {
-            notificationService.addNotification({ message: error, type: 'danger' });
+            notificationService.addNotification({
+                message: error,
+                type: 'danger',
+            });
         }
         return () => clearError();
     }, [error, clearError]);
