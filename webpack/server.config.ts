@@ -40,12 +40,45 @@ const config: Configuration = {
                     },
                 ],
             },
+            // {
+            //     test: /\.scss$/,
+            //     use: ['null-loader'],
+            // },
             {
                 test: /\.scss$/,
-                use: ['null-loader'],
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                localIdentName: '[local]_[hash:base64:5]',
+                            },
+                            sourceMap: true,
+                        },
+                    },
+                    'sass-loader',
+                ],
             },
         ],
     },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                styles: {
+                    name: 'styles',
+                    type: 'css/mini-extract',
+                    chunks: 'all',
+                    enforce: true,
+                },
+            },
+        },
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+        }),
+    ],
     output: {
         filename: 'server.js',
         libraryTarget: 'commonjs2',
