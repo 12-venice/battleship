@@ -10,6 +10,8 @@ const router = Router();
 router.post('/create', async (req, res) => {
     try {
         const { id } = req.body;
+        setTimeout(() => {
+        }, 500);
         const isExist = await User.findOne({ id });
         if (isExist) {
             await User.updateOne({ id }, { $set: req.body });
@@ -29,12 +31,14 @@ router.post('/create', async (req, res) => {
 router.post('/read', async (req, res) => {
     try {
         const { sortType, sortDirection, page } = req.body;
+        console.log( sortType, sortDirection, page )
         const user = await User.find()
             .sort({ [sortType]: sortDirection ? 1 : -1 })
             .skip(page * 10)
             .limit(10);
         res.json(user);
     } catch (e) {
+        console.log(e)
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });

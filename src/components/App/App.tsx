@@ -2,20 +2,17 @@ import { hot } from 'react-hot-loader/root';
 import { Toast } from '../Toast';
 import { ErrorBoundary } from '../utils/ErrorBoundary';
 import { useRoutes } from '../utils/Routes';
+import { Listener } from '../utils/Socket/Listeners';
 import './App.scss';
 
 const AppWithRoutes: React.FC = () => {
     const routes = useRoutes();
     const position = 'top-right';
-    const autoDelete = true;
-    const autoDeleteTime = 30000;
-
+    Listener()
     return (
         <ErrorBoundary>
             <Toast
                 position={position}
-                autoDelete={autoDelete}
-                autoDeleteTime={autoDeleteTime}
             />
             {routes}
         </ErrorBoundary>

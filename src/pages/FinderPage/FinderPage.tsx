@@ -14,16 +14,21 @@ import { User } from 'src/store/reducers/user';
 import styles from './FinderPage.scss';
 
 export const FinderPage = () => {
+    const navigator = useNavigate();
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const [online, setOnline] = useState([]);
-    const navigation = useNavigate();
+    const usersOnline = useSelector((state: AllStateTypes) => state.userOnline);
+
+    const checkUserOnline = (id: string) => {
+        const isOnline = Object.keys(usersOnline).find((key) => usersOnline[key] === id)
+        return isOnline ? true : false
+    }
+
     const [rooms, setRooms] = useState([]);
     const [str, setStr] = useState('');
     const { request, loading } = useHttp();
-    socket.on('online', (data) => setOnline(data));
 
     const findUser = useCallback(async () => {
         const data = await request('/api/user/find', 'POST', { str }, {}, true);
@@ -32,7 +37,7 @@ export const FinderPage = () => {
 
     const getRooms = useCallback(async () => {
         const data = await request(
-            '/api/room/read',
+            '/api/room/find',
             'POST',
             { _id: user?._id, rooms: user?.rooms },
             {},
@@ -60,8 +65,11 @@ export const FinderPage = () => {
     };
 
     const createRoom = (invitedUserId: string) => {
-        socket.emit('invite:send', { createdUserId: user?._id, invitedUserId });
-        getRooms();
+        socket.emit('invite:sent', { createdUserId: user?._id, invitedUserId });
+    };
+    const inviteUser = (invitedUserId: string, room: string) => {
+        socket.emit('invite:sent', { createdUserId: user?._id, invitedUserId });
+        navigator(`${PageLinks.game}/${room}`)
     };
 
     return (
@@ -106,24 +114,23 @@ export const FinderPage = () => {
                                         key={element._id}
                                         aria-hidden
                                         className={styles.finder__line}
-                                        onClick={() => createRoom(element._id)}
                                     >
                                         {Avatar(element)}
                                         <span className={styles.finder__name}>
                                             {element.display_name}
                                         </span>
-                                        <div
-                                            className={styles.finder__point}
-                                            style={{
-                                                background: online.find(
-                                                    (onlineUser: User) =>
-                                                        onlineUser._id ===
-                                                        element._id,
-                                                )
-                                                    ? 'greenyellow'
-                                                    : 'gray',
-                                            }}
+                                        <Button
+                                            title={str ? '+' : 'v'}
+                                            skin='quad'
+                                            color={str ? 'green' : 'blue'}
+                                            onClick={str ? () => createRoom(element._id) : () => inviteUser(element._id, element.room)}
                                         />
+                                        {!str &&
+                                            <div
+                                                className={styles.finder__point}
+                                                style={{ background: checkUserOnline(element._id) ? 'greenyellow' : 'gray' }}
+                                            />
+                                        }
                                     </div>
                                 ),
                         )

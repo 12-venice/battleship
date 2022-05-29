@@ -1,15 +1,34 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/extensions */
-import { getSocket, getUser } from './usersOnline';
 import User from '../serverModels/user';
 import Room from '../serverModels/room';
+import { Socket } from 'socket.io';
+import { getSocketUserOnline, getUserOnline } from './usersOnline';
 
-export default (socket) => {
-    const createRoom = async ({ createdUserId, invitedUserId }) => {
+type roomUsers = {
+    createdUserId: string;
+    invitedUserId: string;
+};
+
+export default (socket: Socket) => {
+    const sentInvite = async ({ createdUserId, invitedUserId }: roomUsers) => {
         const createdUser = await User.findOne({ _id: createdUserId });
         const invitedUser = await User.findOne({ _id: invitedUserId });
-        const isRoomCreate = await Room.findOne({ users: [createdUser, invitedUser] })
-        if (!isRoomCreate) {
+        const isRoomCreate = await Room.findOne({
+            users: [createdUser, invitedUser],
+        });
+        const isRoomCreateInvited = await Room.findOne({
+            users: [invitedUser, createdUser],
+        });
+        const socketInvitedUser = getSocketUserOnline(invitedUserId);
+        const sendInvite = (room: string) => {
+            console.log('socketInvitedUser: ', socketInvitedUser)
+            socket.to(socketInvitedUser as string).emit('invite:recive', {
+                user: createdUser,
+                room: room,
+            });
+        };
+        if (!isRoomCreate && !isRoomCreateInvited) {
             const room = new Room({ users: [createdUser, invitedUser] });
             await room.save();
             await User.updateOne(
@@ -20,29 +39,29 @@ export default (socket) => {
                 { _id: invitedUserId },
                 { $push: { rooms: room } },
             );
+            socket.join(room);
+            sendInvite(room);
         } else {
-            console.log('Room is created!')
-        };
-        socket.to(await getSocket(invitedUserId)).emit('invite:recive', {
-            user: await getUser(socket.id),
-            socketId: socket.id,
-        });
+            isRoomCreate
+                ? sendInvite(isRoomCreate)
+                : sendInvite(isRoomCreateInvited);
+        }
     };
 
-    const acceptInvite = async (socketId) => {
+    const acceptInvite = async (socketId: string) => {
         socket.to(socketId).emit('invite:accept', {
-            user: await getUser(socket.id),
+            user: getUserOnline(socket.id),
             socketId: socket.id,
         });
     };
 
-    const cancelInvite = async (socketId) => {
+    const cancelInvite = async (socketId: string) => {
         socket.to(socketId).emit('invite:cancel', {
-            user: await getUser(socket.id),
+            user: getUserOnline(socket.id),
         });
     };
 
-    socket.on('invite:send', createRoom);
+    socket.on('invite:sent', sentInvite);
     socket.on('invite:accept', acceptInvite);
     socket.on('invite:cancel', cancelInvite);
 };

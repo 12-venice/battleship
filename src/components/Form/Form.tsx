@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
-import { notificationService } from 'src/store/services/notificationService';
 import { Button } from '../Button';
 import { Input } from '../Input';
 import styles from './Form.scss';
@@ -37,7 +36,6 @@ export const Form = ({
         if (!checking) {
             setData(formValues);
         } else {
-            notificationService.resetNotification();
             const { valid, newFields } = validation(fields, formValues);
             if (valid) {
                 setData(formValues);

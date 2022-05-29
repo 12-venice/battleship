@@ -12,10 +12,6 @@ export const useAuth = () => {
             userService.pending();
             const response = await request('/auth/user', 'GET', null);
             if (response) {
-                socket.emit('auth', response.id);
-                if (from) {
-                    navigate(from, { replace: true });
-                }
                 const responseServer = await request(
                     '/api/user/create',
                     'POST',
@@ -25,6 +21,10 @@ export const useAuth = () => {
                 );
                 userService.success();
                 userService.setUser(responseServer);
+                socket.emit('userOnline:add', responseServer._id);
+                if (from) {
+                    navigate(from, { replace: true });
+                }
             }
         },
         [navigate, request],
@@ -32,7 +32,7 @@ export const useAuth = () => {
 
     const logout = useCallback(async () => {
         userService.setUser(null);
-        socket.emit('!auth');
+        socket.emit('userOnline:remove');
         await request('/auth/logout', 'POST', null);
     }, [request]);
 

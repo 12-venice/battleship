@@ -1,31 +1,35 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable import/extensions */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-undef */
-import User from '../serverModels/user';
+export interface StringArray {
+    [key: string]: string;
+}
 
-const users = {};
+const usersOnline: StringArray = {};
 
-const getSocket = async (value) => {
-    const id = Object.keys(users).find((key) => users[key] === value);
-    return id;
+const addUserOnline = (socketId: string, id: string) => {
+    usersOnline[socketId] = id;
 };
 
-const getUser = async (socketId) => {
-    const user = await User.findOne({ id: users[socketId] });
+const removeUserOnline = (socketId: string) => {
+    delete usersOnline[socketId];
+};
+
+const getUserOnline = (socketId: string) => {
+    const user = usersOnline[socketId];
     return user;
 };
 
-const getUsers = async () => {
-    const onlineUsers = [];
-    for (const key in users) {
-        if (Object.hasOwnProperty.call(users, key)) {
-            const user = await User.findOne({ id: users[key] });
-            onlineUsers.push(user);
-        }
-    }
-    return onlineUsers;
+const getSocketUserOnline = (id: string) => {
+    const socket = Object.keys(usersOnline).find((key) => usersOnline[key] === id);
+    return socket;
 };
 
-export { users, getUsers, getUser, getSocket };
+const getUsersOnline = () => {
+    return usersOnline;
+};
+
+export {
+    addUserOnline,
+    removeUserOnline,
+    getUserOnline,
+    getSocketUserOnline,
+    getUsersOnline,
+};

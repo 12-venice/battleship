@@ -7,19 +7,23 @@
 import { Router } from 'express';
 import User from '../serverModels/user';
 import Room from '../serverModels/room';
-import Comment from '../serverModels/comment';
-
+import Message from '../serverModels/message';
 
 const router = Router();
 
-router.post('/create', async (req, res) => {
+router.post('/read', async (req, res) => {
     try {
-        const { createdUserId, invitedUserId } = req.body;
-        const createdUser = await User.findOne({ _id: createdUserId });
-        const invitedUser = await User.findOne({ _id: invitedUserId });
-        const room = new Room({ users: [createdUser, invitedUser] });
-        await room.save();
-        res.status(201).json(room);
+        const { userId, roomId } = req.body;
+        const room = await Room.findOne({ _id: roomId });
+        const anotherUserId =
+            room.users.indexOf(userId) === 0 ? room.users[1] : room.users[0];
+        const anotherUser = await User.findOne({ _id: anotherUserId });
+        const messages = [];
+        for (let i = 0; i < room.messages.length; i++) {
+            const message = await Message.findOne({ _id: room.messages[i] });
+            messages.push(message.toJSON());
+        }
+        res.status(200).json({ room, anotherUser, messages });
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -27,7 +31,7 @@ router.post('/create', async (req, res) => {
     }
 });
 
-router.post('/read', async (req, res) => {
+router.post('/find', async (req, res) => {
     try {
         const { _id, rooms } = req.body;
         const data = [];
@@ -36,32 +40,9 @@ router.post('/read', async (req, res) => {
             const anotherUserId =
                 users.indexOf(_id) === 0 ? users[1] : users[0];
             const anotherUser = await User.findOne({ _id: anotherUserId });
-            data.push(anotherUser);
+            data.push({ ...anotherUser.toJSON(), ...{ room: rooms[i] } });
         }
         res.status(200).json(data);
-    } catch (e) {
-        res.status(500).json({
-            message: 'Что-то пошло не так, попробуйте еще раз',
-        });
-    }
-});
-
-router.post('/update', async (req, res) => {
-    try {
-        await Comment.updateOne({ id: req.body.id }, { $set: req.body });
-        res.status(201).json({ message: 'OK' });
-    } catch (e) {
-        res.status(500).json({
-            message: 'Что-то пошло не так, попробуйте еще раз',
-        });
-    }
-});
-
-router.post('/delete', async (req, res) => {
-    try {
-        const { _id } = req.body;
-        await Comment.deleteOne({ _id });
-        res.status(201).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',

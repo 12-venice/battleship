@@ -109,7 +109,7 @@
 .game__field {
     width: min(20vw, 380px);
 }
-.container {
+.game__container {
     display: flex;
     overflow: hidden;
     background: var(--light-dark-blue);
@@ -117,7 +117,7 @@
     border-radius: 16px;
     padding: 0 min(2vw, 20px);
 }
-.slider {
+.game__slider {
     align-items: center;
     display: flex;
     justify-content: space-between;

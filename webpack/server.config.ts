@@ -1,84 +1,31 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
-import { Configuration } from 'webpack';
+import webpack, { Configuration, Entry } from 'webpack';
 import nodeExternals from 'webpack-node-externals';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
-
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { IS_DEV, DIST_DIR, SRC_DIR } from './env';
-// import fileLoader from './loaders/file';
-// import cssLoader from './loaders/css';
-// import jsLoader from './loaders/js';
+import fileLoader from './loaders/file';
+import cssLoader from './loaders/css';
+import jsLoader from './loaders/js';
 
 const config: Configuration = {
     name: 'server',
     target: 'node',
     node: { __dirname: false },
-    entry: path.join(SRC_DIR, 'server'),
+    entry: [
+        IS_DEV && 'webpack/hot/dev-server.js',
+        path.join(SRC_DIR, 'server'),
+    ].filter(Boolean) as unknown as Entry,
+
     module: {
-        rules: [
-            {
-                test: /\.tsx?$/,
-                use: [
-                    {
-                        loader: 'ts-loader',
-                        options: {
-                            transpileOnly: true, // https://github.com/TypeStrong/ts-loader#transpileonly
-                        },
-                    },
-                ],
-                exclude: /node_modules/,
-            },
-            {
-                test: /\.(png|jp(e*)g|svg|gif)$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: 'images/[hash]-[name].[ext]',
-                        },
-                    },
-                ],
-            },
-            // {
-            //     test: /\.scss$/,
-            //     use: ['null-loader'],
-            // },
-            {
-                test: /\.scss$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: {
-                                localIdentName: '[local]_[hash:base64:5]',
-                            },
-                            sourceMap: true,
-                        },
-                    },
-                    'sass-loader',
-                ],
-            },
-        ],
+        rules: [fileLoader.server, cssLoader.server, jsLoader.server],
     },
+
     optimization: {
-        splitChunks: {
-            cacheGroups: {
-                styles: {
-                    name: 'styles',
-                    type: 'css/mini-extract',
-                    chunks: 'all',
-                    enforce: true,
-                },
-            },
-        },
+        nodeEnv: false,
     },
-    plugins: [
-        new MiniCssExtractPlugin({
-            filename: '[name].css',
-        }),
-    ],
+
     output: {
         filename: 'server.js',
         libraryTarget: 'commonjs2',
@@ -91,15 +38,29 @@ const config: Configuration = {
         plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
     },
 
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'styles.css',
+        }),
+        ...(IS_DEV ? [new webpack.HotModuleReplacementPlugin()] : []),
+    ],
+
     devtool: 'source-map',
 
     performance: {
         hints: IS_DEV ? false : 'warning',
     },
 
-    externals: [nodeExternals({ allowlist: [/\.(?!(?:tsx?|json)$).{1,5}$/i] })],
-
-    optimization: { nodeEnv: false },
+    externals: [
+        nodeExternals({ allowlist: [/\.(?!(?:tsx?|json)$).{1,5}$/i] }),
+        {
+            express: 'commonjs express',
+            react: 'commonjs react',
+            'react-dom/server': 'commonjs react-dom/server',
+            'react-router': 'commonjs react-router',
+            'react-router-dom': 'commonjs react-router-dom',
+        },
+    ],
 };
 
 export default config;

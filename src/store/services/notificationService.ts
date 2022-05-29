@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
-import { store } from '../../index';
 import {
     addNotification,
     deleteNotification,
     Notification,
     resetNotification,
 } from '../reducers/notifications';
+import { store } from '../store';
 
 const newToast = (data: Notification) => {
     const id = uuidv4();

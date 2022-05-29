@@ -7,22 +7,22 @@ export const PlayerName = ({
     avatarPosition = 'left',
     name,
 }: Props) => (
-    <div className={styles.container}>
+    <div className={styles.player__container}>
         <div
-            className={cn(styles.flex, {
+            className={cn(styles.player__flex, {
                 [styles.avatarLeft]: avatarPosition === 'right',
             })}
         >
             {avatarSrc ? (
-                <div className={styles.avatar}>
+                <div className={styles.player__avatar}>
                     <img src={avatarSrc} alt="" />
                 </div>
             ) : (
-                <div className={styles.avatar}>
+                <div className={styles.player__avatar}>
                     <p className={styles.nameCharacter}>{name.charAt(0)}</p>
                 </div>
             )}
-            <p className={styles.name}>{name}</p>
+            <p className={styles.player__name}>{name}</p>
         </div>
     </div>
 );

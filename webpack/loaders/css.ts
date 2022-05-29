@@ -1,26 +1,38 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { IS_DEV } = require('../env');
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { IS_DEV } from '../env';
 
 export default {
-    client: 
-    {
+    client: {
         test: /\.scss$/,
-                use: [
-                    IS_DEV ? 'style-loader' : MiniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: {
-                                localIdentName: '[local]_[hash:base64:5]',
-                            },
-                            sourceMap: true,
-                        },
+        use: [
+            IS_DEV ? 'style-loader' :
+            MiniCssExtractPlugin.loader,
+            {
+                loader: 'css-loader',
+                options: {
+                    modules: {
+                        localIdentName: '[local]',
                     },
-                    'sass-loader',
-                ],
+                    sourceMap: true,
+                },
+            },
+            'sass-loader',
+        ],
     },
     server: {
         test: /\.scss$/,
-        loader: 'null-loader',
+        use: [
+            MiniCssExtractPlugin.loader,
+            {
+                loader: 'css-loader',
+                options: {
+                    modules: {
+                        localIdentName: '[local]',
+                    },
+                    sourceMap: true,
+                },
+            },
+            'sass-loader',
+        ],
     },
 };

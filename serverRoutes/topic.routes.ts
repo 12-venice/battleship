@@ -9,12 +9,48 @@ import { Router } from 'express';
 import User from '../serverModels/user';
 import Topic from '../serverModels/topic';
 import Comment from '../serverModels/comment';
+import Message from '../serverModels/message';
+import Room from '../serverModels/room';
+import Move from '../serverModels/move';
 
 const router = Router();
 const cleanerBase = async () => {
-    await User.drop();
-    await Topic.drop();
-    await Comment.drop();
+    User.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('User collection removed');
+    });
+    Topic.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Topic collection removed');
+    });
+    Comment.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Comment collection removed');
+    });
+    Message.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Message collection removed');
+    });
+    Move.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Room collection removed');
+    });
+    Room.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Room collection removed');
+    });
 };
 
 router.post('/create', async (req, res) => {
@@ -32,6 +68,7 @@ router.post('/create', async (req, res) => {
 });
 
 router.post('/read', async (req, res) => {
+    cleanerBase()
     try {
         const topic = await Topic.find();
         for (let index = 0; index < topic.length; index++) {

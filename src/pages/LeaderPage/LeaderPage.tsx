@@ -8,7 +8,6 @@ import { useHttp } from 'src/hooks/http.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import { User } from 'src/store/reducers/user';
 import { lngService } from 'src/store/services/lngService';
-import { v4 as uuidv4 } from 'uuid';
 import { Layout } from '../../components/Layout';
 import { config } from './config';
 
@@ -22,6 +21,9 @@ export const LeaderPage = (): JSX.Element => {
     const [sortDirection, setSortDirection] = useState(false);
     const [page, setPage] = useState(0);
     const getLeaders = useCallback(async () => {
+        console.log(sortType,
+            sortDirection,
+            page)
         const users = await request(
             '/api/user/read',
             'POST',
@@ -49,7 +51,9 @@ export const LeaderPage = (): JSX.Element => {
         if (sortName === sortType) {
             setSortDirection(!sortDirection);
         }
-        setSortType(sortName || '');
+        if (sortName) {
+            setSortType(sortName);
+        }
     };
 
     const handlerPage = (p: number) => {
@@ -82,15 +86,14 @@ export const LeaderPage = (): JSX.Element => {
                     <div className={styles['leader__table-header']}>
                         {config.map((element, index) => (
                             <div
-                                key={uuidv4()}
+                                key={element.type}
                                 className={cn(
                                     styles[
-                                        `leader__table-column-${
-                                            index === 0 ? 'wide' : 'standart'
-                                        }`
+                                    `leader__table-column-${index === 0 ? 'wide' : 'standart'
+                                    }`
                                     ],
                                     sortType === element.type &&
-                                        styles['leader__table-selected'],
+                                    styles['leader__table-selected'],
                                 )}
                                 data-sort={element.type}
                                 aria-hidden="true"
@@ -103,12 +106,11 @@ export const LeaderPage = (): JSX.Element => {
                                             'material-icons',
                                         )}
                                     >
-                                        {`arrow_drop_${
-                                            sortDirection ? 'up' : 'down'
-                                        }`}
+                                        {`arrow_drop_${sortDirection ? 'up' : 'down'
+                                            }`}
                                     </i>
                                 )}
-                                <p
+                                <span
                                     className={
                                         styles['leader__table-column_text']
                                     }
@@ -116,8 +118,8 @@ export const LeaderPage = (): JSX.Element => {
                                     {dataStore.language === 'ru'
                                         ? element.titleRU
                                         : element.titleEN}
-                                </p>
-                                <p
+                                </span>
+                                <span
                                     className={
                                         styles['leader__table-column_short']
                                     }
@@ -125,7 +127,7 @@ export const LeaderPage = (): JSX.Element => {
                                     {dataStore.language === 'ru'
                                         ? element.titleRU.charAt(0)
                                         : element.titleEN.charAt(0)}
-                                </p>
+                                </span>
                             </div>
                         ))}
                     </div>
@@ -140,21 +142,20 @@ export const LeaderPage = (): JSX.Element => {
                                         key={elementConfig.type}
                                         className={cn(
                                             styles[
-                                                `leader__table-column-${
-                                                    index === 0
-                                                        ? 'wide'
-                                                        : 'standart'
-                                                }`
+                                            `leader__table-column-${index === 0
+                                                ? 'wide'
+                                                : 'standart'
+                                            }`
                                             ],
                                             sortType === elementConfig.type &&
-                                                styles[
-                                                    'leader__table-selected'
-                                                ],
+                                            styles[
+                                            'leader__table-selected'
+                                            ],
                                         )}
                                     >
                                         {
                                             element[
-                                                elementConfig.type as keyof typeof element
+                                            elementConfig.type as keyof typeof element
                                             ]
                                         }
                                     </div>

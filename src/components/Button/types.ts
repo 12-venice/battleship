@@ -5,7 +5,7 @@ export type btnProps = {
     title?: string | ReactElement;
     disabled?: boolean;
     type?: 'button' | 'submit' | 'reset';
-    onClick?: MouseEventHandler<HTMLButtonElement>;
+    onClick?: MouseEventHandler<HTMLButtonElement> | Function;
     skin?:
         | 'short'
         | 'wide'
