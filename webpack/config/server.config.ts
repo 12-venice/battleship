@@ -1,12 +1,12 @@
-import path from 'path';
-import { Configuration } from 'webpack';
+import path, { join, resolve } from 'path';
+import webpack, { Configuration } from 'webpack';
 import nodeExternals from 'webpack-node-externals';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 
-import { IS_DEV, DIST_DIR, SERVER_DIR } from './env';
-import fileLoader from './loaders/file';
-import cssLoader from './loaders/css';
-import jsLoader from './loaders/js';
+import { IS_DEV, DIST_DIR, SERVER_DIR } from '../assets/env';
+import fileLoader from '../loaders/file';
+import cssLoader from '../loaders/css';
+import jsLoader from '../loaders/js';
 
 const config: Configuration = {
     name: 'server',
@@ -27,6 +27,14 @@ const config: Configuration = {
         extensions: ['*', '.js', '.jsx', '.json', '.ts', '.tsx'],
         plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
     },
+
+    plugins: [
+        new webpack.ProvidePlugin({
+            window: resolve(join(__dirname, './mock/window.mock')),
+            localStorage: resolve(join(__dirname, './mock/localStorage.mock')),
+            document: 'global/document',
+        }),
+    ],
 
     devtool: 'source-map',
 

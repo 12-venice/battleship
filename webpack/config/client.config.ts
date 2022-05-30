@@ -3,11 +3,11 @@ import webpack, { Configuration } from 'webpack';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-import { IS_DEV, DIST_DIR, SRC_DIR } from './env';
+import { IS_DEV, DIST_DIR, SRC_DIR } from '../assets/env';
 
-import fileLoader from './loaders/file';
-import cssLoader from './loaders/css';
-import jsLoader from './loaders/js';
+import fileLoader from '../loaders/file';
+import cssLoader from '../loaders/css';
+import jsLoader from '../loaders/js';
 
 const config: Configuration = {
     target: 'web',
@@ -17,7 +17,7 @@ const config: Configuration = {
         rules: [fileLoader.client, cssLoader.client, jsLoader.client],
     },
     output: {
-        path: DIST_DIR,
+        path: path.join(DIST_DIR, 'client', '_'),
         filename: '[name].js',
         publicPath: '/',
     },

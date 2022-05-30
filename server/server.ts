@@ -5,7 +5,7 @@ import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
 import 'babel-polyfill';
 import serverRenderMiddleware from './middlewares/render';
-import config from '../webpack/client.config';
+import config from '../webpack/config/client.config';
 
 // Эта функция возвращает middleware для локального девсервера и HMR
 // Она должна работать только для режима разработки
