@@ -13,6 +13,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 const config: Configuration = {
     name: 'client',
     target: 'web',
+    mode: IS_DEV ? 'development' : 'production',
     entry: [
         IS_DEV && 'react-hot-loader/patch',
         IS_DEV && 'webpack-hot-middleware/client?reload=true',

@@ -12,7 +12,7 @@ import messageRouter from '../serverRoutes/message.routes';
 import webpack from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
-import config from '../webpack/client.config';
+import config from '../webpack/server.config';
 import authRoutes from 'socketRoutes/auth.routes';
 import messageRoutes from 'socketRoutes/message.routes';
 import inviteRoutes from 'socketRoutes/invite.routes';
@@ -20,24 +20,27 @@ import inviteRoutes from 'socketRoutes/invite.routes';
 const getWebpackMiddlewares = (
     config: webpack.Configuration,
 ): RequestHandler[] => {
-    const compiler = webpack({ ...config, mode: 'development' });
-
+    const compiler = webpack(config);
     return [
         devMiddleware(compiler, {
-            publicPath: config.output!.publicPath!,
+            publicPath: config.output?.publicPath,
+            serverSideRender: true
         }),
-        hotMiddleware(compiler, { path: `/__webpack_hmr` }),
+        hotMiddleware(compiler),
     ];
 };
 
 const app = express();
 const httpServer = http.createServer(app);
 
-export const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
-    cors: {
-        origin: '*',
+export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
+    httpServer,
+    {
+        cors: {
+            origin: '*',
+        },
     },
-});
+);
 io.on('connection', (socket: Socket) => {
     console.log(socket.id);
     authRoutes(socket);

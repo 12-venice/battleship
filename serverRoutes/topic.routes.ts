@@ -68,7 +68,7 @@ router.post('/create', async (req, res) => {
 });
 
 router.post('/read', async (req, res) => {
-    cleanerBase()
+    //cleanerBase()
     try {
         const topic = await Topic.find();
         for (let index = 0; index < topic.length; index++) {

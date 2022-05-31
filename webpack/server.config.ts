@@ -9,12 +9,14 @@ import fileLoader from './loaders/file';
 import cssLoader from './loaders/css';
 import jsLoader from './loaders/js';
 
+const ASSET_PATH = process.env.ASSET_PATH || '/'
+
 const config: Configuration = {
     name: 'server',
+    mode: IS_DEV ? 'development' : 'production',
     target: 'node',
     node: { __dirname: false },
     entry: [
-        IS_DEV && 'webpack/hot/dev-server.js',
         path.join(SRC_DIR, 'server'),
     ].filter(Boolean) as unknown as Entry,
 
@@ -30,7 +32,7 @@ const config: Configuration = {
         filename: 'server.js',
         libraryTarget: 'commonjs2',
         path: DIST_DIR,
-        publicPath: '/',
+        publicPath: ASSET_PATH,
     },
     resolve: {
         modules: ['src', 'node_modules'],
@@ -41,8 +43,7 @@ const config: Configuration = {
     plugins: [
         new MiniCssExtractPlugin({
             filename: 'styles.css',
-        }),
-        ...(IS_DEV ? [new webpack.HotModuleReplacementPlugin()] : []),
+        })
     ],
 
     devtool: 'source-map',

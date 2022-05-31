@@ -21,7 +21,7 @@ export const Input = ({
     }, [className, validateMsgFalse]);
 
     return (
-        <div className="input-field" style={{ margin: '5px 0' }}>
+        <div style={{ margin: '5px 0' }}>
             <input
                 style={{ width: 'min(250px, 45vw)' }}
                 id={name}
@@ -30,11 +30,9 @@ export const Input = ({
                 onChange={onChange}
                 defaultValue={defaultValue}
                 className={className}
+                placeholder={title}
                 autoComplete="new-password"
             />
-            <label className={defaultValue ? 'active' : ''} htmlFor={name}>
-                {title}
-            </label>
         </div>
     );
 };
