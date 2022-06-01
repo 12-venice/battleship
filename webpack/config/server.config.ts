@@ -30,8 +30,8 @@ const config: Configuration = {
 
     plugins: [
         new webpack.ProvidePlugin({
-            window: resolve(join(__dirname, './mock/window.mock')),
-            localStorage: resolve(join(__dirname, './mock/localStorage.mock')),
+            window: resolve(join(__dirname, '../mock/window.mock')),
+            localStorage: resolve(join(__dirname, '../mock/localStorage.mock')),
             document: 'global/document',
         }),
     ],
