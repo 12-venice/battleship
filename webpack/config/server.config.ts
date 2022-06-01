@@ -30,6 +30,8 @@ const config: Configuration = {
 
     plugins: [
         new webpack.ProvidePlugin({
+            // TODO: почему то не удалось прокинуть react в nodeExternals allowlist
+            React: 'react',
             window: resolve(join(__dirname, '../mock/window.mock')),
             localStorage: resolve(join(__dirname, '../mock/localStorage.mock')),
             document: 'global/document',
@@ -42,6 +44,7 @@ const config: Configuration = {
         hints: IS_DEV ? false : 'warning',
     },
 
+    // Не собирать в бандл код из стандартных библиотек типа path, fs и из node_modules библиотек с помощью плагина webpack-node-externals
     externals: [nodeExternals({ allowlist: [/\.(?!(?:tsx?|json)$).{1,5}$/i] })],
 
     optimization: { nodeEnv: false },

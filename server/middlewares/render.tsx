@@ -4,7 +4,7 @@ import { StaticRouter } from 'react-router-dom/server';
 import { Provider as ReduxProvider } from 'react-redux';
 import type { StaticRouterContext } from 'react-router';
 import type { Request, Response } from 'express';
-import vendorsMeta from 'webpack/config/vendors-meta';
+// import vendorsMeta from 'webpack/config/vendors-meta';
 import configureStore from '../../src/store/store';
 import reducers from '../../src/store/reducers';
 import { getInitialState } from '../../src/store/getInitialState';
@@ -17,7 +17,7 @@ interface PageHtmlParams {
 
 function getPageHtml(params: PageHtmlParams) {
     const { bundleHtml, reduxState } = params;
-    const vendorsFilePath = `/client/_/${vendorsMeta.name}`;
+    // const vendorsFilePath = `/client/_/${vendorsMeta.name}`;
 
     const html = renderToStaticMarkup(
         <html lang="en">
@@ -35,7 +35,7 @@ function getPageHtml(params: PageHtmlParams) {
                         __html: `window.__INITIAL_STATE__ = ${JSON.stringify(reduxState)}`,
                     }}
                 />
-                <script src={`${vendorsFilePath}.js`} />
+                {/*<script src={`${vendorsFilePath}.js`} />*/}
                 <script src="/main.js" />
             </body>
         </html>,

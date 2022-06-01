@@ -3,8 +3,10 @@ import { RUSSIAN as dictionaryRU } from './reducers/RU';
 
 export const getInitialState = (pathname: string = '/'): State => {
     return {
-        language: 'ru',
-        dictionary: dictionaryRU,
+        language: {
+            language: 'ru',
+            translate: dictionaryRU,
+        },
         router: {
             location: { pathname, search: '', hash: '', key: '' },
             action: 'POP',
