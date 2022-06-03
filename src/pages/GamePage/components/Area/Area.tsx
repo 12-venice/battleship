@@ -74,6 +74,7 @@ export const Area = forwardRef(
 
         return (
             <div
+                aria-hidden
                 onMouseEnter={handlerMouseEnter}
                 onMouseLeave={handlerMouseLeave}
                 onClick={handlerClick}

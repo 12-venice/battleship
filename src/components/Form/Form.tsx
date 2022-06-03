@@ -11,6 +11,7 @@ export const Form = ({
     setData,
     submitTitle,
     disabled,
+    checking = true,
 }: formProps): JSX.Element => {
     const [fields, setFields] = useState(inputs);
     let formValues = fields.reduce(
@@ -32,11 +33,15 @@ export const Form = ({
 
     const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const { valid, newFields } = validation(fields, formValues);
-        if (valid) {
+        if (!checking) {
             setData(formValues);
+        } else {
+            const { valid, newFields } = validation(fields, formValues);
+            if (valid) {
+                setData(formValues);
+            }
+            setFields(newFields);
         }
-        setFields(newFields);
     };
 
     return (
@@ -47,7 +52,6 @@ export const Form = ({
                         <Input
                             defaultValue={field.defaultValue}
                             className={field.className}
-                            validateMsgTrue={field.validateMsgTrue}
                             validateMsgFalse={field.validateMsgFalse}
                             key={uuidv4()}
                             type={field.type}

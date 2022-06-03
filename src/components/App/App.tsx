@@ -1,9 +1,22 @@
+import { hot } from 'react-hot-loader/root';
+import { Toast } from '../Toast';
 import { ErrorBoundary } from '../utils/ErrorBoundary';
-
 import { useRoutes } from '../utils/Routes';
+import { Listener } from '../utils/Socket/Listeners';
 import './App.scss';
 
-export const App = (): JSX.Element => {
+const AppWithRoutes: React.FC = () => {
     const routes = useRoutes();
-    return <ErrorBoundary>{routes}</ErrorBoundary>;
+    const position = 'top-right';
+    Listener()
+    return (
+        <ErrorBoundary>
+            <Toast
+                position={position}
+            />
+            {routes}
+        </ErrorBoundary>
+    );
 };
+
+export const App = hot(AppWithRoutes);

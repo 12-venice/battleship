@@ -8,7 +8,7 @@ export const FullScreenView: FC<{ isFullscr: boolean }> = ({
 }) => {
     const element = useRef(null);
     let isFullscreen: null;
-    let setIsFullscreen;
+    let setIsFullscreen: (() => void) | undefined;
 
     try {
         [isFullscreen, setIsFullscreen] = useFullscreen(element);

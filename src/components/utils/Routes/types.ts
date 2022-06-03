@@ -10,6 +10,7 @@ export const enum PageLinks {
     profilePassUpdate = '/passupdate',
     forum = '/forum',
     leaderboard = '/leaderboard',
+    finder = '/finder',
 }
 
 type RouteProps = {

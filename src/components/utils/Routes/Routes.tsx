@@ -11,6 +11,7 @@ import { ForumPage } from 'src/pages/ForumPage';
 import { UpdateProfilePage } from 'src/pages/UpdateProfilePage';
 import { GamePage } from 'src/pages/GamePage';
 import { AllStateTypes } from 'src/store/reducers';
+import { FinderPage } from 'src/pages/FinderPage';
 import { PageLinks, Props } from './types';
 
 const ProtectedRoute: Props = ({ childrens }) => {
@@ -41,8 +42,12 @@ export const useRoutes = (): JSX.Element => (
         <Route path={PageLinks.profileUpdate} element={<UpdateProfilePage />} />
         <Route path={PageLinks.forum} element={<ForumPage />} />
         <Route
-            path={PageLinks.game}
+            path={`${PageLinks.game}/:room`}
             element={<ProtectedRoute childrens={<GamePage />} />}
+        />
+        <Route
+            path={PageLinks.finder}
+            element={<ProtectedRoute childrens={<FinderPage />} />}
         />
         <Route path="*" element={<NotFoundPage />} />
     </Routes>

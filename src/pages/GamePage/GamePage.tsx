@@ -9,20 +9,24 @@ import { Placement } from 'src/gameCore/Placement';
 import { AllStateTypes } from 'src/store/reducers';
 import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
 
+import { MatrixCell } from 'src/gameCore/types';
+import { useParams } from 'react-router-dom';
 import fsIcon from '../../../images/fs.svg';
 import fsExitIcon from '../../../images/fs_exit.svg';
 import arrowIcon from '../../../images/round_arrow.svg';
 import sendIcon from '../../../images/send.svg';
 import closeIcon from '../../../images/close.svg';
-import videoIcon from '../../../images/video.svg'
+import videoIcon from '../../../images/video.svg';
 
-import { MatrixCell } from 'src/gameCore/types';
 import { Area } from './components/Area';
 import { PlayerName } from './components/PlayerName';
 import { ShipsMenu } from './components/ShipsMenu';
 
 import styles from './GamePage.scss';
 import { mapStateToProps } from './mapState';
+import { useHttp } from 'src/hooks/http.hook';
+import { Preloader } from 'src/components/Preloader';
+import { sendMessage } from 'src/components/utils/Socket/Listeners';
 
 const STATISTICS = [
     { label: 'HITS', player: 8, opponent: 17 },
@@ -32,6 +36,44 @@ const STATISTICS = [
 ];
 
 export const GamePage = (): JSX.Element => {
+    if (typeof window === 'undefined') return <></>;
+    const { room } = useParams();
+    const { request, loading } = useHttp();
+    const user = useSelector((state: AllStateTypes) => state.user.item);
+    const [dataOfRoom, setDataOfRoom] = useState({ messages: [] });
+    const [message, setMessage] = useState('');
+    const getDataOfRoom = useCallback(async () => {
+        const data = await request(
+            '/api/room/read',
+            'POST',
+            { userId: user?._id, roomId: room },
+            {},
+            true,
+        );
+        setDataOfRoom(data);
+    }, [request, user?._id, user?.rooms]);
+
+    useEffect(() => {
+        if (room !== 'bot') {
+            getDataOfRoom();
+        } else {
+            setDataOfRoom({
+                room: {},
+                user: {
+                    display_name: 'Captain JACK'
+                },
+                messages: [
+                    {
+                        _id: 'bot',
+                        text: 'Hello!',
+                        date: Date.now()
+                    }
+                ]
+            })
+        }
+        return () => setDataOfRoom({});
+    }, []);
+
     const store = useSelector(mapStateToProps);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
@@ -39,7 +81,6 @@ export const GamePage = (): JSX.Element => {
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
     const [gameStep, setGameStep] = useState(0);
-    const [info, setInfo] = useState(false);
     const [playerField, setPlayerField] = useState();
     const [opponentField, setOpponentField] = useState();
     const [info, setInfo] = useState(false);
@@ -51,6 +92,14 @@ export const GamePage = (): JSX.Element => {
         !!store.opponent_display_name,
     );
     const [videoCall, setVideoCall] = useState(false);
+
+    const sendMessageHandler = () => {
+        if (message) {
+            sendMessage({ room, message })
+            setMessage('')
+        }
+    }
+
     const handlerChangePlayerField = useCallback(({ matrix, squadron }) => {
         const ships = Object.entries(squadron).map(
             ([shipName, { arrDecks, x, y, kx, hits }]) => ({
@@ -66,10 +115,10 @@ export const GamePage = (): JSX.Element => {
     }, []);
 
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
-        const currentMatrix = matrix.map(
-            (row) => row.map(
-                (cell) => (cell === MatrixCell.deck ? MatrixCell.empty : cell)
-            )
+        const currentMatrix = matrix.map((row) =>
+            row.map((cell) =>
+                cell === MatrixCell.deck ? MatrixCell.empty : cell,
+            ),
         );
 
         const ships = Object.entries(squadron)
@@ -83,8 +132,8 @@ export const GamePage = (): JSX.Element => {
                 isRip: hits === arrDecks.length,
             }));
 
-            setOpponentField({ matrix: currentMatrix, ships });
-        }, []);
+        setOpponentField({ matrix: currentMatrix, ships });
+    }, []);
     const placementArea = useMemo(
         () => new Placement({ field: playerCanvasRef }),
         [playerCanvasRef],
@@ -213,6 +262,11 @@ export const GamePage = (): JSX.Element => {
         setGameStep(1);
         setStartGame(!startGame);
     }, [placementArea]);
+
+    if (loading) {
+        return <Preloader />
+    }
+
     return (
         <Layout>
             <div className={styles.game__background}>
@@ -222,12 +276,17 @@ export const GamePage = (): JSX.Element => {
                         <div className={styles['game__header-players']}>
                             <p className={styles['game__header-text']}>0</p>
                             <PlayerName
-                                name={store.display_name ?? 'Player 1'}
+                                name={user?.display_name ?? 'Player 1'}
                                 avatarPosition="right"
-                                avatarSrc={`https://ya-praktikum.tech/api/v2/resources${store.avatar}`}
+                                avatarSrc={`https://ya-praktikum.tech/api/v2/resources${user?.avatar}`}
                             />
                             <p className={styles['game__header-text']}>00</p>
-                            <PlayerName name="Player 2" />
+                            <PlayerName
+                                name={dataOfRoom?.anotherUser?.display_name ?? 'Player 2'}
+                                avatarPosition="left"
+                                avatarSrc={`https://ya-praktikum.tech/api/v2/resources${dataOfRoom?.anotherUser?.avatar}`}
+
+                            />
                             <p className={styles['game__header-text']}>0</p>
                         </div>
                         <Button href="/" skin="quad" title="X" color="red" />
@@ -240,10 +299,10 @@ export const GamePage = (): JSX.Element => {
                                 onClick={() => setInviteAccept(!inviteAccept)}
                             />
                         ) : (
-                            <div className={styles.container}>
+                            <div className={styles.game__container}>
                                 <div
                                     className={cn(
-                                        styles.slider,
+                                        styles.game__slider,
                                         startGame && !trnslX
                                             ? styles.left
                                             : styles.right,
@@ -286,7 +345,7 @@ export const GamePage = (): JSX.Element => {
                                                 <h5
                                                     className={
                                                         styles[
-                                                            'game__statistics-label'
+                                                        'game__statistics-label'
                                                         ]
                                                     }
                                                 >
@@ -295,7 +354,7 @@ export const GamePage = (): JSX.Element => {
                                                 <span
                                                     className={
                                                         styles[
-                                                            'game__statistics-description'
+                                                        'game__statistics-description'
                                                         ]
                                                     }
                                                 >
@@ -333,26 +392,23 @@ export const GamePage = (): JSX.Element => {
                                 <div className={styles.game__call}> </div>
                             ) : (
                                 <div className={cn(styles.test)}>
-                                    <div className={cn(styles['game__chat-row'], styles.notme)}>
-                                        <div className={cn(styles['game__chat-msg'])}>
-                                            <div className={cn(styles['game__chat-text'])}>
-                                                Some msg 1
-                                            </div>
-                                            <div className={cn(styles['game__chat-date'])}>
-                                                23:30
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={styles['game__chat-row']}>
-                                        <div className={cn(styles['game__chat-msg'])}>
-                                            <div className={cn(styles['game__chat-text'])}>
-                                                Some msg 2
-                                            </div>
-                                            <div className={cn(styles['game__chat-date'])}>
-                                                23:32
+                                    {dataOfRoom?.messages.map((message) => (
+                                        <div
+                                            className={cn(
+                                                styles['game__chat-row'],
+                                                (message.user !== user?._id && styles.notme),
+                                            )}
+                                        >
+                                            <div className={styles['game__chat-msg']}>
+                                                <div className={styles['game__chat-text']}>
+                                                    {message.text}
+                                                </div>
+                                                <div className={styles['game__chat-date']}>
+                                                    {message.date}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    ))}
                                 </div>
                             )}
                         </div>
@@ -397,25 +453,26 @@ export const GamePage = (): JSX.Element => {
                                             <input
                                                 className={cn(
                                                     styles[
-                                                        'game__footer-input'
+                                                    'game__footer-input'
                                                     ],
                                                     'browser-default',
                                                 )}
                                                 type="text"
+                                                value={message}
                                                 placeholder="value"
-                                                onChange={(e) => console.log(e)}
+                                                onChange={(e) => setMessage(e.target.value)}
                                             />
                                             <div
                                                 className={
                                                     styles[
-                                                        'game__footer-controls'
+                                                    'game__footer-controls'
                                                     ]
                                                 }
                                             >
                                                 <div
                                                     className={
                                                         styles[
-                                                            'game__footer-video_btn'
+                                                        'game__footer-video_btn'
                                                         ]
                                                     }
                                                 >
@@ -439,6 +496,7 @@ export const GamePage = (): JSX.Element => {
                                                     <Button
                                                         href="/"
                                                         skin="quad"
+                                                        onClick={sendMessageHandler}
                                                     >
                                                         <img
                                                             className={

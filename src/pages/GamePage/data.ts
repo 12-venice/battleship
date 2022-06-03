@@ -21,6 +21,7 @@ export const ripShipsSrcMap = new Map([
     [4, ripShip4Img],
 ]);
 
-export const AREA_WIDTH = 418;
+export const AREA_WIDTH =
+    typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
 export const AREA_CELL_WIDTH = AREA_WIDTH / 10;
 export const AREA_CELL_GAP = 2;

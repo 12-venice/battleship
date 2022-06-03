@@ -4,25 +4,22 @@
 /* eslint-disable import/extensions */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { Router } = require('express');
-const User = require('../serverModels/user.ts');
-const Topic = require('../serverModels/topic.ts');
-const Comment = require('../serverModels/comment.ts');
+import { Router } from 'express';
+import User from '../serverModels/user';
+import Room from '../serverModels/room';
+import Comment from '../serverModels/comment';
+
 
 const router = Router();
 
 router.post('/create', async (req, res) => {
     try {
-        const { id, topic } = req.body;
-        const user = await User.findOne({ id });
-        const topicFind = await Topic.findOne({ topic });
-        const comment = new Comment({
-            ...{ user: user._id },
-            ...{ topic: topicFind },
-            ...req.body,
-        });
-        await comment.save();
-        res.status(201).json({ message: 'OK' });
+        const { createdUserId, invitedUserId } = req.body;
+        const createdUser = await User.findOne({ _id: createdUserId });
+        const invitedUser = await User.findOne({ _id: invitedUserId });
+        const room = new Room({ users: [createdUser, invitedUser] });
+        await room.save();
+        res.status(201).json(room);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -53,7 +50,7 @@ router.post('/read', async (req, res) => {
 
 router.post('/update', async (req, res) => {
     try {
-        await Comment.findOneAndUpdate({ id: req.body.id }, { $set: req.body });
+        await Comment.updateOne({ id: req.body.id }, { $set: req.body });
         res.status(201).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({
@@ -74,4 +71,4 @@ router.post('/delete', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

@@ -5,16 +5,52 @@
 /* eslint-disable import/extensions */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { Router } = require('express');
-const User = require('../serverModels/user.ts');
-const Topic = require('../serverModels/topic.ts');
-const Comment = require('../serverModels/comment.ts');
+import { Router } from 'express';
+import User from '../serverModels/user';
+import Topic from '../serverModels/topic';
+import Comment from '../serverModels/comment';
+import Message from '../serverModels/message';
+import Room from '../serverModels/room';
+import Move from '../serverModels/move';
 
 const router = Router();
 const cleanerBase = async () => {
-    await User.collection.drop();
-    await Topic.collection.drop();
-    await Comment.collection.drop();
+    User.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('User collection removed');
+    });
+    Topic.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Topic collection removed');
+    });
+    Comment.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Comment collection removed');
+    });
+    Message.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Message collection removed');
+    });
+    Move.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Room collection removed');
+    });
+    Room.remove({}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('Room collection removed');
+    });
 };
 
 router.post('/create', async (req, res) => {
@@ -32,6 +68,7 @@ router.post('/create', async (req, res) => {
 });
 
 router.post('/read', async (req, res) => {
+    //cleanerBase()
     try {
         const topic = await Topic.find();
         for (let index = 0; index < topic.length; index++) {
@@ -52,7 +89,7 @@ router.post('/read', async (req, res) => {
 
 router.post('/update', async (req, res) => {
     try {
-        await Topic.findOneAndUpdate({ _id: req.body._id }, { $set: req.body });
+        await Topic.updateOne({ _id: req.body._id }, { $set: req.body });
         res.status(201).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({
@@ -73,4 +110,4 @@ router.post('/delete', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

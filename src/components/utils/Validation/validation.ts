@@ -5,10 +5,10 @@ export const validation = (fields: fieldsProps[], values: {}) => {
     let valid = true;
     const newFields = fields.slice();
     for (let index = 0; index < newFields.length; index += 1) {
-        const { validateType, name } = newFields[index];
+        const { name } = newFields[index];
         const value = values[name as keyof typeof values];
-        if (validateType) {
-            const { pattern, error } = validationPatterns[validateType];
+        if (name) {
+            const { pattern, error } = validationPatterns[name];
             if (!pattern) {
                 throw new SyntaxError('ERROR - no validation pattern found');
             }
@@ -28,7 +28,6 @@ export const validation = (fields: fieldsProps[], values: {}) => {
                     ...{
                         defaultValue: value,
                         className: 'validate valid',
-                        validateMsgTrue: 'Correct',
                     },
                 };
             }

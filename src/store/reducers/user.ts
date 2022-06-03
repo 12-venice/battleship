@@ -8,6 +8,7 @@ type LoadStatus = 'success' | 'pending' | 'failed' | 'error';
 type Nullable<T> = T | null;
 
 export interface User {
+    _id: string;
     id: number;
     avatar: Nullable<string>;
     first_name: string;
@@ -19,6 +20,7 @@ export interface User {
     points?: number;
     wins?: number;
     defeats?: number;
+    rooms: string[];
 }
 
 export type UserState = {
@@ -76,11 +78,3 @@ export function loadPending(): ItemActionType {
 export function setUser(user: User | null): ItemActionType {
     return { type: actions.SET_USER_ITEM, item: user };
 }
-
-export const getTest = () => (dispatch: any) => {
-    dispatch(loadPending());
-    setTimeout(() => {
-        console.log('I got it after 2 second');
-        dispatch(loadSuccess());
-    }, 2000);
-};
