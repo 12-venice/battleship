@@ -4,7 +4,6 @@ import { useHttp } from 'src/hooks/http.hook';
 import { useCallback, useEffect, useState } from 'react';
 import { Preloader } from 'src/components/Preloader';
 import { Form } from 'src/components/Form';
-import { useMessage } from 'src/hooks/message.hook';
 import { fieldsProps } from 'src/components/Form/types';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { Layout } from 'src/components/Layout';
@@ -12,6 +11,7 @@ import { userService } from 'src/store/services/userService';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
+import { notificationService } from 'src/store/services/notificationService';
 import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs } from './config';
 import { Avatar } from '../ProfilePage/components/Avatar';
@@ -30,7 +30,6 @@ export const UpdateProfilePage = (): JSX.Element => {
         };
         inputsWithDefaultsValue.push(element);
     });
-    const message = useMessage();
     const { request, loading, error, clearError } = useHttp();
     const navigate = useNavigate();
     const [updateAvatar, setUpdateAvatar] = useState(false);
@@ -50,9 +49,14 @@ export const UpdateProfilePage = (): JSX.Element => {
     );
 
     useEffect(() => {
-        message(error);
-        clearError();
-    }, [error, message, clearError]);
+        if (error) {
+            notificationService.addNotification({
+                message: error,
+                type: 'danger',
+            });
+        }
+        return () => clearError();
+    }, [error, clearError]);
 
     return (
         <Layout>

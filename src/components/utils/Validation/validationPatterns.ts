@@ -2,9 +2,17 @@ export const validationPatterns: Record<
     string,
     { pattern: RegExp; error: string }
 > = {
-    name: {
+    first_name: {
         pattern: /^[А-ЯЁA-Z][А-ЯЁA-Zа-яёa-z-]+$/,
-        error: 'This field is filled in incorrectly',
+        error: 'The first name is incorrect',
+    },
+    second_name: {
+        pattern: /^[А-ЯЁA-Z][А-ЯЁA-Zа-яёa-z-]+$/,
+        error: 'The second name is incorrect',
+    },
+    display_name: {
+        pattern: /^[А-ЯЁA-Z][А-ЯЁA-Zа-яёa-z0-9-\s]+$/,
+        error: 'The display name is incorrect',
     },
     login: {
         pattern: /^(?=.*[a-zA-Z])([a-zA-Z0-9-_]){3,20}$/,
@@ -18,6 +26,11 @@ export const validationPatterns: Record<
     password: {
         pattern: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/,
         error: 'The password must be at least 8 characters and contain a capital letter and a number',
+    },
+
+    oldpassword: {
+        pattern: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/,
+        error: '',
     },
 
     phone: {

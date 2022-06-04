@@ -69,7 +69,7 @@ export const Topic: Props = ({
                         <h2 className={styles['topic__header-theme']}>
                             {theme}
                         </h2>
-                        {user.display_name === currenUserser?.display_name && (
+                        {user?.display_name === currenUserser?.display_name && (
                             <div className={styles.topic__controls}>
                                 <i
                                     className="small material-icons"
@@ -96,7 +96,7 @@ export const Topic: Props = ({
                     </div>
                     <div className={styles['topic__header-author']}>
                         <h3 className={styles['topic__header-author-name']}>
-                            {user.display_name}
+                            {user?.display_name}
                         </h3>
                         <p className={styles['topic__header-author-date']}>
                             {date}

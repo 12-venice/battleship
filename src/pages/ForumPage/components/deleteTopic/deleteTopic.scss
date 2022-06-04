@@ -4,19 +4,19 @@
 .delete-topic__label {
     font-family: var(--font-family), var(--font-family-ru);
     color: var(--white);
-    font-size: 41px;
+    font-size: min(41px, 6vw);
     margin: 0;
 }
 .delete-topic__buttons {
-    width: 370px;
+    // width: 370px;
     display: flex;
     justify-content: space-between;
 }
 .delete-topic__description {
     font-family: var(--font-family-second), var(--font-family-ru);;
     color: var(--white);
-    font-size: 24px;
+    font-size: min(24px, 6vw);
     line-height: 28px;
     text-align: center;
-    width: 368px;
+    // width: 368px;
 }

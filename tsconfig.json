@@ -5,9 +5,13 @@
       "es2017"
     ],
     "module": "esnext",
-    "moduleResolution": "node",
+    // "module": "es2015",
     "target": "es5",
     "jsx": "react-jsx",
+    // "module": "commonjs",
+    // "target": "esnext",
+    // "jsx": "react",
+    "moduleResolution": "node",
     "importHelpers": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,
@@ -34,3 +38,4 @@
     "**/*.js"
   ]
 }
+

@@ -4,14 +4,14 @@
 .information__label {
     font-family: var(--font-family), var(--font-family-ru);
     color: var(--white);
-    font-size: 41px;
+    font-size: min(41px, 7vw);
     margin: 0;
 }
 .information__description {
     font-family: var(--font-family-second);
     color: var(--white);
-    font-size: 24px;
-    line-height: 28px;
+    font-size: min(24px, 5vw);
+    line-height: min(28px, 6vw);
     text-align: center;
-    width: 368px;
+    width: min(368px, 80vw);
 }

@@ -1,6 +1,5 @@
 export const headers = {
     title: 'BATTLESHIP',
-    page: 'AUTHORIZATION',
     navigation: 'sign up',
 };
 

@@ -5,14 +5,13 @@ import { Form } from 'src/components/Form';
 import { FromProps, PageLinks } from 'src/components/utils/Routes/types';
 import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
-import { useMessage } from 'src/hooks/message.hook';
 import { AllStateTypes } from 'src/store/reducers';
+import { notificationService } from 'src/store/services/notificationService';
 import { Layout } from '../../components/Layout';
 import styles from './AuthPage.scss';
 import { inputs, headers } from './config';
 
 export const AuthPage = (): JSX.Element => {
-    const message = useMessage();
     const location = useLocation().state as FromProps;
     const navigate = useNavigate();
     const from = location?.from?.pathname;
@@ -30,7 +29,7 @@ export const AuthPage = (): JSX.Element => {
                     login(from || PageLinks.home);
                 }
             } catch (e) {
-                throw new SyntaxError('Что-то пошло не так');
+                throw new Error('Что-то пошло не так');
             }
         },
         [from, login, request],
@@ -46,9 +45,14 @@ export const AuthPage = (): JSX.Element => {
         if (error === 'User already in system') {
             login(from || PageLinks.home);
         }
-        message(error);
-        clearError();
-    }, [error, message, clearError, login, from]);
+        if (error) {
+            notificationService.addNotification({
+                message: error,
+                type: 'danger',
+            });
+        }
+        return () => clearError();
+    }, [error, clearError, login, from]);
 
     return (
         <Layout>
@@ -62,6 +66,7 @@ export const AuthPage = (): JSX.Element => {
                     setData={auth}
                     submitTitle={dataStore.buttons.login}
                     disabled={loading}
+                    checking={false}
                 />
                 <NavLink to={PageLinks.register}>
                     <span className={styles.auth__link}>

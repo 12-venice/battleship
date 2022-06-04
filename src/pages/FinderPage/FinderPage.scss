@@ -1,0 +1,80 @@
+@import 'src/styles/colors.css';
+
+.finder__background {
+    font-family: var(--font-family), var(--font-family-ru);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 849px;
+    background: var(--blue);
+    border-radius: 38px;
+    padding: 20px;
+}
+
+.finder__block {
+    height: 600px;
+    width: 450px;
+    overflow-y: scroll;
+    font-family: var(--font-family), var(--font-family-ru);
+    border-radius: 38px;
+    padding: 10px 20px;
+    background: #1653A9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.finder__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.finder__label {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    color: var(--white);
+    padding: 20px;
+}
+
+.finder__label-tag {
+    margin: 0 auto;
+    font-size: 20px;
+}
+
+.finder__label-description {
+    margin: 0 auto;
+    font-size: 40px;
+    line-height: 40px;
+}
+
+.finder__line {
+    width: 100%;
+    margin-top: 20px;
+    font-size: 30px;
+    border-radius: 20px;
+    background: var(--dark-blue);
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.finder__name {
+    padding: 10px;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+
+.finder__point {
+    padding: 10px;
+    border-radius: 50%;
+}

@@ -7,6 +7,5 @@ export type inputProps = {
     name: string;
     onChange: ChangeEventHandler<HTMLInputElement>;
     className?: string;
-    validateMsgTrue?: string;
     validateMsgFalse?: string;
 };

@@ -1,12 +1,12 @@
 export const inputs = [
     {
         type: 'password',
-        name: 'oldPassword',
+        name: 'oldpassword',
         title: 'Old password',
     },
     {
         type: 'password',
-        name: 'newPassword',
+        name: 'password',
         title: 'New password',
     },
 ];

@@ -1,4 +1,5 @@
-import M from 'materialize-css';
+import { useEffect } from 'react';
+import { notificationService } from 'src/store/services/notificationService';
 import { inputProps } from './types';
 
 export const Input = ({
@@ -8,33 +9,30 @@ export const Input = ({
     name,
     onChange,
     className = 'validate',
-    validateMsgTrue = '',
-    validateMsgFalse = '',
+    validateMsgFalse,
 }: inputProps): JSX.Element => {
-    M.updateTextFields();
+    useEffect(() => {
+        if (validateMsgFalse && className === 'validate invalid') {
+            notificationService.addNotification({
+                message: validateMsgFalse,
+                type: 'warning',
+            });
+        }
+    }, [className, validateMsgFalse]);
 
     return (
-        <div className="input-field">
+        <div style={{ margin: '5px 0' }}>
             <input
-                style={{ width: '250px' }}
+                style={{ width: 'min(250px, 45vw)' }}
                 id={name}
                 type={type}
                 name={name}
                 onChange={onChange}
                 defaultValue={defaultValue}
                 className={className}
+                placeholder={title}
                 autoComplete="new-password"
             />
-            <label className={defaultValue ? 'active' : ''} htmlFor={name}>
-                {title}
-            </label>
-            {validateMsgFalse || validateMsgTrue ? (
-                <span
-                    className="helper-text"
-                    data-error={validateMsgFalse}
-                    data-success={validateMsgTrue}
-                />
-            ) : null}
         </div>
     );
 };
