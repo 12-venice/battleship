@@ -2,7 +2,7 @@ import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
 
 export type TopicProps = {
     user: { display_name: string };
-    date: string;
+    createdAt: string;
     theme: string;
     description?: string;
     _id: string;

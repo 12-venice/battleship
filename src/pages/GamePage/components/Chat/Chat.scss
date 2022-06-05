@@ -8,4 +8,13 @@
     margin-bottom: 10px;
     overflow-y: scroll;
     padding: 10px;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: var(--MAX-WIDTH-TABLET)) {
+
+}
+
+@media screen and (max-width: var(--MAX-WIDTH-PHONE)) {
+
 }

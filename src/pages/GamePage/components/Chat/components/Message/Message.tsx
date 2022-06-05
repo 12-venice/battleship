@@ -17,7 +17,7 @@ export const Message = (message: messageType): JSX.Element => {
     const parseDate = moment(date).fromNow();
 
     useEffect(() => {
-        if (!delivered && !notme) {
+        if (!delivered && notme) {
             request('/api/message/setdelivered', 'POST', { _id }, {}, true);
         }
     }, []);

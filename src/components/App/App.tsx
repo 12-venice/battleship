@@ -8,12 +8,10 @@ import './App.scss';
 const AppWithRoutes: React.FC = () => {
     const routes = useRoutes();
     const position = 'top-right';
-    Listener()
+    Listener();
     return (
         <ErrorBoundary>
-            <Toast
-                position={position}
-            />
+            <Toast position={position} />
             {routes}
         </ErrorBoundary>
     );

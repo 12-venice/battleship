@@ -1,0 +1,72 @@
+@import 'src/styles/variables.css';
+@import "src/styles/colors.css";
+
+.player__container {
+    display: flex;
+}
+
+.player__flex {
+    display: flex;
+    align-items: center;
+}
+
+.avatarLeft {
+    flex-direction: row-reverse;
+}
+
+.avatarLeft .name {
+    flex-grow: 1;
+    margin: 0 min(1vw, 10px) 0 0;
+}
+
+.player__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 82px;
+    max-height: 82px;
+    width: 6vw;
+    height: 6vw;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: var(--white);
+    font-size: 34px;
+}
+
+.player__avatar img {
+    border-radius: 50%;
+    width: 6vw;
+    height: 6vw;
+    max-width: 82px;
+    max-height: 82px;
+}
+
+.player__name {
+    font-size: min(1.8vw, 30px);
+    font-family: var(--font-family), var(--font-family-ru);
+    color: var(--white);
+    margin: 0 0 0 min(1vw, 10px);
+    width: min(14vw, 200px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.nameCharacter {
+    color: var(--light-blue);
+    margin: 0;
+    user-select: none;
+}
+
+@media screen and (max-width: var(--MAX-WIDTH-TABLET)) {
+    .player__avatar {
+        width: 42px;
+        height: 42px;
+    }
+
+    .player__name {
+        display: none;
+    }
+}
+
+@media screen and (max-width: var(--MAX-WIDTH-PHONE)) {}

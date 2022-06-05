@@ -25,56 +25,6 @@
     margin-bottom: 20px;
 }
 
-.game__docs {
-    background: var(--light-dark-blue);
-    display: inline-block;
-    padding: 10px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-}
-
-.game__header {
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.game__footer-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 50px;
-    margin-top: 10px;
-}
-
-.game__footer {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}
-
-.game__header-text {
-    color: var(--dark-yellow);
-    font-size: 34px;
-    margin: 0 min(1vw, 10px);
-}
-
-.game__footer-ships-btn {
-    display: none;
-}
-
-.game__header-players {
-    display: flex;
-    align-items: center;
-    background: var(--light-dark-blue);
-    height: 100%;
-    border-radius: 7vw;
-    padding: 0 min(1vw, 10px);
-}
-
 .slider {
     align-items: center; // *
     display: flex;
@@ -86,14 +36,10 @@
 .game__battlefield-bot {
     display: none;
 }
+
 .game__battlefields {
     margin-top: 20px;
     justify-content: center;
-}
-.game__footer-buttons_controls {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
 }
 
 .game__main-content {
@@ -142,33 +88,7 @@
     font-size: min(2vw, 30px); 
 }
 
-.game__footer-ships-btn {
-    display: block;
-}
-.game__footer-buttons_controls {
-    display: flex;
-    flex-direction: row;
-}
-.game__footer {
-    justify-content: center;
-}
-.game__footer-buttons {
-    margin: 0;
-}
-.game__footer-buttons_controls {
-    background: var(--light-dark-blue);
-    border-radius: 14px;
-    width: 82vw;
-    max-width: 1000px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0;
-}
 
-.game__footer-controls {
-    display: flex;
-}
 .test {
     display: block;
     overflow: scroll;
@@ -188,20 +108,6 @@
     height: 100px;
     background: #ccc;
 }
-.game__footer-input {
-    margin: 0;
-    flex-grow: 2;
-    height: 80%;
-}
-
-
-
-.disabled {
-    display: none;
-}
-.active {
-    display: flex;
-}
 
 
 @media screen and (max-width: 800px) {
@@ -213,31 +119,10 @@
         justify-content: space-between;
         margin: 0;
     }
-    .game__footer-video_btn {
-        display: none;
-    }
 
     .game__background {
         height: 98%;
         max-height: none;
-    }
-    .game__header {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    .game__docs {
-        display: flex;
-        align-items: center;
-        width: 84vw;
-        flex-grow: 4;
-        margin-bottom: 10px;
-        margin-top: 10px;
-        margin-left: 0;
-    }
-    .game__call {
-        width: 80vw;
-        height: 100px;
-        background: #ccc;
     }
     .game__battlefield-player {
         background: var(--light-dark-blue);
@@ -252,12 +137,7 @@
         display: block;
         width: 100%;
     }
-    .disabled {
-        display: none;
-    }
-    .active {
-        display: flex;
-    }
+    
     .small2 {
         width: 46vw;
     }
@@ -265,10 +145,7 @@
         padding: 10px;
         padding-top: 12px;
     }
-    .game__header-text {
-        font-size: 20px;
-        margin: 0 2vw;
-    }
+    
     .container {
         display: block;
         width: 84vw;
@@ -315,42 +192,9 @@
     .game__statistics-description {
         font-size: 5vw;
     }
-    .game__footer-buttons_controls {
-        background: var(--light-dark-blue);
-        border-radius: 14px;
-        width: 84vw;
-        display: flex;
-        justify-content: space-between;
-        margin: 0;
-    }
-    .game__header-players {
-        display: flex;
-        align-items: center;
-        background: var(--light-dark-blue);
-        height: 100%;
-        border-radius: 7vw;
-        padding: 0 1vw;
-    }
 }
 
 @media screen and (max-width: 479px) {
-    .game__header {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    .game__docs {
-        display: flex;
-        align-items: center;
-        width: 84vw;
-        flex-grow: 4;
-        margin-bottom: 10px;
-        margin-top: 10px;
-    }
-    .game__call {
-        width: 80vw;
-        height: 100px;
-        background: #ccc;
-    }
     .game__battlefield-player {
         background: var(--light-dark-blue);
         border-radius: 16px;
@@ -363,22 +207,12 @@
     .test {
         display: block;
     }
-    .disabled {
-        display: none;
-    }
-    .active {
-        display: flex;
-    }
     .small2 {
         width: 46vw;
     }
     .game__background {
         padding: 10px;
         padding-top: 12px;
-    }
-    .game__header-text {
-        font-size: 20px;
-        margin: 0 2vw;
     }
 
     .container {
@@ -419,21 +253,5 @@
     }
     .game__statistics-description {
         font-size: 7vw;
-    }
-    .game__footer-buttons_controls {
-        background: var(--light-dark-blue);
-        border-radius: 14px;
-        width: 84vw;
-        display: flex;
-        justify-content: space-between;
-        margin: 0;
-    }
-    .game__header-players {
-        display: flex;
-        align-items: center;
-        background: var(--light-dark-blue);
-        height: 100%;
-        border-radius: 7vw;
-        padding: 0 1vw;
     }
 }

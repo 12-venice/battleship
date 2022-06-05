@@ -7,7 +7,7 @@ import styles from './Chat.scss';
 import { Message } from './components/Message';
 import { messageType } from './components/Message/types';
 
-export const Chat = (): JSX.Element => {
+export const Chat = ({ videoCall }: { videoCall: boolean }): JSX.Element => {
     const { request, loading } = useHttp();
     const { room } = useParams() as { room: string };
     const [messages, setMessages] = useState([] as messageType[]);
@@ -46,7 +46,9 @@ export const Chat = (): JSX.Element => {
                 messages
                     .slice(0)
                     .reverse()
-                    .map((message: messageType) => <Message {...message} />)
+                    .map((message: messageType) => (
+                        <Message key={message._id} {...message} />
+                    ))
             )}
         </div>
     );
