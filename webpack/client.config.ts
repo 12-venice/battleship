@@ -1,14 +1,15 @@
+/* eslint-disable import/no-default-export */
 /* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
 import webpack, { Configuration, Entry } from 'webpack';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 import { IS_DEV, DIST_DIR, SRC_DIR } from './env';
 import fileLoader from './loaders/file';
 import cssLoader from './loaders/css';
 import jsLoader from './loaders/js';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
 
 const config: Configuration = {
     name: 'client',
@@ -52,7 +53,7 @@ const config: Configuration = {
 
     optimization: {
         moduleIds: 'named',
-        minimize: !IS_DEV ? true : false,
+        minimize: !IS_DEV,
         minimizer: !IS_DEV ? [new TerserPlugin()] : [],
         splitChunks: {
             cacheGroups: {
