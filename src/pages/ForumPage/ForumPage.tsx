@@ -91,7 +91,6 @@ export const ForumPage = (): JSX.Element => {
                         <Button
                             skin="quad"
                             color="green"
-                            // title="✚"
                             onClick={() => setWindowCreate(true)}
                         >
                             <img

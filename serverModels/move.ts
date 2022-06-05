@@ -1,6 +1,5 @@
-// Старый синтаксис
-/* eslint-disable @typescript-eslint/no-var-requires */
-import { Schema, model, Types } from 'mongoose';
+/* eslint-disable import/no-default-export */
+import mongoose, { Schema, model, Types } from 'mongoose';
 
 const schema = new Schema({
     date: { type: Date, default: Date.now() },
@@ -10,4 +9,4 @@ const schema = new Schema({
     delivered: { type: Boolean, default: false },
 });
 
-export default model('Move', schema);
+export default mongoose.models.Move || model('Move', schema);
