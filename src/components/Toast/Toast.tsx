@@ -5,18 +5,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { notificationService } from 'src/store/services/notificationService';
+import { Notification } from 'src/store/reducers/notifications';
 import { Avatar } from '../Avatar';
 import { Button } from '../Button';
 import styles from './Toast.scss';
 import { Props } from './types';
-import { Notification } from 'src/store/reducers/notifications';
 
 const ToastBlock = (toast: Notification, position: string): JSX.Element => {
     const deleteToast = (id: string) => {
         notificationService.deleteNotification(id);
     };
 
-    setInterval(() => {
+    setTimeout(() => {
         if (toast.autoDelete) {
             deleteToast(toast.id as string);
         }
@@ -43,13 +43,9 @@ const ToastBlock = (toast: Notification, position: string): JSX.Element => {
                 </div>
             )}
             {toast.title && (
-                <p className={styles['notification-title']}>
-                    {toast.title}
-                </p>
+                <p className={styles['notification-title']}>{toast.title}</p>
             )}
-            <p className={styles['notification-message']}>
-                {toast.message}
-            </p>
+            <p className={styles['notification-message']}>{toast.message}</p>
             {toast.buttons && toast.buttons.length > 0 && (
                 <p className={styles['notification-buttons']}>
                     {toast.buttons.map((button) => (
@@ -63,8 +59,8 @@ const ToastBlock = (toast: Notification, position: string): JSX.Element => {
                 </p>
             )}
         </div>
-    )
-}
+    );
+};
 
 export const Toast: FC<Props> = ({ position }) => {
     const list = useSelector((state: AllStateTypes) => state.notification);
@@ -73,9 +69,7 @@ export const Toast: FC<Props> = ({ position }) => {
         <div
             className={cn(styles['notification-containers'], styles[position])}
         >
-            {list.map((toast) => (
-                ToastBlock(toast, position)
-            ))}
+            {list.map((toast) => ToastBlock(toast, position))}
         </div>
     );
 };

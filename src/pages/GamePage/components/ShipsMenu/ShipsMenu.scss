@@ -1,7 +1,13 @@
 .container {
     position: relative;
-    height: 150px;
+    height: 100%;
     margin: 0 auto;
+    background: var(--light-dark-blue);
+    display: inline-block;
+    padding: 10px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
 }
 
 .container img {
@@ -9,7 +15,11 @@
     transform-origin: left top;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: var(--MAX-WIDTH-TABLET)) {
+
+}
+
+@media screen and (max-width: var(--MAX-WIDTH-PHONE)) {
     .container {
         height: 32vw;
     }

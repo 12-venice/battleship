@@ -1,0 +1,17 @@
+
+.game__footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background: var(--light-dark-blue);
+    border-radius: 14px;
+}
+
+
+@media screen and (max-width: var(--MAX-WIDTH-TABLET)) {
+
+}
+
+@media screen and (max-width: var(--MAX-WIDTH-PHONE)) {
+
+}
