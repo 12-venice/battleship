@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 import { hydrate, render } from 'react-dom';
 import 'babel-polyfill';
 import { Provider } from 'react-redux';
@@ -7,15 +8,15 @@ import { store } from './store/store';
 
 const renderMethod = module.hot ? render : hydrate;
 
-    renderMethod(
-        <Provider store={store}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </Provider>,
-        document.getElementById('root'),
-    );
-    
+renderMethod(
+    <Provider store={store}>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </Provider>,
+    document.getElementById('root'),
+);
+
 if (module.hot) {
     module.hot.accept();
-  }
+}
