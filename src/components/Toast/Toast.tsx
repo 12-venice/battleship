@@ -16,7 +16,7 @@ const ToastBlock = (toast: Notification, position: string): JSX.Element => {
         notificationService.deleteNotification(id);
     };
 
-    setInterval(() => {
+    setTimeout(() => {
         if (toast.autoDelete) {
             deleteToast(toast.id as string);
         }

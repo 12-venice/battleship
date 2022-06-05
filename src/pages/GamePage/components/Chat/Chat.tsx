@@ -37,6 +37,9 @@ export const Chat = ({ videoCall }: { videoCall: boolean }): JSX.Element => {
         }
         return () => setMessages([]);
     }, [getMessages, room]);
+    if (videoCall) {
+        return <div className={styles.chat__block}>VIDEOCALL</div>;
+    }
 
     return (
         <div className={styles.chat__block}>
