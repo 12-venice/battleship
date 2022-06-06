@@ -1,4 +1,5 @@
 import { hot } from 'react-hot-loader/root';
+import { useNavigate } from 'react-router-dom';
 import { Toast } from '../Toast';
 import { ErrorBoundary } from '../utils/ErrorBoundary';
 import { useRoutes } from '../utils/Routes';
@@ -8,7 +9,8 @@ import './App.scss';
 const AppWithRoutes: React.FC = () => {
     const routes = useRoutes();
     const position = 'top-right';
-    Listener();
+    const navigation = useNavigate();
+    Listener(navigation);
     return (
         <ErrorBoundary>
             <Toast position={position} />

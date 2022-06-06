@@ -1,14 +1,13 @@
 /* eslint-disable react/jsx-curly-newline */
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { notificationService } from 'src/store/services/notificationService';
 import { OnlineService } from 'src/store/services/onlineService';
 import { PageLinks } from '../Routes/types';
 import { socket } from './Socket';
 
-export const AcceptInvite = (room?: string) => {
-    const navigation = useNavigate();
+export const AcceptInvite = (nav, room?: string) => {
     socket.emit('invite:accept', room);
-    navigation(PageLinks.game);
+    nav(`${PageLinks.game}/${room._id}`);
 };
 
 export const CancelInvite = (room?: string) => {
@@ -19,7 +18,7 @@ export const SendMessage = (data: any) => {
     socket.emit('messages:sent', data);
 };
 
-export const Listener = () => {
+export const Listener = (nav) => {
     const { room } = useParams() as { room: string };
 
     socket.on('userOnline:add', (data) => {
@@ -74,7 +73,7 @@ export const Listener = () => {
                     title: 'ACCEPT',
                     skin: 'small',
                     color: 'orange',
-                    onClick: () => AcceptInvite(data.room),
+                    onClick: () => AcceptInvite(nav, data.room),
                 },
                 {
                     title: 'CANCEL',
