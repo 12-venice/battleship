@@ -40,7 +40,7 @@ export const GamePage = (): JSX.Element => {
     const { room } = useParams();
     const { request, loading } = useHttp();
     const user = useSelector((state: AllStateTypes) => state.user.item);
-    const [dataOfRoom, setDataOfRoom] = useState({ messages: [] });
+    const [dataOfRoom, setDataOfRoom] = useState({ anotherUser: {avatar: null, login: 'null'}, messages: [] });
     const [message, setMessage] = useState('');
     const getDataOfRoom = useCallback(async () => {
         const data = await request(
@@ -59,7 +59,9 @@ export const GamePage = (): JSX.Element => {
         } else {
             setDataOfRoom({
                 room: {},
-                user: {
+                anotherUser: {
+                    login: 'CAPTAIN',
+                    avatar: null,
                     display_name: 'Captain JACK'
                 },
                 messages: [
@@ -276,16 +278,13 @@ export const GamePage = (): JSX.Element => {
                         <div className={styles['game__header-players']}>
                             <p className={styles['game__header-text']}>0</p>
                             <PlayerName
-                                name={user?.display_name ?? 'Player 1'}
+                                user={user}
                                 avatarPosition="right"
-                                avatarSrc={`https://ya-praktikum.tech/api/v2/resources${user?.avatar}`}
                             />
                             <p className={styles['game__header-text']}>00</p>
                             <PlayerName
-                                name={dataOfRoom?.anotherUser?.display_name ?? 'Player 2'}
+                                user={dataOfRoom?.anotherUser}
                                 avatarPosition="left"
-                                avatarSrc={`https://ya-praktikum.tech/api/v2/resources${dataOfRoom?.anotherUser?.avatar}`}
-
                             />
                             <p className={styles['game__header-text']}>0</p>
                         </div>

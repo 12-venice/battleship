@@ -12,13 +12,10 @@ import { Props } from './types';
 import { Notification } from 'src/store/reducers/notifications';
 
 const ToastBlock = (toast: Notification, position: string): JSX.Element => {
-    const deleteToast = (id: string) => {
-        notificationService.deleteNotification(id);
-    };
 
     setInterval(() => {
         if (toast.autoDelete) {
-            deleteToast(toast.id as string);
+            notificationService.deleteNotification(toast.id);
         }
     }, toast.autoDeleteTime);
 

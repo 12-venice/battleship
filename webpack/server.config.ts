@@ -1,24 +1,19 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
-import webpack, { Configuration, Entry } from 'webpack';
+import { Configuration } from 'webpack';
 import nodeExternals from 'webpack-node-externals';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { IS_DEV, DIST_DIR, SRC_DIR } from './env';
 import fileLoader from './loaders/file';
 import cssLoader from './loaders/css';
 import jsLoader from './loaders/js';
-
-const ASSET_PATH = process.env.ASSET_PATH || '/'
 
 const config: Configuration = {
     name: 'server',
     mode: IS_DEV ? 'development' : 'production',
     target: 'node',
     node: { __dirname: false },
-    entry: [
-        path.join(SRC_DIR, 'server'),
-    ].filter(Boolean) as unknown as Entry,
+    entry: path.join(SRC_DIR, 'server'),
 
     module: {
         rules: [fileLoader.server, cssLoader.server, jsLoader.server],
@@ -31,20 +26,14 @@ const config: Configuration = {
     output: {
         filename: 'server.js',
         libraryTarget: 'commonjs2',
-        path: DIST_DIR,
-        publicPath: ASSET_PATH,
+        path: DIST_DIR
     },
+
     resolve: {
         modules: ['src', 'node_modules'],
         extensions: ['*', '.js', '.jsx', '.json', '.ts', '.tsx'],
         plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
     },
-
-    plugins: [
-        new MiniCssExtractPlugin({
-            filename: 'styles.css',
-        })
-    ],
 
     devtool: 'source-map',
 

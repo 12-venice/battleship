@@ -1,6 +1,5 @@
-// Старый синтаксис
-/* eslint-disable @typescript-eslint/no-var-requires */
-import { Schema, model, Types } from 'mongoose';
+import mongoose, { Schema, model, Types } from 'mongoose';
+mongoose.Promise = global.Promise;
 
 const schema = new Schema({
     topic: { type: Types.ObjectId, ref: 'Topic', required: true },
@@ -9,4 +8,4 @@ const schema = new Schema({
     user: { type: Types.ObjectId, ref: 'User', required: true },
 });
 
-export default model('Comment', schema);
+export default mongoose.models.Comment || model('Comment', schema);

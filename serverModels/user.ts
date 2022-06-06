@@ -1,4 +1,5 @@
-import { Schema, model, Types } from 'mongoose';
+import mongoose, { Schema, model, Types } from 'mongoose';
+mongoose.Promise = global.Promise;
 
 const schema = new Schema({
     id: { type: Number, required: true },
@@ -15,4 +16,4 @@ const schema = new Schema({
     defeats: { type: String, default: 0 },
 });
 
-export default model('User', schema);
+export default mongoose.models.User || model('User', schema);;

@@ -12,6 +12,12 @@ router.post('/create', async (req, res) => {
         const { id } = req.body;
         setTimeout(() => {
         }, 500);
+        if (!req.body.login) {
+            req.body = { ...req.body, ...{ login: req.body.email } }
+        }
+        if (!req.body.display_name) {
+            req.body = { ...req.body, ...{ display_name: req.body.login } }
+        }
         const isExist = await User.findOne({ id });
         if (isExist) {
             await User.updateOne({ id }, { $set: req.body });
@@ -31,7 +37,7 @@ router.post('/create', async (req, res) => {
 router.post('/read', async (req, res) => {
     try {
         const { sortType, sortDirection, page } = req.body;
-        console.log( sortType, sortDirection, page )
+        console.log(sortType, sortDirection, page)
         const user = await User.find()
             .sort({ [sortType]: sortDirection ? 1 : -1 })
             .skip(page * 10)

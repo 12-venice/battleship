@@ -6,8 +6,7 @@
 /* eslint-disable no-console */
 const mongoose = require('mongoose');
 const { httpServer } = require('./dist/server.js');
-
-const mongoBase = 'mongodb://usw2m9pivmflt8e3fgvc:DvcQrZQiBITI5QAR5zKK@blcazg7veeuyg88-mongodb.services.clever-cloud.com:27017/blcazg7veeuyg88';
+const mongoBase = 'mongodb+srv://admin:Edifier123@cluster0.pfe5h.mongodb.net/battleship?retryWrites=true&w=majority'
 const PORT = 5000;
 
 async function start() {

@@ -1,28 +1,25 @@
 import cn from 'classnames';
+import { Avatar } from 'src/components/Avatar';
 import styles from './PlayerName.scss';
 import { Props } from './types';
 
 export const PlayerName = ({
-    avatarSrc,
+    user,
     avatarPosition = 'left',
-    name,
-}: Props) => (
-    <div className={styles.player__container}>
-        <div
-            className={cn(styles.player__flex, {
-                [styles.avatarLeft]: avatarPosition === 'right',
-            })}
-        >
-            {avatarSrc ? (
-                <div className={styles.player__avatar}>
-                    <img src={avatarSrc} alt="" />
+}: Props) => {
+    if (user) {
+        return (
+            <div className={styles.player__container}>
+                <div
+                    className={cn(styles.player__flex, {
+                        [styles.avatarLeft]: avatarPosition === 'right',
+                    })}
+                >
+                    <Avatar avatar={user?.avatar!} login={user?.login} />
+                    <p className={styles.player__name}>{user?.display_name ? user?.display_name : 'PIRATE'}</p>
                 </div>
-            ) : (
-                <div className={styles.player__avatar}>
-                    <p className={styles.nameCharacter}>{name.charAt(0)}</p>
-                </div>
-            )}
-            <p className={styles.player__name}>{name}</p>
-        </div>
-    </div>
-);
+            </div>)
+    } else {
+        return <div />
+    }
+};

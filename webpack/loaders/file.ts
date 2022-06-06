@@ -6,7 +6,7 @@ export default {
         test: fileRegex,
     },
     server: {
-        loader: 'file-loader',
+        loader: 'null-loader',
         test: fileRegex,
     },
 };

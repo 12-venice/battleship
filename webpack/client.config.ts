@@ -16,7 +16,7 @@ const config: Configuration = {
     mode: IS_DEV ? 'development' : 'production',
     entry: [
         IS_DEV && 'react-hot-loader/patch',
-        IS_DEV && 'webpack-hot-middleware/client?reload=true',
+        IS_DEV && 'webpack-hot-middleware/client',
         IS_DEV && 'css-hot-loader/hotModuleReplacement',
         path.join(SRC_DIR, 'client'),
     ].filter(Boolean) as unknown as Entry,
@@ -41,7 +41,7 @@ const config: Configuration = {
             filename: '[name].css',
         }),
         new FaviconsWebpackPlugin('./images/favicon.png'),
-        ...(IS_DEV ? [new webpack.HotModuleReplacementPlugin()] : []),
+        new webpack.HotModuleReplacementPlugin(),
     ],
 
     devtool: 'source-map',

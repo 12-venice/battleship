@@ -9,24 +9,25 @@ import topicRouter from '../serverRoutes/topic.routes';
 import commentRouter from '../serverRoutes/comment.routes';
 import roomRouter from '../serverRoutes/room.routes';
 import messageRouter from '../serverRoutes/message.routes';
-import webpack from 'webpack';
+import webpack, { Compiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
-import config from '../webpack/server.config';
+import hotServerMiddleware from 'webpack-hot-server-middleware';
+import config from '../webpack.config';
 import authRoutes from 'socketRoutes/auth.routes';
 import messageRoutes from 'socketRoutes/message.routes';
 import inviteRoutes from 'socketRoutes/invite.routes';
 
 const getWebpackMiddlewares = (
-    config: webpack.Configuration,
+    config: webpack.Configuration[],
 ): RequestHandler[] => {
     const compiler = webpack(config);
     return [
         devMiddleware(compiler, {
-            publicPath: config.output?.publicPath,
             serverSideRender: true
         }),
-        hotMiddleware(compiler),
+        hotMiddleware(compiler.compilers.find(compiler => compiler.name === 'client') as Compiler),
+        hotServerMiddleware(compiler)
     ];
 };
 
@@ -58,6 +59,6 @@ app.use('/api/room', roomRouter);
 app.use('/api/message', messageRouter);
 
 app.use(express.static(path.resolve(__dirname, '../dist')));
-app.get('/*', [...getWebpackMiddlewares(config)], requestHandler);
+app.use('/*', [...getWebpackMiddlewares(config)], requestHandler);
 
 export { httpServer };
