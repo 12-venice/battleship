@@ -126,25 +126,6 @@ export const GamePage = (): JSX.Element => {
         return 380;
     }, []);
 
-    const [areaWidthSize, setareaWidthSize] = useState(startAreaWidth());
-
-    useEffect(() => {
-        function winResize() {
-            const width = window.innerWidth;
-            if (width < 480) {
-                setareaWidthSize(width * 0.8);
-            } else if (width >= 480 && width <= 800) {
-                setareaWidthSize(378);
-            } else if (width > 800 && width < 1500) {
-                setareaWidthSize(width * 0.25);
-            } else if (width >= 1500) {
-                setareaWidthSize(380);
-            }
-        }
-        window.addEventListener('resize', winResize);
-        return () => window.removeEventListener('resize', winResize);
-    }, []);
-
     useEffect(() => {
         let tuchX = 0;
         let delt = false;
@@ -227,7 +208,7 @@ export const GamePage = (): JSX.Element => {
                                     >
                                         <Area
                                             ref={botCanvasRef}
-                                            areaWidth={areaWidthSize}
+                                            areaWidth={startAreaWidth()}
                                             fillColor="#9DC0F0"
                                             onClick={handlerPlayerShot}
                                             {...opponentField}
@@ -244,7 +225,7 @@ export const GamePage = (): JSX.Element => {
                                     >
                                         <Area
                                             ref={playerCanvasRef}
-                                            areaWidth={areaWidthSize}
+                                            areaWidth={startAreaWidth()}
                                             {...playerField}
                                         />
                                     </div>
@@ -288,7 +269,7 @@ export const GamePage = (): JSX.Element => {
                         {!startGame ? (
                             <div className={styles.game__docs}>
                                 <ShipsMenu
-                                    imgWidth={areaWidthSize / 10}
+                                    imgWidth={startAreaWidth() / 10}
                                     onDragStart={placementArea.handlerShipDragStart}
                                     onDrop={placementArea.handlerShipDragEnd}
                                     onDragOver={placementArea.handlerShipOver}
