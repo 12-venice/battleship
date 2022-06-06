@@ -20,7 +20,6 @@ export const SendMessage = (data: any) => {
 };
 
 export const Listener = () => {
-    const navigation = useNavigate();
     const { room } = useParams() as { room: string };
 
     socket.on('userOnline:add', (data) => {
@@ -50,7 +49,6 @@ export const Listener = () => {
                 },
             ],
         });
-        navigation(PageLinks.game);
     });
 
     socket.on('invite:cancel', (data) => {
@@ -88,11 +86,11 @@ export const Listener = () => {
         });
     });
     socket.on('messages:recive', (data) => {
-        console.log(data)
-        if (room !== data.message.room) {
+        console.log(room, data.room)
+        if (room !== data.room) {
             notificationService.addNotification({
                 title: `New message by ${data.user.display_name}`,
-                message: data.message,
+                message: data.text,
                 autoDelete: true,
                 autoDeleteTime: 15000,
                 user: data.user,
@@ -101,8 +99,6 @@ export const Listener = () => {
                         title: 'READ',
                         skin: 'small',
                         color: 'green',
-                        onClick: () =>
-                            navigation(`${PageLinks.game}/${data.room}`),
                     },
                 ],
             });

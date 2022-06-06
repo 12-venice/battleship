@@ -15,7 +15,7 @@ const ToastBlock = (toast: Notification, position: string): JSX.Element => {
     const deleteToast = (id: string) => {
         notificationService.deleteNotification(id);
     };
-
+console.log(toast)
     setTimeout(() => {
         if (toast.autoDelete) {
             deleteToast(toast.id as string);
@@ -43,16 +43,19 @@ const ToastBlock = (toast: Notification, position: string): JSX.Element => {
                 </div>
             )}
             {toast.title && (
-                <p className={styles['notification-title']}>{toast.title}</p>
+                <div className={styles['notification-title']}>
+                    {toast.title}
+                </div>
             )}
-            <p className={styles['notification-message']}>{toast.message}</p>
+            <div className={styles['notification-message']}>
+                {toast.message}
+            </div>
             {toast.buttons && toast.buttons.length > 0 && (
                 <p className={styles['notification-buttons']}>
                     {toast.buttons.map((button) => (
                         <Button
                             key={uuidv4()}
                             title={button.title}
-                            skin="small"
                             onClick={button.onClick}
                         />
                     ))}

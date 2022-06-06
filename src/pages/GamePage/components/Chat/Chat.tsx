@@ -14,10 +14,9 @@ export const Chat = ({ videoCall }: { videoCall: boolean }): JSX.Element => {
     const [messages, setMessages] = useState([] as messageType[]);
 
     socket.on('messages:recive', (data) => {
-        console.log(data)
         if (room === data.room) {
-            console.log(data.message)
-            setMessages([messages, ...data.message]);
+            const newArr = [...messages, ...[data]];
+            setMessages(newArr);
         }
     });
 
