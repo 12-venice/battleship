@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable import/no-default-export */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/extensions */
+import { Socket } from 'socket.io';
 import User from '../serverModels/user';
 import Room from '../serverModels/room';
-import { Socket } from 'socket.io';
 import { getSocketUserOnline, getUserOnline } from './usersOnline';
 
 type roomUsers = {
@@ -22,10 +24,10 @@ export default (socket: Socket) => {
         });
         const socketInvitedUser = getSocketUserOnline(invitedUserId);
         const sendInvite = (room: string) => {
-            console.log('socketInvitedUser: ', socketInvitedUser)
+            console.log('socketInvitedUser: ', socketInvitedUser);
             socket.to(socketInvitedUser as string).emit('invite:recive', {
                 user: createdUser,
-                room: room,
+                room,
             });
         };
         if (!isRoomCreate && !isRoomCreateInvited) {
