@@ -6,7 +6,13 @@
     border-radius: 50%;
     background: #ffffff;
     color: #9DC0F0;
-    width: 70px;
-    height: 70px;
-    font-size: 35px;
+    width: min(7vw, 70px);
+    height: min(7vw, 70px);
+    font-size: min(3vw, 35px);
+}
+
+@media screen and (max-width: 800px) {
+    .avatar {
+        display: none;
+    }
 }

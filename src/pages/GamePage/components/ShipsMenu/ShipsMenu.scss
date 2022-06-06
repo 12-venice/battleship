@@ -1,6 +1,5 @@
-.container {
+.ships__container {
     position: relative;
-    height: 100%;
     margin: 0 auto;
     background: var(--light-dark-blue);
     display: inline-block;
@@ -10,17 +9,17 @@
     align-items: center;
 }
 
-.container img {
+.ships__container img {
     position: absolute;
     transform-origin: left top;
 }
 
 @media screen and (max-width: var(--MAX-WIDTH-TABLET)) {
-
+    .ships__container {
+        height: 32vw;
+    }
 }
 
 @media screen and (max-width: var(--MAX-WIDTH-PHONE)) {
-    .container {
-        height: 32vw;
-    }
+    
 }
