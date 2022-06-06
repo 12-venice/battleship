@@ -11,6 +11,9 @@ import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
 
 import { MatrixCell } from 'src/gameCore/types';
 import { useParams } from 'react-router-dom';
+import { useHttp } from 'src/hooks/http.hook';
+import { Preloader } from 'src/components/Preloader';
+import { sendMessage } from 'src/components/utils/Socket/Listeners';
 import fsIcon from '../../../images/fs.svg';
 import fsExitIcon from '../../../images/fs_exit.svg';
 import arrowIcon from '../../../images/round_arrow.svg';
@@ -24,9 +27,6 @@ import { ShipsMenu } from './components/ShipsMenu';
 
 import styles from './GamePage.scss';
 import { mapStateToProps } from './mapState';
-import { useHttp } from 'src/hooks/http.hook';
-import { Preloader } from 'src/components/Preloader';
-import { sendMessage } from 'src/components/utils/Socket/Listeners';
 
 const STATISTICS = [
     { label: 'HITS', player: 8, opponent: 17 },
@@ -60,16 +60,16 @@ export const GamePage = (): JSX.Element => {
             setDataOfRoom({
                 room: {},
                 user: {
-                    display_name: 'Captain JACK'
+                    display_name: 'Captain JACK',
                 },
                 messages: [
                     {
                         _id: 'bot',
                         text: 'Hello!',
-                        date: Date.now()
-                    }
-                ]
-            })
+                        date: Date.now(),
+                    },
+                ],
+            });
         }
         return () => setDataOfRoom({});
     }, []);
@@ -95,10 +95,10 @@ export const GamePage = (): JSX.Element => {
 
     const sendMessageHandler = () => {
         if (message) {
-            sendMessage({ room, message })
-            setMessage('')
+            sendMessage({ room, message });
+            setMessage('');
         }
-    }
+    };
 
     const handlerChangePlayerField = useCallback(({ matrix, squadron }) => {
         const ships = Object.entries(squadron).map(
@@ -210,13 +210,11 @@ export const GamePage = (): JSX.Element => {
         let delt = false;
         const tStart = (e: TouchEvent) => {
             tuchX = e.changedTouches[0].clientX;
-            // console.log('start')
         };
         const tEnd = (e: TouchEvent) => {
             if (Math.abs(tuchX - e.changedTouches[0].clientX) > 40) {
                 delt = !delt;
                 setTrnslX(!delt);
-                // console.log('end')
             }
         };
         if (sliderRef.current) {
@@ -233,7 +231,6 @@ export const GamePage = (): JSX.Element => {
     useEffect(() => {
         let timer: any;
         const onlongtouch = function () {
-            console.log('1s');
             setVideoCall(true);
         };
         function touchstart() {
@@ -264,7 +261,7 @@ export const GamePage = (): JSX.Element => {
     }, [placementArea]);
 
     if (loading) {
-        return <Preloader />
+        return <Preloader />;
     }
 
     return (
@@ -282,10 +279,12 @@ export const GamePage = (): JSX.Element => {
                             />
                             <p className={styles['game__header-text']}>00</p>
                             <PlayerName
-                                name={dataOfRoom?.anotherUser?.display_name ?? 'Player 2'}
+                                name={
+                                    dataOfRoom?.anotherUser?.display_name ??
+                                    'Player 2'
+                                }
                                 avatarPosition="left"
                                 avatarSrc={`https://ya-praktikum.tech/api/v2/resources${dataOfRoom?.anotherUser?.avatar}`}
-
                             />
                             <p className={styles['game__header-text']}>0</p>
                         </div>
@@ -345,7 +344,7 @@ export const GamePage = (): JSX.Element => {
                                                 <h5
                                                     className={
                                                         styles[
-                                                        'game__statistics-label'
+                                                            'game__statistics-label'
                                                         ]
                                                     }
                                                 >
@@ -354,7 +353,7 @@ export const GamePage = (): JSX.Element => {
                                                 <span
                                                     className={
                                                         styles[
-                                                        'game__statistics-description'
+                                                            'game__statistics-description'
                                                         ]
                                                     }
                                                 >
@@ -396,14 +395,31 @@ export const GamePage = (): JSX.Element => {
                                         <div
                                             className={cn(
                                                 styles['game__chat-row'],
-                                                (message.user !== user?._id && styles.notme),
+                                                message.user !== user?._id &&
+                                                    styles.notme,
                                             )}
                                         >
-                                            <div className={styles['game__chat-msg']}>
-                                                <div className={styles['game__chat-text']}>
+                                            <div
+                                                className={
+                                                    styles['game__chat-msg']
+                                                }
+                                            >
+                                                <div
+                                                    className={
+                                                        styles[
+                                                            'game__chat-text'
+                                                        ]
+                                                    }
+                                                >
                                                     {message.text}
                                                 </div>
-                                                <div className={styles['game__chat-date']}>
+                                                <div
+                                                    className={
+                                                        styles[
+                                                            'game__chat-date'
+                                                        ]
+                                                    }
+                                                >
                                                     {message.date}
                                                 </div>
                                             </div>
@@ -453,26 +469,27 @@ export const GamePage = (): JSX.Element => {
                                             <input
                                                 className={cn(
                                                     styles[
-                                                    'game__footer-input'
+                                                        'game__footer-input'
                                                     ],
                                                     'browser-default',
                                                 )}
                                                 type="text"
                                                 value={message}
                                                 placeholder="value"
-                                                onChange={(e) => setMessage(e.target.value)}
+                                                onChange={(e) =>
+                                                    setMessage(e.target.value)}
                                             />
                                             <div
                                                 className={
                                                     styles[
-                                                    'game__footer-controls'
+                                                        'game__footer-controls'
                                                     ]
                                                 }
                                             >
                                                 <div
                                                     className={
                                                         styles[
-                                                        'game__footer-video_btn'
+                                                            'game__footer-video_btn'
                                                         ]
                                                     }
                                                 >
@@ -496,7 +513,9 @@ export const GamePage = (): JSX.Element => {
                                                     <Button
                                                         href="/"
                                                         skin="quad"
-                                                        onClick={sendMessageHandler}
+                                                        onClick={
+                                                            sendMessageHandler
+                                                        }
                                                     >
                                                         <img
                                                             className={

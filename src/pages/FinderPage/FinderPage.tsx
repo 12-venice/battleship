@@ -22,9 +22,11 @@ export const FinderPage = () => {
     const usersOnline = useSelector((state: AllStateTypes) => state.userOnline);
 
     const checkUserOnline = (id: string) => {
-        const isOnline = Object.keys(usersOnline).find((key) => usersOnline[key] === id)
-        return isOnline ? true : false
-    }
+        const isOnline = Object.keys(usersOnline).find(
+            (key) => usersOnline[key] === id,
+        );
+        return !!isOnline;
+    };
 
     const [rooms, setRooms] = useState([]);
     const [str, setStr] = useState('');
@@ -69,7 +71,7 @@ export const FinderPage = () => {
     };
     const inviteUser = (invitedUserId: string, room: string) => {
         socket.emit('invite:sent', { createdUserId: user?._id, invitedUserId });
-        navigator(`${PageLinks.game}/${room}`)
+        navigator(`${PageLinks.game}/${room}`);
     };
 
     return (
@@ -121,16 +123,33 @@ export const FinderPage = () => {
                                         </span>
                                         <Button
                                             title={str ? '+' : 'v'}
-                                            skin='quad'
+                                            skin="quad"
                                             color={str ? 'green' : 'blue'}
-                                            onClick={str ? () => createRoom(element._id) : () => inviteUser(element._id, element.room)}
+                                            onClick={
+                                                str
+                                                    ? () =>
+                                                        createRoom(
+                                                            element._id,
+                                                        )
+                                                    : () =>
+                                                        inviteUser(
+                                                            element._id,
+                                                            element.room,
+                                                        )
+                                            }
                                         />
-                                        {!str &&
+                                        {!str && (
                                             <div
                                                 className={styles.finder__point}
-                                                style={{ background: checkUserOnline(element._id) ? 'greenyellow' : 'gray' }}
+                                                style={{
+                                                    background: checkUserOnline(
+                                                        element._id,
+                                                    )
+                                                        ? 'greenyellow'
+                                                        : 'gray',
+                                                }}
                                             />
-                                        }
+                                        )}
                                     </div>
                                 ),
                         )

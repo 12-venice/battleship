@@ -17,7 +17,7 @@ const newToast = (data: Notification) => {
         buttons: data.buttons ?? undefined,
         type: data.type ?? undefined,
         autoDelete: data.autoDelete ?? true,
-        autoDeleteTime: data.autoDeleteTime ?? 3000
+        autoDeleteTime: data.autoDeleteTime ?? 3000,
     };
 };
 

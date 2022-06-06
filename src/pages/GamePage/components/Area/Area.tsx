@@ -20,7 +20,6 @@ export const Area = forwardRef(
     ) => {
         const handlerClick = useCallback(
             (event) => {
-                // console.log('onMouseEnter', event);
                 if (onClick) onClick(event);
             },
             [onClick],
@@ -28,7 +27,6 @@ export const Area = forwardRef(
 
         const handlerMouseEnter = useCallback(
             (event) => {
-                // console.log('onMouseEnter', event);
                 if (onCursorEnter) onCursorEnter(event);
             },
             [onCursorEnter],
@@ -36,7 +34,6 @@ export const Area = forwardRef(
 
         const handlerMouseLeave = useCallback(
             (event) => {
-                // console.log('onMouseLeave', event);
                 if (onCursorOver) onCursorOver(event);
             },
             [onCursorOver],
