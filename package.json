@@ -10,11 +10,13 @@
         "eslint": "eslint ./src --ext .js,.ts,.tsx --cache",
         "eslint:fix": "eslint ./src --ext .js,.ts,.tsx --fix",
         "prepare": "husky install",
-        "dev": "npm run clean && NODE_ENV=development webpack --mode=development --watch",
-        "dev:server": "npm run clean && NODE_ENV=development DEV=true webpack --mode=development --watch",
-        "start:webpack": "npm run clean && webpack --mode=production",
+        "build:production": "NODE_ENV=production webpack --mode=production",
+        "build:dev": "NODE_ENV=development webpack --mode=development",
+        "build:dev:watch": "NODE_ENV=development webpack --mode=development --watch",
+        "start:dev:server": "nodemon --watch dist/server.js",
         "start:server": "node dist/server.js",
-        "start": "npm-run-all --print-label start:*"
+        "start:production": "npm run clean && npm-run-all --print-label --parallel build:production start:server",
+        "start:dev": "npm run clean && npm-run-all --print-label --parallel build:dev:watch start:dev:server"
     },
     "keywords": [],
     "author": "",
