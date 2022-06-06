@@ -10,6 +10,7 @@ import { MatrixCell } from 'src/gameCore/types';
 import { useParams } from 'react-router-dom';
 import { useHttp } from 'src/hooks/http.hook';
 import { User } from 'src/store/reducers/user';
+import { Button } from 'src/components/Button';
 import { Area } from './components/Area';
 import { ShipsMenu } from './components/ShipsMenu';
 import styles from './GamePage.scss';
@@ -39,9 +40,10 @@ export const GamePage = (): JSX.Element => {
     const [videoCall, setVideoCall] = useState(false);
     const [trnslX, setTrnslX] = useState(true);
     const [isFull, setIsFull] = useState(false);
+    const [fieldIs, setField] = useState(true);
 
     const sliderRef = createRef<HTMLDivElement>();
-    const video = createRef<HTMLDivElement>();
+    // const video = createRef<HTMLDivElement>();
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
 
@@ -154,7 +156,7 @@ export const GamePage = (): JSX.Element => {
             if (Math.abs(tuchX - e.changedTouches[0].clientX) > 40) {
                 delt = !delt;
                 setTrnslX(!delt);
-                // console.log('end')
+                // console.log('end', delt)
             }
         };
         if (sliderRef.current) {
@@ -165,33 +167,33 @@ export const GamePage = (): JSX.Element => {
             window.removeEventListener('touchstart', tStart);
             window.removeEventListener('touchend', tEnd);
         };
-    }, [sliderRef]);
+    }, []);
 
-    useEffect(() => {
-        let timer: any;
-        const onlongtouch = function () {
-            console.log('1s');
-            setVideoCall(true);
-        };
-        function touchstart() {
-            timer = setTimeout(onlongtouch, 1000);
-        }
+    // useEffect(() => {
+    //     let timer: any;
+    //     const onlongtouch = function () {
+    //         console.log('1s');
+    //         setVideoCall(true);
+    //     };
+    //     function touchstart() {
+    //         timer = setTimeout(onlongtouch, 1000);
+    //     }
 
-        function touchend() {
-            if (timer) {
-                clearTimeout(timer);
-            }
-        }
+    //     function touchend() {
+    //         if (timer) {
+    //             clearTimeout(timer);
+    //         }
+    //     }
 
-        if (video.current) {
-            video.current.addEventListener('touchstart', touchstart);
-            video.current.addEventListener('touchend', touchend);
-        }
-        return () => {
-            window.removeEventListener('touchstart', touchstart);
-            window.removeEventListener('touchend', touchend);
-        };
-    }, [startGame, video, videoCall]);
+    //     if (video.current) {
+    //         video.current.addEventListener('touchstart', touchstart);
+    //         video.current.addEventListener('touchend', touchend);
+    //     }
+    //     return () => {
+    //         window.removeEventListener('touchstart', touchstart);
+    //         window.removeEventListener('touchend', touchend);
+    //     };
+    // }, [startGame, video, videoCall]);
 
     useEffect(() => {
         getRoom();
@@ -208,8 +210,8 @@ export const GamePage = (): JSX.Element => {
                                 className={cn(
                                     styles.game__slider,
                                     startGame && !trnslX
-                                        ? styles.left
-                                        : styles.right,
+                                        ? styles.game__left
+                                        : styles.game__right,
                                 )}
                                 ref={sliderRef}
                             >
@@ -218,7 +220,9 @@ export const GamePage = (): JSX.Element => {
                                         className={cn(
                                             styles.game__field,
                                             styles.disabled,
-                                            startGame ? styles.active : '',
+                                            startGame && fieldIs
+                                                ? styles.active
+                                                : '',
                                         )}
                                     >
                                         <Area
@@ -233,7 +237,9 @@ export const GamePage = (): JSX.Element => {
                                         className={cn(
                                             styles.game__field,
                                             styles.disabled,
-                                            startGame ? '' : styles.active,
+                                            startGame && fieldIs
+                                                ? ''
+                                                : styles.active,
                                         )}
                                     >
                                         <Area
@@ -243,40 +249,52 @@ export const GamePage = (): JSX.Element => {
                                         />
                                     </div>
                                 </div>
-                                <div className={styles.game__statistics}>
-                                    {STATISTICS.map((el) => (
-                                        <div key={el.label}>
-                                            <h5
-                                                className={
-                                                    styles[
-                                                        'game__statistics-label'
-                                                    ]
-                                                }
-                                            >
-                                                {el.label}
-                                            </h5>
-                                            <span
-                                                className={
-                                                    styles[
-                                                        'game__statistics-description'
-                                                    ]
-                                                }
-                                            >
-                                                {`${el.player}/${el.opponent}`}
-                                            </span>
-                                        </div>
-                                    ))}
+                                <div className={styles['game__slider-stat']}>
+                                    <div className={styles.game__statistics}>
+                                        {STATISTICS.map((el) => (
+                                            <div key={el.label}>
+                                                <h5
+                                                    className={
+                                                        styles[
+                                                            'game__statistics-label'
+                                                        ]
+                                                    }
+                                                >
+                                                    {el.label}
+                                                </h5>
+                                                <span
+                                                    className={
+                                                        styles[
+                                                            'game__statistics-description'
+                                                        ]
+                                                    }
+                                                >
+                                                    {`${el.player}/${el.opponent}`}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
+                            {startGame && (
+                                <Button
+                                    onClick={() => setField(!fieldIs)}
+                                    title="switch"
+                                    color="blue"
+                                    className={styles.game__switch}
+                                />
+                            )}
                         </div>
                         {!startGame ? (
-                            <ShipsMenu
-                                imgWidth={areaWidthSize / 10}
-                                onDragStart={placementArea.handlerShipDragStart}
-                                onDrop={placementArea.handlerShipDragEnd}
-                                onDragOver={placementArea.handlerShipOver}
-                                onContextMenu={placementArea.rotationShip}
-                            />
+                            <div className={styles.game__docs}>
+                                <ShipsMenu
+                                    imgWidth={areaWidthSize / 10}
+                                    onDragStart={placementArea.handlerShipDragStart}
+                                    onDrop={placementArea.handlerShipDragEnd}
+                                    onDragOver={placementArea.handlerShipOver}
+                                    onContextMenu={placementArea.rotationShip}
+                                />
+                            </div>
                         ) : (
                             <Chat {...{ videoCall }} />
                         )}

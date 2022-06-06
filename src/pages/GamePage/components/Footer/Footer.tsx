@@ -68,7 +68,7 @@ export const Footer = ({
                 onClick={() => setIsFull(!isFull)}
             >
                 <img
-                    className={styles.icon}
+                    className={styles.footer__icon}
                     src={isFull ? fsExitIcon : fsIcon}
                     alt="Add"
                 />
@@ -86,7 +86,7 @@ export const Footer = ({
 
                     <Button href="/" skin="quad" onClick={handleClickReset}>
                         <img
-                            className={styles.icon}
+                            className={styles.footer__icon}
                             src={arrowIcon}
                             alt="Add"
                         />

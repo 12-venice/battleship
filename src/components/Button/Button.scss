@@ -6,10 +6,10 @@
     border-radius: 1vw;
     color: var(--white);
     font-family: var(--font-family), var(--font-family-ru);
-    font-size: 2vw;
+    font-size: min(2vw, 40px);
     border-top: 6px solid var(--light-yellow);
-    height: 3.6vw;
-    width: 11vw;
+    height: min(3.6vw, 70px);
+    width: min(11vw, 200px);
     margin: 7px;
     padding: 0;
 }
@@ -24,7 +24,7 @@
 }
 
 .button_quad {
-    width: 3.6vw;
+    width: min(3.6vw, 70px);
 }
 
 .button_wide {

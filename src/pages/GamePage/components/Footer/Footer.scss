@@ -1,4 +1,6 @@
-
+.footer__icon {
+    height: min(1.8vw, 60px);
+}
 .game__footer {
     width: 100%;
     display: flex;
@@ -8,10 +10,14 @@
 }
 
 
-@media screen and (max-width: var(--MAX-WIDTH-TABLET)) {
-
+@media screen and (max-width: 800px) {
+    .footer__icon {
+        height: 30px;
+    }
 }
 
-@media screen and (max-width: var(--MAX-WIDTH-PHONE)) {
-
+@media screen and (max-width: 479px) {
+    .footer__icon {
+        height: 20px;
+    }
 }
