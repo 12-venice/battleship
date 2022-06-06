@@ -1,0 +1,33 @@
+.inputMessage__input {
+    display: flex;
+    height: 70%;
+    width: 60%;
+    padding: 10px;
+    margin: 0;
+    flex-grow: 2;
+}
+
+.inputMessage__block{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    flex-grow: 2;
+}
+
+.footer__icon {
+    height: min(1.8vw, 60px);
+}
+
+@media screen and (max-width: 800px) {
+    .footer__icon {
+        height: 30px;
+    }
+}
+
+@media screen and (max-width: 479px) {
+    .footer__icon {
+        height: 20px;
+    }
+}

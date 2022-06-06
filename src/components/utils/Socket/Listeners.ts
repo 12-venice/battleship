@@ -1,26 +1,25 @@
 /* eslint-disable react/jsx-curly-newline */
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { notificationService } from 'src/store/services/notificationService';
 import { OnlineService } from 'src/store/services/onlineService';
 import { PageLinks } from '../Routes/types';
 import { socket } from './Socket';
 
-export const acceptInvite = (room?: string) => {
-    const navigation = useNavigate();
+export const AcceptInvite = (nav, room?: string) => {
     socket.emit('invite:accept', room);
-    navigation(PageLinks.game);
+    nav(`${PageLinks.game}/${room._id}`);
 };
 
-export const cancelInvite = (room?: string) => {
+export const CancelInvite = (room?: string) => {
     socket.emit('invite:cancel', room);
 };
 
-export const sendMessage = (data: any) => {
+export const SendMessage = (data: any) => {
     socket.emit('messages:sent', data);
 };
 
-export const Listener = () => {
-    const navigation = useNavigate();
+export const Listener = (nav) => {
+    const { room } = useParams() as { room: string };
 
     socket.on('userOnline:add', (data) => {
         OnlineService.addUserOnline(data);
@@ -48,7 +47,6 @@ export const Listener = () => {
                 },
             ],
         });
-        navigation(PageLinks.game);
     });
 
     socket.on('invite:cancel', (data) => {
@@ -74,32 +72,34 @@ export const Listener = () => {
                     title: 'ACCEPT',
                     skin: 'small',
                     color: 'orange',
-                    onClick: () => acceptInvite(data.room),
+                    onClick: () => AcceptInvite(nav, data.room),
                 },
                 {
                     title: 'CANCEL',
                     skin: 'small',
                     color: 'red',
-                    onClick: () => cancelInvite(data.room),
+                    onClick: () => CancelInvite(data.room),
                 },
             ],
         });
     });
     socket.on('messages:recive', (data) => {
-        notificationService.addNotification({
-            title: `New message by ${data.user.display_name}`,
-            message: data.message,
-            autoDelete: true,
-            autoDeleteTime: 15000,
-            user: data.user,
-            buttons: [
-                {
-                    title: 'READ',
-                    skin: 'small',
-                    color: 'green',
-                    onClick: () => navigation(`${PageLinks.game}/${data.room}`),
-                },
-            ],
-        });
+        console.log(room, data.room)
+        if (room !== data.room) {
+            notificationService.addNotification({
+                title: `New message by ${data.user.display_name}`,
+                message: data.text,
+                autoDelete: true,
+                autoDeleteTime: 15000,
+                user: data.user,
+                buttons: [
+                    {
+                        title: 'READ',
+                        skin: 'small',
+                        color: 'green',
+                    },
+                ],
+            });
+        }
     });
 };

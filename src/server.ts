@@ -11,7 +11,7 @@ import mongoose from 'mongoose';
 import webpack from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
-import { DB, IS_DEV, IS_DEV_SERVER, PORT } from '../webpack/env.ts';
+import { DB, IS_DEV, IS_DEV_SERVER, PORT } from '../webpack/env';
 import { renderResponse } from './server/renderResponse';
 import userRouter from '../serverRoutes/user.routes';
 import topicRouter from '../serverRoutes/topic.routes';

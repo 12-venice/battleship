@@ -1,16 +1,25 @@
-.container {
+.ships__container {
     position: relative;
-    height: 150px;
     margin: 0 auto;
+    background: var(--light-dark-blue);
+    display: inline-block;
+    padding: 10px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
 }
 
-.container img {
+.ships__container img {
     position: absolute;
     transform-origin: left top;
 }
 
-@media screen and (max-width: 480px) {
-    .container {
+@media screen and (max-width: var(--MAX-WIDTH-TABLET)) {
+    .ships__container {
         height: 32vw;
     }
+}
+
+@media screen and (max-width: var(--MAX-WIDTH-PHONE)) {
+    
 }

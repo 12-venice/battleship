@@ -3,6 +3,7 @@ import { DragEvent } from 'react';
 export type DragImageEvent = DragEvent<HTMLImageElement>;
 
 export type Props = {
+    imgWidth: number;
     ships: {
         /** уникальный ключ */
         id: string;

@@ -1,8 +1,7 @@
+import { User } from 'src/store/reducers/user';
+
 export type Props = {
-    /** Имя игрока */
-    name: string;
-    /** Путь до изображения аватара */
-    avatarSrc?: string;
+    user?: User | null;
     /** Позиция аватара относительно имени игрока */
     avatarPosition?: 'right' | 'left';
 };

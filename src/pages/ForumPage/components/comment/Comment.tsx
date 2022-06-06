@@ -3,7 +3,7 @@ import { Props } from './types';
 import styles from './Comment.scss';
 
 export const Comment: Props = ({
-    date = '',
+    createdAt = '',
     user = { display_name: 'No name' },
     description = 'Default description...',
 }): JSX.Element => (
@@ -14,7 +14,7 @@ export const Comment: Props = ({
                 <h3 className={styles['comment__author-name']}>
                     {user.display_name}
                 </h3>
-                <p className={styles['comment__author-date']}>{date}</p>
+                <p className={styles['comment__author-date']}>{createdAt}</p>
             </div>
         </div>
     </div>

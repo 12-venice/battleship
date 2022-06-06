@@ -91,7 +91,7 @@ export const ShipsMenu = ({
 
     return (
         <div
-            className={styles.container}
+            className={styles.ships__container}
             style={{
                 width: imgWidth * 8 + MARGIN * 7,
                 // height: CONTAINER_HEIGHT,

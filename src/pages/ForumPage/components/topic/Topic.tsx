@@ -12,7 +12,7 @@ import styles from './Topic.scss';
 import { CommentProps } from '../comment/types';
 
 export const Topic: Props = ({
-    date = '',
+    createdAt = '',
     user = { display_name: 'Noname' },
     theme = 'Topic',
     description = 'Default description...',
@@ -99,7 +99,7 @@ export const Topic: Props = ({
                             {user?.display_name}
                         </h3>
                         <p className={styles['topic__header-author-date']}>
-                            {date}
+                            {createdAt}
                         </p>
                     </div>
                 </div>
@@ -112,7 +112,7 @@ export const Topic: Props = ({
                         <Comment
                             key={comment._id}
                             user={comment.user}
-                            date={DateParser(comment.date)}
+                            createdAt={DateParser(comment.createdAt)}
                             description={comment.description}
                             _id={comment._id}
                         />
