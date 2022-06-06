@@ -125,7 +125,18 @@ export const FinderPage = () => {
                                             title={str ? '+' : 'v'}
                                             skin="quad"
                                             color={str ? 'green' : 'blue'}
-                                            onClick={str ? () => createRoom(element._id) : () => inviteUser(element._id, element.room)}
+                                            onClick={
+                                                str
+                                                    ? () =>
+                                                        createRoom(
+                                                            element._id,
+                                                        )
+                                                    : () =>
+                                                        inviteUser(
+                                                            element._id,
+                                                              element.room,
+                                                          )
+                                            }
                                         />
                                         {!str &&
                                             <div

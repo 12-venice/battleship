@@ -1,7 +1,12 @@
 .icon {
     height: 65%;
 }
-
+.disabled {
+    display: none;
+}
+.active {
+    display: flex;
+}
 .game__background {
     display: flex;
     flex-direction: column;

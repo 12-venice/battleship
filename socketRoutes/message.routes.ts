@@ -20,13 +20,20 @@ export default (socket: Socket) => {
             user: createdUser,
             room,
         });
-        await newMessage.save();
+        await newMessage.save((err: string, obj: object) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log(room, obj)
+            socket.to(room).emit('messages:recive', {
+                user: createdUser,
+                message: obj,
+            });
+        });
         await Room.updateOne(
             { _id: room },
             { $push: { messages: newMessage } },
         );
-        socket.to(room).emit('messages:recive', { user: createdUser, message });
     };
-
     socket.on('messages:sent', sentMessage);
 };

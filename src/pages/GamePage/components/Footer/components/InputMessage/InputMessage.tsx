@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { useState } from 'react';
 import { Button } from 'src/components/Button';
-import { sendMessage } from 'src/components/utils/Socket/Listeners';
+import { SendMessage } from 'src/components/utils/Socket/Listeners';
 import { useParams } from 'react-router-dom';
 import styles from './InputMessage.scss';
 import sendIcon from '../../../../../../../images/send.svg';
@@ -18,7 +18,7 @@ export const InputMessage = ({
     const [message, setMessage] = useState('');
     const sendMessageHandler = () => {
         if (message) {
-            sendMessage({ room, message });
+            SendMessage({ room, message });
             setMessage('');
         }
     };

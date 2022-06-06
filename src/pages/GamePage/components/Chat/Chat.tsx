@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Preloader } from 'src/components/Preloader';
+import { socket } from 'src/components/utils/Socket/Socket';
 import { useHttp } from 'src/hooks/http.hook';
 import styles from './Chat.scss';
 import { Message } from './components/Message';
@@ -11,6 +12,14 @@ export const Chat = ({ videoCall }: { videoCall: boolean }): JSX.Element => {
     const { request, loading } = useHttp();
     const { room } = useParams() as { room: string };
     const [messages, setMessages] = useState([] as messageType[]);
+
+    socket.on('messages:recive', (data) => {
+        console.log(data)
+        if (room === data.room) {
+            console.log(data.message)
+            setMessages([messages, ...data.message]);
+        }
+    });
 
     const getMessages = useCallback(async () => {
         const data = await request(
