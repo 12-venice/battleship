@@ -134,16 +134,22 @@ export const FinderPage = () => {
                                                     : () =>
                                                         inviteUser(
                                                             element._id,
-                                                              element.room,
-                                                          )
+                                                            element.room,
+                                                        )
                                             }
                                         />
-                                        {!str &&
+                                        {!str && (
                                             <div
                                                 className={styles.finder__point}
-                                                style={{ background: checkUserOnline(element._id) ? 'greenyellow' : 'gray' }}
+                                                style={{
+                                                    background: checkUserOnline(
+                                                        element._id,
+                                                    )
+                                                        ? 'greenyellow'
+                                                        : 'gray',
+                                                }}
                                             />
-                                        }
+                                        )}
                                     </div>
                                 ),
                         )

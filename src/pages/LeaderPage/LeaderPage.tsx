@@ -21,9 +21,6 @@ export const LeaderPage = (): JSX.Element => {
     const [sortDirection, setSortDirection] = useState(false);
     const [page, setPage] = useState(0);
     const getLeaders = useCallback(async () => {
-        console.log(sortType,
-            sortDirection,
-            page)
         const users = await request(
             '/api/user/read',
             'POST',
@@ -89,11 +86,12 @@ export const LeaderPage = (): JSX.Element => {
                                 key={element.type}
                                 className={cn(
                                     styles[
-                                    `leader__table-column-${index === 0 ? 'wide' : 'standart'
-                                    }`
+                                        `leader__table-column-${
+                                            index === 0 ? 'wide' : 'standart'
+                                        }`
                                     ],
                                     sortType === element.type &&
-                                    styles['leader__table-selected'],
+                                        styles['leader__table-selected'],
                                 )}
                                 data-sort={element.type}
                                 aria-hidden="true"
@@ -106,8 +104,9 @@ export const LeaderPage = (): JSX.Element => {
                                             'material-icons',
                                         )}
                                     >
-                                        {`arrow_drop_${sortDirection ? 'up' : 'down'
-                                            }`}
+                                        {`arrow_drop_${
+                                            sortDirection ? 'up' : 'down'
+                                        }`}
                                     </i>
                                 )}
                                 <span
@@ -142,20 +141,21 @@ export const LeaderPage = (): JSX.Element => {
                                         key={elementConfig.type}
                                         className={cn(
                                             styles[
-                                            `leader__table-column-${index === 0
-                                                ? 'wide'
-                                                : 'standart'
-                                            }`
+                                                `leader__table-column-${
+                                                    index === 0
+                                                        ? 'wide'
+                                                        : 'standart'
+                                                }`
                                             ],
                                             sortType === elementConfig.type &&
-                                            styles[
-                                            'leader__table-selected'
-                                            ],
+                                                styles[
+                                                    'leader__table-selected'
+                                                ],
                                         )}
                                     >
                                         {
                                             element[
-                                            elementConfig.type as keyof typeof element
+                                                elementConfig.type as keyof typeof element
                                             ]
                                         }
                                     </div>

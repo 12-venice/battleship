@@ -11,7 +11,7 @@ export type AllStateTypes = {
     language: LngState;
     opponent: OpponentState;
     notification: NotificationState;
-    userOnline: userOnlineState
+    userOnline: userOnlineState;
 };
 
 export default combineReducers({
@@ -19,5 +19,5 @@ export default combineReducers({
     language: lngReducer,
     opponent: opponentReducer,
     notification: notificationReducer,
-    userOnline: userOnlineReducer
+    userOnline: userOnlineReducer,
 });

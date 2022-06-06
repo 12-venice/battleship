@@ -30,7 +30,6 @@ export const Listener = (nav) => {
     });
 
     socket.on('userOnline:set', (data) => {
-        console.log(data);
         OnlineService.setUserOnline(data);
     });
 
