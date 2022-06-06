@@ -7,11 +7,13 @@ import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import { notificationService } from 'src/store/services/notificationService';
+import { Button } from 'src/components/Button';
 import { Layout } from '../../components/Layout';
 import styles from './AuthPage.scss';
 import { inputs, headers } from './config';
 
 export const AuthPage = (): JSX.Element => {
+    const OAUTH_ID = '085740c0f5614f93a07ce6b4c4246a65';
     const location = useLocation().state as FromProps;
     const navigate = useNavigate();
     const from = location?.from?.pathname;
@@ -67,6 +69,14 @@ export const AuthPage = (): JSX.Element => {
                     submitTitle={dataStore.buttons.login}
                     disabled={loading}
                     checking={false}
+                />
+                <Button
+                    link={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${OAUTH_ID}&redirect_uri=${
+                        from || PageLinks.home
+                    }.`}
+                    skin="wide"
+                    color="red"
+                    title="YANDEX"
                 />
                 <NavLink to={PageLinks.register}>
                     <span className={styles.auth__link}>
