@@ -1,19 +1,20 @@
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Button } from 'src/components/Button';
 import { Form } from 'src/components/Form';
+import { YandexLogin } from 'src/components/oauth/YandexLogin';
 import { FromProps, PageLinks } from 'src/components/utils/Routes/types';
 import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
 import { AllStateTypes } from 'src/store/reducers';
+import { User } from 'src/store/reducers/user';
 import { notificationService } from 'src/store/services/notificationService';
-import { Button } from 'src/components/Button';
 import { Layout } from '../../components/Layout';
 import styles from './AuthPage.scss';
 import { inputs, headers } from './config';
 
 export const AuthPage = (): JSX.Element => {
-    const OAUTH_ID = '085740c0f5614f93a07ce6b4c4246a65';
     const location = useLocation().state as FromProps;
     const navigate = useNavigate();
     const from = location?.from?.pathname;
@@ -36,6 +37,11 @@ export const AuthPage = (): JSX.Element => {
         },
         [from, login, request],
     );
+
+    const yandexAuth = (data: User) => {
+        console.log(data);
+        debugger
+    };
 
     useEffect(() => {
         if (user) {
@@ -70,14 +76,12 @@ export const AuthPage = (): JSX.Element => {
                     disabled={loading}
                     checking={false}
                 />
-                <Button
-                    link={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${OAUTH_ID}&redirect_uri=${
-                        from || PageLinks.home
-                    }.`}
-                    skin="wide"
-                    color="red"
-                    title="YANDEX"
-                />
+                <YandexLogin
+                    currentUrl={from || PageLinks.home}
+                    onSuccess={yandexAuth}
+                >
+                    <Button color="red" title="YANDEX" />
+                </YandexLogin>
                 <NavLink to={PageLinks.register}>
                     <span className={styles.auth__link}>
                         {headers.navigation}
