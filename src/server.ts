@@ -1,39 +1,37 @@
-import express, { RequestHandler } from 'express';
+/* eslint-disable no-console */
+import express from 'express';
 import 'babel-polyfill';
 import http from 'http';
 import path from 'path';
 import { Server, Socket } from 'socket.io';
-import { requestHandler } from './components/server/server-render-middleware';
+import authRoutes from 'socketRoutes/auth.routes';
+import messageRoutes from 'socketRoutes/message.routes';
+import inviteRoutes from 'socketRoutes/invite.routes';
+import mongoose from 'mongoose';
+import webpack from 'webpack';
+import devMiddleware from 'webpack-dev-middleware';
+import hotMiddleware from 'webpack-hot-middleware';
+import { DB, IS_DEV, IS_DEV_SERVER, PORT } from '../webpack/env';
+import { renderResponse } from './server/renderResponse';
 import userRouter from '../serverRoutes/user.routes';
 import topicRouter from '../serverRoutes/topic.routes';
 import commentRouter from '../serverRoutes/comment.routes';
 import roomRouter from '../serverRoutes/room.routes';
 import messageRouter from '../serverRoutes/message.routes';
-import webpack, { Compiler } from 'webpack';
-import devMiddleware from 'webpack-dev-middleware';
-import hotMiddleware from 'webpack-hot-middleware';
-import hotServerMiddleware from 'webpack-hot-server-middleware';
-import config from '../webpack.config';
-import authRoutes from 'socketRoutes/auth.routes';
-import messageRoutes from 'socketRoutes/message.routes';
-import inviteRoutes from 'socketRoutes/invite.routes';
+import webpackConfig from '../webpack/client.config';
 
-const getWebpackMiddlewares = (
-    config: webpack.Configuration[],
-): RequestHandler[] => {
-    const compiler = webpack(config);
-    return [
-        devMiddleware(compiler, {
-            serverSideRender: true
-        }),
-        hotMiddleware(compiler.compilers.find(compiler => compiler.name === 'client') as Compiler),
-        hotServerMiddleware(compiler)
-    ];
-};
+const compiler = webpack(webpackConfig);
 
 const app = express();
 const httpServer = http.createServer(app);
-
+if (IS_DEV && !IS_DEV_SERVER) {
+    app.use(
+        devMiddleware(compiler, {
+            publicPath: webpackConfig?.output?.publicPath,
+        }),
+    );
+    app.use(hotMiddleware(compiler));
+}
 export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
     httpServer,
     {
@@ -43,7 +41,6 @@ export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
     },
 );
 io.on('connection', (socket: Socket) => {
-    console.log(socket.id);
     authRoutes(socket);
     messageRoutes(socket);
     inviteRoutes(socket);
@@ -59,6 +56,13 @@ app.use('/api/room', roomRouter);
 app.use('/api/message', messageRouter);
 
 app.use(express.static(path.resolve(__dirname, '../dist')));
-app.use('/*', [...getWebpackMiddlewares(config)], requestHandler);
+app.get('/*', renderResponse);
 
-export { httpServer };
+mongoose.connect(DB);
+httpServer.listen(PORT, () => {
+    console.log(
+        `Сервер запущен в режиме ${IS_DEV ? 'РАЗРАБОТКИ' : 'ПРОДАКШЕН'}${
+            IS_DEV_SERVER ? ' СЕРВЕРА' : ''
+        } на порту: ${PORT}`,
+    );
+});

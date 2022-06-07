@@ -1,8 +1,11 @@
+/* eslint-disable import/no-default-export */
 /* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
 import { Configuration } from 'webpack';
 import nodeExternals from 'webpack-node-externals';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
+import NodemonPlugin from 'nodemon-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { IS_DEV, DIST_DIR, SRC_DIR } from './env';
 import fileLoader from './loaders/file';
 import cssLoader from './loaders/css';
@@ -13,7 +16,7 @@ const config: Configuration = {
     mode: IS_DEV ? 'development' : 'production',
     target: 'node',
     node: { __dirname: false },
-    entry: path.join(SRC_DIR, 'server'),
+    entry: [path.join(SRC_DIR, 'server')],
 
     module: {
         rules: [fileLoader.server, cssLoader.server, jsLoader.server],
@@ -26,9 +29,8 @@ const config: Configuration = {
     output: {
         filename: 'server.js',
         libraryTarget: 'commonjs2',
-        path: DIST_DIR
+        path: DIST_DIR,
     },
-
     resolve: {
         modules: ['src', 'node_modules'],
         extensions: ['*', '.js', '.jsx', '.json', '.ts', '.tsx'],
@@ -36,6 +38,17 @@ const config: Configuration = {
     },
 
     devtool: 'source-map',
+
+    plugins: [
+        new NodemonPlugin({
+            script: './dist/server.js',
+            ignore: ['main.js', '*.js.map'],
+            delay: 1,
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+        }),
+    ],
 
     performance: {
         hints: IS_DEV ? false : 'warning',

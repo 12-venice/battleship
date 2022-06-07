@@ -1,14 +1,15 @@
+/* eslint-disable import/no-default-export */
 /* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
 import webpack, { Configuration, Entry } from 'webpack';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 import { IS_DEV, DIST_DIR, SRC_DIR } from './env';
 import fileLoader from './loaders/file';
 import cssLoader from './loaders/css';
 import jsLoader from './loaders/js';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
 
 const config: Configuration = {
     name: 'client',
@@ -16,7 +17,7 @@ const config: Configuration = {
     mode: IS_DEV ? 'development' : 'production',
     entry: [
         IS_DEV && 'react-hot-loader/patch',
-        IS_DEV && 'webpack-hot-middleware/client',
+        IS_DEV && 'webpack-hot-middleware/client?reload=true',
         IS_DEV && 'css-hot-loader/hotModuleReplacement',
         path.join(SRC_DIR, 'client'),
     ].filter(Boolean) as unknown as Entry,
@@ -41,7 +42,7 @@ const config: Configuration = {
             filename: '[name].css',
         }),
         new FaviconsWebpackPlugin('./images/favicon.png'),
-        new webpack.HotModuleReplacementPlugin(),
+        ...(IS_DEV ? [new webpack.HotModuleReplacementPlugin()] : []),
     ],
 
     devtool: 'source-map',
@@ -52,7 +53,7 @@ const config: Configuration = {
 
     optimization: {
         moduleIds: 'named',
-        minimize: !IS_DEV ? true : false,
+        minimize: !IS_DEV,
         minimizer: !IS_DEV ? [new TerserPlugin()] : [],
         splitChunks: {
             cacheGroups: {

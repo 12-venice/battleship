@@ -1,3 +1,4 @@
+/* eslint-disable import/no-default-export */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-underscore-dangle */
@@ -7,23 +8,15 @@
 import { Router } from 'express';
 import User from '../serverModels/user';
 import Room from '../serverModels/room';
-import Message from '../serverModels/message';
 
 const router = Router();
 
-router.post('/read', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
-        const { userId, roomId } = req.body;
-        const room = await Room.findOne({ _id: roomId });
-        const anotherUserId =
-            room.users.indexOf(userId) === 0 ? room.users[1] : room.users[0];
-        const anotherUser = await User.findOne({ _id: anotherUserId });
-        const messages = [];
-        for (let i = 0; i < room.messages.length; i++) {
-            const message = await Message.findOne({ _id: room.messages[i] });
-            messages.push(message.toJSON());
-        }
-        res.status(200).json({ room, anotherUser, messages });
+        const data = await Room.findOne({ _id: req.params.id }).populate(
+            'users',
+        );
+        res.status(200).json(data);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',

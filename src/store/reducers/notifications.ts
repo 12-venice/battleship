@@ -7,7 +7,7 @@ import { btnProps } from 'src/components/Button/types';
 import { User } from './user';
 
 export interface Notification {
-    id: string;
+    id?: string;
     title?: string;
     message?: string;
     user?: User;

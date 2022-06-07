@@ -1,3 +1,6 @@
+/* eslint-disable import/no-default-export */
+import { IS_DEV } from '../env';
+
 const fileRegex = /^(?!.*\.inline).*\.(svg|jpe?g|png|gif|eot|woff2?|ttf)$/;
 
 export default {
@@ -6,7 +9,7 @@ export default {
         test: fileRegex,
     },
     server: {
-        loader: 'null-loader',
+        loader: IS_DEV ? 'null-loader' : 'file-loader',
         test: fileRegex,
     },
 };

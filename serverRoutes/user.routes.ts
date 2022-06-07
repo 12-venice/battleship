@@ -1,3 +1,4 @@
+/* eslint-disable import/no-default-export */
 /* eslint-disable import/extensions */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-var-requires */
@@ -10,13 +11,12 @@ const router = Router();
 router.post('/create', async (req, res) => {
     try {
         const { id } = req.body;
-        setTimeout(() => {
-        }, 500);
+        setTimeout(() => {}, 500);
         if (!req.body.login) {
-            req.body = { ...req.body, ...{ login: req.body.email } }
+            req.body.login = req.body.email;
         }
         if (!req.body.display_name) {
-            req.body = { ...req.body, ...{ display_name: req.body.login } }
+            req.body.display_name = req.body.login;
         }
         const isExist = await User.findOne({ id });
         if (isExist) {
@@ -37,14 +37,14 @@ router.post('/create', async (req, res) => {
 router.post('/read', async (req, res) => {
     try {
         const { sortType, sortDirection, page } = req.body;
-        console.log(sortType, sortDirection, page)
+        console.log(sortType, sortDirection, page);
         const user = await User.find()
             .sort({ [sortType]: sortDirection ? 1 : -1 })
             .skip(page * 10)
             .limit(10);
         res.json(user);
     } catch (e) {
-        console.log(e)
+        console.log(e);
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });

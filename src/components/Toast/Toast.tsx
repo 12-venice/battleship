@@ -5,17 +5,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { notificationService } from 'src/store/services/notificationService';
+import { Notification } from 'src/store/reducers/notifications';
 import { Avatar } from '../Avatar';
 import { Button } from '../Button';
 import styles from './Toast.scss';
 import { Props } from './types';
-import { Notification } from 'src/store/reducers/notifications';
 
 const ToastBlock = (toast: Notification, position: string): JSX.Element => {
-
-    setInterval(() => {
+    const deleteToast = (id: string) => {
+        notificationService.deleteNotification(id);
+    };
+console.log(toast)
+    setTimeout(() => {
         if (toast.autoDelete) {
-            notificationService.deleteNotification(toast.id);
+            deleteToast(toast.id as string);
         }
     }, toast.autoDeleteTime);
 
@@ -40,28 +43,27 @@ const ToastBlock = (toast: Notification, position: string): JSX.Element => {
                 </div>
             )}
             {toast.title && (
-                <p className={styles['notification-title']}>
+                <div className={styles['notification-title']}>
                     {toast.title}
-                </p>
+                </div>
             )}
-            <p className={styles['notification-message']}>
+            <div className={styles['notification-message']}>
                 {toast.message}
-            </p>
+            </div>
             {toast.buttons && toast.buttons.length > 0 && (
                 <p className={styles['notification-buttons']}>
                     {toast.buttons.map((button) => (
                         <Button
                             key={uuidv4()}
                             title={button.title}
-                            skin="small"
                             onClick={button.onClick}
                         />
                     ))}
                 </p>
             )}
         </div>
-    )
-}
+    );
+};
 
 export const Toast: FC<Props> = ({ position }) => {
     const list = useSelector((state: AllStateTypes) => state.notification);
@@ -70,9 +72,7 @@ export const Toast: FC<Props> = ({ position }) => {
         <div
             className={cn(styles['notification-containers'], styles[position])}
         >
-            {list.map((toast) => (
-                ToastBlock(toast, position)
-            ))}
+            {list.map((toast) => ToastBlock(toast, position))}
         </div>
     );
 };

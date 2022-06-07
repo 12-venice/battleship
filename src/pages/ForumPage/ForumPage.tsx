@@ -61,7 +61,7 @@ export const ForumPage = (): JSX.Element => {
                 <Topic
                     key={item._id}
                     theme={item.theme}
-                    date={DateParser(item.date)}
+                    createdAt={DateParser(item.createdAt)}
                     description={item.description}
                     user={item.user}
                     isActiveTopic={topicId}
@@ -91,7 +91,6 @@ export const ForumPage = (): JSX.Element => {
                         <Button
                             skin="quad"
                             color="green"
-                            // title="✚"
                             onClick={() => setWindowCreate(true)}
                         >
                             <img
