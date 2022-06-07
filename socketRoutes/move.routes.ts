@@ -3,7 +3,7 @@ import { Socket } from 'socket.io';
 import { io } from '../src/server';
 
 export default (socket: Socket) => {
-    socket.emit(
+    socket.on(
         'move:sent',
         async ({ roomID, data }: { roomID: string; data: {} }) => {
             io.in(roomID).emit('move:recive', data);

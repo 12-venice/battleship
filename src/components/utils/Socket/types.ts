@@ -6,8 +6,8 @@ interface ServerToClientEvents {
     'invite:accept': (data: any) => void;
     'invite:cancel': (data: any) => void;
     'invite:recive': (data: any) => void;
-    'moves:sent': (data: any) => void;
-    'moves:recive': (data: any) => void;
+    'move:sent': (data: any) => void;
+    'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;
     'messages:recive': (data: any) => void;
 }
@@ -20,8 +20,8 @@ interface ClientToServerEvents {
     'invite:accept': (data: any) => void;
     'invite:cancel': (data: any) => void;
     'invite:recive': (data: any) => void;
-    'moves:sent': (data: any) => void;
-    'moves:recive': (data: any) => void;
+    'move:sent': (data: any) => void;
+    'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;
     'messages:recive': (data: any) => void;
 }

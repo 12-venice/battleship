@@ -21,14 +21,17 @@ export const Chat = ({ videoCall }: { videoCall: boolean }): JSX.Element => {
         }
     });
 
-    socket.on('move', ({ roomID, data }: { room: string; data: {} }) => {
-        if (room === roomID) {
-            console.log(data);
-        }
-    });
+    socket.on(
+        'move:recive',
+        ({ roomID, data }: { roomID: string; data: {} }) => {
+            if (room === roomID) {
+                console.log(data);
+            }
+        },
+    );
 
     const sentMove = (data: {}) => {
-        socket.emit('move', { roomID: room, data });
+        socket.emit('move:sent', { roomID: room, data });
     };
 
     const getMessages = useCallback(async () => {
