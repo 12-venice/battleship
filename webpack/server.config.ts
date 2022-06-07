@@ -40,7 +40,7 @@ const config: Configuration = {
     devtool: 'source-map',
 
     plugins: [
-        new NodemonPlugin({
+        IS_DEV && new NodemonPlugin({
             script: './dist/server.js',
             ignore: ['main.js', '*.js.map'],
             delay: 1,

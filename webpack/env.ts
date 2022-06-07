@@ -6,11 +6,9 @@ dotenv.config();
 const IS_DEV = process.env.NODE_ENV !== 'production';
 const SRC_DIR = path.join(__dirname, '../src');
 const DIST_DIR = path.join(__dirname, '../dist');
-const DB = process.env.DB_CONN;
+const DB = process.env.DB_CONN || '';
 const { PORT } = process.env;
-const IS_DEV_SERVER = process.env.DEV === 'true';
-const OAUTH_ID = '085740c0f5614f93a07ce6b4c4246a65';
-const OAUTH_PASSWORD = 'cb927f496d9f4dc58b0cbac069671d97';
+const IS_DEV_SERVER = process.env.SERVER === 'true';
 
 export {
     IS_DEV,
@@ -19,6 +17,4 @@ export {
     DB,
     PORT,
     IS_DEV_SERVER,
-    OAUTH_ID,
-    OAUTH_PASSWORD,
 };

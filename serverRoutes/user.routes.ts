@@ -11,7 +11,7 @@ const router = Router();
 router.post('/create', async (req, res) => {
     try {
         const { id } = req.body;
-        setTimeout(() => {}, 500);
+        setTimeout(() => { }, 500);
         if (!req.body.login) {
             req.body.login = req.body.email;
         }
