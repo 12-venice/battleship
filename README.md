@@ -21,7 +21,7 @@ ___
 #### Запуск проекта
 
 ```bash
-npm run start
+npm run start:production
 ```
 
 #### Запуск проекта в режиме разработки
