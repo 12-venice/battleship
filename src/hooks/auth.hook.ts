@@ -31,6 +31,7 @@ export const useAuth = () => {
     );
 
     const logout = useCallback(async () => {
+        sessionStorage.setItem('yandexAutoLoginDisabled', 'true');
         userService.setUser(null);
         socket.emit('userOnline:remove');
         await request('/auth/logout', 'POST', null);

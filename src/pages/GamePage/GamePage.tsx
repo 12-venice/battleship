@@ -11,14 +11,12 @@ import { useParams } from 'react-router-dom';
 import { useHttp } from 'src/hooks/http.hook';
 import { User } from 'src/store/reducers/user';
 import { Button } from 'src/components/Button';
-
 import { Area } from './components/Area';
 import { ShipsMenu } from './components/ShipsMenu';
 import styles from './GamePage.scss';
 import { Chat } from './components/Chat';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-
 
 const STATISTICS = [
     { label: 'HITS', player: 8, opponent: 17 },

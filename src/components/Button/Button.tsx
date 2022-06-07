@@ -14,6 +14,7 @@ export const Button: ButtonProps = ({
     href,
     className,
     children,
+    link,
 }) => {
     const navigate = useNavigate();
     let handlerClick;
@@ -26,6 +27,7 @@ export const Button: ButtonProps = ({
 
     return (
         <button
+            href={link}
             className={cn(
                 styles.button,
                 skin && styles[`button_${skin}`],

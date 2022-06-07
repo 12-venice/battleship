@@ -41,11 +41,6 @@ export const Listener = (nav) => {
             autoDeleteTime: 5000,
             type: 'success',
             user: data.user,
-            buttons: [
-                {
-                    title: 'Start',
-                },
-            ],
         });
     });
 

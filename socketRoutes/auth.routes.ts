@@ -1,4 +1,7 @@
+/* eslint-disable import/no-default-export */
 import { Socket } from 'socket.io';
+import { io } from 'src/server';
+import Room from 'serverModels/room';
 import {
     addUserOnline,
     getSocketUserOnline,
@@ -7,8 +10,6 @@ import {
     removeUserOnline,
 } from './usersOnline';
 import User from '../serverModels/user';
-import { io } from 'src/server';
-import Room from 'serverModels/room';
 
 export default (socket: Socket) => {
     socket.on('userOnline:add', async (id) => {
@@ -21,7 +22,7 @@ export default (socket: Socket) => {
             socket.join(roomId);
             socket.broadcast.to(roomId).emit('userOnline:add', {
                 socketId: socket.id,
-                id: id,
+                id,
             });
             const { users } = await Room.findOne({ _id: roomId });
             const anotherUserId = users.indexOf(id) === 0 ? users[1] : users[0];
@@ -33,7 +34,6 @@ export default (socket: Socket) => {
         };
         await rooms.forEach(joinToRoom);
         socket.to(socket.id).emit('userOnline:set', onlineFriends);
-        console.log(getUsersOnline());
         console.log(io.sockets.adapter.rooms);
     });
 
