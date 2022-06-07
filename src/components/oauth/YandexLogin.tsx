@@ -7,8 +7,8 @@ const YandexHiddenFrame = (props: { redirectTo: string | undefined }) => (
     <iframe hidden title="yandex-hidden-frame" src={props.redirectTo} />
 );
 
-const checkAccessKey = () => {
-    const token = /access_token=([^&]+)/.exec(document.location.hash);
+export const checkToken = () => {
+    const token = /access_token=([^&]+)/.exec(window.location.hash);
     if (!token) {
         return null;
     }
@@ -52,7 +52,7 @@ export const YandexLogin = (props: PROPS) => {
 
     let frameRedirectTo = null;
 
-    const aki = checkAccessKey();
+    const aki = checkToken();
     const receiver = window.parent !== window ? window.parent : window.opener;
 
     useEffect(() => {
