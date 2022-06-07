@@ -15,7 +15,7 @@
         "build:dev:watch": "NODE_ENV=development webpack --mode=development --watch",
         "start:dev:server": "nodemon --watch dist/server.js",
         "start:server": "node dist/server.js",
-        "start:production": "npm run clean && npm-run-all --print-label --parallel build:production start:server",
+        "start:production": "npm-run-all --print-label build:production start:server",
         "start:dev": "npm run clean && npm-run-all --print-label --parallel build:dev:watch start:dev:server",
         "dev:server": "npm run clean && NODE_ENV=development DEV=true webpack --mode=development --watch"
     },
