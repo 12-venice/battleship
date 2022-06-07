@@ -19,6 +19,7 @@ import commentRouter from '../serverRoutes/comment.routes';
 import roomRouter from '../serverRoutes/room.routes';
 import messageRouter from '../serverRoutes/message.routes';
 import webpackConfig from '../webpack/client.config';
+import { getJSON } from './server/request';
 
 const compiler = webpack(webpackConfig);
 
@@ -44,6 +45,11 @@ io.on('connection', (socket: Socket) => {
     authRoutes(socket);
     messageRoutes(socket);
     inviteRoutes(socket);
+});
+
+getJSON('token', (statusCode: string, result: JSON) => {
+    // I could work with the resulting HTML/JSON here. I could also just return it
+    console.log(`onResult: (${statusCode})\n\n${JSON.stringify(result)}`);
 });
 
 app.use(express.json({ limit: '10mb' }));

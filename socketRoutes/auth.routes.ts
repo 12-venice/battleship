@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable import/no-default-export */
 import { Socket } from 'socket.io';
 import { io } from 'src/server';
@@ -14,7 +15,7 @@ import User from '../serverModels/user';
 export default (socket: Socket) => {
     socket.on('userOnline:add', async (id) => {
         addUserOnline(socket.id, id);
-        const { rooms } = await User.findOne({ _id: id });
+        const user = await User.findOne({ _id: id });
         const onlineFriends = {};
 
         const joinToRoom = async (room: { _id: string }) => {
@@ -32,22 +33,24 @@ export default (socket: Socket) => {
                 ...{ [anotherUserSocket]: anotherUserId },
             };
         };
-        await rooms.forEach(joinToRoom);
-        socket.to(socket.id).emit('userOnline:set', onlineFriends);
+        if (user && user.rooms) {
+            await user.rooms.forEach(joinToRoom);
+        }
+        io.to(socket.id).emit('userOnline:set', onlineFriends);
         console.log(io.sockets.adapter.rooms);
     });
 
     socket.on('userOnline:remove', async () => {
         const id = getUserOnline(socket.id);
-        const { rooms } = await User.findOne({ _id: id });
+        const user = await User.findOne({ _id: id });
         const leaveFromRoom = (room: { _id: string }) => {
             const roomId = room._id.toString();
             socket.leave(roomId);
             console.log('User LEAVE from room: ', roomId);
             socket.to(roomId).emit('userOnline:remove', socket.id);
         };
-        if (rooms) {
-            rooms.forEach(leaveFromRoom);
+        if (user && user.rooms) {
+            user.rooms.forEach(leaveFromRoom);
         }
         removeUserOnline(socket.id);
     });

@@ -103,6 +103,7 @@
     "save-dev": "0.0.1-security",
     "socket.io": "4.5.0",
     "socket.io-client": "4.5.0",
+    "typed-rest-client": "^1.8.9",
     "url-loader": "4.1.1",
     "uuid": "8.3.2",
     "webpack": "5.70.0",

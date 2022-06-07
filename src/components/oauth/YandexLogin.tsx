@@ -14,12 +14,8 @@ const getYandexAuthUrl = (redirectUrl: string) => {
 export const YandexLogin = (props: PROPS) => {
     const onClick = () => {
         sessionStorage.setItem('yandexAutoLoginDisabled', 'false');
-        window.location.href = getYandexAuthUrl(props.currentUrl)
+        window.location.href = getYandexAuthUrl(props.currentUrl);
     };
 
-    return (
-        <div>
-            {React.cloneElement(props.children, { onClick })}
-        </div>
-    );
+    return <div>{React.cloneElement(props.children, { onClick })}</div>;
 };

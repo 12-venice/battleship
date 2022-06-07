@@ -11,13 +11,20 @@ const router = Router();
 router.post('/create', async (req, res) => {
     try {
         const { id } = req.body;
-        setTimeout(() => { }, 500);
+        setTimeout(() => {}, 500);
+        if (req.body.default_email) {
+            req.body.email = req.body.default_email;
+        }
+        if (req.body.default_phone) {
+            req.body.phone = req.body.default_phone.number;
+        }
         if (!req.body.login) {
             req.body.login = req.body.email;
         }
         if (!req.body.display_name) {
             req.body.display_name = req.body.login;
         }
+        
         const isExist = await User.findOne({ id });
         if (isExist) {
             await User.updateOne({ id }, { $set: req.body });
