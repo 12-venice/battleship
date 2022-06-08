@@ -21,17 +21,11 @@ export const LeaderPage = (): JSX.Element => {
     const [sortDirection, setSortDirection] = useState(false);
     const [page, setPage] = useState(0);
     const getLeaders = useCallback(async () => {
-        const users = await request(
-            '/api/user/read',
-            'POST',
-            {
-                sortType,
-                sortDirection,
-                page,
-            },
-            {},
-            true,
-        );
+        const users = await request('/api/user/read', 'POST', {
+            sortType,
+            sortDirection,
+            page,
+        });
         setLeaders(users);
     }, [page, request, sortDirection, sortType]);
 

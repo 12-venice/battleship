@@ -18,7 +18,7 @@ export const Message = (message: messageType): JSX.Element => {
 
     useEffect(() => {
         if (!delivered && notme) {
-            request('/api/message/setdelivered', 'POST', { _id }, {}, true);
+            request('/api/message/setdelivered', 'POST', { _id });
         }
     }, []);
 

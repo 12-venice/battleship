@@ -33,18 +33,15 @@ export const FinderPage = () => {
     const { request, loading } = useHttp();
 
     const findUser = useCallback(async () => {
-        const data = await request('/api/user/find', 'POST', { str }, {}, true);
+        const data = await request('/api/user/find', 'POST', { str });
         setRooms(data);
     }, [request, str]);
 
     const getRooms = useCallback(async () => {
-        const data = await request(
-            '/api/room/find',
-            'POST',
-            { _id: user?._id, rooms: user?.rooms },
-            {},
-            true,
-        );
+        const data = await request('/api/room/find', 'POST', {
+            _id: user?._id,
+            rooms: user?.rooms,
+        });
         setRooms(data);
     }, [request, user?._id, user?.rooms]);
 
@@ -132,9 +129,7 @@ export const FinderPage = () => {
                                                             element._id,
                                                         )
                                                     : () =>
-                                                        inviteUser(
-                                                            element._id,
-                                                            element.room,
+                                                        inviteUser(element._id,element.room,
                                                         )
                                             }
                                         />

@@ -36,13 +36,7 @@ export const Topic: Props = ({
     };
 
     const getComments = useCallback(async () => {
-        const data = await request(
-            '/api/comment/read',
-            'POST',
-            { _id },
-            {},
-            true,
-        );
+        const data = await request('/api/comment/read', 'POST', { _id });
         setComments(data);
     }, [_id, request]);
 

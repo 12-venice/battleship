@@ -1,61 +1,70 @@
-import { useCallback } from 'react';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useState, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { FromProps, PageLinks } from 'src/components/utils/Routes/types';
 import { socket } from 'src/components/utils/Socket/Socket';
 import { userService } from 'src/store/services/userService';
 import { useHttp } from './http.hook';
+import { useMessage } from './message.hook';
 
-const getYandexData = async (token: string[]) => {
-    const response = await fetch(
-        `https://login.yandex.ru/info?format=json&oauth_token=${token[1]}`,
-    );
-    const data = await response.json();
-    return data;
-};
+export const STORAGE_NAME = 'bShipData';
 
 export const useAuth = () => {
-    const { request } = useHttp();
-    const location = useLocation();
-    const navigate = useNavigate();
-    const login = useCallback(
-        async (from?) => {
-            userService.pending();
-            const token = /access_token=([^&]+)/.exec(location.hash);
-            let userData;
-            if (token) {
-                userData = await getYandexData(token);
-            } else {
-                userData = await request('/auth/user', 'GET', null);
-            }
-            if (userData.id) {
-                const responseServer = await request(
-                    '/api/user/create',
-                    'POST',
-                    userData,
-                    {},
-                    true,
-                );
-                userService.success();
-                userService.setUser(responseServer);
-                socket.emit('userOnline:add', responseServer._id);
-                if (from) {
-                    navigate(from, { replace: true });
-                }
-            }
-        },
-        [navigate, request],
-    );
+    const [token, setToken] = useState(null);
 
-    const logout = useCallback(async () => {
-        sessionStorage.setItem('yandexAutoLoginDisabled', 'true');
+    const { request, error, clearError } = useHttp();
+    const navigate = useNavigate();
+    const { pathname, state } = useLocation();
+    const from = (state as FromProps)?.from?.pathname;
+    const message = useMessage();
+
+    const _getUserInfo = useCallback(async () => {
+        const userInfo = await request('/api/user/info', 'GET', null, {
+            Authorization: `Bearer ${token}`,
+        });
+        userService.success();
+        userService.setUser(userInfo);
+        socket.emit('userOnline:add', userInfo._id);
+        if (pathname === (PageLinks.auth && PageLinks.register)) {
+            navigate(from || PageLinks.home, { replace: true });
+        }
+    }, [from, navigate, pathname, request, token]);
+
+    const login = useCallback((jwtToken) => {
+        setToken(jwtToken);
+        localStorage.setItem(
+            STORAGE_NAME,
+            JSON.stringify({
+                token: jwtToken,
+            }),
+        );
+    }, []);
+
+    const logout = useCallback(() => {
+        setToken(null);
+        localStorage.removeItem(STORAGE_NAME);
         userService.setUser(null);
         socket.emit('userOnline:remove');
-        await request('/auth/logout', 'POST', null);
-    }, [request]);
+    }, []);
 
-    const value = {
-        login,
-        logout,
-    };
+    useEffect(() => {
+        const data = JSON.parse(localStorage.getItem(STORAGE_NAME)!);
 
-    return value;
+        if (data && data.token) {
+            login(data.token);
+        }
+    }, [login]);
+
+    useEffect(() => {
+        if (token) {
+            _getUserInfo();
+        }
+    }, [token, _getUserInfo]);
+
+    useEffect(() => {
+        message(error);
+        clearError();
+    }, [error, message, clearError]);
+
+    return { login, logout, token };
 };

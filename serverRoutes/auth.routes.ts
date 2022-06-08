@@ -1,11 +1,14 @@
-import { Router } from 'express'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import User from '../serverModels/user'
-import { SECRET_KEY } from '../webpack/env'
+/* eslint-disable import/no-default-export */
+/* eslint-disable consistent-return */
+/* eslint-disable no-param-reassign */
+import { Router } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User from '../serverModels/user';
+import { SECRET_KEY } from '../webpack/env';
 import { getToken, getUserInfo } from '../src/server/request';
 
-const router = Router()
+const router = Router();
 
 router.post('/oauth', async (req, res) => {
     try {
@@ -19,33 +22,36 @@ router.post('/oauth', async (req, res) => {
                         result.access_token,
                         async (user: {
                             email: string;
-                            default_email: string;
+                            default_email?: string;
                             phone: string;
-                            default_phone: string;
+                            default_phone?: string;
                             id: string;
                         }) => {
                             // переименование полей для стандартизации User
-                            user.email = user.default_email;
-                            delete user.default_email;
-                            user.phone = user.default_phone;
-                            delete user.default_phone;
-                            const isExist = await User.findOne({ id: user.id });
-                            if (isExist) {
-                                await User.updateOne(
-                                    { id: user.id },
-                                    { $set: user },
-                                );
-                            } else {
+                            if (user.default_email) {
+                                user.email = user.default_email;
+                                delete user.default_email;
+                            }
+                            if (user.default_phone) {
+                                user.phone = user.default_phone;
+                                delete user.default_phone;
+                            }
+
+                            const isExist = await User.findOne({
+                                email: user.email,
+                            });
+                            let userID = isExist ? isExist._id : '';
+                            if (!isExist) {
                                 const userCreate = new User(user);
                                 await userCreate.save();
+                                userID = userCreate._id;
                             }
                             const token = jwt.sign(
-                                {userId: user.id},
+                                { userId: userID },
                                 SECRET_KEY,
-                                {expiresIn: '9h'}
-                            )
-                    
-                            res.json({ token, userId: user.id })
+                                { expiresIn: '9h' },
+                            );
+                            res.json(token);
                         },
                     );
                 }
@@ -62,31 +68,36 @@ router.post('/oauth', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        const {login, password} = req.body
+        const { email, password } = req.body;
 
-        const user = await User.findOne({login: login})
+        const user = await User.findOne({ email: email.toLowerCase() });
 
         if (!user) {
-            return res.status(400).json({message: 'Пользователь не найден'})
+            return res.status(400).json({ message: 'Пользователь не найден' });
         }
 
-        const isMatch = await bcrypt.compare(password, user.token)
+        if (!user.password) {
+            return res
+                .status(400)
+                .json({ message: 'Для входа используйте Яндекс.ID' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.status(400).json({message: 'Неверный пароль'})
+            return res.status(400).json({ message: 'Неверный пароль' });
         }
-        
-        const token = jwt.sign(
-            {userId: user.id},
-            SECRET_KEY,
-            {expiresIn: '9h'}
-        )
 
-        res.json({ token, userId: user.id })
+        const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
+            expiresIn: '9h',
+        });
 
+        res.json(token);
     } catch (e) {
-        res.status(500).json({message: 'Что-то пошло не так, попробуйте еще раз'})
+        res.status(500).json({
+            message: 'Что-то пошло не так, попробуйте еще раз',
+        });
     }
-})
+});
 
-export default router
+export default router;

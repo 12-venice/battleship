@@ -35,13 +35,7 @@ export const Chat = ({ videoCall }: { videoCall: boolean }): JSX.Element => {
     };
 
     const getMessages = useCallback(async () => {
-        const data = await request(
-            '/api/message/read',
-            'POST',
-            { room },
-            {},
-            true,
-        );
+        const data = await request('/api/message/read', 'POST', { room });
         setMessages(data);
     }, [request, room]);
 

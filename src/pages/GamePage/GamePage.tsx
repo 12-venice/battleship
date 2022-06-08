@@ -48,7 +48,7 @@ export const GamePage = (): JSX.Element => {
     const botCanvasRef = createRef<HTMLCanvasElement>();
 
     const getRoom = useCallback(async () => {
-        const data = await request(`/api/room/${room}`, 'GET', null, {}, true);
+        const data = await request(`/api/room/${room}`, 'GET', null);
         setAnotherUser(
             data.users.find((user: User) => user._id !== thisUser?._id),
         );

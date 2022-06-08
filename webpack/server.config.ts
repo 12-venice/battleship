@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable import/no-default-export */
 /* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
@@ -40,14 +41,18 @@ const config: Configuration = {
     devtool: 'source-map',
 
     plugins: [
-        IS_DEV && new NodemonPlugin({
-            script: './dist/server.js',
-            ignore: ['main.js', '*.js.map'],
-            delay: 1,
-        }),
         new MiniCssExtractPlugin({
             filename: '[name].css',
         }),
+        ...(IS_DEV
+            ? [
+                  new NodemonPlugin({
+                      script: './dist/server.js',
+                      ignore: ['main.js', '*.js.map'],
+                      delay: 1,
+                  }),
+              ]
+            : []),
     ],
 
     performance: {

@@ -34,7 +34,7 @@ export const ForumPage = (): JSX.Element => {
     const { request, loading } = useHttp();
 
     const getTopics = useCallback(async () => {
-        const data = await request('/api/topic/read', 'POST', null, {}, true);
+        const data = await request('/api/topic/read', 'POST', null);
         setTopics(data);
     }, [request]);
 
@@ -44,7 +44,7 @@ export const ForumPage = (): JSX.Element => {
             description: textComment,
             ...user,
         };
-        await request('/api/comment/create', 'POST', newTopic, {}, true);
+        await request('/api/comment/create', 'POST', newTopic);
         setTextComment('');
         getTopics();
     }, [getTopics, request, textComment, topicId, user]);

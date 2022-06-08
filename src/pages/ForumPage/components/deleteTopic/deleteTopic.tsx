@@ -15,7 +15,7 @@ export const DeleteTopicWindow: Props = ({ close, _id }): JSX.Element => {
     );
     const { request, loading } = useHttp();
     const deleteTopic = useCallback(async () => {
-        await request('/api/topic/delete', 'POST', { _id }, {}, true);
+        await request('/api/topic/delete', 'POST', { _id });
         close();
     }, [_id, close, request]);
 

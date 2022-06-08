@@ -25,7 +25,7 @@ export const AddTopicWindow: Props = ({ close }): JSX.Element => {
             description,
             ...user,
         };
-        await request('/api/topic/create', 'POST', newTopic, {}, true);
+        await request('/api/topic/create', 'POST', newTopic);
         close();
     }, [close, description, request, theme, user]);
     return (

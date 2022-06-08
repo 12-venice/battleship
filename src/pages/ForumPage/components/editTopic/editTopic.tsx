@@ -31,7 +31,7 @@ export const EditTopicWindow: Props = ({
             description,
             ...user,
         };
-        await request('/api/topic/update', 'POST', newTopic, {}, true);
+        await request('/api/topic/update', 'POST', newTopic);
         close();
     }, [_id, close, description, request, theme, user]);
     return (

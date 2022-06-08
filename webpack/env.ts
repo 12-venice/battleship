@@ -9,7 +9,7 @@ const DIST_DIR = path.join(__dirname, '../dist');
 const DB = process.env.DB_CONN || '';
 const { PORT } = process.env;
 const IS_DEV_SERVER = process.env.SERVER === 'true';
-const SECRET_KEY = '5fXeXE0WvPDxbsn411y67Q0j6Idr6Jwv'
+const SECRET_KEY = '5fXeXE0WvPDxbsn411y67Q0j6Idr6Jwv';
 const YANDEX_ID = '085740c0f5614f93a07ce6b4c4246a65';
 const YANDEX_PASSWORD = 'cb927f496d9f4dc58b0cbac069671d97';
 

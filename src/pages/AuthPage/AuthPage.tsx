@@ -1,61 +1,35 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Button } from 'src/components/Button';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Form } from 'src/components/Form';
-import { YandexLogin } from 'src/components/oauth/YandexLogin';
+import { YandexLogin } from 'src/components/utils/oauth/YandexLogin';
 import { FromProps, PageLinks } from 'src/components/utils/Routes/types';
-import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
+import { useMessage } from 'src/hooks/message.hook';
 import { AllStateTypes } from 'src/store/reducers';
-import { notificationService } from 'src/store/services/notificationService';
+import { User } from 'src/store/reducers/user';
+import yandexId from '../../../images/yandexid.svg';
 import { Layout } from '../../components/Layout';
 import styles from './AuthPage.scss';
 import { inputs, headers } from './config';
 
 export const AuthPage = (): JSX.Element => {
     const location = useLocation().state as FromProps;
-    const navigate = useNavigate();
+    const message = useMessage();
     const from = location?.from?.pathname;
-    const user = useSelector((userState: AllStateTypes) => userState.user.item);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const { login } = useAuth();
     const { request, loading, error, clearError } = useHttp();
 
-    const auth = useCallback(
-        async (userData) => {
-            try {
-                const fetched = await request('/auth/signin', 'POST', userData);
-                if (fetched === 'OK') {
-                    login(from || PageLinks.home);
-                }
-            } catch (e) {
-                throw new Error('Что-то пошло не так');
-            }
-        },
-        [from, login, request],
-    );
+    const auth = async (userData: User) => {
+        request('/api/auth/login', 'POST', userData);
+    };
 
     useEffect(() => {
-        if (user) {
-            navigate(from || PageLinks.home, { replace: true });
-        }
-    }, [from, navigate, user]);
-
-    useEffect(() => {
-        if (error === 'User already in system') {
-            login(from || PageLinks.home);
-        }
-        if (error) {
-            notificationService.addNotification({
-                message: error,
-                type: 'danger',
-            });
-        }
-        return () => clearError();
-    }, [error, clearError, login, from]);
+        message(error);
+        clearError();
+    }, [error, message, clearError]);
 
     return (
         <Layout>
@@ -71,7 +45,13 @@ export const AuthPage = (): JSX.Element => {
                     disabled={loading}
                     checking={false}
                 />
-                <Button color="red" title="YANDEX" onClick={YandexLogin} />
+                <img
+                    className={styles.auth__yandexid}
+                    aria-hidden
+                    onClick={() => YandexLogin(from || PageLinks.home)}
+                    src={yandexId}
+                    alt="Yandex"
+                />
                 <NavLink to={PageLinks.register}>
                     <span className={styles.auth__link}>
                         {headers.navigation}

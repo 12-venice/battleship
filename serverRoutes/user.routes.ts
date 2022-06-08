@@ -4,11 +4,10 @@
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Router } from 'express';
+import authMiddleware from 'src/server/auth.middleware';
 import User from '../serverModels/user';
 
 const router = Router();
-
-
 router.post('/create', async (req, res) => {
     try {
         const { id } = req.body;
@@ -90,6 +89,17 @@ router.post('/delete', async (req, res) => {
         const { id } = req.body;
         await User.deleteOne({ id });
         res.status(201).json({ message: 'OK' });
+    } catch (e) {
+        res.status(500).json({
+            message: 'Что-то пошло не так, попробуйте еще раз',
+        });
+    }
+});
+
+router.get('/info', authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.userId);
+        res.json(user);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
