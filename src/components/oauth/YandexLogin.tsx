@@ -1,5 +1,4 @@
 /* eslint-disable react/destructuring-assignment */
-import React from 'react';
 import { PROPS } from './types';
 
 const OAUTH_ID = '085740c0f5614f93a07ce6b4c4246a65';
@@ -12,14 +11,6 @@ const getYandexAuthUrl = (redirectUrl: string) => {
 };
 
 export const YandexLogin = (props: PROPS) => {
-    const onClick = () => {
         sessionStorage.setItem('yandexAutoLoginDisabled', 'false');
-        window.location.href = getYandexAuthUrl(props.currentUrl)
-    };
-
-    return (
-        <div>
-            {React.cloneElement(props.children, { onClick })}
-        </div>
-    );
+        window.location.href = getYandexAuthUrl(props.currentUrl);
 };

@@ -8,7 +8,6 @@ import { FromProps, PageLinks } from 'src/components/utils/Routes/types';
 import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
 import { AllStateTypes } from 'src/store/reducers';
-import { User } from 'src/store/reducers/user';
 import { notificationService } from 'src/store/services/notificationService';
 import { Layout } from '../../components/Layout';
 import styles from './AuthPage.scss';
@@ -37,11 +36,6 @@ export const AuthPage = (): JSX.Element => {
         },
         [from, login, request],
     );
-
-    const yandexAuth = (data: User) => {
-        console.log(data);
-        debugger
-    };
 
     useEffect(() => {
         if (user) {
@@ -76,12 +70,7 @@ export const AuthPage = (): JSX.Element => {
                     disabled={loading}
                     checking={false}
                 />
-                <YandexLogin
-                    currentUrl={from || PageLinks.home}
-                    onSuccess={yandexAuth}
-                >
-                    <Button color="red" title="YANDEX" />
-                </YandexLogin>
+                <Button color="red" title="YANDEX" onClick={YandexLogin} />
                 <NavLink to={PageLinks.register}>
                     <span className={styles.auth__link}>
                         {headers.navigation}

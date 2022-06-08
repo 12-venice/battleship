@@ -9,6 +9,7 @@ const DIST_DIR = path.join(__dirname, '../dist');
 const DB = process.env.DB_CONN || '';
 const { PORT } = process.env;
 const IS_DEV_SERVER = process.env.SERVER === 'true';
+const SECRET_KEY = '5fXeXE0WvPDxbsn411y67Q0j6Idr6Jwv'
 
 export {
     IS_DEV,
@@ -17,4 +18,5 @@ export {
     DB,
     PORT,
     IS_DEV_SERVER,
+    SECRET_KEY
 };
