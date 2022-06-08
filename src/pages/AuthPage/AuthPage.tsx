@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { Form } from 'src/components/Form';
 import { YandexLogin } from 'src/components/oauth/YandexLogin';
@@ -23,6 +23,7 @@ export const AuthPage = (): JSX.Element => {
     );
     const { login } = useAuth();
     const { request, loading, error, clearError } = useHttp();
+
     const auth = useCallback(
         async (userData) => {
             try {

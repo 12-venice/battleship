@@ -1,23 +1,25 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable import/no-default-export */
 /* eslint-disable import/extensions */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Router } from 'express';
-
 import User from '../serverModels/user';
 
 const router = Router();
 
+
 router.post('/create', async (req, res) => {
     try {
         const { id } = req.body;
-        setTimeout(() => { }, 500);
+        setTimeout(() => {}, 500);
         if (!req.body.login) {
             req.body.login = req.body.email;
         }
         if (!req.body.display_name) {
             req.body.display_name = req.body.login;
         }
+
         const isExist = await User.findOne({ id });
         if (isExist) {
             await User.updateOne({ id }, { $set: req.body });

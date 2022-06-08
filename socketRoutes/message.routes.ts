@@ -1,10 +1,10 @@
 /* eslint-disable import/no-default-export */
 import { Socket } from 'socket.io';
+import { io } from 'src/server';
 import Message from '../serverModels/message';
 import User from '../serverModels/user';
 import Room from '../serverModels/room';
 import { getUserOnline } from './usersOnline';
-import { io } from 'src/server';
 
 export default (socket: Socket) => {
     const sentMessage = async ({
@@ -25,7 +25,6 @@ export default (socket: Socket) => {
             if (err) {
                 console.log(err);
             }
-            console.log(room, obj);
             io.in(room).emit('messages:recive', obj);
         });
         await Room.updateOne(

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable react/jsx-curly-newline */
 import { useParams } from 'react-router-dom';
 import { notificationService } from 'src/store/services/notificationService';
@@ -18,9 +19,7 @@ export const SendMessage = (data: any) => {
     socket.emit('messages:sent', data);
 };
 
-export const Listener = (nav) => {
-    const { room } = useParams() as { room: string };
-
+export const Listener = (nav: Function, pathname: string) => {
     socket.on('userOnline:add', (data) => {
         OnlineService.addUserOnline(data);
     });
@@ -79,8 +78,7 @@ export const Listener = (nav) => {
         });
     });
     socket.on('messages:recive', (data) => {
-        console.log(room, data.room)
-        if (room !== data.room) {
+        if (pathname !== `${PageLinks.game}/${data.room}`) {
             notificationService.addNotification({
                 title: `New message by ${data.user.display_name}`,
                 message: data.text,

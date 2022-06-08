@@ -4,9 +4,9 @@ import { PROPS } from './types';
 const OAUTH_ID = '085740c0f5614f93a07ce6b4c4246a65';
 
 const getYandexAuthUrl = (redirectUrl: string) => {
-    let requestUrl = `https://oauth.yandex.ru/authorize?response_type=token&client_id=${OAUTH_ID}`;
+    let requestUrl = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${OAUTH_ID}`;
     requestUrl += `&redirect_uri=${window.location.origin}${redirectUrl}`;
-    requestUrl += '&display=popup';
+    requestUrl += '&force_confirm=yes';
     return requestUrl;
 };
 

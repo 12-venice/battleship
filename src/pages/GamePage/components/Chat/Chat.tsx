@@ -14,11 +14,25 @@ export const Chat = ({ videoCall }: { videoCall: boolean }): JSX.Element => {
     const [messages, setMessages] = useState([] as messageType[]);
 
     socket.on('messages:recive', (data) => {
+        console.log(room === data.room);
         if (room === data.room) {
             const newArr = [...messages, ...[data]];
             setMessages(newArr);
         }
     });
+
+    socket.on(
+        'move:recive',
+        ({ roomID, data }: { roomID: string; data: {} }) => {
+            if (room === roomID) {
+                console.log(data);
+            }
+        },
+    );
+
+    const sentMove = (data: {}) => {
+        socket.emit('move:sent', { roomID: room, data });
+    };
 
     const getMessages = useCallback(async () => {
         const data = await request(
