@@ -78,7 +78,6 @@ export const Listener = (nav: Function, pathname: string) => {
         });
     });
     socket.on('messages:recive', (data) => {
-        console.log(pathname !== `${PageLinks.game}/${data.room}`);
         if (pathname !== `${PageLinks.game}/${data.room}`) {
             notificationService.addNotification({
                 title: `New message by ${data.user.display_name}`,

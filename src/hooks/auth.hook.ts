@@ -1,14 +1,15 @@
 import { useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { socket } from 'src/components/utils/Socket/Socket';
 import { userService } from 'src/store/services/userService';
 import { useHttp } from './http.hook';
 
 const getYandexData = async (token: string[]) => {
-    const response = await fetch(`https://login.yandex.ru/info?format=json&oauth_token=${token[1]}`);
+    const response = await fetch(
+        `https://login.yandex.ru/info?format=json&oauth_token=${token[1]}`,
+    );
     const data = await response.json();
-    return data
+    return data;
 };
 
 export const useAuth = () => {
@@ -19,9 +20,9 @@ export const useAuth = () => {
         async (from?) => {
             userService.pending();
             const token = /access_token=([^&]+)/.exec(location.hash);
-            let userData
+            let userData;
             if (token) {
-                userData = await getYandexData(token)
+                userData = await getYandexData(token);
             } else {
                 userData = await request('/auth/user', 'GET', null);
             }

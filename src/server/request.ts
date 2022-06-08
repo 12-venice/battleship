@@ -1,46 +1,83 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/ban-types */
-import http from 'http';
 import https from 'https';
+import queryString from 'query-string';
+import { YANDEX_ID, YANDEX_PASSWORD } from '../../webpack/env';
 
-type optionsType = {
-    host: string;
-    port: number;
-    path: string;
-    method: 'GET' | 'POST';
-    headers: {};
-};
-
-const OAUTH_ID = '085740c0f5614f93a07ce6b4c4246a65';
-
-export const getJSON = (token: string, onResult: Function) => {
+export const getToken = (code: string, onResult: Function) => {
+    const postData = queryString.stringify({
+        grant_type: 'authorization_code',
+        code,
+    });
+    const base64encodedData = Buffer.from(
+        `${YANDEX_ID}:${YANDEX_PASSWORD}`,
+    ).toString('base64');
     const options = {
-        host: `https://oauth.yandex.ru/authorize?response_type=token&client_id=${OAUTH_ID}`,
+        host: 'oauth.yandex.ru',
         port: 443,
-        path: '/some/path',
-        method: 'GET',
+        path: '/token',
+        method: 'POST',
         headers: {
-            Authorization: `OAuth ${token}`,
+            Authorization: `Basic ${base64encodedData}`,
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(postData),
         },
     };
-    console.log('rest::getJSON');
-    const port = options.port === 443 ? https : http;
 
     let output = '';
 
-    const req = port.request(options, (res) => {
-        console.log(`${options.host} : ${res.statusCode}`);
+    const req = https.request(options, (res) => {
         res.setEncoding('utf8');
-
         res.on('data', (chunk) => {
             output += chunk;
         });
-
         res.on('end', () => {
             const obj = JSON.parse(output);
-            onResult(res.statusCode, obj);
+            onResult(obj);
         });
     });
+
+    req.write(postData);
+
+    req.on('error', (err: Error) => {
+        console.log(`error: ${err.message}`);
+    });
+
+    req.end();
+};
+
+export const getUserInfo = (
+    tokenType: string,
+    token: string,
+    onResult: Function,
+) => {
+    const postData = queryString.stringify({
+        format: 'json',
+    });
+    const options = {
+        host: 'login.yandex.ru',
+        method: 'GET',
+        path: '/info',
+        headers: {
+            Authorization: `${tokenType} ${token}`,
+            'Content-type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(postData),
+        },
+    };
+    let output = '';
+    const req = https.request(options, (res) => {
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => {
+            output += chunk;
+        });
+        res.on('end', () => {
+            const obj = JSON.parse(output);
+            onResult(obj);
+        });
+    });
+
+    req.write(postData);
 
     req.on('error', (err: Error) => {
         console.log(`error: ${err.message}`);

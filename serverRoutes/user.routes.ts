@@ -1,30 +1,78 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable import/no-default-export */
 /* eslint-disable import/extensions */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Router } from 'express';
+import { getToken, getUserInfo } from 'src/server/request';
 
 import User from '../serverModels/user';
 
 const router = Router();
 
+router.post('/oauth', async (req, res) => {
+    try {
+        const { code } = req.body;
+
+        getToken(
+            code,
+            (result: { access_token: string; token_type: string }) => {
+                if (result.token_type && result.access_token) {
+                    getUserInfo(
+                        result.token_type,
+                        result.access_token,
+                        async (user: {
+                            email: string;
+                            default_email: string;
+                            phone: string;
+                            default_phone: string;
+                            id: string;
+                        }) => {
+                            // переименование полей для стандартизации User
+                            user.email = user.default_email;
+                            delete user.default_email;
+                            user.phone = user.default_phone;
+                            delete user.default_phone;
+                            if (req.body.default_phone) {
+                                req.body.phone = req.body.default_phone.number;
+                            }
+                            const isExist = await User.findOne({ id: user.id });
+                            if (isExist) {
+                                await User.updateOne(
+                                    { id: user.id },
+                                    { $set: user },
+                                );
+                                res.status(200).json(isExist);
+                            } else {
+                                const userCreate = new User(user);
+                                await userCreate.save();
+                                res.status(201).json(userCreate);
+                            }
+                        },
+                    );
+                }
+            },
+        );
+        res.status(200);
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            message: 'Что-то пошло не так, попробуйте еще раз',
+        });
+    }
+});
+
 router.post('/create', async (req, res) => {
     try {
         const { id } = req.body;
         setTimeout(() => {}, 500);
-        if (req.body.default_email) {
-            req.body.email = req.body.default_email;
-        }
-        if (req.body.default_phone) {
-            req.body.phone = req.body.default_phone.number;
-        }
         if (!req.body.login) {
             req.body.login = req.body.email;
         }
         if (!req.body.display_name) {
             req.body.display_name = req.body.login;
         }
-        
+
         const isExist = await User.findOne({ id });
         if (isExist) {
             await User.updateOne({ id }, { $set: req.body });
