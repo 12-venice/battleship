@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { hot } from 'react-hot-loader/root';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
 import { notificationService } from 'src/store/services/notificationService';
@@ -15,7 +15,9 @@ import './App.scss';
 
 const AppWithRoutes: React.FC = () => {
     const routes = useRoutes();
-    const { location, search } = useLocation();
+    const navigator = useNavigate();
+    const location = useLocation();
+    const { search } = location;
     const { request } = useHttp();
     const { login } = useAuth();
     const position = 'top-right';
@@ -25,7 +27,6 @@ const AppWithRoutes: React.FC = () => {
         const getToken = await request('/api/auth/oauth', 'POST', {
             code: reqCode,
         });
-
         if (getToken) {
             login(getToken);
         }
@@ -36,6 +37,16 @@ const AppWithRoutes: React.FC = () => {
             RequestTokenOauth(code[1] as unknown as string);
         }
     }, []);
+    
+    const AcceptInvite = (navigator, room?: string) => {
+        socket.emit('invite:accept', room);
+        navigator(`${PageLinks.game}/${room._id}`);
+    };
+    
+    const CancelInvite = (room?: string) => {
+        socket.emit('invite:cancel', room);
+    };
+    
 
     socket.on('userOnline:add', (data) => {
         OnlineService.addUserOnline(data);
@@ -46,6 +57,7 @@ const AppWithRoutes: React.FC = () => {
     });
 
     socket.on('userOnline:set', (data) => {
+        console.log(data)
         OnlineService.setUserOnline(data);
     });
 
@@ -83,7 +95,7 @@ const AppWithRoutes: React.FC = () => {
                     title: 'ACCEPT',
                     skin: 'small',
                     color: 'orange',
-                    onClick: () => AcceptInvite(nav, data.room),
+                    onClick: () => AcceptInvite(navigator, data.room),
                 },
                 {
                     title: 'CANCEL',

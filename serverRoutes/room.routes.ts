@@ -27,17 +27,20 @@ router.get('/:id', async (req, res) => {
 
 router.post('/find', authMiddleware, async (req, res) => {
     try {
-        const { rooms } = req.body;
+        const { rooms } = await User.findOne({ _id: req.user.userId }).populate('rooms')
         const data = [];
         for (let i = 0; i < rooms.length; i++) {
-            const { users } = await Room.findOne({ _id: rooms[i] });
-            const anotherUserId =
-                users.indexOf(req.user.userId) === 0 ? users[1] : users[0];
+            const { users } = rooms[i];
+            let anotherUserId = users[0]
+            if (users[0].toString() === req.user.userId) {
+                anotherUserId = users[1]
+            }
             const anotherUser = await User.findOne({ _id: anotherUserId });
             data.push({ ...anotherUser.toJSON(), ...{ room: rooms[i] } });
         }
         res.status(200).json(data);
     } catch (e) {
+        console.log(e)
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });

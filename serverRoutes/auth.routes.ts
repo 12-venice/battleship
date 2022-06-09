@@ -59,7 +59,7 @@ router.post('/oauth', async (req, res) => {
                                 SECRET_KEY,
                                 { expiresIn: '30d' },
                             );
-                            res.json(token);
+                            res.status(200).json(token);
                         },
                     );
                 }

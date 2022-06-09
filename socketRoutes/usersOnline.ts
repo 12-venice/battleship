@@ -4,8 +4,8 @@ export interface StringArray {
 
 const usersOnline: StringArray = {};
 
-const addUserOnline = (socketId: string, id: string) => {
-    usersOnline[socketId] = id;
+const addUserOnline = (socketId: string, _id: string) => {
+    usersOnline[socketId] = _id;
 };
 
 const removeUserOnline = (socketId: string) => {

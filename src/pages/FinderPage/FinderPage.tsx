@@ -81,18 +81,19 @@ export const FinderPage = () => {
         setStr(e.target.value);
     };
 
-    const createRoom = (invitedUserId: string) => {
-        socket.emit('invite:sent', { createdUserId: user?._id, invitedUserId });
+    const createRoom = async (element: User) => {
+        socket.emit('invite:sent', { createdUserId: user?._id, invitedUserId: element._id });
+        setRooms([...(await getRooms() as []), ...[element]])
         getRooms();
     };
 
-    const inviteUser = (invitedUserId: string, room: string) => {
-        socket.emit('invite:sent', { createdUserId: user?._id, invitedUserId });
-        navigator(`${PageLinks.game}/${room}`);
+    const inviteUser = (element: User) => {
+        socket.emit('invite:sent', { createdUserId: user?._id, invitedUserId: element._id });
+        navigator(`${PageLinks.game}/${element.room!}`);
     };
 
     const selectUser = (element: User) => {
-        str ? createRoom(element._id) : inviteUser(element._id, element.room!);
+        str ? () => createRoom(element) : () => inviteUser(element._id, element.room!);
     };
 
     return (
