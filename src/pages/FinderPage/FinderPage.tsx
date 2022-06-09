@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -8,12 +9,16 @@ import { Layout } from 'src/components/Layout';
 import { Preloader } from 'src/components/Preloader';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { socket } from 'src/components/utils/Socket/Socket';
+import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
+import { useMessage } from 'src/hooks/message.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import { User } from 'src/store/reducers/user';
 import styles from './FinderPage.scss';
 
 export const FinderPage = () => {
+    const message = useMessage();
+    const { token } = useAuth();
     const navigator = useNavigate();
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const dataStore = useSelector(
@@ -30,25 +35,30 @@ export const FinderPage = () => {
 
     const [rooms, setRooms] = useState([]);
     const [str, setStr] = useState('');
-    const { request, loading } = useHttp();
+    const { request, loading, error, clearError } = useHttp();
 
     const findUser = useCallback(async () => {
         const data = await request('/api/user/find', 'POST', { str });
         setRooms(data);
     }, [request, str]);
-
     const getRooms = useCallback(async () => {
-        const data = await request('/api/room/find', 'POST', {
-            _id: user?._id,
-            rooms: user?.rooms,
-        });
+        const data = await request(
+            '/api/room/find',
+            'POST',
+            {
+                rooms: user?.rooms,
+            },
+            {
+                Authorization: `Bearer ${token}`,
+            },
+        );
         setRooms(data);
-    }, [request, user?._id, user?.rooms]);
+    }, [request, token, user]);
 
     useEffect(() => {
         getRooms();
         return () => setRooms([]);
-    }, []);
+    }, [getRooms]);
 
     useEffect(() => {
         const timeOut = setTimeout(() => {
@@ -59,16 +69,27 @@ export const FinderPage = () => {
         return () => clearTimeout(timeOut);
     }, [findUser, str.length]);
 
+    useEffect(() => {
+        message(error);
+        clearError();
+    }, [error, message, clearError]);
+
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStr(e.target.value);
     };
 
     const createRoom = (invitedUserId: string) => {
         socket.emit('invite:sent', { createdUserId: user?._id, invitedUserId });
+        getRooms();
     };
+
     const inviteUser = (invitedUserId: string, room: string) => {
         socket.emit('invite:sent', { createdUserId: user?._id, invitedUserId });
         navigator(`${PageLinks.game}/${room}`);
+    };
+
+    const selectUser = (element: User) => {
+        str ? createRoom(element._id) : inviteUser(element._id, element.room);
     };
 
     return (
@@ -79,7 +100,7 @@ export const FinderPage = () => {
                         <Button
                             skin="quad"
                             color="orange"
-                            title="✚"
+                            title="F"
                             onClick={() => getRooms()}
                         />
                     </div>
@@ -113,26 +134,12 @@ export const FinderPage = () => {
                                         key={element._id}
                                         aria-hidden
                                         className={styles.finder__line}
+                                        onClick={() => selectUser(element)}
                                     >
                                         {Avatar(element)}
                                         <span className={styles.finder__name}>
                                             {element.display_name}
                                         </span>
-                                        <Button
-                                            title={str ? '+' : 'v'}
-                                            skin="quad"
-                                            color={str ? 'green' : 'blue'}
-                                            onClick={
-                                                str
-                                                    ? () =>
-                                                        createRoom(
-                                                            element._id,
-                                                        )
-                                                    : () =>
-                                                        inviteUser(element._id,element.room,
-                                                        )
-                                            }
-                                        />
                                         {!str && (
                                             <div
                                                 className={styles.finder__point}
@@ -152,12 +159,12 @@ export const FinderPage = () => {
                         <Preloader />
                     )}
                 </div>
-                <Button
+                {/* <Button
                     skin="regular"
                     color="green"
                     disabled
                     title={dataStore.buttons.random}
-                />
+                /> */}
             </div>
         </Layout>
     );

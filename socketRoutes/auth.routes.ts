@@ -7,7 +7,6 @@ import {
     addUserOnline,
     getSocketUserOnline,
     getUserOnline,
-    getUsersOnline,
     removeUserOnline,
 } from './usersOnline';
 import User from '../serverModels/user';
@@ -47,7 +46,7 @@ export default (socket: Socket) => {
             const roomId = room._id.toString();
             socket.leave(roomId);
             console.log('User LEAVE from room: ', roomId);
-            socket.to(roomId).emit('userOnline:remove', socket.id);
+            io.to(roomId).emit('userOnline:remove', socket.id);
         };
         if (user && user.rooms) {
             user.rooms.forEach(leaveFromRoom);
@@ -62,7 +61,7 @@ export default (socket: Socket) => {
             const roomId = room._id.toString();
             socket.leave(roomId);
             console.log('User DISCONNECT from room: ', roomId, reason);
-            socket.to(roomId).emit('userOnline:remove', socket.id);
+            io.to(roomId).emit('userOnline:remove', socket.id);
         };
         if (user && user.rooms) {
             user.rooms.forEach(leaveFromRoom);

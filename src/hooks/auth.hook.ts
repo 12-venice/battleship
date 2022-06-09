@@ -15,7 +15,10 @@ export const useAuth = () => {
     const { request, error, clearError } = useHttp();
     const navigate = useNavigate();
     const { pathname, state } = useLocation();
-    const from = (state as FromProps)?.from?.pathname;
+    const from =
+        (state as FromProps)?.from?.pathname !== PageLinks.auth
+            ? (state as FromProps)?.from?.pathname
+            : null;
     const message = useMessage();
 
     const _getUserInfo = useCallback(async () => {
@@ -25,7 +28,7 @@ export const useAuth = () => {
         userService.success();
         userService.setUser(userInfo);
         socket.emit('userOnline:add', userInfo._id);
-        if (pathname === (PageLinks.auth && PageLinks.register)) {
+        if (pathname === (PageLinks.auth || PageLinks.register)) {
             navigate(from || PageLinks.home, { replace: true });
         }
     }, [from, navigate, pathname, request, token]);

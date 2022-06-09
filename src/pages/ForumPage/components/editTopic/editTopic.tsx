@@ -1,14 +1,12 @@
 import cn from 'classnames';
-
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
-
 import { useCallback, useState } from 'react';
 import { useHttp } from 'src/hooks/http.hook';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
+import { useAuth } from 'src/hooks/auth.hook';
 import { Props } from './types';
-
 import styles from './editTopic.scss';
 
 export const EditTopicWindow: Props = ({
@@ -17,6 +15,7 @@ export const EditTopicWindow: Props = ({
     oldDescription,
     oldTheme,
 }): JSX.Element => {
+    const { token } = useAuth();
     const { request, loading } = useHttp();
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const dataStore = useSelector(
@@ -29,11 +28,13 @@ export const EditTopicWindow: Props = ({
             _id,
             theme,
             description,
-            ...user,
+            ...{ user },
         };
-        await request('/api/topic/update', 'POST', newTopic);
+        await request('/api/topic/update', 'POST', newTopic, {
+            Authorization: `Bearer ${token}`,
+        });
         close();
-    }, [_id, close, description, request, theme, user]);
+    }, [_id, close, description, request, theme, token, user]);
     return (
         <ModalWindow>
             <h2 className={styles['add-topic__label']}>

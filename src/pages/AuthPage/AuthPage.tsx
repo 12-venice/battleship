@@ -4,6 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { Form } from 'src/components/Form';
 import { YandexLogin } from 'src/components/utils/oauth/YandexLogin';
 import { FromProps, PageLinks } from 'src/components/utils/Routes/types';
+import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
 import { useMessage } from 'src/hooks/message.hook';
 import { AllStateTypes } from 'src/store/reducers';
@@ -16,6 +17,7 @@ import { inputs, headers } from './config';
 export const AuthPage = (): JSX.Element => {
     const location = useLocation().state as FromProps;
     const message = useMessage();
+    const { login } = useAuth();
     const from = location?.from?.pathname;
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
@@ -23,7 +25,10 @@ export const AuthPage = (): JSX.Element => {
     const { request, loading, error, clearError } = useHttp();
 
     const auth = async (userData: User) => {
-        request('/api/auth/login', 'POST', userData);
+        const token = await request('/api/auth/login', 'POST', userData);
+        if (token) {
+            login(token);
+        }
     };
 
     useEffect(() => {

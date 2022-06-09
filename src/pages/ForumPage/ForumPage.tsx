@@ -8,6 +8,7 @@ import { Preloader } from 'src/components/Preloader';
 import { DateParser } from 'src/components/utils/DateParse/DateParser';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
+import { useAuth } from 'src/hooks/auth.hook';
 import { Layout } from '../../components/Layout';
 import { Topic } from './components/topic';
 import sendIcon from '../../../images/send.svg';
@@ -19,7 +20,7 @@ import { EditTopicWindow } from './components/editTopic';
 import { TopicProps } from './components/topic/types';
 
 export const ForumPage = (): JSX.Element => {
-    const user = useSelector((state: AllStateTypes) => state.user.item);
+    const { token } = useAuth();
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
@@ -34,7 +35,7 @@ export const ForumPage = (): JSX.Element => {
     const { request, loading } = useHttp();
 
     const getTopics = useCallback(async () => {
-        const data = await request('/api/topic/read', 'POST', null);
+        const data = await request('/api/topic/read', 'GET', null);
         setTopics(data);
     }, [request]);
 
@@ -42,12 +43,13 @@ export const ForumPage = (): JSX.Element => {
         const newTopic = {
             topic: topicId,
             description: textComment,
-            ...user,
         };
-        await request('/api/comment/create', 'POST', newTopic);
+        await request('/api/comment/create', 'POST', newTopic, {
+            Authorization: `Bearer ${token}`,
+        });
         setTextComment('');
         getTopics();
-    }, [getTopics, request, textComment, topicId, user]);
+    }, [getTopics, request, textComment, token, topicId]);
 
     useEffect(() => {
         getTopics();
@@ -91,6 +93,7 @@ export const ForumPage = (): JSX.Element => {
                         <Button
                             skin="quad"
                             color="green"
+                            disabled={!token}
                             onClick={() => setWindowCreate(true)}
                         >
                             <img
@@ -129,7 +132,7 @@ export const ForumPage = (): JSX.Element => {
                     <Button
                         skin="quad"
                         // title={dataStore.buttons.send}
-                        disabled={!topicId}
+                        disabled={!topicId || !token}
                         onClick={createComment}
                     >
                         <img
@@ -140,7 +143,7 @@ export const ForumPage = (): JSX.Element => {
                     </Button>
                 </div>
             </div>
-            {openCreateWindow && user && (
+            {openCreateWindow && (
                 <AddTopicWindow
                     close={() => {
                         setWindowCreate(false);

@@ -29,6 +29,11 @@ export const validationPatterns: Record<
     },
 
     oldpassword: {
+        pattern: /(.*){0,40}$/,
+        error: '',
+    },
+
+    retrypassword: {
         pattern: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/,
         error: '',
     },

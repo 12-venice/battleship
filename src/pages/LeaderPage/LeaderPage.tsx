@@ -88,7 +88,7 @@ export const LeaderPage = (): JSX.Element => {
                                         styles['leader__table-selected'],
                                 )}
                                 data-sort={element.type}
-                                aria-hidden="true"
+                                aria-hidden
                                 onClick={(event) => handlerClick(event)}
                             >
                                 {index > 0 && (

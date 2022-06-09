@@ -11,13 +11,16 @@ import { userService } from 'src/store/services/userService';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
-import { notificationService } from 'src/store/services/notificationService';
+import { useMessage } from 'src/hooks/message.hook';
+import { useAuth } from 'src/hooks/auth.hook';
 import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs } from './config';
 import { Avatar } from '../ProfilePage/components/Avatar';
 import { UpdateAvatar } from './components/UpdateAvatar';
 
 export const UpdateProfilePage = (): JSX.Element => {
+    const message = useMessage();
+    const { token } = useAuth();
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
@@ -36,27 +39,19 @@ export const UpdateProfilePage = (): JSX.Element => {
     const getUpdateAvatar = () => setUpdateAvatar(!updateAvatar);
     const changeProfile = useCallback(
         async (data) => {
-            try {
-                const fetched = await request('/user/profile', 'PUT', data);
-                await request('/api/user/update', 'POST', fetched);
-                userService.setUser(fetched);
-                navigate(PageLinks.profile);
-            } catch (e) {
-                throw new SyntaxError('Что-то пошло не так');
-            }
+            const updated = await request('/api/user/update', 'POST', data, {
+                Authorization: `Bearer ${token}`,
+            });
+            userService.setUser(updated);
+            navigate(PageLinks.profile);
         },
-        [navigate, request],
+        [navigate, request, token],
     );
 
     useEffect(() => {
-        if (error) {
-            notificationService.addNotification({
-                message: error,
-                type: 'danger',
-            });
-        }
-        return () => clearError();
-    }, [error, clearError]);
+        message(error);
+        clearError();
+    }, [error, message, clearError]);
 
     return (
         <Layout>

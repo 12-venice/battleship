@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FC } from 'react';
 import cn from 'classnames';
@@ -15,7 +16,7 @@ const ToastBlock = (toast: Notification, position: string): JSX.Element => {
     const deleteToast = (id: string) => {
         notificationService.deleteNotification(id);
     };
-console.log(toast)
+
     setTimeout(() => {
         if (toast.autoDelete) {
             deleteToast(toast.id as string);

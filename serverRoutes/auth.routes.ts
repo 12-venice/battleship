@@ -26,6 +26,8 @@ router.post('/oauth', async (req, res) => {
                             phone: string;
                             default_phone?: string;
                             id: string;
+                            display_name?: string;
+                            login?: string;
                         }) => {
                             // переименование полей для стандартизации User
                             if (user.default_email) {
@@ -35,6 +37,12 @@ router.post('/oauth', async (req, res) => {
                             if (user.default_phone) {
                                 user.phone = user.default_phone;
                                 delete user.default_phone;
+                            }
+                            if (!user.login) {
+                                user.login = user.email;
+                            }
+                            if (!user.display_name) {
+                                user.display_name = user.login;
                             }
 
                             const isExist = await User.findOne({
@@ -49,7 +57,7 @@ router.post('/oauth', async (req, res) => {
                             const token = jwt.sign(
                                 { userId: userID },
                                 SECRET_KEY,
-                                { expiresIn: '9h' },
+                                { expiresIn: '30d' },
                             );
                             res.json(token);
                         },
@@ -59,7 +67,6 @@ router.post('/oauth', async (req, res) => {
         );
         res.status(200);
     } catch (e) {
-        console.log(e);
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
@@ -70,29 +77,29 @@ router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const user = await User.findOne({ email: email.toLowerCase() });
+        const isExist = await User.findOne({ email: email.toLowerCase() });
 
-        if (!user) {
+        if (!isExist) {
             return res.status(400).json({ message: 'Пользователь не найден' });
         }
 
-        if (!user.password) {
+        if (!isExist.password) {
             return res
                 .status(400)
                 .json({ message: 'Для входа используйте Яндекс.ID' });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, isExist.password);
 
         if (!isMatch) {
             return res.status(400).json({ message: 'Неверный пароль' });
         }
 
-        const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
-            expiresIn: '9h',
+        const token = jwt.sign({ userId: isExist.id }, SECRET_KEY, {
+            expiresIn: '30d',
         });
 
-        res.json(token);
+        res.status(200).json(token);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',

@@ -5,13 +5,33 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Router } from 'express';
 import authMiddleware from 'src/server/auth.middleware';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { SECRET_KEY } from '../webpack/env';
 import User from '../serverModels/user';
 
 const router = Router();
-router.post('/create', async (req, res) => {
+
+router.post('/generate', async (req, res) => {
     try {
-        const { id } = req.body;
-        setTimeout(() => {}, 500);
+        const { retrypassword, password } = req.body;
+
+        if (retrypassword !== password) {
+            return res.status(400).json({
+                message: 'Пароль не совпадает',
+            });
+        }
+
+        const isExist = await User.findOne({
+            email: req.body.email.toLowerCase(),
+        });
+
+        if (isExist) {
+            return res.status(400).json({
+                message: 'Пользователь с таким E-mail уже зарегистрирован',
+            });
+        }
+
         if (!req.body.login) {
             req.body.login = req.body.email;
         }
@@ -19,33 +39,36 @@ router.post('/create', async (req, res) => {
             req.body.display_name = req.body.login;
         }
 
-        const isExist = await User.findOne({ id });
-        if (isExist) {
-            await User.updateOne({ id }, { $set: req.body });
-            res.status(200).json(isExist);
-        } else {
-            const user = new User(req.body);
-            await user.save();
-            res.status(201).json(user);
-        }
-    } catch (e) {
-        res.status(500).json({
-            message: 'Что-то пошло не так, попробуйте еще раз',
+        const hashedPassword = await bcrypt.hash(password, 15);
+        const user = new User({
+            ...req.body,
+            ...{ password: hashedPassword },
         });
+
+        await user.save();
+
+        const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
+            expiresIn: '30d',
+        });
+
+        res.status(200).json(token);
+    } catch (e) {
+        console.log(e);
+        return res
+            .status(500)
+            .json({ message: 'Что-то пошло не так, попробуйте еще раз' });
     }
 });
 
 router.post('/read', async (req, res) => {
     try {
         const { sortType, sortDirection, page } = req.body;
-        console.log(sortType, sortDirection, page);
-        const user = await User.find()
+        const user = await User.find({}, { password: 0 })
             .sort({ [sortType]: sortDirection ? 1 : -1 })
             .skip(page * 10)
             .limit(10);
         res.json(user);
     } catch (e) {
-        console.log(e);
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
@@ -55,17 +78,20 @@ router.post('/read', async (req, res) => {
 router.post('/find', async (req, res) => {
     try {
         const { str } = req.body;
-        const user = await User.find({
-            $or: [
-                { display_name: { $regex: str, $options: 'i' } },
-                { first_name: { $regex: str, $options: 'i' } },
-                { second_name: { $regex: str, $options: 'i' } },
-                { email: { $regex: str, $options: 'i' } },
-                { phone: { $regex: str, $options: 'i' } },
-                { login: { $regex: str, $options: 'i' } },
-            ],
-        });
-        res.json(user);
+        const user = await User.find(
+            {
+                $or: [
+                    { display_name: { $regex: str, $options: 'i' } },
+                    { first_name: { $regex: str, $options: 'i' } },
+                    { second_name: { $regex: str, $options: 'i' } },
+                    { email: { $regex: str, $options: 'i' } },
+                    { phone: { $regex: str, $options: 'i' } },
+                    { login: { $regex: str, $options: 'i' } },
+                ],
+            },
+            { password: 0 },
+        );
+        res.status(200).json(user);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -73,10 +99,11 @@ router.post('/find', async (req, res) => {
     }
 });
 
-router.post('/update', async (req, res) => {
+router.post('/update', authMiddleware, async (req, res) => {
     try {
-        await User.updateOne({ id: req.body.id }, { $set: req.body });
-        res.status(201).json({ message: 'OK' });
+        await User.updateOne({ _id: req.user.userId }, { $set: req.body });
+        const user = await User.findOne({ _id: req.user.userId });
+        res.status(200).json(user);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -84,11 +111,34 @@ router.post('/update', async (req, res) => {
     }
 });
 
-router.post('/delete', async (req, res) => {
+router.post('/password', authMiddleware, async (req, res) => {
     try {
-        const { id } = req.body;
-        await User.deleteOne({ id });
-        res.status(201).json({ message: 'OK' });
+        const { oldpassword, password } = req.body;
+        console.log(req.body)
+        const user = await User.findOne({ _id: req.user.userId });
+        const isMatch = await bcrypt.compare(oldpassword, user.password);
+        if (isMatch) {
+            await User.updateOne(
+                { _id: req.user.userId },
+                { $set: { password } },
+            );
+            res.status(200);
+        } else {
+            res.status(400).json({
+                message: 'Пароль неправильный',
+            });
+        }
+    } catch (e) {
+        res.status(500).json({
+            message: 'Что-то пошло не так, попробуйте еще раз',
+        });
+    }
+});
+
+router.post('/delete', authMiddleware, async (req, res) => {
+    try {
+        await User.deleteOne({ _id: req.user.userId });
+        res.status(200);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
