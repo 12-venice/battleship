@@ -1,57 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-param-reassign */
 import { useState, useCallback } from 'react';
 
 export const useHttp = () => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const baseUrl = 'https://ya-praktikum.tech/api/v2';
+    const [error, setError] = useState(null);
+
     const request = useCallback(
-        async (url, method, body, headers = {}, DB = false, image = null) => {
+        async (url, method = 'GET', body = null, headers = {}) => {
             setLoading(true);
             try {
-                let currentBody = null;
-                const currentHeaders = { ...headers };
                 if (body) {
-                    currentBody = JSON.stringify(body);
-                    currentHeaders['Content-Type'] = 'application/json';
+                    body = JSON.stringify(body);
+                    headers['Content-Type'] = 'application/json';
                 }
-                if (image) {
-                    currentBody = image;
-                }
-                const response = await fetch((DB ? '' : baseUrl) + url, {
-                    method: method || 'GET',
-                    body: currentBody,
-                    headers: currentHeaders,
-                    credentials: 'include',
-                });
+                const response = await fetch(url, { method, body, headers });
+                const data = await response.json();
 
-                const contentType = response.headers
-                    .get('content-type')
-                    ?.split(';')[0];
-                let data;
-                if (contentType === 'application/json') {
-                    data = await response.json();
-                } else {
-                    data = await response.text();
-                }
                 if (!response.ok) {
-                    throw new Error(data.reason || 'Что-то пошло не так');
+                    throw new Error(data.message || 'Что-то пошло не так');
                 }
                 setLoading(false);
+
                 return data;
-            } catch (e) {
+            } catch (err: any) {
                 setLoading(false);
-                setError((e as Error).message);
-                throw e;
+                setError(err.message);
+                throw err;
             }
         },
         [],
     );
-    const clearError = useCallback(() => setError(''), []);
+    const clearError = useCallback(() => setError(null), []);
 
-    return {
-        loading,
-        request,
-        error,
-        clearError,
-    };
+    return { loading, request, error, clearError };
 };

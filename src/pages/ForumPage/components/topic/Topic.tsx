@@ -25,7 +25,7 @@ export const Topic: Props = ({
     const [state, toggleState] = useState(false);
     const [comments, setComments] = useState([]);
     const [select, toggleSelect] = useState(false);
-    const currenUserser = useSelector(
+    const currentUser = useSelector(
         (userState: AllStateTypes) => userState.user.item,
     );
     const { request, loading } = useHttp();
@@ -36,13 +36,7 @@ export const Topic: Props = ({
     };
 
     const getComments = useCallback(async () => {
-        const data = await request(
-            '/api/comment/read',
-            'POST',
-            { _id },
-            {},
-            true,
-        );
+        const data = await request('/api/comment/read', 'POST', { _id });
         setComments(data);
     }, [_id, request]);
 
@@ -69,7 +63,7 @@ export const Topic: Props = ({
                         <h2 className={styles['topic__header-theme']}>
                             {theme}
                         </h2>
-                        {user?.display_name === currenUserser?.display_name && (
+                        {user?._id === currentUser?._id && (
                             <div className={styles.topic__controls}>
                                 <i
                                     className="small material-icons"

@@ -19,5 +19,6 @@ type RouteProps = {
 export type Props = FC<RouteProps>;
 
 export type FromProps = {
+    pathname: string;
     from: { pathname: string };
 };

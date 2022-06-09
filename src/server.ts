@@ -13,6 +13,7 @@ import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
 import { DB, IS_DEV, IS_DEV_SERVER, PORT } from '../webpack/env';
 import { renderResponse } from './server/renderResponse';
+import authRouter from '../serverRoutes/auth.routes';
 import userRouter from '../serverRoutes/user.routes';
 import topicRouter from '../serverRoutes/topic.routes';
 import commentRouter from '../serverRoutes/comment.routes';
@@ -23,6 +24,7 @@ import webpackConfig from '../webpack/client.config';
 const compiler = webpack(webpackConfig);
 
 const app = express();
+
 const httpServer = http.createServer(app);
 if (IS_DEV && !IS_DEV_SERVER) {
     app.use(
@@ -49,6 +51,7 @@ io.on('connection', (socket: Socket) => {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
+app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/topic', topicRouter);
 app.use('/api/comment', commentRouter);

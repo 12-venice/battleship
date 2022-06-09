@@ -4,6 +4,6 @@ export type messageType = {
     _id: string;
     text: string;
     user: User;
-    date: Date;
+    createdAt: Date;
     delivered: boolean;
 };

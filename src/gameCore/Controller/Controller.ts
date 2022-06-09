@@ -59,16 +59,16 @@ export class Controller {
                 : this.player;
         const v = activeField.matrix[x][y];
         switch (v) {
-            // промах
-            case MatrixCell.empty:
-                this.miss({ x, y, activeField });
-                break;
+        // промах
+        case MatrixCell.empty:
+            this.miss({ x, y, activeField });
+            break;
             // попадание
-            case MatrixCell.deck:
-                this.hit({ x, y, activeField });
-                break;
-            default:
-                break;
+        case MatrixCell.deck:
+            this.hit({ x, y, activeField });
+            break;
+        default:
+            break;
         }
     }
 

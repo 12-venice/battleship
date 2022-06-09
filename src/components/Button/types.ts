@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { FC, MouseEventHandler, ReactElement } from 'react';
 
 export type btnProps = {
@@ -18,6 +19,7 @@ export type btnProps = {
     color?: 'red' | 'yellow' | 'orange' | 'blue' | 'green';
     noFill?: boolean;
     href?: string;
+    link?: string;
 };
 
 export type ButtonProps = FC<btnProps>;

@@ -32,9 +32,6 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
                 '/user/profile/avatar',
                 'PUT',
                 null,
-                {},
-                false,
-                formData,
             );
             close();
             navigate(PageLinks.profile);

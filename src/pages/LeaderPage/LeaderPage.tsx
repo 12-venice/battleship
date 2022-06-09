@@ -21,17 +21,11 @@ export const LeaderPage = (): JSX.Element => {
     const [sortDirection, setSortDirection] = useState(false);
     const [page, setPage] = useState(0);
     const getLeaders = useCallback(async () => {
-        const users = await request(
-            '/api/user/read',
-            'POST',
-            {
-                sortType,
-                sortDirection,
-                page,
-            },
-            {},
-            true,
-        );
+        const users = await request('/api/user/read', 'POST', {
+            sortType,
+            sortDirection,
+            page,
+        });
         setLeaders(users);
     }, [page, request, sortDirection, sortType]);
 
@@ -94,7 +88,7 @@ export const LeaderPage = (): JSX.Element => {
                                         styles['leader__table-selected'],
                                 )}
                                 data-sort={element.type}
-                                aria-hidden="true"
+                                aria-hidden
                                 onClick={(event) => handlerClick(event)}
                             >
                                 {index > 0 && (

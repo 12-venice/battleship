@@ -29,6 +29,11 @@ export const inputs = [
         name: 'password',
         type: 'password',
     },
+    {
+        title: 'Retry password',
+        name: 'retrypassword',
+        type: 'password',
+    },
 ];
 
 export const submitTitle = 'SIGN UP!';

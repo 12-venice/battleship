@@ -1,3 +1,5 @@
+/* eslint-disable no-fallthrough */
+/* eslint-disable no-param-reassign */
 // Отключены для теста
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable default-param-last */
@@ -18,7 +20,7 @@ interface BaseActionType<T> {
     type: T;
 }
 interface ItemActionType extends BaseActionType<keyof typeof actions> {
-    data: { socketId?: string; id?: string } | StringArray;
+    data: { socketId?: string; _id?: string } | StringArray;
 }
 
 const defaultState: userOnlineState = {};
@@ -29,8 +31,9 @@ export function userOnlineReducer(
 ): userOnlineState {
     switch (type) {
         case actions.ADD_USER_ONLINE: {
-            if (data.socketId && data.id) {
-                const newUserOnline = { [data.socketId]: data.id };
+            console.log(state)
+            if (data.socketId && data._id) {
+                const newUserOnline = { [data.socketId]: data._id };
                 return { ...state, ...newUserOnline };
             }
         }
@@ -50,7 +53,7 @@ export function userOnlineReducer(
 
 export function addUserOnline(data: {
     socketId: string;
-    id: string;
+    _id: string;
 }): ItemActionType {
     return { type: actions.ADD_USER_ONLINE, data };
 }

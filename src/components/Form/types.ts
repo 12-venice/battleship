@@ -1,5 +1,4 @@
-import { Dispatch } from 'react';
-
+/* eslint-disable @typescript-eslint/ban-types */
 export type fieldsProps = {
     type?: string;
     title?: string;
@@ -10,11 +9,9 @@ export type fieldsProps = {
     validateMsgFalse?: string;
 };
 
-type SetStateAction<S> = S | ((prevState: S) => S);
-
 export type formProps = {
     inputs: fieldsProps[];
-    setData: Dispatch<SetStateAction<{}>>;
+    setData: Function;
     submitTitle: string;
     disabled?: boolean;
     checking?: boolean;

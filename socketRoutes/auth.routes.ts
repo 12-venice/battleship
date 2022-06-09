@@ -1,53 +1,55 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable import/no-default-export */
 import { Socket } from 'socket.io';
+import { io } from 'src/server';
+import Room from 'serverModels/room';
 import {
     addUserOnline,
     getSocketUserOnline,
     getUserOnline,
-    getUsersOnline,
     removeUserOnline,
 } from './usersOnline';
 import User from '../serverModels/user';
-import { io } from 'src/server';
-import Room from 'serverModels/room';
+
+const onlineFriends = {};
 
 export default (socket: Socket) => {
-    socket.on('userOnline:add', async (id) => {
-        addUserOnline(socket.id, id);
-        const { rooms } = await User.findOne({ _id: id });
-        const onlineFriends = {};
+    socket.on('userOnline:add', async (_id) => {
+        addUserOnline(socket.id, _id);
+        const user = await User.findOne({ _id });
 
         const joinToRoom = async (room: { _id: string }) => {
             const roomId = room._id.toString();
             socket.join(roomId);
             socket.broadcast.to(roomId).emit('userOnline:add', {
                 socketId: socket.id,
-                id: id,
+                _id,
             });
             const { users } = await Room.findOne({ _id: roomId });
-            const anotherUserId = users.indexOf(id) === 0 ? users[1] : users[0];
+            const anotherUserId = users.indexOf(_id) === 0 ? users[1] : users[0];
             const anotherUserSocket = getSocketUserOnline(anotherUserId);
             anotherUserSocket && {
                 ...onlineFriends,
                 ...{ [anotherUserSocket]: anotherUserId },
             };
         };
-        await rooms.forEach(joinToRoom);
-        socket.to(socket.id).emit('userOnline:set', onlineFriends);
-        console.log(getUsersOnline());
-        console.log(io.sockets.adapter.rooms);
+        if (user && user.rooms) {
+            await user.rooms.forEach(joinToRoom);
+        }
+        io.to(socket.id).emit('userOnline:set', onlineFriends);
     });
 
     socket.on('userOnline:remove', async () => {
         const id = getUserOnline(socket.id);
-        const { rooms } = await User.findOne({ _id: id });
+        const user = await User.findOne({ _id: id });
         const leaveFromRoom = (room: { _id: string }) => {
             const roomId = room._id.toString();
             socket.leave(roomId);
             console.log('User LEAVE from room: ', roomId);
-            socket.to(roomId).emit('userOnline:remove', socket.id);
+            io.to(roomId).emit('userOnline:remove', socket.id);
         };
-        if (rooms) {
-            rooms.forEach(leaveFromRoom);
+        if (user && user.rooms) {
+            user.rooms.forEach(leaveFromRoom);
         }
         removeUserOnline(socket.id);
     });
@@ -59,7 +61,7 @@ export default (socket: Socket) => {
             const roomId = room._id.toString();
             socket.leave(roomId);
             console.log('User DISCONNECT from room: ', roomId, reason);
-            socket.to(roomId).emit('userOnline:remove', socket.id);
+            io.to(roomId).emit('userOnline:remove', socket.id);
         };
         if (user && user.rooms) {
             user.rooms.forEach(leaveFromRoom);

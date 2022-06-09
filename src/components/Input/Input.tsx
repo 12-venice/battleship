@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { notificationService } from 'src/store/services/notificationService';
+import { useMessage } from 'src/hooks/message.hook';
 import { inputProps } from './types';
 
 export const Input = ({
@@ -11,14 +11,13 @@ export const Input = ({
     className = 'validate',
     validateMsgFalse,
 }: inputProps): JSX.Element => {
+    const message = useMessage();
+
     useEffect(() => {
         if (validateMsgFalse && className === 'validate invalid') {
-            notificationService.addNotification({
-                message: validateMsgFalse,
-                type: 'warning',
-            });
+            message(validateMsgFalse, 'warning');
         }
-    }, [className, validateMsgFalse]);
+    }, [validateMsgFalse, message, className]);
 
     return (
         <div style={{ margin: '5px 0' }}>
