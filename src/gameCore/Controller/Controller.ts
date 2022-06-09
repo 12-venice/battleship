@@ -99,6 +99,14 @@ export class Controller {
 
         this.onChangeField();
 
+        if (
+            Object.entries(activeField.getSquadron()).every(
+                ([shipId, shipData]) => shipData.type === shipData.hits,
+            )
+        ) {
+            console.log('GAME OVER', { win: this.shotQueue });
+        }
+
         if (this.shotQueue === activeFieldIds.opponent) {
             this.opponent.setHitCoords({ x, y });
             this.opponent.nextShot(this.makeShot.bind(this));
@@ -114,6 +122,8 @@ export class Controller {
 
         if (this.shotQueue === activeFieldIds.player) {
             this.opponent.nextShot(this.makeShot.bind(this));
+        } else {
+            this.opponent.setMissCoords({ x, y });
         }
 
         this.shotQueue =
