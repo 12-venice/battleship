@@ -132,7 +132,7 @@ export const FinderPage = () => {
                     {!loading ? (
                         rooms.map(
                             (element: User) =>
-                                user?.id !== element.id && (
+                                user?._id !== element._id && (
                                     <div
                                         key={element._id}
                                         aria-hidden

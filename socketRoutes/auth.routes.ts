@@ -11,21 +11,22 @@ import {
 } from './usersOnline';
 import User from '../serverModels/user';
 
+const onlineFriends = {};
+
 export default (socket: Socket) => {
-    socket.on('userOnline:add', async (id) => {
-        addUserOnline(socket.id, id);
-        const user = await User.findOne({ _id: id });
-        const onlineFriends = {};
+    socket.on('userOnline:add', async (_id) => {
+        addUserOnline(socket.id, _id);
+        const user = await User.findOne({ _id });
 
         const joinToRoom = async (room: { _id: string }) => {
             const roomId = room._id.toString();
             socket.join(roomId);
             socket.broadcast.to(roomId).emit('userOnline:add', {
                 socketId: socket.id,
-                id,
+                _id,
             });
             const { users } = await Room.findOne({ _id: roomId });
-            const anotherUserId = users.indexOf(id) === 0 ? users[1] : users[0];
+            const anotherUserId = users.indexOf(_id) === 0 ? users[1] : users[0];
             const anotherUserSocket = getSocketUserOnline(anotherUserId);
             anotherUserSocket && {
                 ...onlineFriends,
@@ -36,7 +37,6 @@ export default (socket: Socket) => {
             await user.rooms.forEach(joinToRoom);
         }
         io.to(socket.id).emit('userOnline:set', onlineFriends);
-        console.log(io.sockets.adapter.rooms);
     });
 
     socket.on('userOnline:remove', async () => {
