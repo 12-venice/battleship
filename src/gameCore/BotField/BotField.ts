@@ -12,25 +12,16 @@ export class BotField extends Field {
     }
 
     setHitCoords({ x, y }) {
-        console.log('[setHit]')
         this.opponentMatrix[x][y] = MatrixCell.hit;
     }
 
     setMissCoords({ x, y }) {
-        console.log('[setMiss]')
         this.opponentMatrix[x][y] = MatrixCell.miss;
     }
 
     getCoordsForShot() {
         const x = getRandom(9);
         const y = getRandom(9);
-        console.log(
-            '[debug]',
-            x,
-            y,
-            this.opponentMatrix,
-            this.opponentMatrix[x][y],
-        );
 
         if (
             this.opponentMatrix[x][y] === MatrixCell.hit ||

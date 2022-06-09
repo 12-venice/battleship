@@ -12,13 +12,14 @@ import { useHttp } from 'src/hooks/http.hook';
 import { User } from 'src/store/reducers/user';
 import { Button } from 'src/components/Button';
 
+import { activeFieldIds } from 'src/gameCore/Controller/types';
 import { Area } from './components/Area';
 import { ShipsMenu } from './components/ShipsMenu';
 import styles from './GamePage.scss';
 import { Chat } from './components/Chat';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-
+import { EndGameComponent } from './components/EndGame';
 
 const STATISTICS = [
     { label: 'HITS', player: 8, opponent: 17 },
@@ -43,6 +44,7 @@ export const GamePage = (): JSX.Element => {
     const [trnslX, setTrnslX] = useState(true);
     const [isFull, setIsFull] = useState(false);
     const [fieldIs, setField] = useState(true);
+    const [gameOver, setGameOver] = useState(null);
 
     const sliderRef = createRef<HTMLDivElement>();
     // const video = createRef<HTMLDivElement>();
@@ -55,6 +57,14 @@ export const GamePage = (): JSX.Element => {
             data.users.find((user: User) => user._id !== thisUser?._id),
         );
     }, [request, room, thisUser?._id]);
+
+    const handlerGameOver = useCallback((winner) => {
+        if (winner === activeFieldIds.opponent) {
+            setGameOver('defeat');
+        } else {
+            setGameOver('victory');
+        }
+    }, []);
 
     const handlerChangePlayerField = useCallback(({ matrix, squadron }) => {
         const ships = Object.entries(squadron).map(
@@ -101,6 +111,7 @@ export const GamePage = (): JSX.Element => {
                 playerMatrix,
                 handlerChangePlayerField,
                 handlerChangeOpponentField,
+                handlerGameOver,
             });
         }
         return null;
@@ -295,6 +306,9 @@ export const GamePage = (): JSX.Element => {
                             setVideoCall,
                         }}
                     />
+                    {gameOver && (
+                        <EndGameComponent screen={gameOver} room={room} />
+                    )}
                 </FullScreenView>
             </div>
         </Layout>

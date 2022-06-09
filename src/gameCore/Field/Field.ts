@@ -15,7 +15,6 @@ export class Field {
 
     setMatrix(matrix) {
         if (!matrix || !Array.isArray(matrix)) return;
-        console.log('[debug] set matrix');
         this.matrix = matrix;
     }
 
@@ -25,7 +24,6 @@ export class Field {
 
     setSquadron(squadron) {
         if (!squadron) return;
-        console.log('[debug] set squadron', squadron);
         this.squadron = squadron;
     }
 

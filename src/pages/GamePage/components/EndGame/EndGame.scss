@@ -4,14 +4,34 @@
     display: flex;
     align-items: center;
     flex-direction: column-reverse;
-    width: 97%;
+    width: min(40vw, 500px);
 }
 
 .endGame__buttons {
     position: absolute;
-    left: calc(50vw - 376px/2);
-    top: calc(50vh + 280px);
-    width: 370px;
+    // left: calc(50vw - 376px/2);
+    left: calc(50vw - min(132px, 9.6vw));
+    // top: calc(50vh + 280px);
+    top: calc(50vh + min(195px, 16vw));
+    // width: 370px;
+    width: min(254px, 19vw);
     display: flex;
     justify-content: space-between;
+}
+
+@media screen and (max-width: 800px) {
+    .endGame__logo {
+        width: 80vw;
+    }
+    .endGame__buttons {
+        left: calc(50vw - min(112px, 22.6vw));
+        top: calc(50vh + min(295px, 31vw));
+    }
+}
+
+@media screen and (max-width: 479px) {
+    .endGame__buttons {
+        left: calc(50vw - min(75px, 24.6vw));
+        top: calc(50vh + min(295px, 30vw));
+    }
 }

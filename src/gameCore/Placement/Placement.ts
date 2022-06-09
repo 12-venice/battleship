@@ -14,6 +14,7 @@ import {
     calculateElementPositionInFrame,
 } from './helpers';
 import type { DragImageEvent } from './types';
+import { MatrixCell } from '../types';
 
 export class Placement extends Field {
     field;
@@ -167,6 +168,12 @@ export class Placement extends Field {
             ...this.getSquadron(),
             [shipId]: ship,
         });
+
+        const matrix = this.getMatrix();
+        ship.arrDecks.forEach(([x, y]) => {
+            matrix[x][y] = MatrixCell.deck;
+        });
+        this.setMatrix(matrix);
     }
 
     rotationShip(event) {

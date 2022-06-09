@@ -8,7 +8,7 @@ import { MatrixCell } from 'src/gameCore/types';
 import { activeFieldIds } from 'src/gameCore/Controller/types';
 
 const mockHandlerChangeField = ({ matrix, squadron }) => {};
-
+const mockHandlerGameOver = () => {};
 export class Controller {
     opponentField;
 
@@ -22,12 +22,15 @@ export class Controller {
 
     shotQueue;
 
+    handlerGameOver;
+
     constructor({
         opponentFieldRef,
         playerSquadron,
         playerMatrix,
         handlerChangePlayerField,
         handlerChangeOpponentField,
+        handlerGameOver
     }) {
         this.opponentField = opponentFieldRef;
         this.handlerChangePlayerField =
@@ -43,6 +46,7 @@ export class Controller {
 
         this.shotQueue = activeFieldIds.player;
         this.onChangeField();
+        this.handlerGameOver = handlerGameOver || mockHandlerGameOver;
     }
 
     handlerPlayerShot(e) {
@@ -104,7 +108,7 @@ export class Controller {
                 ([shipId, shipData]) => shipData.type === shipData.hits,
             )
         ) {
-            console.log('GAME OVER', { win: this.shotQueue });
+            this.handlerGameOver(this.shotQueue);
         }
 
         if (this.shotQueue === activeFieldIds.opponent) {
