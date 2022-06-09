@@ -26,7 +26,6 @@ export const getToken = (code: string, onResult: Function) => {
     };
 
     let output = '';
-    console.log(output)
 
     const req = https.request(options, (res) => {
         res.setEncoding('utf8');

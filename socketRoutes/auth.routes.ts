@@ -17,15 +17,15 @@ export default (socket: Socket) => {
     socket.on('userOnline:add', async (_id) => {
         addUserOnline(socket.id, _id);
         const user = await User.findOne({ _id });
+
         const joinToRoom = async (room: { _id: string }) => {
             const roomId = room._id.toString();
             socket.join(roomId);
-            io.to(roomId).emit('userOnline:add', {
+            socket.broadcast.to(roomId).emit('userOnline:add', {
                 socketId: socket.id,
                 _id,
             });
-            console.log(roomId)
-            const { users } = await Room.findOne({ _id: roomId }).populate('users');
+            const { users } = await Room.findOne({ _id: roomId });
             const anotherUserId = users.indexOf(_id) === 0 ? users[1] : users[0];
             const anotherUserSocket = getSocketUserOnline(anotherUserId);
             anotherUserSocket && {

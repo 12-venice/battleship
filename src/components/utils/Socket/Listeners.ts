@@ -6,14 +6,6 @@ import { OnlineService } from 'src/store/services/onlineService';
 import { PageLinks } from '../Routes/types';
 import { socket } from './Socket';
 
-export const AcceptInvite = (nav, room?: string) => {
-    socket.emit('invite:accept', room);
-    nav(`${PageLinks.game}/${room._id}`);
-};
-
-export const CancelInvite = (room?: string) => {
-    socket.emit('invite:cancel', room);
-};
 
 export const SendMessage = (data: any) => {
     socket.emit('messages:sent', data);
