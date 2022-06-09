@@ -47,7 +47,24 @@ export const Chat = ({ videoCall }: { videoCall: boolean }): JSX.Element => {
                 text: 'Hello my friend! Arrrggg....',
                 delivered: false,
             } as unknown as messageType;
-            setMessages([botMessage]);
+            const botMessage1 = {
+                user: { _id: 'bot' },
+                date: Date.now(),
+                text: 'Bla bla bla',
+                delivered: false,
+            } as unknown as messageType;
+            setMessages([
+                botMessage,
+                botMessage1,
+                botMessage,
+                botMessage,
+                botMessage,
+                botMessage,
+                botMessage,
+                botMessage,
+                botMessage,
+                botMessage,
+            ]);
         } else {
             getMessages();
         }
