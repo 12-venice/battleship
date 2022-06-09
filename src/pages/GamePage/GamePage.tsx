@@ -11,7 +11,6 @@ import { useParams } from 'react-router-dom';
 import { useHttp } from 'src/hooks/http.hook';
 import { User } from 'src/store/reducers/user';
 import { Button } from 'src/components/Button';
-
 import { activeFieldIds } from 'src/gameCore/Controller/types';
 import { Area } from './components/Area';
 import { ShipsMenu } from './components/ShipsMenu';
@@ -20,6 +19,7 @@ import { Chat } from './components/Chat';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { EndGameComponent } from './components/EndGame';
+
 
 const STATISTICS = [
     { label: 'HITS', player: 8, opponent: 17 },
@@ -52,7 +52,7 @@ export const GamePage = (): JSX.Element => {
     const botCanvasRef = createRef<HTMLCanvasElement>();
 
     const getRoom = useCallback(async () => {
-        const data = await request(`/api/room/${room}`, 'GET', null, {}, true);
+        const data = await request(`/api/room/${room}`, 'GET', null);
         setAnotherUser(
             data.users.find((user: User) => user._id !== thisUser?._id),
         );

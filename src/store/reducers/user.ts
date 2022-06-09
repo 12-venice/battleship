@@ -21,6 +21,7 @@ export interface User {
     wins?: number;
     defeats?: number;
     rooms: string[];
+    room?: string;
 }
 
 export type UserState = {

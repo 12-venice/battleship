@@ -6,7 +6,6 @@ const schema = new Schema(
         user: { type: Types.ObjectId, ref: 'User', required: true },
         room: { type: Types.ObjectId, ref: 'Room', required: true },
         move: { type: Object, required: true },
-        delivered: { type: Boolean, default: false },
     },
     { timestamps: true },
 );

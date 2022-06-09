@@ -8,13 +8,16 @@ import { PageLinks } from 'src/components/utils/Routes/types';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
-import { notificationService } from 'src/store/services/notificationService';
+import { useMessage } from 'src/hooks/message.hook';
+import { useAuth } from 'src/hooks/auth.hook';
 import { Layout } from '../../components/Layout';
 import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs } from './config';
 import { Avatar } from '../ProfilePage/components/Avatar';
 
 export const UpdatePassPage = (): JSX.Element => {
+    const message = useMessage();
+    const { token } = useAuth();
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
@@ -23,25 +26,18 @@ export const UpdatePassPage = (): JSX.Element => {
     const navigate = useNavigate();
     const changePass = useCallback(
         async (data) => {
-            try {
-                await request('/user/password', 'PUT', data);
-                navigate(PageLinks.profile);
-            } catch (e) {
-                throw new SyntaxError('Что-то пошло не так');
-            }
+            await request('/api/user/password', 'POST', data, {
+                Authorization: `Bearer ${token}`,
+            });
+            navigate(PageLinks.profile);
         },
-        [navigate, request],
+        [navigate, request, token],
     );
 
     useEffect(() => {
-        if (error) {
-            notificationService.addNotification({
-                message: error,
-                type: 'danger',
-            });
-        }
-        return () => clearError();
-    }, [error, clearError]);
+        message(error);
+        clearError();
+    }, [error, message, clearError]);
 
     return (
         <Layout>
@@ -67,7 +63,7 @@ export const UpdatePassPage = (): JSX.Element => {
                             {Avatar(user)}
                             <Form
                                 inputs={inputs}
-                                setData={changePass}
+                                setData={(data: {}) => changePass(data)}
                                 submitTitle={dataStore.buttons.confirm}
                                 disabled={loading}
                             />

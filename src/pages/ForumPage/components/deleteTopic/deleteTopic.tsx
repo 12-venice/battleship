@@ -1,23 +1,30 @@
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
-
 import { useCallback } from 'react';
 import { useHttp } from 'src/hooks/http.hook';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
+import { useAuth } from 'src/hooks/auth.hook';
 import { Props } from './types';
-
 import styles from './deleteTopic.scss';
 
 export const DeleteTopicWindow: Props = ({ close, _id }): JSX.Element => {
+    const { token } = useAuth();
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
     const { request, loading } = useHttp();
     const deleteTopic = useCallback(async () => {
-        await request('/api/topic/delete', 'POST', { _id }, {}, true);
+        await request(
+            '/api/topic/delete',
+            'POST',
+            { _id },
+            {
+                Authorization: `Bearer ${token}`,
+            },
+        );
         close();
-    }, [_id, close, request]);
+    }, [_id, close, request, token]);
 
     return (
         <ModalWindow>

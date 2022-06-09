@@ -5,8 +5,8 @@ export const headers = {
 
 export const inputs = [
     {
-        name: 'login',
-        title: 'Login',
+        name: 'email',
+        title: 'E-mail',
     },
     {
         type: 'password',
