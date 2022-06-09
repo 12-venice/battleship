@@ -53,7 +53,6 @@ router.post('/generate', async (req, res) => {
 
         res.status(200).json(token);
     } catch (e) {
-        console.log(e);
         return res
             .status(500)
             .json({ message: 'Что-то пошло не так, попробуйте еще раз' });
@@ -67,7 +66,7 @@ router.post('/read', async (req, res) => {
             .sort({ [sortType]: sortDirection ? 1 : -1 })
             .skip(page * 10)
             .limit(10);
-        res.json(user);
+        res.status(200).json(user);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -122,7 +121,7 @@ router.post('/password', authMiddleware, async (req, res) => {
                 { _id: req.user.userId },
                 { $set: { password } },
             );
-            res.status(200);
+            res.status(200).json({ message: 'OK' });
         } else {
             res.status(400).json({
                 message: 'Пароль неправильный',
@@ -138,7 +137,7 @@ router.post('/password', authMiddleware, async (req, res) => {
 router.post('/delete', authMiddleware, async (req, res) => {
     try {
         await User.deleteOne({ _id: req.user.userId });
-        res.status(200);
+        res.status(200).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -149,7 +148,7 @@ router.post('/delete', authMiddleware, async (req, res) => {
 router.get('/info', authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.user.userId);
-        res.json(user);
+        res.status(200).json(user);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',

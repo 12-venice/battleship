@@ -24,7 +24,7 @@ router.post('/create', authMiddleware, async (req, res) => {
             ...req.body,
         });
         await comment.save();
-        res.status(200);
+        res.status(200).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -36,7 +36,7 @@ router.post('/read', async (req, res) => {
     try {
         const { _id } = req.body;
         const comments = await Comment.find({ topic: _id }).populate('user');
-        res.json(comments);
+        res.status(200).json(comments);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -50,7 +50,7 @@ router.post('/update', authMiddleware, async (req, res) => {
         const { user } = await Comment.findOne({ _id });
         if (user._id.toJSON() === req.user.userId) {
             await Comment.updateOne({ _id }, { $set: req.body });
-            res.status(200);
+            res.status(200).json({ message: 'OK' });
         } else {
             res.status(400).json({ message: 'Denied' });
         }
@@ -67,7 +67,7 @@ router.post('/delete', authMiddleware, async (req, res) => {
         const { user } = await Comment.findOne({ _id });
         if (user._id.toJSON() === req.user.userId) {
             await Comment.deleteOne({ _id });
-            res.status(200);
+            res.status(200).json({ message: 'OK' });
         } else {
             res.status(400).json({ message: 'Denied' });
         }

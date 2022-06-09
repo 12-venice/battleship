@@ -6,9 +6,9 @@
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Router } from 'express';
+import authMiddleware from 'src/server/auth.middleware';
 import User from '../serverModels/user';
 import Room from '../serverModels/room';
-import authMiddleware from 'src/server/auth.middleware';
 
 const router = Router();
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-unused-expressions */
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -46,7 +47,7 @@ export const FinderPage = () => {
             '/api/room/find',
             'POST',
             {
-                rooms: user?.rooms,
+                rooms: user.rooms,
             },
             {
                 Authorization: `Bearer ${token}`,
@@ -56,18 +57,20 @@ export const FinderPage = () => {
     }, [request, token, user]);
 
     useEffect(() => {
-        getRooms();
+        if (!str && token) {
+            getRooms();
+        }
         return () => setRooms([]);
-    }, [getRooms]);
+    }, [getRooms, str, token]);
 
     useEffect(() => {
         const timeOut = setTimeout(() => {
-            if (str.length > 0) {
+            if (str) {
                 findUser();
             }
         }, 1000);
         return () => clearTimeout(timeOut);
-    }, [findUser, str.length]);
+    }, [findUser, str]);
 
     useEffect(() => {
         message(error);
@@ -89,7 +92,7 @@ export const FinderPage = () => {
     };
 
     const selectUser = (element: User) => {
-        str ? createRoom(element._id) : inviteUser(element._id, element.room);
+        str ? createRoom(element._id) : inviteUser(element._id, element.room!);
     };
 
     return (
