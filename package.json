@@ -12,7 +12,7 @@
     "prepare": "husky install",
     "dev": "npm run clean && cross-env NODE_ENV=development webpack --watch",
     "dev:server": "npm run clean && cross-env NODE_ENV=development SERVER=true webpack --watch",
-    "start:webpack": "npm run clean && cross-env PORT=8855 webpack",
+    "start:webpack": "npm run clean && webpack",
     "start:server": "node dist/server.js",
     "start": "npm-run-all --print-label start:*"
   },
