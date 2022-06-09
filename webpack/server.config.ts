@@ -44,15 +44,11 @@ const config: Configuration = {
         new MiniCssExtractPlugin({
             filename: '[name].css',
         }),
-        ...(IS_DEV
-            ? [
-                  new NodemonPlugin({
-                      script: './dist/server.js',
-                      ignore: ['main.js', '*.js.map'],
-                      delay: 1,
-                  }),
-              ]
-            : []),
+        new NodemonPlugin({
+            script: './dist/server.js',
+            ignore: ['main.js', '*.js.map'],
+            delay: 1,
+        }),
     ],
 
     performance: {

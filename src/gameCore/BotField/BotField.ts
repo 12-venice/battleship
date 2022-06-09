@@ -18,9 +18,9 @@ export class BotField extends Field {
     getCoordsForShot() {
         const x = getRandom(9);
         const y = getRandom(9);
-
+        console.log(x, y);
         if (this.opponentMatrix[x][y] === MatrixCell.hit) {
-            return this.getCoordsForShot();
+            this.getCoordsForShot();
         }
 
         return [x, y];

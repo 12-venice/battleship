@@ -21,7 +21,6 @@ export default (req: Request, res: Response, next: () => void) => {
             if (err && err.name === 'TokenExpiredError') {
                 res.status(401).json({ message: err.name });
             }
-            console.log(token)
             if (decoded) {
                 req.user = decoded;
                 next();

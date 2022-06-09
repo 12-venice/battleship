@@ -9,12 +9,12 @@ import styles from './Message.scss';
 import { messageType } from './types';
 
 export const Message = (message: messageType): JSX.Element => {
-    const { _id, date, text, user, delivered } = message;
+    const { _id, createdAt, text, user, delivered } = message;
     const { request } = useHttp();
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
     const notme = user._id !== thisUser?._id;
     moment.locale('ru');
-    const parseDate = moment(date).fromNow();
+    const parseDate = moment(createdAt).fromNow();
 
     useEffect(() => {
         if (!delivered && notme) {
