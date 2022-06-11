@@ -39,6 +39,7 @@ export const GamePage = (): JSX.Element => {
     const [fieldIs, setField] = useState(true);
     const [gameOver, setGameOver] = useState(null);
     const [gameStatistics, setGameStatistics] = useState([]);
+    const [gameAccount, setGameAccount] = useState([]);
     const [timerDisplay, setTimerDisplay] = useState(true);
     const [timerOver, setTimerOver] = useState(false);
 
@@ -208,6 +209,7 @@ export const GamePage = (): JSX.Element => {
     useEffect(() => {
         // следит за изменениями полей
         setGameStatistics(gameController?.getStatistics() ?? []);
+        setGameAccount(gameController?.getAccount() ?? [0, 0]);
         // проверка очереди хода
         if (
             (gameController?.getShotQueue() ?? activeFieldIds.player) ===
@@ -232,6 +234,7 @@ export const GamePage = (): JSX.Element => {
                         display={timerDisplay}
                         handler={() => setTimerOver(true)}
                         gameOver={gameOver}
+                        account={gameAccount}
                     />
                     <div className={styles['game__main-content']}>
                         <div className={styles.game__container}>

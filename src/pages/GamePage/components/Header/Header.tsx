@@ -3,7 +3,7 @@ import { Button } from 'src/components/Button';
 import { useSelector } from 'react-redux';
 import { User } from 'src/store/reducers/user';
 import { AllStateTypes } from 'src/store/reducers';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { Information } from 'src/components/Information';
 import { Preloader } from 'src/components/Preloader';
@@ -18,14 +18,15 @@ export const Header = ({
     display,
     handler,
     gameOver,
+    account,
 }: {
     user: User | undefined;
     updateTimer: any;
     display: boolean;
     handler: any;
     gameOver: boolean | null;
+    account: number[];
 }) => {
-    const navigate = useNavigate();
     const [info, setinfo] = useState(false);
     const [exit, setExit] = useState(false);
     const [timer, setTimer] = useState(30);
@@ -72,7 +73,14 @@ export const Header = ({
             <div className={styles.game__header}>
                 <Button skin="quad" title="i" onClick={getInfo} />
                 <div className={styles['game__header-players']}>
-                    <div className={styles['game__header-text']}>0</div>
+                    <div
+                        className={cn(
+                            styles['game__header-text'],
+                            styles['game__header-active'],
+                        )}
+                    >
+                        {account[0]}
+                    </div>
                     <PlayerName user={thisUser} avatarPosition="right" />
                     <div
                         className={cn(
@@ -88,7 +96,9 @@ export const Header = ({
                     ) : (
                         <PlayerName user={anotherUser} avatarPosition="left" />
                     )}
-                    <div className={styles['game__header-text']}>0</div>
+                    <div className={styles['game__header-text']}>
+                        {account[1]}
+                    </div>
                 </div>
                 <Button
                     onClick={() => setExit(!exit)}
