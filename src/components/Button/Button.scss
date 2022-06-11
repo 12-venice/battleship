@@ -12,6 +12,9 @@
     width: min(11vw, 200px);
     margin: 7px;
     padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button:focus {
@@ -21,6 +24,12 @@
 
 .button_short {
     width: 151px;
+}
+
+.button_tiny {
+    width: min(8vw, 100px);
+    height: min(3.6vw, 45px);
+    font-size: min(28px, 2vw);
 }
 
 .button_quad {
@@ -125,6 +134,12 @@
         width: 151px;
     }
 
+    .button_tiny {
+        width: 18vw;
+        font-size: 5vw;
+        height: 8vw;
+    }
+
     .button_quad {
         width: 57px;
     }
@@ -220,6 +235,11 @@
         border-radius: 5px;
         font-size: 0.5vw;
     }
+    .button_tiny {
+        width: 18vw;
+        font-size: 5vw;
+        height: 8vw;
+    }
 }
 
 @media screen and (max-width: 320px) {
@@ -227,5 +247,10 @@
         width: 60vw;
         font-size: 14vw;
         height: 20vw;
+    }
+    .button_tiny {
+        width: 18vw;
+        font-size: 5vw;
+        height: 8vw;
     }
 }
