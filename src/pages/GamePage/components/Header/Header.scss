@@ -23,10 +23,22 @@
     padding: min(1vw, 5px);
 }
 
-@media screen and (max-width: var(--MAX-WIDTH-TABLET)) {
+.game__header-timer {
+    width: 44px;
+}
+
+.game__header-active {
+    color: var(--light-green);
+}
+
+@media screen and (max-width: 800px) {
     .game__header {
         width: 100%;
         margin-bottom: 10px;
+    }
+
+    .game__header-timer {
+        width: 2vw;
     }
 
     .game__header-text {
@@ -49,7 +61,7 @@
     }
 }
 
-@media screen and (max-width: var(--MAX-WIDTH-PHONE)) {
+@media screen and (max-width: 479px) {
     .game__header {
         width: 100%;
         margin-bottom: 10px;

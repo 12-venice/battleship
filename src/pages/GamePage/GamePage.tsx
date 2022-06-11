@@ -39,6 +39,8 @@ export const GamePage = (): JSX.Element => {
     const [fieldIs, setField] = useState(true);
     const [gameOver, setGameOver] = useState(null);
     const [gameStatistics, setGameStatistics] = useState([]);
+    const [timerDisplay, setTimerDisplay] = useState(true);
+    const [timerOver, setTimerOver] = useState(false);
 
     const sliderRef = createRef<HTMLDivElement>();
     // const video = createRef<HTMLDivElement>();
@@ -184,15 +186,53 @@ export const GamePage = (): JSX.Element => {
         getRoom();
     }, []);
 
+    // callback задержки смены поля
+    const delay = useCallback(() => {
+        setTimeout(() => setField(!fieldIs), 400);
+    }, [fieldIs]);
+
     useEffect(() => {
+        // если время на ход вышло
+        if (timerOver === true) {
+            if (gameStep === 1) {
+                // если мы уже в процессе игры
+                gameController?.nextQueue();
+                setTimerOver(false);
+            } else {
+                // если мы на старте игры
+                handlerGameOver(activeFieldIds.opponent);
+            }
+        }
+    }, [timerOver]);
+
+    useEffect(() => {
+        // следит за изменениями полей
         setGameStatistics(gameController?.getStatistics() ?? []);
-    }, [playerField]);
+        // проверка очереди хода
+        if (
+            (gameController?.getShotQueue() ?? activeFieldIds.player) ===
+            activeFieldIds.player
+        ) {
+            // если игрок, то меняем цвет таймера и включаем задержку на переход к полю противника
+            if (timerDisplay === false) delay();
+            setTimerDisplay(true);
+        } else {
+            if (timerDisplay === true) delay();
+            setTimerDisplay(false);
+        }
+    }, [playerField, opponentField]);
 
     return (
         <Layout>
             <div className={styles.game__background}>
                 <FullScreenView isFullscr={isFull}>
-                    <Header user={anotherUser} />
+                    <Header
+                        user={anotherUser}
+                        updateTimer={[opponentField, playerField]}
+                        display={timerDisplay}
+                        handler={() => setTimerOver(true)}
+                        gameOver={gameOver}
+                    />
                     <div className={styles['game__main-content']}>
                         <div className={styles.game__container}>
                             <div

@@ -37,6 +37,6 @@ export class BotField extends Field {
         const [x, y] = this.getCoordsForShot();
         setTimeout(() => {
             callback({ x, y });
-        }, 500);
+        }, 1000);
     }
 }
