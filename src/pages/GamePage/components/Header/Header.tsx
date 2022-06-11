@@ -10,6 +10,7 @@ import { Preloader } from 'src/components/Preloader';
 import styles from './Header.scss';
 import { PlayerName } from './components/PlayerName';
 import { Timer } from './helpers/easyTimer';
+import { CloseGameDialog } from '../CloseGameDialog';
 
 export const Header = ({
     user,
@@ -26,6 +27,7 @@ export const Header = ({
 }) => {
     const navigate = useNavigate();
     const [info, setinfo] = useState(false);
+    const [exit, setExit] = useState(false);
     const [timer, setTimer] = useState(30);
     const { room } = useParams() as { room: string };
     const [anotherUser, setAnotherUser] = useState({} as User);
@@ -89,13 +91,14 @@ export const Header = ({
                     <div className={styles['game__header-text']}>0</div>
                 </div>
                 <Button
-                    onClick={() => navigate(-1)}
+                    onClick={() => setExit(!exit)}
                     skin="quad"
                     title="X"
                     color="red"
                 />
             </div>
             {info && <Information close={getInfo} />}
+            {exit && <CloseGameDialog close={() => setExit(!exit)} />}
         </>
     );
 };
