@@ -169,7 +169,7 @@ export const HomePage = (): JSX.Element => {
                                     <p
                                         className={cn(
                                             styles[
-                                            'home__select-tablet_classic'
+                                                'home__select-tablet_classic'
                                             ],
                                             !typeOfGame ? styles.selected : '',
                                         )}
@@ -183,7 +183,7 @@ export const HomePage = (): JSX.Element => {
                                     <p
                                         className={cn(
                                             styles[
-                                            'home__select-tablet_online'
+                                                'home__select-tablet_online'
                                             ],
                                             typeOfGame ? styles.selected : '',
                                         )}

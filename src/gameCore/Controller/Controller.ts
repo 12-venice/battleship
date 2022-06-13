@@ -30,7 +30,7 @@ export class Controller {
         playerMatrix,
         handlerChangePlayerField,
         handlerChangeOpponentField,
-        handlerGameOver
+        handlerGameOver,
     }) {
         this.opponentField = opponentFieldRef;
         this.handlerChangePlayerField =

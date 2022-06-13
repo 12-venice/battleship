@@ -20,7 +20,6 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { EndGameComponent } from './components/EndGame';
 
-
 const STATISTICS = [
     { label: 'HITS', player: 8, opponent: 17 },
     { label: 'MISS', player: 17, opponent: 3 },
@@ -194,7 +193,6 @@ export const GamePage = (): JSX.Element => {
         getRoom();
     }, []);
 
-
     return (
         <Layout>
             <div className={styles.game__background}>
@@ -285,7 +283,9 @@ export const GamePage = (): JSX.Element => {
                             <div className={styles.game__docs}>
                                 <ShipsMenu
                                     imgWidth={startAreaWidth() / 10}
-                                    onDragStart={placementArea.handlerShipDragStart}
+                                    onDragStart={
+                                        placementArea.handlerShipDragStart
+                                    }
                                     onDrop={placementArea.handlerShipDragEnd}
                                     onDragOver={placementArea.handlerShipOver}
                                     onContextMenu={placementArea.rotationShip}
