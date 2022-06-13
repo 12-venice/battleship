@@ -5,10 +5,27 @@ import {
     getRandomLocationShipsAndMatrix,
 } from 'src/gameCore/helpers';
 import { MatrixCell } from 'src/gameCore/types';
-import { activeFieldIds } from 'src/gameCore/Controller/types';
+import {
+    activeFieldIds,
+    statisticsFields,
+} from 'src/gameCore/Controller/types';
 
 const mockHandlerChangeField = ({ matrix, squadron }) => {};
 const mockHandlerGameOver = () => {};
+const mockStatistics = () => [
+    { label: 'HITS', [activeFieldIds.player]: 0, [activeFieldIds.opponent]: 0 },
+    { label: 'MISS', [activeFieldIds.player]: 0, [activeFieldIds.opponent]: 0 },
+    {
+        label: 'ALIVE',
+        [activeFieldIds.player]: 10,
+        [activeFieldIds.opponent]: 10,
+    },
+    {
+        label: 'DESTROYED',
+        [activeFieldIds.player]: 0,
+        [activeFieldIds.opponent]: 0,
+    },
+];
 export class Controller {
     opponentField;
 
@@ -24,13 +41,15 @@ export class Controller {
 
     handlerGameOver;
 
+    statistics;
+
     constructor({
         opponentFieldRef,
         playerSquadron,
         playerMatrix,
         handlerChangePlayerField,
         handlerChangeOpponentField,
-        handlerGameOver
+        handlerGameOver,
     }) {
         this.opponentField = opponentFieldRef;
         this.handlerChangePlayerField =
@@ -45,8 +64,36 @@ export class Controller {
         this.opponent = new BotField(getRandomLocationShipsAndMatrix());
 
         this.shotQueue = activeFieldIds.player;
-        this.onChangeField();
         this.handlerGameOver = handlerGameOver || mockHandlerGameOver;
+        this.statistics = mockStatistics();
+        this.onChangeField();
+    }
+
+    getStatistics() {
+        return this.statistics;
+    }
+
+    incrementStatistics(player: activeFieldIds, element: statisticsFields) {
+        // eslint-disable-next-line no-plusplus
+        this.statistics[element][player]++;
+    }
+
+    updateStateShips(player: activeFieldIds, squadron) {
+        const ripShipsCount = Object.entries(squadron).filter(
+            ([, { arrDecks, hits }]) => hits === arrDecks.length,
+        ).length;
+        if (player === activeFieldIds.player) {
+            this.statistics[statisticsFields.alive][activeFieldIds.opponent] =
+                10 - ripShipsCount;
+            this.statistics[statisticsFields.destroyed][
+                activeFieldIds.opponent
+            ] = ripShipsCount;
+        } else {
+            this.statistics[statisticsFields.alive][activeFieldIds.player] =
+                10 - ripShipsCount;
+            this.statistics[statisticsFields.destroyed][activeFieldIds.player] =
+                ripShipsCount;
+        }
     }
 
     handlerPlayerShot(e) {
@@ -68,11 +115,11 @@ export class Controller {
             this.miss({ x, y, activeField });
             break;
             // попадание
-        case MatrixCell.deck:
-            this.hit({ x, y, activeField });
-            break;
-        default:
-            break;
+            case MatrixCell.deck:
+                this.hit({ x, y, activeField });
+                break;
+            default:
+                break;
         }
     }
 
@@ -101,6 +148,9 @@ export class Controller {
         );
         activeField.setSquadron(squadron);
 
+        this.incrementStatistics(this.shotQueue, statisticsFields.hits);
+        this.updateStateShips(this.shotQueue, activeField.getSquadron());
+
         this.onChangeField();
 
         if (
@@ -121,6 +171,9 @@ export class Controller {
         const matrix = activeField.getMatrix();
         matrix[x][y] = MatrixCell.miss;
         activeField.setMatrix(matrix);
+
+        this.incrementStatistics(this.shotQueue, statisticsFields.miss);
+        this.updateStateShips(this.shotQueue, activeField.getSquadron());
 
         this.onChangeField();
 

@@ -19,14 +19,7 @@ import { Chat } from './components/Chat';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { EndGameComponent } from './components/EndGame';
-
-
-const STATISTICS = [
-    { label: 'HITS', player: 8, opponent: 17 },
-    { label: 'MISS', player: 17, opponent: 3 },
-    { label: 'ALIVE', player: 3, opponent: 8 },
-    { label: 'DESTROYED', player: 2, opponent: 7 },
-];
+import { Statistics } from './components/Statistics';
 
 export const GamePage = (): JSX.Element => {
     const { request } = useHttp();
@@ -45,6 +38,7 @@ export const GamePage = (): JSX.Element => {
     const [isFull, setIsFull] = useState(false);
     const [fieldIs, setField] = useState(true);
     const [gameOver, setGameOver] = useState(null);
+    const [gameStatistics, setGameStatistics] = useState([]);
 
     const sliderRef = createRef<HTMLDivElement>();
     // const video = createRef<HTMLDivElement>();
@@ -149,7 +143,6 @@ export const GamePage = (): JSX.Element => {
             if (Math.abs(tuchX - e.changedTouches[0].clientX) > 40) {
                 delt = !delt;
                 setTrnslX(!delt);
-                // console.log('end', delt)
             }
         };
         if (sliderRef.current) {
@@ -191,6 +184,9 @@ export const GamePage = (): JSX.Element => {
         getRoom();
     }, []);
 
+    useEffect(() => {
+        setGameStatistics(gameController?.getStatistics() ?? []);
+    }, [playerField]);
 
     return (
         <Layout>
@@ -243,30 +239,7 @@ export const GamePage = (): JSX.Element => {
                                     </div>
                                 </div>
                                 <div className={styles['game__slider-stat']}>
-                                    <div className={styles.game__statistics}>
-                                        {STATISTICS.map((el) => (
-                                            <div key={el.label}>
-                                                <h5
-                                                    className={
-                                                        styles[
-                                                            'game__statistics-label'
-                                                        ]
-                                                    }
-                                                >
-                                                    {el.label}
-                                                </h5>
-                                                <span
-                                                    className={
-                                                        styles[
-                                                            'game__statistics-description'
-                                                        ]
-                                                    }
-                                                >
-                                                    {`${el.player}/${el.opponent}`}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
+                                    <Statistics statistics={gameStatistics} />
                                 </div>
                             </div>
                             {startGame && (
@@ -282,7 +255,9 @@ export const GamePage = (): JSX.Element => {
                             <div className={styles.game__docs}>
                                 <ShipsMenu
                                     imgWidth={startAreaWidth() / 10}
-                                    onDragStart={placementArea.handlerShipDragStart}
+                                    onDragStart={
+                                        placementArea.handlerShipDragStart
+                                    }
                                     onDrop={placementArea.handlerShipDragEnd}
                                     onDragOver={placementArea.handlerShipOver}
                                     onContextMenu={placementArea.rotationShip}
