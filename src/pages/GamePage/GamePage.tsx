@@ -39,6 +39,7 @@ export const GamePage = (): JSX.Element => {
     const [fieldIs, setField] = useState(true);
     const [gameOver, setGameOver] = useState(null);
     const [gameStatistics, setGameStatistics] = useState([]);
+  
     const [timerDisplay, setTimerDisplay] = useState(true);
     const [timerOver, setTimerOver] = useState(false);
 
