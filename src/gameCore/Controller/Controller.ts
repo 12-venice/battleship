@@ -26,6 +26,9 @@ const mockStatistics = () => [
         [activeFieldIds.opponent]: 0,
     },
 ];
+
+const mockAccount = () => [0, 0];
+
 export class Controller {
     opponentField;
 
@@ -43,6 +46,10 @@ export class Controller {
 
     statistics;
 
+    account;
+
+    bonusCount;
+  
     constructor({
         opponentFieldRef,
         playerSquadron,
@@ -66,6 +73,8 @@ export class Controller {
         this.shotQueue = activeFieldIds.player;
         this.handlerGameOver = handlerGameOver || mockHandlerGameOver;
         this.statistics = mockStatistics();
+        this.account = mockAccount();
+        this.bonusCount = 0;
         this.onChangeField();
     }
 
@@ -75,6 +84,18 @@ export class Controller {
 
     getShotQueue() {
         return this.shotQueue;
+    }
+
+    getAccount() {
+        return this.account;
+    }
+
+    getBonusCount() {
+        return this.bonusCount;
+    }
+
+    resetBonusCount() {
+        this.bonusCount = 0;
     }
 
     nextQueue() {
@@ -90,8 +111,15 @@ export class Controller {
     }
 
     incrementStatistics(player: activeFieldIds, element: statisticsFields) {
-        // eslint-disable-next-line no-plusplus
-        this.statistics[element][player]++;
+        this.statistics[element][player] += 1;
+    }
+
+    incrementBonusCount() {
+        this.bonusCount += 1;
+    }
+
+    incrementAccount(player: activeFieldIds, value: number) {
+        this.account[player] += value;
     }
 
     updateStateShips(player: activeFieldIds, squadron) {
@@ -126,10 +154,10 @@ export class Controller {
                 : this.player;
         const v = activeField.matrix[x][y];
         switch (v) {
-        // промах
-        case MatrixCell.empty:
-            this.miss({ x, y, activeField });
-            break;
+            // промах
+            case MatrixCell.empty:
+                this.miss({ x, y, activeField });
+                break;
             // попадание
             case MatrixCell.deck:
                 this.hit({ x, y, activeField });
@@ -165,6 +193,8 @@ export class Controller {
         activeField.setSquadron(squadron);
 
         this.incrementStatistics(this.shotQueue, statisticsFields.hits);
+        this.incrementBonusCount();
+        this.incrementAccount(this.shotQueue, this.getBonusCount());
         this.updateStateShips(this.shotQueue, activeField.getSquadron());
 
         this.onChangeField();
@@ -174,6 +204,10 @@ export class Controller {
                 ([shipId, shipData]) => shipData.type === shipData.hits,
             )
         ) {
+            this.incrementAccount(
+                this.shotQueue,
+                this.getAccount()[this.shotQueue],
+            );
             this.handlerGameOver(this.shotQueue);
         }
 
@@ -189,6 +223,7 @@ export class Controller {
         activeField.setMatrix(matrix);
 
         this.incrementStatistics(this.shotQueue, statisticsFields.miss);
+        this.resetBonusCount();
         this.updateStateShips(this.shotQueue, activeField.getSquadron());
 
         this.onChangeField();
