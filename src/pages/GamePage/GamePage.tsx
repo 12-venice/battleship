@@ -127,6 +127,9 @@ export const GamePage = (): JSX.Element => {
     );
 
     const startAreaWidth = useCallback(() => {
+        if (typeof window === 'undefined') {
+            return 250;
+        }
         if (window.innerWidth < 480) {
             return window.innerWidth * 0.8;
         }

@@ -1,71 +1,59 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable import/no-default-export */
-import { Socket } from 'socket.io';
 import { io } from 'src/server';
-import Room from 'serverModels/room';
-import {
-    addUserOnline,
-    getSocketUserOnline,
-    getUserOnline,
-    removeUserOnline,
-} from './usersOnline';
+import { ISocket } from 'src/server/types';
 import User from '../serverModels/user';
 
-const onlineFriends = {};
+let _users: { socket: ISocket; id: string }[] = [];
 
-export default (socket: Socket) => {
-    socket.on('userOnline:add', async (_id) => {
-        addUserOnline(socket.id, _id);
-        const user = await User.findOne({ _id });
+export const addUser = (socket: ISocket) => {
+    _users.push({ socket, id: socket.userID! });
+};
 
-        const joinToRoom = async (room: { _id: string }) => {
-            const roomId = room._id.toString();
-            socket.join(roomId);
-            socket.broadcast.to(roomId).emit('userOnline:add', {
-                socketId: socket.id,
-                _id,
-            });
-            const { users } = await Room.findOne({ _id: roomId });
-            const anotherUserId = users.indexOf(_id) === 0 ? users[1] : users[0];
-            const anotherUserSocket = getSocketUserOnline(anotherUserId);
-            anotherUserSocket && {
-                ...onlineFriends,
-                ...{ [anotherUserSocket]: anotherUserId },
-            };
-        };
-        if (user && user.rooms) {
-            await user.rooms.forEach(joinToRoom);
-        }
-        io.to(socket.id).emit('userOnline:set', onlineFriends);
-    });
+export const deleteUser = (socket: ISocket) => {
+    _users = _users.filter((obj) => obj.id !== socket.userID!);
+};
 
-    socket.on('userOnline:remove', async () => {
-        const id = getUserOnline(socket.id);
-        const user = await User.findOne({ _id: id });
+export const getUsers = () => _users;
+
+export default async (socket: ISocket) => {
+    io.to(socket.id).emit(
+        'users:set',
+        getUsers().map((userOnline) => userOnline.socket.userID) as string[],
+    );
+    addUser(socket);
+    const user = await User.findOne({ _id: socket.userID }).populate('rooms');
+
+    const joinToRoom = async (room: { _id: string }) => {
+        socket.join(room._id.toString());
+        socket.broadcast
+            .to(room._id.toString())
+            .emit('users:add', socket.userID);
+        console.log(`${socket.userID} JOIN to room: ${room._id.toString()}`);
+    };
+
+    if (user && user.rooms) {
+        await user.rooms.forEach(joinToRoom);
+    }
+
+    socket.on('disconnect', async () => {
+        deleteUser(socket);
+        const disconnectUser = await User.findOne({
+            _id: socket.userID,
+        }).populate('rooms');
         const leaveFromRoom = (room: { _id: string }) => {
-            const roomId = room._id.toString();
-            socket.leave(roomId);
-            console.log('User LEAVE from room: ', roomId);
-            io.to(roomId).emit('userOnline:remove', socket.id);
+            socket.leave(room._id.toString());
+            socket.broadcast
+                .to(room._id.toString())
+                .emit('users:remove', socket.userID);
+            console.log(
+                `${socket.userID} LEAVE from room: ${room._id.toString()}`,
+            );
         };
-        if (user && user.rooms) {
-            user.rooms.forEach(leaveFromRoom);
+        if (disconnectUser && disconnectUser.rooms) {
+            disconnectUser.rooms.forEach(leaveFromRoom);
         }
-        removeUserOnline(socket.id);
-    });
-
-    socket.on('disconnect', async (reason: string) => {
-        const id = getUserOnline(socket.id);
-        const user = await User.findOne({ _id: id });
-        const leaveFromRoom = (room: { _id: string }) => {
-            const roomId = room._id.toString();
-            socket.leave(roomId);
-            console.log('User DISCONNECT from room: ', roomId, reason);
-            io.to(roomId).emit('userOnline:remove', socket.id);
-        };
-        if (user && user.rooms) {
-            user.rooms.forEach(leaveFromRoom);
-        }
-        removeUserOnline(socket.id);
     });
 };

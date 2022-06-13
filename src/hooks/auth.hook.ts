@@ -11,43 +11,64 @@ export const STORAGE_NAME = 'bShipData';
 
 export const useAuth = () => {
     const [token, setToken] = useState(null);
-
+    const { search } = useLocation();
+    const message = useMessage();
     const { request, error, clearError } = useHttp();
     const navigate = useNavigate();
     const { pathname, state } = useLocation();
+    const code = /code=([^&]+)/.exec(search);
     const from =
         (state as FromProps)?.from?.pathname !== PageLinks.auth
             ? (state as FromProps)?.from?.pathname
             : null;
-    const message = useMessage();
 
-    const _getUserInfo = useCallback(async () => {
-        const userInfo = await request('/api/user/info', 'GET', null, {
-            Authorization: `Bearer ${token}`,
-        });
-        userService.success();
-        userService.setUser(userInfo);
-        socket.emit('userOnline:add', userInfo._id);
-        if (pathname === (PageLinks.auth || PageLinks.register)) {
-            navigate(from || PageLinks.home, { replace: true });
-        }
-    }, [from, navigate, pathname, request, token]);
+    const _getUserInfo = useCallback(
+        async (jwtToken: string) => {
+            const userInfo = await request('/api/user/info', 'GET', null, {
+                Authorization: `Bearer ${jwtToken}`,
+            });
+            userService.success();
+            userService.setUser(userInfo);
+        },
+        [request],
+    );
 
-    const login = useCallback((jwtToken) => {
-        setToken(jwtToken);
-        localStorage.setItem(
-            STORAGE_NAME,
-            JSON.stringify({
-                token: jwtToken,
-            }),
-        );
-    }, []);
+    const login = useCallback(
+        (jwtToken) => {
+            setToken(jwtToken);
+            localStorage.setItem(
+                STORAGE_NAME,
+                JSON.stringify({
+                    token: jwtToken,
+                }),
+            );
+            _getUserInfo(jwtToken);
+            socket.auth = { jwtToken };
+            socket.connect();
+            if (pathname === (PageLinks.auth || PageLinks.register)) {
+                navigate(from || PageLinks.home, { replace: true });
+            }
+        },
+        [_getUserInfo, from, navigate, pathname],
+    );
+
+    const RequestTokenOauth = useCallback(
+        async (reqCode: string) => {
+            const jwtToken = await request('/api/auth/oauth', 'POST', {
+                code: reqCode,
+            });
+            if (jwtToken) {
+                login(jwtToken);
+            }
+        },
+        [login, request],
+    );
 
     const logout = useCallback(() => {
         setToken(null);
         localStorage.removeItem(STORAGE_NAME);
         userService.setUser(null);
-        socket.emit('userOnline:remove');
+        socket.disconnect();
     }, []);
 
     useEffect(() => {
@@ -59,15 +80,21 @@ export const useAuth = () => {
     }, [login]);
 
     useEffect(() => {
-        if (token) {
-            _getUserInfo();
-        }
-    }, [token, _getUserInfo]);
-
-    useEffect(() => {
         message(error);
         clearError();
     }, [error, message, clearError]);
 
-    return { login, logout, token };
+    useEffect(() => {
+        if (!token && code && code[1]) {
+            RequestTokenOauth(code[1] as unknown as string);
+        }
+    }, [RequestTokenOauth, code, token]);
+
+    socket.on('connect_error', (err) => {
+        if (err.message === 'TokenExpiredError') {
+            logout();
+        }
+    });
+
+    return { login, logout, token, RequestTokenOauth };
 };

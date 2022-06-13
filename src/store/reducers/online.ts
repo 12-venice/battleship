@@ -1,13 +1,8 @@
-/* eslint-disable no-fallthrough */
 /* eslint-disable no-param-reassign */
-// Отключены для теста
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable default-param-last */
+/* eslint-disable no-fallthrough */
 /* eslint-disable indent */
-
-import { StringArray } from 'socketRoutes/usersOnline';
-
-export type userOnlineState = StringArray;
+export type userOnlineState = string[];
 
 const actions: Record<string, string> = {
     ADD_USER_ONLINE: 'ADD_USER_ONLINE',
@@ -20,10 +15,10 @@ interface BaseActionType<T> {
     type: T;
 }
 interface ItemActionType extends BaseActionType<keyof typeof actions> {
-    data: { socketId?: string; _id?: string } | StringArray;
+    data: string | string[];
 }
 
-const defaultState: userOnlineState = {};
+const defaultState: userOnlineState = [];
 
 export function userOnlineReducer(
     state: userOnlineState = defaultState,
@@ -31,37 +26,37 @@ export function userOnlineReducer(
 ): userOnlineState {
     switch (type) {
         case actions.ADD_USER_ONLINE: {
-            console.log(state)
-            if (data.socketId && data._id) {
-                const newUserOnline = { [data.socketId]: data._id };
-                return { ...state, ...newUserOnline };
+            if (data) {
+                state.push(data as string);
+                return [...state];
             }
+            return state;
         }
         case actions.REMOVE_USER_ONLINE: {
-            if (data.socketId) {
-                delete state[data.socketId];
+            const index = state.indexOf(data as string);
+            if (index > -1) {
+                state.splice(index, 1);
+                return [...state];
             }
             return state;
         }
         case actions.SET_USER_ONLINE: {
-            return { ...state, ...data };
+            state = data as string[];
+            return [...state];
         }
         default:
             return state;
     }
 }
 
-export function addUserOnline(data: {
-    socketId: string;
-    _id: string;
-}): ItemActionType {
+export function addUserOnline(data: string): ItemActionType {
     return { type: actions.ADD_USER_ONLINE, data };
 }
 
-export function removeUserOnline(data: { socketId: string }): ItemActionType {
+export function removeUserOnline(data: string): ItemActionType {
     return { type: actions.REMOVE_USER_ONLINE, data };
 }
 
-export function setUserOnline(data: StringArray): ItemActionType {
+export function setUserOnline(data: string[]): ItemActionType {
     return { type: actions.SET_USER_ONLINE, data };
 }

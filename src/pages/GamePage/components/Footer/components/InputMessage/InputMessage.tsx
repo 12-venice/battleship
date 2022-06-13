@@ -2,8 +2,8 @@
 import cn from 'classnames';
 import { useState } from 'react';
 import { Button } from 'src/components/Button';
-import { SendMessage } from 'src/components/utils/Socket/Listeners';
 import { useParams } from 'react-router-dom';
+import { socket } from 'src/components/utils/Socket/Socket';
 import styles from './InputMessage.scss';
 import sendIcon from '../../../../../../../images/send.svg';
 // import videoIcon from '../../../../../../../images/video.svg';
@@ -19,7 +19,7 @@ export const InputMessage = ({
     const [message, setMessage] = useState('');
     const sendMessageHandler = () => {
         if (message) {
-            SendMessage({ room, message });
+            socket.emit('messages:sent', { room, message });
             setMessage('');
         }
     };

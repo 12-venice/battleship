@@ -58,6 +58,7 @@ const ToastBlock = (toast: Notification, position: string): JSX.Element => {
                             key={uuidv4()}
                             title={button.title}
                             onClick={button.onClick}
+                            href={button.href}
                         />
                     ))}
                 </p>

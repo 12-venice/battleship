@@ -9,6 +9,7 @@ import Countdown from 'react-countdown';
 import { Preloader } from 'src/components/Preloader';
 import styles from './Header.scss';
 import { PlayerName } from './components/PlayerName';
+import { getBot } from '../Chat/config';
 
 export const Header = ({ user }: { user: User | undefined }) => {
     const navigate = useNavigate();
@@ -19,18 +20,7 @@ export const Header = ({ user }: { user: User | undefined }) => {
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
     useEffect(() => {
         if (room === 'bot') {
-            setAnotherUser({
-                _id: 'bot',
-                display_name: 'Captain Jack',
-                avatar: '',
-                first_name: 'Jack',
-                second_name: 'Captain',
-                rooms: [],
-                email: 'bot',
-                login: 'bot',
-                phone: '',
-                id: 0,
-            });
+            setAnotherUser(getBot());
         }
         if (user !== undefined) {
             setAnotherUser(user);
