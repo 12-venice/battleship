@@ -2,7 +2,10 @@
     padding: 1rem;
     background: var(--light-dark-blue);
     flex-shrink: 2;
-    overflow-y: auto;
+    overflow: hidden;
+    border-radius: 16px;
+    width: min(36vw, 520px);
+    padding: min(2vw, 20px) min(2vw, 20px);
     
     box-shadow: 
         inset 0 2rem 2rem -2rem rgba(black, 0.05),
@@ -23,7 +26,8 @@
     .chat__block {
         width: 84vw;
         margin-left: 0;
-        height: 5vh;
+        margin-bottom: 10px;
+        height: 30vh;
     }
 }
 

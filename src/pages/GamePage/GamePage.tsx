@@ -48,7 +48,6 @@ export const GamePage = (): JSX.Element => {
     const [timerOver, setTimerOver] = useState(false);
 
     const sliderRef = createRef<HTMLDivElement>();
-    // const video = createRef<HTMLDivElement>();
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
 
@@ -84,9 +83,7 @@ export const GamePage = (): JSX.Element => {
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
         const currentMatrix = matrix.map((row) =>
             row.map((cell) =>
-                cell === MatrixCell.deck ? MatrixCell.empty : cell,
-            ),
-        );
+                (cell === MatrixCell.deck ? MatrixCell.empty : cell),),);
 
         const ships = Object.entries(squadron)
             .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)
@@ -166,8 +163,6 @@ export const GamePage = (): JSX.Element => {
             window.removeEventListener('touchend', tEnd);
         };
     }, []);
-
-
     useEffect(() => {
         getRoom();
     }, []);
