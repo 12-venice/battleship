@@ -26,7 +26,9 @@ const mockStatistics = () => [
         [activeFieldIds.opponent]: 0,
     },
 ];
+
 const mockAccount = () => [0, 0];
+
 export class Controller {
     opponentField;
 
@@ -47,7 +49,7 @@ export class Controller {
     account;
 
     bonusCount;
-
+  
     constructor({
         opponentFieldRef,
         playerSquadron,
@@ -157,11 +159,11 @@ export class Controller {
                 this.miss({ x, y, activeField });
                 break;
             // попадание
-        case MatrixCell.deck:
-            this.hit({ x, y, activeField });
-            break;
-        default:
-            break;
+            case MatrixCell.deck:
+                this.hit({ x, y, activeField });
+                break;
+            default:
+                break;
         }
     }
 
