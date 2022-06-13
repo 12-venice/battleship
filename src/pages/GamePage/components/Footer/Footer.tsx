@@ -38,10 +38,12 @@ export const Footer = ({
     );
 
     const handleGameStart = useCallback(() => {
-        setPlayerMatrix(placementArea.getMatrix());
-        setPlayerSquadron(placementArea.getSquadron());
-        setGameStep(1);
-        setStartGame(!startGame);
+        if (Object.entries(placementArea.getSquadron()).length === 10) {
+            setPlayerMatrix(placementArea.getMatrix());
+            setPlayerSquadron(placementArea.getSquadron());
+            setGameStep(1);
+            setStartGame(!startGame);
+        }
     }, [
         placementArea,
         setGameStep,

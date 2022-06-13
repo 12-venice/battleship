@@ -7,31 +7,91 @@
     width: min(40vw, 500px);
 }
 
-.endGame__buttons {
+.endGame__stats {
     position: absolute;
-    // left: calc(50vw - 376px/2);
-    left: calc(50vw - min(132px, 9.6vw));
-    // top: calc(50vh + 280px);
-    top: calc(50vh + min(195px, 16vw));
-    // width: 370px;
+    left: calc(50vw - min(129px, 9.6vw));
+    top: calc(50vh + min(107px, 9vw));
     width: min(254px, 19vw);
+}
+
+.endGame__score {
     display: flex;
-    justify-content: space-between;
+    width: 100%;
+    height: min(9vw, 108px);
+    justify-content: space-evenly;
+}
+.endGame__buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+.endGame__left {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.endGame__right {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.endGame__ships {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.endGame__hits {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.endGame__label {
+    color: var(--beige);
+    font-size: min(1.2vw, 14.4px);
+    line-height: min(1.2vw, 14.4px);
+}
+.endGame__count {
+    font-size: min(2.5vw, 30px);
+    line-height: min(2.5vw, 30px);
+}
+.endGame__label-strong {
+    font-size: min(2vw, 24px);
+    margin-bottom: min(2vw, 24px);
+}
+.endGame__count-strong {
+    font-size: min(4vw, 48px);
+    line-height: min(4vw, 48px);
 }
 
 @media screen and (max-width: 800px) {
     .endGame__logo {
         width: 80vw;
     }
-    .endGame__buttons {
-        left: calc(50vw - min(112px, 22.6vw));
-        top: calc(50vh + min(295px, 31vw));
+    .endGame__stats {
+        width: 44vw;
+        left: calc(50vw - 22.6vw);
+        top: calc(50vh + min(295px, 18vw));
     }
-}
-
-@media screen and (max-width: 479px) {
-    .endGame__buttons {
-        left: calc(50vw - min(75px, 24.6vw));
-        top: calc(50vh + min(295px, 30vw));
+    .endGame__score {
+        height: 17vw;
+    }
+    .endGame__label {
+        font-size: 2.5vw;
+        line-height: 2.5vw;
+    }
+    .endGame__count {
+        font-size: 4vw;
+        line-height: 4vw;
+    }
+    .endGame__label-strong {
+        font-size: 4vw;
+        margin-bottom: 2vw;
+    }
+    .endGame__count-strong {
+        font-size: 7vw;
+        line-height: 7vw;
     }
 }

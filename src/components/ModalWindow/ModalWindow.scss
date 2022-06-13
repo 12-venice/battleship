@@ -10,6 +10,7 @@
     display: flex;
     align-items: center;
     top: 0;
+    left: 0;
 }
 .modal__plate {
     background: var(--blue);
@@ -23,12 +24,6 @@
 }
 .modal__plate-no-bg {
     background: none;
-}
-
-// временное решение
-.modal__background {
-    width: 99.8vw;
-    height: 99.9vh;
 }
 
 @media screen and (max-width: 479px) {

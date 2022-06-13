@@ -12,6 +12,7 @@
     color: var(--dark-yellow);
     font-size: min(4vw, 34px);
     margin: 0 min(1vw, 10px);
+    width: 44px;
 }
 
 .game__header-players {
@@ -23,10 +24,22 @@
     padding: min(1vw, 5px);
 }
 
-@media screen and (max-width: var(--MAX-WIDTH-TABLET)) {
+.game__header-timer {
+    width: 44px;
+}
+
+.game__header-active {
+    color: var(--light-green);
+}
+
+@media screen and (max-width: 800px) {
     .game__header {
         width: 100%;
         margin-bottom: 10px;
+    }
+
+    .game__header-timer {
+        width: 2vw;
     }
 
     .game__header-text {
@@ -35,6 +48,7 @@
         justify-content: center;
         font-size: 34px;
         margin: 0 2vw;
+        width: 2vw;
     }
 
     .game__header-players {
@@ -49,7 +63,7 @@
     }
 }
 
-@media screen and (max-width: var(--MAX-WIDTH-PHONE)) {
+@media screen and (max-width: 479px) {
     .game__header {
         width: 100%;
         margin-bottom: 10px;

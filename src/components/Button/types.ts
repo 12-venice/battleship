@@ -15,7 +15,8 @@ export type btnProps = {
         | 'large'
         | 'high'
         | 'auth'
-        | 'small';
+        | 'small'
+        | 'tiny';
     color?: 'red' | 'yellow' | 'orange' | 'blue' | 'green';
     noFill?: boolean;
     href?: string;

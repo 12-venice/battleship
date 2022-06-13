@@ -2,7 +2,11 @@ import cn from 'classnames';
 import { createRef, useState, useCallback, useMemo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Layout } from 'src/components/Layout';
-import { Controller } from 'src/gameCore/Controller';
+import {
+    Controller,
+    mockAccount,
+    mockStatistics,
+} from 'src/gameCore/Controller';
 import { Placement } from 'src/gameCore/Placement';
 import { AllStateTypes } from 'src/store/reducers';
 import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
@@ -19,13 +23,7 @@ import { Chat } from './components/Chat';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { EndGameComponent } from './components/EndGame';
-
-const STATISTICS = [
-    { label: 'HITS', player: 8, opponent: 17 },
-    { label: 'MISS', player: 17, opponent: 3 },
-    { label: 'ALIVE', player: 3, opponent: 8 },
-    { label: 'DESTROYED', player: 2, opponent: 7 },
-];
+import { Statistics } from './components/Statistics';
 
 export const GamePage = (): JSX.Element => {
     const { request } = useHttp();
@@ -44,6 +42,10 @@ export const GamePage = (): JSX.Element => {
     const [isFull, setIsFull] = useState(false);
     const [fieldIs, setField] = useState(true);
     const [gameOver, setGameOver] = useState(null);
+    const [gameStatistics, setGameStatistics] = useState([]);
+    const [gameAccount, setGameAccount] = useState([]);
+    const [timerDisplay, setTimerDisplay] = useState(true);
+    const [timerOver, setTimerOver] = useState(false);
 
     const sliderRef = createRef<HTMLDivElement>();
     // const video = createRef<HTMLDivElement>();
@@ -82,7 +84,9 @@ export const GamePage = (): JSX.Element => {
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
         const currentMatrix = matrix.map((row) =>
             row.map((cell) =>
-                (cell === MatrixCell.deck ? MatrixCell.empty : cell),),);
+                cell === MatrixCell.deck ? MatrixCell.empty : cell,
+            ),
+        );
 
         const ships = Object.entries(squadron)
             .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)
@@ -151,7 +155,6 @@ export const GamePage = (): JSX.Element => {
             if (Math.abs(tuchX - e.changedTouches[0].clientX) > 40) {
                 delt = !delt;
                 setTrnslX(!delt);
-                // console.log('end', delt)
             }
         };
         if (sliderRef.current) {
@@ -164,40 +167,60 @@ export const GamePage = (): JSX.Element => {
         };
     }, []);
 
-    // useEffect(() => {
-    //     let timer: any;
-    //     const onlongtouch = function () {
-    //         console.log('1s');
-    //         setVideoCall(true);
-    //     };
-    //     function touchstart() {
-    //         timer = setTimeout(onlongtouch, 1000);
-    //     }
-    //     function touchend() {
-    //         if (timer) {
-    //             clearTimeout(timer);
-    //         }
-    //     }
-
-    //     if (video.current) {
-    //         video.current.addEventListener('touchstart', touchstart);
-    //         video.current.addEventListener('touchend', touchend);
-    //     }
-    //     return () => {
-    //         window.removeEventListener('touchstart', touchstart);
-    //         window.removeEventListener('touchend', touchend);
-    //     };
-    // }, [startGame, video, videoCall]);
 
     useEffect(() => {
         getRoom();
     }, []);
 
+    // callback задержки смены поля
+    const delay = useCallback(() => {
+        setTimeout(() => setField(!fieldIs), 400);
+    }, [fieldIs]);
+
+    useEffect(() => {
+        // если время на ход вышло
+        if (timerOver === true) {
+            if (gameStep === 1) {
+                // если мы уже в процессе игры
+                gameController?.nextQueue();
+                setTimerOver(false);
+            } else {
+                // если мы на старте игры
+                handlerGameOver(activeFieldIds.opponent);
+            }
+        }
+    }, [timerOver]);
+
+    useEffect(() => {
+        // следит за изменениями полей
+        setGameStatistics(gameController?.getStatistics() ?? mockStatistics());
+        setGameAccount(gameController?.getAccount() ?? mockAccount());
+        // проверка очереди хода
+        if (
+            (gameController?.getShotQueue() ?? activeFieldIds.player) ===
+            activeFieldIds.player
+        ) {
+            // если игрок, то меняем цвет таймера и включаем задержку на переход к полю противника
+            if (timerDisplay === false) delay();
+            setTimerDisplay(true);
+        } else {
+            if (timerDisplay === true) delay();
+            setTimerDisplay(false);
+        }
+    }, [playerField, opponentField]);
+
     return (
         <Layout>
             <div className={styles.game__background}>
                 <FullScreenView isFullscr={isFull}>
-                    <Header user={anotherUser} />
+                    <Header
+                        user={anotherUser}
+                        updateTimer={[opponentField, playerField]}
+                        display={timerDisplay}
+                        handler={() => setTimerOver(true)}
+                        gameOver={gameOver}
+                        account={gameAccount}
+                    />
                     <div className={styles['game__main-content']}>
                         <div className={styles.game__container}>
                             <div
@@ -244,30 +267,7 @@ export const GamePage = (): JSX.Element => {
                                     </div>
                                 </div>
                                 <div className={styles['game__slider-stat']}>
-                                    <div className={styles.game__statistics}>
-                                        {STATISTICS.map((el) => (
-                                            <div key={el.label}>
-                                                <h5
-                                                    className={
-                                                        styles[
-                                                            'game__statistics-label'
-                                                        ]
-                                                    }
-                                                >
-                                                    {el.label}
-                                                </h5>
-                                                <span
-                                                    className={
-                                                        styles[
-                                                            'game__statistics-description'
-                                                        ]
-                                                    }
-                                                >
-                                                    {`${el.player}/${el.opponent}`}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
+                                    <Statistics statistics={gameStatistics} />
                                 </div>
                             </div>
                             {startGame && (
@@ -310,7 +310,12 @@ export const GamePage = (): JSX.Element => {
                         }}
                     />
                     {gameOver && (
-                        <EndGameComponent screen={gameOver} room={room} />
+                        <EndGameComponent
+                            screen={gameOver}
+                            room={room}
+                            gameAccount={gameAccount}
+                            gameStatistics={gameStatistics}
+                        />
                     )}
                 </FullScreenView>
             </div>
