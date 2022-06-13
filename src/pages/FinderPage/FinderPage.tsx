@@ -1,9 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-unused-expressions */
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { Avatar } from 'src/components/Avatar';
 import { Button } from 'src/components/Button';
 import { Input } from 'src/components/Input';
 import { Layout } from 'src/components/Layout';
@@ -15,24 +15,16 @@ import { useHttp } from 'src/hooks/http.hook';
 import { useMessage } from 'src/hooks/message.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import { User } from 'src/store/reducers/user';
+import { Cell } from './components/cell/Cell';
 import styles from './FinderPage.scss';
 
 export const FinderPage = () => {
     const message = useMessage();
     const { token } = useAuth();
-    const navigator = useNavigate();
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const usersOnline = useSelector((state: AllStateTypes) => state.userOnline);
-
-    const checkUserOnline = (id: string) => {
-        const isOnline = Object.keys(usersOnline).find(
-            (key) => usersOnline[key] === id,
-        );
-        return !!isOnline;
-    };
 
     const [rooms, setRooms] = useState([]);
     const [str, setStr] = useState('');
@@ -42,26 +34,25 @@ export const FinderPage = () => {
         const data = await request('/api/user/find', 'POST', { str });
         setRooms(data);
     }, [request, str]);
+
     const getRooms = useCallback(async () => {
         const data = await request(
             '/api/room/find',
             'POST',
-            {
-                rooms: user.rooms,
-            },
+            {},
             {
                 Authorization: `Bearer ${token}`,
             },
         );
         setRooms(data);
-    }, [request, token, user]);
+    }, [token]);
 
     useEffect(() => {
         if (!str && token) {
             getRooms();
         }
         return () => setRooms([]);
-    }, [getRooms, str, token]);
+    }, [str, token]);
 
     useEffect(() => {
         const timeOut = setTimeout(() => {
@@ -74,25 +65,15 @@ export const FinderPage = () => {
 
     useEffect(() => {
         message(error);
-        clearError();
+        return () => clearError();
     }, [error, message, clearError]);
 
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStr(e.target.value);
     };
 
-    const createRoom = (invitedUserId: string) => {
-        socket.emit('invite:sent', { createdUserId: user?._id, invitedUserId });
-        getRooms();
-    };
-
-    const inviteUser = (invitedUserId: string, room: string) => {
-        socket.emit('invite:sent', { createdUserId: user?._id, invitedUserId });
-        navigator(`${PageLinks.game}/${room}`);
-    };
-
-    const selectUser = (element: User) => {
-        str ? createRoom(element._id) : inviteUser(element._id, element.room!);
+    const sendRandomInvite = () => {
+        socket.emit('invite:random');
     };
 
     return (
@@ -130,44 +111,22 @@ export const FinderPage = () => {
                 />
                 <div className={styles.finder__block}>
                     {!loading ? (
-                        rooms.map(
+                        rooms?.map(
                             (element: User) =>
                                 user?._id !== element._id && (
-                                    <div
-                                        key={element._id}
-                                        aria-hidden
-                                        className={styles.finder__line}
-                                        onClick={() => selectUser(element)}
-                                    >
-                                        {Avatar(element)}
-                                        <span className={styles.finder__name}>
-                                            {element.display_name}
-                                        </span>
-                                        {!str && (
-                                            <div
-                                                className={styles.finder__point}
-                                                style={{
-                                                    background: checkUserOnline(
-                                                        element._id,
-                                                    )
-                                                        ? 'greenyellow'
-                                                        : 'gray',
-                                                }}
-                                            />
-                                        )}
-                                    </div>
+                                    <Cell element={element} str={str} />
                                 ),
                         )
                     ) : (
                         <Preloader />
                     )}
                 </div>
-                {/* <Button
+                <Button
                     skin="regular"
                     color="green"
-                    disabled
                     title={dataStore.buttons.random}
-                /> */}
+                    onClick={() => sendRandomInvite()}
+                />
             </div>
         </Layout>
     );

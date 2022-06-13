@@ -17,18 +17,11 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 0 auto;
+    margin: auto;
     border-radius: 38px;
     align-items: center;
     padding: 45px;
 }
 .modal__plate-no-bg {
     background: none;
-}
-
-@media screen and (max-width: 479px) {
-    .modal__plate {
-        width: 90%;
-        height: 90%;
-    }
 }

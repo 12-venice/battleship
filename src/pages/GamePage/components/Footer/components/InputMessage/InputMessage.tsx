@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import cn from 'classnames';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Button } from 'src/components/Button';
-import { SendMessage } from 'src/components/utils/Socket/Listeners';
 import { useParams } from 'react-router-dom';
+import { socket } from 'src/components/utils/Socket/Socket';
 import styles from './InputMessage.scss';
 import sendIcon from '../../../../../../../images/send.svg';
 // import videoIcon from '../../../../../../../images/video.svg';
@@ -17,14 +17,18 @@ export const InputMessage = ({
 }) => {
     const { room } = useParams() as { room: string };
     const [message, setMessage] = useState('');
-    const sendMessageHandler = () => {
+    const sendMessageHandler = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if (message) {
-            SendMessage({ room, message });
+            socket.emit('messages:sent', { room, message });
             setMessage('');
         }
     };
     return (
-        <div className={styles.inputMessage__block}>
+        <form
+            className={styles.inputMessage__block}
+            onSubmit={(e) => sendMessageHandler(e)}
+        >
             <input
                 className={cn(styles.inputMessage__input, 'browser-default')}
                 type="text"
@@ -33,16 +37,13 @@ export const InputMessage = ({
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
             />
-            {/* <Button skin="quad" onClick={() => setVideoCall(!videoCall)}>
-                <img className={styles.icon} src={videoIcon} alt="Video call" />
-            </Button> */}
-            <Button skin="quad" onClick={sendMessageHandler}>
+            <Button skin="quad" type="submit">
                 <img
                     className={styles.footer__icon}
                     src={sendIcon}
                     alt="Send"
                 />
             </Button>
-        </div>
+        </form>
     );
 };

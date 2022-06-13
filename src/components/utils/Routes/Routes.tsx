@@ -17,7 +17,7 @@ import { PageLinks, Props } from './types';
 const ProtectedRoute: Props = ({ childrens }) => {
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const location = useLocation();
-    if (!user) {
+    if (!user && typeof window !== 'undefined') {
         return (
             <Navigate to={PageLinks.auth} state={{ from: location }} replace />
         );

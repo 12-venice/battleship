@@ -1,8 +1,10 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable react-hooks/exhaustive-deps */
 import cn from 'classnames';
 import moment from 'moment';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { socket } from 'src/components/utils/Socket/Socket';
 import { useHttp } from 'src/hooks/http.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import styles from './Message.scss';
@@ -11,13 +13,20 @@ import { messageType } from './types';
 export const Message = (message: messageType): JSX.Element => {
     const { _id, createdAt, text, user, delivered } = message;
     const { request } = useHttp();
+    const [deliver, setDeliver] = useState(delivered);
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
-    const notme = user._id !== thisUser?._id;
+    const myMsg = user._id === thisUser?._id;
     moment.locale('ru');
     const parseDate = moment(createdAt).fromNow();
 
+    socket.on('message:delivered', (id: string) => {
+        if (id === _id && myMsg) {
+            setDeliver(true);
+        }
+    });
+
     useEffect(() => {
-        if (!delivered && notme) {
+        if (!delivered && !myMsg) {
             request('/api/message/setdelivered', 'POST', { _id });
         }
     }, []);
@@ -26,22 +35,15 @@ export const Message = (message: messageType): JSX.Element => {
         <div
             className={cn(
                 styles.message__row,
-                notme && styles.message__row__notme,
+                myMsg && styles.message__row__notme,
             )}
         >
-            <div
-                className={cn(
-                    styles.message__block,
-                    notme && styles.message__block__notme,
+            <div className={styles.message__text}>{text}</div>
+            <div className={styles.message__date}>
+                {parseDate}
+                {deliver && myMsg && (
+                    <i className="material-icons tiny">check</i>
                 )}
-            >
-                <div className={styles.message__text}>{text}</div>
-                <div className={styles.message__date}>
-                    {parseDate}
-                    {delivered && !notme && (
-                        <i className="material-icons tiny">check</i>
-                    )}
-                </div>
             </div>
         </div>
     );

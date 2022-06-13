@@ -48,7 +48,6 @@ export const GamePage = (): JSX.Element => {
     const [timerOver, setTimerOver] = useState(false);
 
     const sliderRef = createRef<HTMLDivElement>();
-    // const video = createRef<HTMLDivElement>();
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
 
@@ -84,9 +83,7 @@ export const GamePage = (): JSX.Element => {
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
         const currentMatrix = matrix.map((row) =>
             row.map((cell) =>
-                cell === MatrixCell.deck ? MatrixCell.empty : cell,
-            ),
-        );
+                (cell === MatrixCell.deck ? MatrixCell.empty : cell),),);
 
         const ships = Object.entries(squadron)
             .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)
@@ -130,6 +127,9 @@ export const GamePage = (): JSX.Element => {
     );
 
     const startAreaWidth = useCallback(() => {
+        if (typeof window === 'undefined') {
+            return 250;
+        }
         if (window.innerWidth < 480) {
             return window.innerWidth * 0.8;
         }
@@ -163,32 +163,6 @@ export const GamePage = (): JSX.Element => {
             window.removeEventListener('touchend', tEnd);
         };
     }, []);
-
-    // useEffect(() => {
-    //     let timer: any;
-    //     const onlongtouch = function () {
-    //         console.log('1s');
-    //         setVideoCall(true);
-    //     };
-    //     function touchstart() {
-    //         timer = setTimeout(onlongtouch, 1000);
-    //     }
-    //     function touchend() {
-    //         if (timer) {
-    //             clearTimeout(timer);
-    //         }
-    //     }
-
-    //     if (video.current) {
-    //         video.current.addEventListener('touchstart', touchstart);
-    //         video.current.addEventListener('touchend', touchend);
-    //     }
-    //     return () => {
-    //         window.removeEventListener('touchstart', touchstart);
-    //         window.removeEventListener('touchend', touchend);
-    //     };
-    // }, [startGame, video, videoCall]);
-
     useEffect(() => {
         getRoom();
     }, []);

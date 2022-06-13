@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { useCallback } from 'react';
 import { Placement } from 'src/gameCore/Placement';
+import { useParams } from 'react-router-dom';
 import fsIcon from '../../../../../images/fs.svg';
 import fsExitIcon from '../../../../../images/fs_exit.svg';
 import arrowIcon from '../../../../../images/round_arrow.svg';
@@ -36,6 +37,7 @@ export const Footer = ({
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
+    const { room } = useParams() as { room: string };
 
     const handleGameStart = useCallback(() => {
         if (Object.entries(placementArea.getSquadron()).length === 10) {
@@ -76,7 +78,9 @@ export const Footer = ({
                 />
             </Button>
             {startGame ? (
-                <InputMessage {...{ videoCall, setVideoCall }} />
+                room !== 'bot' && (
+                    <InputMessage {...{ videoCall, setVideoCall }} />
+                )
             ) : (
                 <>
                     <Button

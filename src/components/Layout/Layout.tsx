@@ -1,4 +1,5 @@
 /* eslint-disable react/require-default-props */
+import { CSSProperties } from 'react';
 import background from '../../../images/background.svg';
 import styles from './Layout.scss';
 import leftImg from '../../../images/bg-left.png';
@@ -10,27 +11,34 @@ export const Layout = ({
 }: {
     children: React.ReactNode;
     decor?: boolean;
-}): JSX.Element => (
-    <div
-        className={styles.layout__background}
-        style={{
-            backgroundImage: `url(${background})`,
-        }}
-    >
-        {decor && (
-            <img
-                className={styles.layout__left}
-                src={leftImg}
-                alt="Кораблики"
-            />
-        )}
-        {children}
-        {decor && (
-            <img
-                className={styles.layout__right}
-                src={rightImg}
-                alt="Кораблики"
-            />
-        )}
-    </div>
-);
+}): JSX.Element => {
+    const vh =
+        typeof window !== 'undefined' ? `${window.innerHeight / 100}px` : '1vh';
+    return (
+        <div
+            className={styles.layout__background}
+            style={
+                {
+                    '--vh': vh,
+                    backgroundImage: `url(${background})`,
+                } as CSSProperties
+            }
+        >
+            {decor && (
+                <img
+                    className={styles.layout__left}
+                    src={leftImg}
+                    alt="Кораблики"
+                />
+            )}
+            {children}
+            {decor && (
+                <img
+                    className={styles.layout__right}
+                    src={rightImg}
+                    alt="Кораблики"
+                />
+            )}
+        </div>
+    );
+};

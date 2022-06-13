@@ -9,6 +9,7 @@ import { Information } from 'src/components/Information';
 import { Preloader } from 'src/components/Preloader';
 import styles from './Header.scss';
 import { PlayerName } from './components/PlayerName';
+import { getBot } from '../Chat/config';
 import { Timer } from './helpers/easyTimer';
 import { CloseGameDialog } from '../CloseGameDialog';
 
@@ -35,18 +36,7 @@ export const Header = ({
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
     useEffect(() => {
         if (room === 'bot') {
-            setAnotherUser({
-                _id: 'bot',
-                display_name: 'Captain Jack',
-                avatar: '',
-                first_name: 'Jack',
-                second_name: 'Captain',
-                rooms: [],
-                email: 'bot',
-                login: 'bot',
-                phone: '',
-                id: 0,
-            });
+            setAnotherUser(getBot());
         }
         if (user !== undefined) {
             setAnotherUser(user);
