@@ -2,7 +2,11 @@ import cn from 'classnames';
 import { createRef, useState, useCallback, useMemo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Layout } from 'src/components/Layout';
-import { Controller } from 'src/gameCore/Controller';
+import {
+    Controller,
+    mockAccount,
+    mockStatistics,
+} from 'src/gameCore/Controller';
 import { Placement } from 'src/gameCore/Placement';
 import { AllStateTypes } from 'src/store/reducers';
 import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
@@ -80,7 +84,9 @@ export const GamePage = (): JSX.Element => {
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
         const currentMatrix = matrix.map((row) =>
             row.map((cell) =>
-                (cell === MatrixCell.deck ? MatrixCell.empty : cell),),);
+                cell === MatrixCell.deck ? MatrixCell.empty : cell,
+            ),
+        );
 
         const ships = Object.entries(squadron)
             .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)
@@ -208,8 +214,8 @@ export const GamePage = (): JSX.Element => {
 
     useEffect(() => {
         // следит за изменениями полей
-        setGameStatistics(gameController?.getStatistics() ?? []);
-        setGameAccount(gameController?.getAccount() ?? [0, 0]);
+        setGameStatistics(gameController?.getStatistics() ?? mockStatistics());
+        setGameAccount(gameController?.getAccount() ?? mockAccount());
         // проверка очереди хода
         if (
             (gameController?.getShotQueue() ?? activeFieldIds.player) ===
@@ -325,7 +331,12 @@ export const GamePage = (): JSX.Element => {
                         }}
                     />
                     {gameOver && (
-                        <EndGameComponent screen={gameOver} room={room} />
+                        <EndGameComponent
+                            screen={gameOver}
+                            room={room}
+                            gameAccount={gameAccount}
+                            gameStatistics={gameStatistics}
+                        />
                     )}
                 </FullScreenView>
             </div>
