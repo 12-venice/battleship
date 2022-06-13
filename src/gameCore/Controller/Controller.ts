@@ -73,6 +73,22 @@ export class Controller {
         return this.statistics;
     }
 
+    getShotQueue() {
+        return this.shotQueue;
+    }
+
+    nextQueue() {
+        this.onChangeField();
+        if (this.shotQueue === activeFieldIds.player) {
+            this.opponent.nextShot(this.makeShot.bind(this));
+        }
+
+        this.shotQueue =
+            this.shotQueue === activeFieldIds.player
+                ? activeFieldIds.opponent
+                : activeFieldIds.player;
+    }
+
     incrementStatistics(player: activeFieldIds, element: statisticsFields) {
         // eslint-disable-next-line no-plusplus
         this.statistics[element][player]++;
