@@ -64,9 +64,11 @@ export const Chat = ({ videoCall }: { videoCall: boolean }): JSX.Element => {
             {loading ? (
                 <Preloader />
             ) : (
-                messages.map((message: messageType) => (
-                    <Message key={message._id} {...message} />
-                ))
+                <div>
+                    {messages.map((message: messageType) => (
+                        <Message key={message._id} {...message} />
+                    ))}
+                </div>
             )}
             <div ref={messagesEndRef} />
         </div>
