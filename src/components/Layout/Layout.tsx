@@ -19,7 +19,7 @@ export const Layout = ({
             className={styles.layout__background}
             style={
                 {
-                    '--vh': vh,
+                    // '--vh': vh,
                     backgroundImage: `url(${background})`,
                 } as CSSProperties
             }

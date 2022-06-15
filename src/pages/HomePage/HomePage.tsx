@@ -15,6 +15,7 @@ import exitIcon from '../../../images/exit.svg';
 import profileIcon from '../../../images/profile.svg';
 import loginIcon from '../../../images/login.svg';
 import registrationIcon from '../../../images/registration.svg';
+import chatsIcon from '../../../images/chats.svg';
 import bigShip from '../../../images/4-ship.png';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
@@ -32,7 +33,22 @@ export const HomePage = (): JSX.Element => {
     const leftBlock = () => {
         if (user) {
             return (
-                <Button href={PageLinks.profile} title={data.buttons.profile} />
+                <>
+                    <Button href={PageLinks.profile} skin="quad">
+                        <img
+                            className={styles.icon}
+                            src={profileIcon}
+                            alt="Profile"
+                        />
+                    </Button>
+                    <Button href={PageLinks.chats} skin="quad">
+                        <img
+                            className={styles.icon}
+                            src={chatsIcon}
+                            alt="Chats"
+                        />
+                    </Button>
+                </>
             );
         }
         return null;
@@ -217,6 +233,13 @@ export const HomePage = (): JSX.Element => {
                     </div>
                 </div>
                 <div className={styles['home__select-footer']}>
+                    <Button href={PageLinks.chats} skin="quad">
+                        <img
+                            className={styles.icon}
+                            src={chatsIcon}
+                            alt="Chats"
+                        />
+                    </Button>
                     <Button
                         skin="regular"
                         href={PageLinks.leaderboard}
