@@ -83,7 +83,9 @@ export const GamePage = (): JSX.Element => {
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
         const currentMatrix = matrix.map((row) =>
             row.map((cell) =>
-                (cell === MatrixCell.deck ? MatrixCell.empty : cell),),);
+                cell === MatrixCell.deck ? MatrixCell.empty : cell,
+            ),
+        );
 
         const ships = Object.entries(squadron)
             .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)

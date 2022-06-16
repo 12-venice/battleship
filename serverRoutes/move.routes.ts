@@ -7,14 +7,17 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Router } from 'express';
 import { io } from 'src/server';
+import authMiddleware from 'src/server/auth.middleware';
 import Message from '../serverModels/message';
 
 const router = Router();
 
-router.post('/read', async (req, res) => {
+router.post('/create', authMiddleware, async (req, res) => {
     try {
-        const { room } = req.body;
+        const { x, y } = req.body;
+        const game = await Game.findOne({ _id })
         const messages = await Message.find({ room }).populate('user');
+        сокет отправь событие в эту комнату новое сообщение
         res.status(200).json(messages);
     } catch (e) {
         res.status(500).json({

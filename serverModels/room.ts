@@ -5,7 +5,7 @@ const schema = new Schema(
     {
         users: [{ type: Types.ObjectId, ref: 'User' }],
         messages: [{ type: Types.ObjectId, ref: 'Message' }],
-        moves: [{ type: Types.ObjectId, ref: 'Move' }],
+        games: [{ type: Types.ObjectId, ref: 'Move' }],
     },
     { timestamps: true },
 );

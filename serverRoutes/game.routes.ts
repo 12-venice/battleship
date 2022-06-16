@@ -12,7 +12,7 @@ import Room from '../serverModels/room';
 
 const router = Router();
 
-router.get('/:id', async (req, res) => {
+router.post('/:id', async (req, res) => {
     try {
         const data = await Room.findOne({ _id: req.params.id }).populate(
             'users',
