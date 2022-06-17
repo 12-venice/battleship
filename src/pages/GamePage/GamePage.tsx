@@ -68,6 +68,7 @@ export const GamePage = (): JSX.Element => {
     }, []);
 
     const handlerChangePlayerField = useCallback(({ matrix, squadron }) => {
+        console.log('player', { matrix, squadron });
         const ships = Object.entries(squadron).map(
             ([shipName, { arrDecks, x, y, kx, hits }]) => ({
                 id: shipName,
@@ -80,8 +81,9 @@ export const GamePage = (): JSX.Element => {
         );
         setPlayerField({ matrix, ships });
     }, []);
-
+    
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
+        console.log('bot', { matrix, squadron });
         const currentMatrix = matrix.map((row) =>
             row.map((cell) =>
                 cell === MatrixCell.deck ? MatrixCell.empty : cell,
@@ -108,6 +110,7 @@ export const GamePage = (): JSX.Element => {
 
     const gameController = useMemo(() => {
         if (gameStep === 1) {
+            console.log('start controller', playerMatrix, playerSquadron);
             return new Controller({
                 opponentFieldRef: botCanvasRef,
                 playerSquadron,
@@ -213,6 +216,7 @@ export const GamePage = (): JSX.Element => {
     }, [timerOver]);
 
     useEffect(() => {
+        console.log('[DEBUG]', playerField, opponentField);
         // следит за изменениями полей
         setGameStatistics(gameController?.getStatistics() ?? mockStatistics());
         setGameAccount(gameController?.getAccount() ?? mockAccount());

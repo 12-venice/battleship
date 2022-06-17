@@ -19,6 +19,7 @@ import topicRouter from '../serverRoutes/topic.routes';
 import commentRouter from '../serverRoutes/comment.routes';
 import roomRouter from '../serverRoutes/room.routes';
 import messageRouter from '../serverRoutes/message.routes';
+import gameRouter from '../serverRoutes/game.routes';
 import webpackConfig from '../webpack/client.config';
 
 const compiler = webpack(webpackConfig);
@@ -57,6 +58,7 @@ app.use('/api/topic', topicRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/room', roomRouter);
 app.use('/api/message', messageRouter);
+app.use('/api/game', gameRouter);
 
 app.use(express.static(path.resolve(__dirname, '../dist')));
 app.get('/*', renderResponse);
