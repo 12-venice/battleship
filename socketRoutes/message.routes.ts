@@ -1,12 +1,12 @@
+/* eslint-disable no-console */
 /* eslint-disable import/no-default-export */
-import { Socket } from 'socket.io';
 import { io } from 'src/server';
+import { ISocket } from 'src/server/types';
 import Message from '../serverModels/message';
 import User from '../serverModels/user';
 import Room from '../serverModels/room';
-import { getUserOnline } from './usersOnline';
 
-export default (socket: Socket) => {
+export default async (socket: ISocket) => {
     const sentMessage = async ({
         room,
         message,
@@ -14,13 +14,18 @@ export default (socket: Socket) => {
         room: string;
         message: string;
     }) => {
-        const createdUserId = getUserOnline(socket.id);
-        const createdUser = await User.findOne({ _id: createdUserId });
+        const user = await User.findOne(
+            {
+                _id: socket.userID,
+            },
+            { password: 0 },
+        );
         const newMessage = new Message({
             text: message,
-            user: createdUser,
+            user,
             room,
         });
+
         await newMessage.save((err: string, obj: object) => {
             if (err) {
                 console.log(err);

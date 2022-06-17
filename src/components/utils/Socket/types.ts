@@ -1,11 +1,12 @@
 interface ServerToClientEvents {
-    'userOnline:add': (data: any) => void;
-    'userOnline:remove': (data: any) => void;
-    'userOnline:set': (data: any) => void;
+    'users:add': (data: string) => void;
+    'users:remove': (data: string) => void;
+    'users:set': (data: string[]) => void;
     'invite:sent': (data: any) => void;
     'invite:accept': (data: any) => void;
     'invite:cancel': (data: any) => void;
     'invite:recive': (data: any) => void;
+    'invite:random': () => void;
     'move:sent': (data: any) => void;
     'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;
@@ -13,13 +14,14 @@ interface ServerToClientEvents {
 }
 
 interface ClientToServerEvents {
-    'userOnline:add': (data: any) => void;
-    'userOnline:remove': () => void;
-    'userOnline:set': (data: any) => void;
+    'users:add': (data: string) => void;
+    'users:remove': (data: string) => void;
+    'users:set': (data: string[]) => void;
     'invite:sent': (data: any) => void;
     'invite:accept': (data: any) => void;
     'invite:cancel': (data: any) => void;
     'invite:recive': (data: any) => void;
+    'invite:random': () => void;
     'move:sent': (data: any) => void;
     'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;

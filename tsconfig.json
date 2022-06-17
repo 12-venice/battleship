@@ -5,12 +5,8 @@
       "es2017"
     ],
     "module": "esnext",
-    // "module": "es2015",
     "target": "es5",
     "jsx": "react-jsx",
-    // "module": "commonjs",
-    // "target": "esnext",
-    // "jsx": "react",
     "moduleResolution": "node",
     "importHelpers": true,
     "noUnusedLocals": true,
@@ -21,6 +17,7 @@
     "skipLibCheck": true,
     "declaration": false,
     "sourceMap": false,
+    "downlevelIteration": false,
     "baseUrl": ".",
     "outDir": "./dist",
     "paths": {

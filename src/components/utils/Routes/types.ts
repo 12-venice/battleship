@@ -11,6 +11,7 @@ export const enum PageLinks {
     forum = '/forum',
     leaderboard = '/leaderboard',
     finder = '/finder',
+    chats = '/chats',
 }
 
 type RouteProps = {

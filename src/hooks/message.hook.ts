@@ -4,7 +4,7 @@ import { notificationService } from 'src/store/services/notificationService';
 
 export const useMessage = () =>
     useCallback((message, type?) => {
-        if (message && message !== 'TokenExpiredError') {
+        if (message) {
             notificationService.addNotification({
                 message,
                 type: type || 'warning',

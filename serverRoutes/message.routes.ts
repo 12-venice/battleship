@@ -6,6 +6,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Router } from 'express';
+import { io } from 'src/server';
 import Message from '../serverModels/message';
 
 const router = Router();
@@ -25,8 +26,10 @@ router.post('/read', async (req, res) => {
 router.post('/setdelivered', async (req, res) => {
     try {
         const { _id } = req.body;
+        const message = await Message.findOne({ _id });
         await Message.updateOne({ _id }, { $set: { delivered: true } });
-        res.status(200).json({ message: 'OK' });;
+        io.in(message.room.toString()).emit('message:delivered', message._id);
+        res.status(200).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',

@@ -19,7 +19,7 @@ export default (req: Request, res: Response, next: () => void) => {
         }
         jwt.verify(token, SECRET_KEY, (err: any, decoded) => {
             if (err && err.name === 'TokenExpiredError') {
-                res.status(401).json({ message: err.name });
+                res.status(401).json({ message: 'Срок действия токена истек' });
             }
             if (decoded) {
                 req.user = decoded;

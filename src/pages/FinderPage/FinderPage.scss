@@ -53,28 +53,3 @@
     font-size: 40px;
     line-height: 40px;
 }
-
-.finder__line {
-    width: 100%;
-    margin-top: 20px;
-    font-size: 30px;
-    border-radius: 20px;
-    background: var(--dark-blue);
-    padding: 15px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.finder__name {
-    padding: 10px;
-    white-space: nowrap;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-}
-
-.finder__point {
-    padding: 10px;
-    border-radius: 50%;
-}

@@ -25,9 +25,9 @@ export const AuthPage = (): JSX.Element => {
     const { request, loading, error, clearError } = useHttp();
 
     const auth = async (userData: User) => {
-        const token = await request('/api/auth/login', 'POST', userData);
-        if (token) {
-            login(token);
+        const jwtToken = await request('/api/auth/login', 'POST', userData);
+        if (jwtToken) {
+            login(jwtToken);
         }
     };
 

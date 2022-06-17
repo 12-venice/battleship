@@ -1,4 +1,5 @@
 .layout__background {
+    // height: calc(100 * var(--vh));;
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -7,12 +8,25 @@
     font-family: 'Titan One';
     color: #ffffff;
     background-size: auto 110vh;
+    // max-height: -webkit-fill-available;
+
+    // @media not all and (min-resolution:.001dpcm) {
+    //     @supports (-webkit-appearance:none) {
+
+    //         .safari_only {
+    //             height: 10vh;
+    //         }
+    //     }
+    // }
+
 }
+
 
 @media screen and (max-width: 1500px) {
     .layout__left {
         display: none;
     }
+
     .layout__right {
         display: none;
     }
