@@ -18,6 +18,7 @@ import hotMiddleware from 'webpack-hot-middleware';
 import { DB, IS_DEV, IS_DEV_SERVER, PORT, SECRET_KEY } from '../webpack/env';
 import { renderResponse } from './server/renderResponse';
 import authRouter from '../serverRoutes/auth.routes';
+import fileRouter from '../serverRoutes/file.routes';
 import userRouter from '../serverRoutes/user.routes';
 import topicRouter from '../serverRoutes/topic.routes';
 import commentRouter from '../serverRoutes/comment.routes';
@@ -85,6 +86,7 @@ app.use('/api/topic', topicRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/room', roomRouter);
 app.use('/api/message', messageRouter);
+app.use('/api/upload', fileRouter);
 
 app.use(express.static(path.resolve(__dirname, '../dist')));
 app.get('/*', renderResponse);

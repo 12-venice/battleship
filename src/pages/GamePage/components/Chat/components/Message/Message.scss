@@ -32,6 +32,10 @@
     font-size: min(2vw, 10px);
 }
 
+.message__image {
+    max-width: 66%;
+}
+
 @media screen and (max-width: var(--MAX-WIDTH-TABLET)) {}
 
 @media screen and (max-width: var(--MAX-WIDTH-PHONE)) {}

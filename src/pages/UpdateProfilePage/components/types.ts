@@ -5,6 +5,6 @@ type UpdateAvatarProps = {
 };
 
 export type Url = string;
-export type File = Blob | string | undefined;
+export type File = Blob | string | undefined | null;
 export type FileInput = HTMLInputElement;
 export type Props = FC<UpdateAvatarProps>;
