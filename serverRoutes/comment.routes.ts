@@ -55,10 +55,13 @@ router.post('/create', authMiddleware, async (req, res) => {
 
 router.post('/read', async (req, res) => {
     try {
-        const { _id } = req.body;
-        const comments = await Comment.find({ topic: _id })
-            .populate('user')
-            .populate('subcomments');
+        const { type, _id } = req.body;
+        let comments;
+        if (type && type === 'comment') {
+            comments = await Comment.find({ comment: _id }).populate('user');
+        } else {
+            comments = await Comment.find({ topic: _id }).populate('user');
+        }
         res.status(200).json(comments);
     } catch (e) {
         res.status(500).json({

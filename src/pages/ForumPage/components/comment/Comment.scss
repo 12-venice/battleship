@@ -10,6 +10,9 @@
     border-radius: 15px;
     color: var(--white);
 }
+.comment__active {
+    background: var(--light-blue);
+}
 .comment__btn {
     font-family: var(--font-family-second);
     font-size: 20px;

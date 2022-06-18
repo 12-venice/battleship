@@ -1,10 +1,9 @@
-import { FC } from 'react';
+import { User } from 'src/store/reducers/user';
 
 export type CommentProps = {
-    user: { display_name: string };
+    user: User;
     createdAt: string;
-    description: string;
+    message: string;
     _id: string;
+    subcomments: CommentProps[];
 };
-
-export type Props = FC<CommentProps>;

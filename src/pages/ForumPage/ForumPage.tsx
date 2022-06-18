@@ -25,6 +25,7 @@ export const ForumPage = (): JSX.Element => {
         (state: AllStateTypes) => state.language.translate,
     );
     const [topicId, setTopicId] = useState('');
+    const [commentId, setCommentId] = useState('');
     const [topicTheme, setTopicTheme] = useState('');
     const [topicDesc, setTopicDesc] = useState('');
     const [openCreateWindow, setWindowCreate] = useState(false);
@@ -42,41 +43,43 @@ export const ForumPage = (): JSX.Element => {
     const createComment = useCallback(async () => {
         const newTopic = {
             topic: topicId,
-            description: textComment,
+            comment: commentId,
+            message: textComment,
         };
         await request('/api/comment/create', 'POST', newTopic, {
             Authorization: `Bearer ${token}`,
         });
         setTextComment('');
         getTopics();
-    }, [getTopics, request, textComment, token, topicId]);
+    }, [commentId, getTopics, request, textComment, token, topicId]);
 
     useEffect(() => {
         getTopics();
     }, [getTopics]);
+
     const forumBlock = () => {
         if (loading) {
             return <Preloader />;
         }
         if (topics.length > 0) {
-            return topics.map((item: TopicProps) => (
+            return topics.map((topic: TopicProps) => (
                 <Topic
-                    key={item._id}
-                    theme={item.theme}
-                    createdAt={DateParser(item.createdAt)}
-                    description={item.description}
-                    user={item.user}
+                    key={topic._id}
+                    theme={topic.theme}
+                    createdAt={DateParser(topic.createdAt)}
+                    message={topic.message}
+                    user={topic.user}
                     isActiveTopic={topicId}
-                    setTopicId={setTopicId}
-                    _id={item._id}
+                    setTopicId={(_id) => setTopicId(_id)}
+                    _id={topic._id}
                     deleteFunc={(_id) => {
                         setTopicId(_id);
                         setWindowDelete(true);
                     }}
-                    editFunc={(_id, theme, description) => {
+                    editFunc={(_id, theme, message) => {
                         setTopicTheme(theme);
                         setTopicId(_id);
-                        setTopicDesc(description);
+                        setTopicDesc(message);
                         setWindowEdit(true);
                     }}
                 />
