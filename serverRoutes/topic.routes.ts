@@ -11,11 +11,19 @@ import authMiddleware from 'src/server/auth.middleware';
 import User from '../serverModels/user';
 import Topic from '../serverModels/topic';
 import { cleanerBase } from './cleaner';
+import Comment from '../serverModels/comment';
 
 const router = Router();
 
 router.post('/create', authMiddleware, async (req, res) => {
     try {
+        const { description, theme } = req.body;
+        if (!description && !theme) {
+            res.status(500).json({
+                message: "Theme or description of topic can't be empty ",
+            });
+            return;
+        }
         const user = await User.findOne({ _id: req.user.userId });
         const topic = new Topic({ ...req.body, ...{ user } });
         await topic.save();
@@ -62,6 +70,7 @@ router.post('/delete', authMiddleware, async (req, res) => {
         const { user } = await Topic.findOne({ _id });
         if (user._id.toJSON() === req.user.userId) {
             await Topic.deleteOne({ _id });
+            await Comment.deleteMany({ topic: _id });
             res.status(200).json({ message: 'OK' });
         } else {
             res.status(400).json({ message: 'Denied' });

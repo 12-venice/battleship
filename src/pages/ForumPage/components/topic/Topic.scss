@@ -1,18 +1,13 @@
-@import 'src/styles/colors.css';
-@import 'src/styles/variables.css';
-
 .topic {
     padding: min(2vw, 20px) min(3vw, 30px);
     margin-right: 10px;
     margin-bottom: 10px;
     border-radius: 15px;
     color: var(--white);
-}
-.topic_active {
-    background: var(--light-blue);
-}
-.topic_unactive {
     background: var(--dark-blue);
+}
+.topic__active {
+    background: var(--dark-yellow);
 }
 .topic__description {
     font-family: var(--font-family-second);

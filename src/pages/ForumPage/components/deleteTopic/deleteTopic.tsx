@@ -8,31 +8,51 @@ import { useAuth } from 'src/hooks/auth.hook';
 import { Props } from './types';
 import styles from './deleteTopic.scss';
 
-export const DeleteTopicWindow: Props = ({ close, _id }): JSX.Element => {
+export const DeleteTopicWindow: Props = ({ close }): JSX.Element => {
     const { token } = useAuth();
+    const { topic, comment } = useSelector(
+        (messageState: AllStateTypes) => messageState.message,
+    );
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
     const { request, loading } = useHttp();
+
     const deleteTopic = useCallback(async () => {
         await request(
             '/api/topic/delete',
             'POST',
-            { _id },
+            { _id: topic },
             {
                 Authorization: `Bearer ${token}`,
             },
         );
         close();
-    }, [_id, close, request, token]);
+    }, [topic, close, request, token]);
+
+    const deleteComment = useCallback(async () => {
+        await request(
+            '/api/comment/delete',
+            'POST',
+            { _id: comment },
+            {
+                Authorization: `Bearer ${token}`,
+            },
+        );
+        close();
+    }, [comment, close, request, token]);
 
     return (
         <ModalWindow>
             <h2 className={styles['delete-topic__label']}>
-                {dataStore.labels.delete}
+                {comment
+                    ? dataStore.labels.deleteComment
+                    : dataStore.labels.deleteTopic}
             </h2>
             <p className={styles['delete-topic__description']}>
-                {dataStore.text.delete}
+                {comment
+                    ? dataStore.text.deleteComment
+                    : dataStore.text.deleteTopic}
             </p>
             <div className={styles['delete-topic__buttons']}>
                 <Button
@@ -40,7 +60,7 @@ export const DeleteTopicWindow: Props = ({ close, _id }): JSX.Element => {
                     color="red"
                     title={dataStore.buttons.delete}
                     disabled={loading}
-                    onClick={deleteTopic}
+                    onClick={() => (comment ? deleteComment() : deleteTopic())}
                 />
                 <Button
                     skin="high"

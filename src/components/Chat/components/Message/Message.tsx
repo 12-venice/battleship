@@ -40,15 +40,13 @@ export const Message = (message: messageType): JSX.Element => {
             )}
         >
             {text.match(/^\/image\//gm) ? (
-                <img className={styles.message__image} src={text} alt="image" />
+                <img className={styles.message__image} src={text} alt="img" />
             ) : (
                 <div className={styles.message__text}>{text}</div>
             )}
             <div className={styles.message__date}>
                 {parseDate}
-                {deliver && myMsg && (
-                    <i className="material-icons tiny">check</i>
-                )}
+                {deliver && myMsg && 'Прочитано'}
             </div>
         </div>
     );

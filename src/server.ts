@@ -9,7 +9,6 @@ import http from 'http';
 import path from 'path';
 import { Server, Socket } from 'socket.io';
 import authRoutes from 'socketRoutes/auth.routes';
-import messageRoutes from 'socketRoutes/message.routes';
 import inviteRoutes from 'socketRoutes/invite.routes';
 import mongoose from 'mongoose';
 import webpack from 'webpack';
@@ -72,7 +71,6 @@ io.use((socket: ISocket, next: (err?: Error) => void) => {
 
 io.on('connection', (socket: Socket) => {
     authRoutes(socket);
-    messageRoutes(socket);
     inviteRoutes(socket);
 });
 

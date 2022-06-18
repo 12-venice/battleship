@@ -52,6 +52,9 @@
     margin-right: 10px;
     text-align: justify;
 }
+.comment__image {
+    max-width: 66%;
+}
 
 @media screen and (max-width: 800px) {
     .comment__author-name {

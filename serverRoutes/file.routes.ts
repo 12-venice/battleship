@@ -15,6 +15,7 @@ import { io } from 'src/server';
 import User from '../serverModels/user';
 import Message from '../serverModels/message';
 import Room from '../serverModels/room';
+import Comment from '../serverModels/comment';
 
 const storage = multer.diskStorage({
     destination(req, file, callback) {
@@ -32,16 +33,18 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage,
-    fileFilter: (req, file, cb) => {
+    fileFilter: (req, file, callback) => {
         if (
             file.mimetype === 'image/png' ||
             file.mimetype === 'image/jpg' ||
             file.mimetype === 'image/jpeg'
         ) {
-            cb(null, true);
+            callback(null, true);
         } else {
-            cb(null, false);
-            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+            callback(null, false);
+            return callback(
+                new Error('Only .png, .jpg and .jpeg format allowed!'),
+            );
         }
     },
 }).fields([
@@ -83,7 +86,7 @@ router.post('/avatar', authMiddleware, (req, res) => {
     }
 });
 
-router.post('/image/:id', authMiddleware, (req, res) => {
+router.post('/message/:id', authMiddleware, (req, res) => {
     try {
         upload(req, res, async (err) => {
             if (err) {
@@ -91,14 +94,12 @@ router.post('/image/:id', authMiddleware, (req, res) => {
                     message: 'Произошла ошибка при загрузке файла',
                 });
             }
-            const user = await User.findOne({ _id: req.user.userId });
             const newMessage = new Message({
                 text: `/image/${req.files?.image[0].filename}`,
-                user,
+                user: req.user.userId,
                 room: req.params.id,
             });
-
-            await newMessage.save((e, obj: object) => {
+            await newMessage.save((e: Error, obj: object) => {
                 if (e) {
                     return res.status(500).json({
                         message: 'Что-то пошло не так, попробуйте еще раз',
@@ -111,6 +112,62 @@ router.post('/image/:id', authMiddleware, (req, res) => {
                 { $push: { messages: newMessage } },
             );
             return res.status(200).json({
+                message: 'Файл успешно загружен',
+            });
+        });
+    } catch (e) {
+        return res.status(500).json({
+            message: 'Что-то пошло не так, попробуйте еще раз',
+        });
+    }
+});
+
+router.post('/comment/:id', authMiddleware, (req, res) => {
+    try {
+        upload(req, res, async (err) => {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Произошла ошибка при загрузке файла',
+                });
+            }
+            const newComment = new Comment({
+                topic: req.params.id,
+                message: `/image/${req.files?.image[0].filename}`,
+                user: req.user.userId,
+            });
+            await newComment.save();
+            res.status(200).json({
+                message: 'Файл успешно загружен',
+            });
+        });
+    } catch (e) {
+        return res.status(500).json({
+            message: 'Что-то пошло не так, попробуйте еще раз',
+        });
+    }
+});
+
+router.post('/subcomment/:id', authMiddleware, (req, res) => {
+    try {
+        upload(req, res, async (err) => {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Произошла ошибка при загрузке файла',
+                });
+            }
+            const { topic } = await Comment.findOne({ _id: req.params.id });
+            const newComment = new Comment({
+                topic,
+                comment: req.params.id,
+                message: `/image/${req.files?.image[0].filename}`,
+                user: req.user.userId,
+            });
+            await newComment.save();
+            await Comment.updateOne(
+                { _id: req.params.id },
+                { $push: { subcomments: newComment } },
+            );
+            res.status(200).json({
                 message: 'Файл успешно загружен',
             });
         });

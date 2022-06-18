@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-param-reassign */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useMessage } from './message.hook';
 
 export const useHttp = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const message = useMessage();
 
     const request = useCallback(
         async (url, method = 'GET', body = null, headers = {}) => {
@@ -32,6 +34,11 @@ export const useHttp = () => {
         [],
     );
     const clearError = useCallback(() => setError(null), []);
+
+    useEffect(() => {
+        message(error);
+        clearError();
+    }, [error, message, clearError]);
 
     return { loading, request, error, clearError };
 };

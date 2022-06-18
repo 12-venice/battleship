@@ -16,6 +16,7 @@ import { Layout } from '../../components/Layout';
 import styles from './ChatsPage.scss';
 import { Cell } from './components/cell/Cell';
 import { Search } from './components/Search';
+import { messageService } from 'src/store/services/messageService';
 
 export const ChatsPage = (): JSX.Element => {
     const { room } = useParams() as { room: string };
@@ -90,6 +91,7 @@ export const ChatsPage = (): JSX.Element => {
                                             key={element._id}
                                             element={element}
                                             selectUser={(userData: User) => {
+                                                messageService.selectMessage();
                                                 setActiveChat(userData);
                                                 navigate(
                                                     `${PageLinks.chats}/${userData.room}`,
@@ -121,7 +123,8 @@ export const ChatsPage = (): JSX.Element => {
                                     <Icon type="plus" />
                                 </Button>
                                 <InputMessage
-                                    {...{ videoCall, setVideoCall }}
+                                    videoCall={videoCall}
+                                    setVideoCall={() => setVideoCall()}
                                 />
                             </div>
                         )}

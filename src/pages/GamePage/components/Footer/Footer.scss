@@ -1,23 +1,7 @@
-.footer__icon {
-    height: min(1.8vw, 60px);
-}
 .game__footer {
     width: 100%;
     display: flex;
     justify-content: space-between;
     background: var(--light-dark-blue);
     border-radius: 14px;
-}
-
-
-@media screen and (max-width: 800px) {
-    .footer__icon {
-        height: 30px;
-    }
-}
-
-@media screen and (max-width: 479px) {
-    .footer__icon {
-        height: 20px;
-    }
 }

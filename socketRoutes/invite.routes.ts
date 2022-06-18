@@ -37,7 +37,7 @@ export default async (socket: ISocket) => {
             const invitedUserSocket = getUsers()!.find(
                 (userSocket) => userSocket.id === invitedUserId,
             )!.socket;
-            invitedUserSocket.join(room._id.toString());
+            invitedUserSocket?.join(room._id.toString());
             socket.join(room._id.toString());
             socket.to(room._id.toString()).emit('invite:recive', user);
         } else {

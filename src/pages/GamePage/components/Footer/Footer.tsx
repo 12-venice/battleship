@@ -73,7 +73,10 @@ export const Footer = ({
             </Button>
             {startGame ? (
                 room !== 'bot' && (
-                    <InputMessage {...{ videoCall, setVideoCall }} />
+                    <InputMessage
+                        videoCall={videoCall}
+                        setVideoCall={() => setVideoCall()}
+                    />
                 )
             ) : (
                 <>

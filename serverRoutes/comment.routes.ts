@@ -7,45 +7,25 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Router } from 'express';
 import authMiddleware from 'src/server/auth.middleware';
-import User from '../serverModels/user';
-import Topic from '../serverModels/topic';
 import Comment from '../serverModels/comment';
 
 const router = Router();
 
 router.post('/create', authMiddleware, async (req, res) => {
     try {
-        const { topic, comment } = req.body;
-        const user = await User.findOne({ _id: req.user.userId });
-        let findTopicOrComment;
-        let newComment;
-        if (topic) {
-            findTopicOrComment = await Topic.findOne({ topic });
-            newComment = new Comment({
-                ...{ user },
-                ...{ topic: findTopicOrComment },
-                ...req.body,
-            });
-            await newComment.save();
-            res.status(200).json({ message: 'OK' });
-        }
+        const { comment } = req.body;
+        const newComment = new Comment({
+            ...req.body,
+            ...{ user: req.user.userId },
+        });
+        await newComment.save();
         if (comment) {
-            findTopicOrComment = await Comment.findOne({ comment });
-            newComment = new Comment({
-                ...{ user },
-                ...{ comment: findTopicOrComment },
-                ...req.body,
-            });
-            await newComment.save();
             await Comment.updateOne(
                 { _id: comment },
                 { $push: { subcomments: newComment } },
             );
-            res.status(200).json({ message: 'OK' });
         }
-        res.status(500).json({
-            message: 'Неоходимо выбрать комментарий или топик',
-        });
+        res.status(200).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -55,14 +35,19 @@ router.post('/create', authMiddleware, async (req, res) => {
 
 router.post('/read', async (req, res) => {
     try {
-        const { type, _id } = req.body;
+        const { comment, topic } = req.body;
         let comments;
-        if (type && type === 'comment') {
-            comments = await Comment.find({ comment: _id }).populate('user');
+        if (comment) {
+            comments = await Comment.find({ comment }).populate('user');
+            res.status(200).json(comments);
+        } else if (topic) {
+            comments = await Comment.find({ topic }).populate('user');
+            res.status(200).json(comments);
         } else {
-            comments = await Comment.find({ topic: _id }).populate('user');
+            res.status(500).json({
+                message: 'Неоходимо выбрать комментарий или топик',
+            });
         }
-        res.status(200).json(comments);
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -93,6 +78,7 @@ router.post('/delete', authMiddleware, async (req, res) => {
         const { user } = await Comment.findOne({ _id });
         if (user._id.toJSON() === req.user.userId) {
             await Comment.deleteOne({ _id });
+            await Comment.deleteMany({ comment: _id });
             res.status(200).json({ message: 'OK' });
         } else {
             res.status(400).json({ message: 'Denied' });
