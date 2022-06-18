@@ -15,16 +15,37 @@ const router = Router();
 
 router.post('/create', authMiddleware, async (req, res) => {
     try {
-        const { topic } = req.body;
+        const { topic, comment } = req.body;
         const user = await User.findOne({ _id: req.user.userId });
-        const topicFind = await Topic.findOne({ topic });
-        const comment = new Comment({
-            ...{ user },
-            ...{ topic: topicFind },
-            ...req.body,
+        let findTopicOrComment;
+        let newComment;
+        if (topic) {
+            findTopicOrComment = await Topic.findOne({ topic });
+            newComment = new Comment({
+                ...{ user },
+                ...{ topic: findTopicOrComment },
+                ...req.body,
+            });
+            await newComment.save();
+            res.status(200).json({ message: 'OK' });
+        }
+        if (comment) {
+            findTopicOrComment = await Comment.findOne({ comment });
+            newComment = new Comment({
+                ...{ user },
+                ...{ comment: findTopicOrComment },
+                ...req.body,
+            });
+            await newComment.save();
+            await Comment.updateOne(
+                { _id: comment },
+                { $push: { subcomments: newComment } },
+            );
+            res.status(200).json({ message: 'OK' });
+        }
+        res.status(500).json({
+            message: 'Неоходимо выбрать комментарий или топик',
         });
-        await comment.save();
-        res.status(200).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -35,7 +56,9 @@ router.post('/create', authMiddleware, async (req, res) => {
 router.post('/read', async (req, res) => {
     try {
         const { _id } = req.body;
-        const comments = await Comment.find({ topic: _id }).populate('user');
+        const comments = await Comment.find({ topic: _id })
+            .populate('user')
+            .populate('subcomments');
         res.status(200).json(comments);
     } catch (e) {
         res.status(500).json({
