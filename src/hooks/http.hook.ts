@@ -10,7 +10,7 @@ export const useHttp = () => {
         async (url, method = 'GET', body = null, headers = {}) => {
             setLoading(true);
             try {
-                if (body) {
+                if (body && headers['Content-Disposition'] !== 'form-data') {
                     body = JSON.stringify(body);
                     headers['Content-Type'] = 'application/json';
                 }

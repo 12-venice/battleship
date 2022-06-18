@@ -9,7 +9,7 @@ export const Avatar = (
     onClick?: MouseEventHandler<HTMLImageElement> | undefined,
 ): JSX.Element => {
     if (user?.avatar) {
-        const imageUrl = `https://ya-praktikum.tech/api/v2/resources${user.avatar}`;
+        const imageUrl = user.avatar;
         return (
             <img
                 aria-hidden

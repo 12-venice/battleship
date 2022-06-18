@@ -8,6 +8,7 @@ import { PageLinks } from 'src/components/utils/Routes/types';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
+import { useAuth } from 'src/hooks/auth.hook';
 import {
     File, FileInput, Props, Url,
 } from './types';
@@ -22,6 +23,7 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
     const [file, setFile] = useState<File>();
     const [preview, setPreview] = useState<Url>('');
     const [defAvatar, setDefAvatar] = useState<Url>('');
+    const { token } = useAuth();
     const { request, loading } = useHttp();
     const navigate = useNavigate();
     const updateAvatar = async () => {
@@ -29,9 +31,14 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
             const formData = new FormData();
             formData.append('avatar', file ?? '');
             await request(
-                '/user/profile/avatar',
-                'PUT',
-                null,
+                '/api/upload/avatar',
+                'POST',
+                formData,
+                {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Disposition': 'form-data',
+
+                },
             );
             close();
             navigate(PageLinks.profile);
