@@ -10,19 +10,18 @@ import { useAuth } from 'src/hooks/auth.hook';
 import { User } from 'src/store/reducers/user';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { InviteLoader } from 'src/components/InviteLoader';
+import { InputMessage } from 'src/components/InputMessage';
+import { Icon } from 'src/components/Icon/Icon';
 import { Layout } from '../../components/Layout';
-import plusIcon from '../../../images/plus.svg';
-import searchIcon from '../../../images/search.svg';
 import styles from './ChatsPage.scss';
 import { Cell } from './components/cell/Cell';
-import { InputMessage } from '../GamePage/components/Footer/components/InputMessage';
 import { Search } from './components/Search';
 
 export const ChatsPage = (): JSX.Element => {
     const { room } = useParams() as { room: string };
     const [videoCall, setVideoCall] = useState(false);
     const [search, setSearch] = useState(false);
-    const [activeChat, setActiveChat] = useState('');
+    const [activeChat, setActiveChat] = useState({} as User);
     const [iLoader, setILoader] = useState(false);
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const { token } = useAuth();
@@ -45,14 +44,14 @@ export const ChatsPage = (): JSX.Element => {
             },
         );
         setRooms(data);
-    }, [token]);
+    }, [request, token]);
 
     useEffect(() => {
         if (token) {
             getRooms();
         }
         return () => setRooms([]);
-    }, [token]);
+    }, [getRooms, token]);
 
     return (
         <Layout>
@@ -65,11 +64,7 @@ export const ChatsPage = (): JSX.Element => {
                             disabled={!token}
                             onClick={() => setSearch(!search)}
                         >
-                            <img
-                                className={styles.icon}
-                                src={searchIcon}
-                                alt="Search"
-                            />
+                            <Icon type="search" />
                         </Button>
                     </div>
                     <div className={styles.chats__label}>
@@ -94,7 +89,7 @@ export const ChatsPage = (): JSX.Element => {
                                         <Cell
                                             key={element._id}
                                             element={element}
-                                            selectUser={(userData) => {
+                                            selectUser={(userData: User) => {
                                                 setActiveChat(userData);
                                                 navigate(
                                                     `${PageLinks.chats}/${userData.room}`,
@@ -123,11 +118,7 @@ export const ChatsPage = (): JSX.Element => {
                                         inviteUser(activeChat._id);
                                     }}
                                 >
-                                    <img
-                                        className={styles.icon}
-                                        src={plusIcon}
-                                        alt="Invite"
-                                    />
+                                    <Icon type="plus" />
                                 </Button>
                                 <InputMessage
                                     {...{ videoCall, setVideoCall }}

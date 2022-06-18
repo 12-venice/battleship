@@ -9,10 +9,9 @@ import { DateParser } from 'src/components/utils/DateParse/DateParser';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
 import { useAuth } from 'src/hooks/auth.hook';
+import { Icon } from 'src/components/Icon/Icon';
 import { Layout } from '../../components/Layout';
 import { Topic } from './components/topic';
-import sendIcon from '../../../images/send.svg';
-import plusIcon from '../../../images/plus.svg';
 import { AddTopicWindow } from './components/addTopic';
 import styles from './ForumPage.scss';
 import { DeleteTopicWindow } from './components/deleteTopic';
@@ -99,11 +98,7 @@ export const ForumPage = (): JSX.Element => {
                             disabled={!token}
                             onClick={() => setWindowCreate(true)}
                         >
-                            <img
-                                className={styles.icon}
-                                src={plusIcon}
-                                alt="Add"
-                            />
+                            <Icon type="plus" />
                         </Button>
                         <Button
                             skin="quad"
@@ -138,11 +133,7 @@ export const ForumPage = (): JSX.Element => {
                         disabled={!topicId || !token}
                         onClick={createComment}
                     >
-                        <img
-                            className={styles.icon}
-                            src={sendIcon}
-                            alt="Send"
-                        />
+                        <Icon type="plus" />
                     </Button>
                 </div>
             </div>

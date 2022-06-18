@@ -9,7 +9,7 @@ import { Information } from 'src/components/Information';
 import { Preloader } from 'src/components/Preloader';
 import styles from './Header.scss';
 import { PlayerName } from './components/PlayerName';
-import { getBot } from '../Chat/config';
+import { getBot } from '../../../../components/Chat/config';
 import { Timer } from './helpers/easyTimer';
 import { CloseGameDialog } from '../CloseGameDialog';
 

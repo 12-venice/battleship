@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import cn from 'classnames';
-import { FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { Button } from 'src/components/Button';
 import { useParams } from 'react-router-dom';
 import { socket } from 'src/components/utils/Socket/Socket';
 import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
-import styles from './InputMessage.scss';
-import sendIcon from '../../../../../../../images/send.svg';
 import { File, FileInput } from 'src/pages/UpdateProfilePage/components/types';
-// import videoIcon from '../../../../../../../images/video.svg';
+import styles from './InputMessage.scss';
+import { Icon } from '../Icon/Icon';
 
 export const InputMessage = ({
     videoCall,
@@ -56,12 +55,13 @@ export const InputMessage = ({
             onSubmit={(e) => sendMessageHandler(e)}
         >
             <Button
-                title="+"
                 skin="quad"
                 color="blue"
                 onClick={() => fileInput.current && fileInput.current.click()}
                 disabled={loading}
-            />
+            >
+                <Icon type="plus" />
+            </Button>
             <input
                 className={cn(styles.inputMessage__input, 'browser-default')}
                 type="text"
@@ -71,11 +71,7 @@ export const InputMessage = ({
                 onChange={(e) => setMessage(e.target.value)}
             />
             <Button skin="quad" type="submit">
-                <img
-                    className={styles.footer__icon}
-                    src={sendIcon}
-                    alt="Send"
-                />
+                <Icon type="send" />
             </Button>
             <input
                 accept=".png, .jpg, .jpeg"
