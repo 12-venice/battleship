@@ -1,16 +1,10 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable indent */
 /* eslint-disable no-param-reassign */
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable @typescript-eslint/ban-types */
 import cn from 'classnames';
-import {
-    ChangeEvent,
-    FormEvent,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import { ChangeEvent, FormEvent, useCallback, useRef, useState } from 'react';
 import { Button } from 'src/components/Button';
 import { useParams } from 'react-router-dom';
 import { useAuth } from 'src/hooks/auth.hook';
@@ -21,10 +15,13 @@ import { AllStateTypes } from 'src/store/reducers';
 import styles from './InputMessage.scss';
 import { Icon } from '../Icon/Icon';
 import { InputMessageType } from './types';
+import { Emoji } from '../Emoji';
 
 export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
     const { room } = useParams() as { room: string };
     const [message, setMessage] = useState('');
+    const [openEmoji, setOpenEmoji] = useState(false);
+    const [caretPosition, setCaretPosition] = useState(0);
     const { type, comment, topic } = useSelector(
         (messageState: AllStateTypes) => messageState.message,
     );
@@ -44,6 +41,7 @@ export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
                 return null;
         }
     };
+
     const uploadImage = async (file: File) => {
         try {
             const formData = new FormData();
@@ -103,17 +101,27 @@ export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
         }
     };
 
+    const onEmojiClick = (emoji: string) => {
+        const newString =
+            message.slice(0, caretPosition) +
+            emoji +
+            message.slice(caretPosition);
+        setMessage(newString as unknown as string);
+        setOpenEmoji(!openEmoji);
+    };
+
+    const inputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setCaretPosition(e.target.selectionStart as number);
+        setMessage(e.target.value);
+    };
+
     return (
         <form
             className={styles.inputMessage__block}
             onSubmit={(e) => sendMessageHandler(e)}
         >
             {setVideoCall && (
-                <Button
-                    skin="quad"
-                    color="orange"
-                    onClick={() => setVideoCall()}
-                >
+                <Button skin="quad" color="red" onClick={() => setVideoCall()}>
                     <Icon type="video" />
                 </Button>
             )}
@@ -121,7 +129,7 @@ export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
                 <>
                     <Button
                         skin="quad"
-                        color="blue"
+                        color="yellow"
                         onClick={() =>
                             fileInput.current && fileInput.current.click()
                         }
@@ -129,6 +137,12 @@ export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
                     >
                         <Icon type="plus" />
                     </Button>
+                    <Button
+                        title={'\u{1F642}'}
+                        skin="quad"
+                        color="blue"
+                        onClick={() => setOpenEmoji(!openEmoji)}
+                    />
                     <input
                         className={cn(
                             styles.inputMessage__input,
@@ -138,7 +152,10 @@ export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
                         placeholder="Message"
                         name="MessageInput"
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}
+                        onChange={(e) => inputHandler(e)}
+                        onClick={(e) =>
+                            setCaretPosition(e.target.selectionStart)
+                        }
                     />
                     <Button
                         skin="quad"
@@ -155,6 +172,7 @@ export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
                         type="file"
                         ref={fileInput}
                     />
+                    {openEmoji && <Emoji callback={onEmojiClick} />}
                 </>
             )}
         </form>
