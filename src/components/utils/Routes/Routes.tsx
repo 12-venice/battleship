@@ -12,6 +12,8 @@ import { UpdateProfilePage } from 'src/pages/UpdateProfilePage';
 import { GamePage } from 'src/pages/GamePage';
 import { AllStateTypes } from 'src/store/reducers';
 import { FinderPage } from 'src/pages/FinderPage';
+import { ChatsPage } from 'src/pages/ChatsPage';
+import { Chat } from 'src/pages/GamePage/components/Chat';
 import { PageLinks, Props } from './types';
 
 const ProtectedRoute: Props = ({ childrens }) => {
@@ -49,6 +51,12 @@ export const useRoutes = (): JSX.Element => (
             path={PageLinks.finder}
             element={<ProtectedRoute childrens={<FinderPage />} />}
         />
+        <Route
+            path={PageLinks.chats}
+            element={<ProtectedRoute childrens={<ChatsPage />} />}
+        >
+            <Route path=":room" element={<Chat videoCall={false} />} />
+        </Route>
         <Route path="*" element={<NotFoundPage />} />
     </Routes>
 );
