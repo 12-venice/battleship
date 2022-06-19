@@ -1,4 +1,5 @@
-interface ServerToClientEvents {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export interface ServerToClientEvents {
     'users:add': (data: string) => void;
     'users:remove': (data: string) => void;
     'users:set': (data: string[]) => void;
@@ -10,10 +11,10 @@ interface ServerToClientEvents {
     'move:sent': (data: any) => void;
     'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;
-    'messages:recive': (data: any) => void;
+    'messages:recived': (data: any) => void;
 }
 
-interface ClientToServerEvents {
+export interface ClientToServerEvents {
     'users:add': (data: string) => void;
     'users:remove': (data: string) => void;
     'users:set': (data: string[]) => void;
@@ -25,5 +26,5 @@ interface ClientToServerEvents {
     'move:sent': (data: any) => void;
     'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;
-    'messages:recive': (data: any) => void;
+    'messages:recived': (data: any) => void;
 }

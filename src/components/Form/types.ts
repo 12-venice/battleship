@@ -2,7 +2,7 @@
 export type fieldsProps = {
     type?: string;
     title?: string;
-    defaultValue?: string | number;
+    defaultValue?: string | number | string[];
     name: string;
     className?: string;
     validateType?: string;

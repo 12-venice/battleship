@@ -1,17 +1,17 @@
 import cn from 'classnames';
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { useHttp } from 'src/hooks/http.hook';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
-import { useAuth } from 'src/hooks/auth.hook';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { Props } from './types';
 import styles from './addTopic.scss';
 
 export const AddTopicWindow: Props = ({ close }): JSX.Element => {
     const { request, loading } = useHttp();
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );

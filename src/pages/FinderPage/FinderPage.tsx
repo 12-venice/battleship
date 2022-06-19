@@ -1,15 +1,15 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-unused-expressions */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
 import { Input } from 'src/components/Input';
 import { Layout } from 'src/components/Layout';
 import { Preloader } from 'src/components/Preloader';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { socket } from 'src/components/utils/Socket/Socket';
-import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
 import { useMessage } from 'src/hooks/message.hook';
 import { AllStateTypes } from 'src/store/reducers';
@@ -19,7 +19,7 @@ import styles from './FinderPage.scss';
 
 export const FinderPage = () => {
     const message = useMessage();
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
@@ -113,7 +113,11 @@ export const FinderPage = () => {
                         rooms?.map(
                             (element: User) =>
                                 user?._id !== element._id && (
-                                    <Cell element={element} str={str} />
+                                    <Cell
+                                        key={element._id.toString()}
+                                        element={element}
+                                        str={str}
+                                    />
                                 ),
                         )
                     ) : (

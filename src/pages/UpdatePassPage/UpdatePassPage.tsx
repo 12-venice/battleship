@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'src/components/Button';
 import { useHttp } from 'src/hooks/http.hook';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { Preloader } from 'src/components/Preloader';
 import { Form } from 'src/components/Form';
 import { PageLinks } from 'src/components/utils/Routes/types';
@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
 import { useMessage } from 'src/hooks/message.hook';
-import { useAuth } from 'src/hooks/auth.hook';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { Layout } from '../../components/Layout';
 import styles from '../ProfilePage/ProfilePage.scss';
 import { inputs } from './config';
@@ -17,7 +17,7 @@ import { Avatar } from '../ProfilePage/components/Avatar';
 
 export const UpdatePassPage = (): JSX.Element => {
     const message = useMessage();
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,

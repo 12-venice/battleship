@@ -3,13 +3,12 @@
 import cn from 'classnames';
 import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { PageLinks } from 'src/components/utils/Routes/types';
-import { useAuth } from 'src/hooks/auth.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
-import { opponentService } from 'src/store/services/opponentService';
 import { Icon } from 'src/components/Icon/Icon';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
 import bigShip from '../../../images/4-ship.png';
@@ -22,7 +21,7 @@ export const HomePage = (): JSX.Element => {
     const data = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const { logout } = useAuth();
+    const { logout } = useContext(AuthContext);
     const [typeOfGame, setTypeOfGame] = useState(true);
     const [info, setInfo] = useState(false);
     const getInfo = () => setInfo(!info);
@@ -163,7 +162,6 @@ export const HomePage = (): JSX.Element => {
                                         )}
                                         onClick={() => {
                                             setTypeOfGame(!typeOfGame);
-                                            opponentService.setOpponent(null);
                                         }}
                                     >
                                         {data.labels.classic}
@@ -177,9 +175,6 @@ export const HomePage = (): JSX.Element => {
                                         )}
                                         onClick={() => {
                                             setTypeOfGame(!typeOfGame);
-                                            opponentService.setOpponent({
-                                                display_name: 'test',
-                                            });
                                         }}
                                     >
                                         {data.labels.online}

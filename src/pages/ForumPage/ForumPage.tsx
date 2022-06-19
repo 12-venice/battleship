@@ -2,13 +2,13 @@ import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Preloader } from 'src/components/Preloader';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
-import { useAuth } from 'src/hooks/auth.hook';
 import { Icon } from 'src/components/Icon/Icon';
 import { InputMessage } from 'src/components/InputMessage';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { Layout } from '../../components/Layout';
 import { Topic } from './components/topic';
 import { AddTopicWindow } from './components/addTopic';
@@ -18,12 +18,10 @@ import { EditTopicWindow } from './components/editTopic';
 import { TopicProps } from './components/topic/types';
 
 export const ForumPage = (): JSX.Element => {
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const [topicTheme, setTopicTheme] = useState('');
-    const [topicDescription, setTopicDescription] = useState('');
     const [openCreateWindow, setWindowCreate] = useState(false);
     const [openDeleteWindow, setWindowDelete] = useState(false);
     const [openEditWindow, setWindowEdit] = useState(false);
@@ -46,7 +44,7 @@ export const ForumPage = (): JSX.Element => {
         if (topics.length > 0) {
             return topics.map((topic: TopicProps) => (
                 <Topic
-                    key={topic._id}
+                    key={topic._id.toString()}
                     _id={topic._id}
                     theme={topic.theme}
                     description={topic.description}

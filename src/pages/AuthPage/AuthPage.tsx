@@ -1,12 +1,11 @@
-import { useEffect } from 'react';
+import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Form } from 'src/components/Form';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { YandexLogin } from 'src/components/utils/oauth/YandexLogin';
 import { FromProps, PageLinks } from 'src/components/utils/Routes/types';
-import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
-import { useMessage } from 'src/hooks/message.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import { User } from 'src/store/reducers/user';
 import yandexId from '../../../images/yandexid.svg';
@@ -16,25 +15,18 @@ import { inputs, headers } from './config';
 
 export const AuthPage = (): JSX.Element => {
     const location = useLocation().state as FromProps;
-    const message = useMessage();
-    const { login } = useAuth();
     const from = location?.from?.pathname;
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const { request, loading, error, clearError } = useHttp();
-
+    const { request, loading } = useHttp();
+    const { login } = useContext(AuthContext);
     const auth = async (userData: User) => {
         const jwtToken = await request('/api/auth/login', 'POST', userData);
         if (jwtToken) {
-            login(jwtToken);
+            login(jwtToken, from);
         }
     };
-
-    useEffect(() => {
-        message(error);
-        clearError();
-    }, [error, message, clearError]);
 
     return (
         <Layout>

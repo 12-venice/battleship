@@ -108,7 +108,7 @@ export const Comment = (comment: CommentProps): JSX.Element => {
                 comments.length > 0 &&
                 comments.map((subcomment: CommentProps) => (
                     <Comment
-                        key={subcomment._id}
+                        key={subcomment._id.toString()}
                         _id={subcomment._id}
                         topic={subcomment.topic}
                         message={subcomment.message}

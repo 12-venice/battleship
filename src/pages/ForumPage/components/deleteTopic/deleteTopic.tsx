@@ -1,15 +1,15 @@
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { useHttp } from 'src/hooks/http.hook';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
-import { useAuth } from 'src/hooks/auth.hook';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { Props } from './types';
 import styles from './deleteTopic.scss';
 
 export const DeleteTopicWindow: Props = ({ close }): JSX.Element => {
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
     const { topic, comment } = useSelector(
         (messageState: AllStateTypes) => messageState.message,
     );

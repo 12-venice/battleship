@@ -1,22 +1,22 @@
+/* eslint-disable react/jsx-curly-newline */
 import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Preloader } from 'src/components/Preloader';
-import { socket } from 'src/components/utils/Socket/Socket';
 import { AllStateTypes } from 'src/store/reducers';
-import { useAuth } from 'src/hooks/auth.hook';
 import { User } from 'src/store/reducers/user';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { InviteLoader } from 'src/components/InviteLoader';
 import { InputMessage } from 'src/components/InputMessage';
 import { Icon } from 'src/components/Icon/Icon';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
+import { socket } from 'src/components/utils/Socket/Socket';
 import { Layout } from '../../components/Layout';
 import styles from './ChatsPage.scss';
 import { Cell } from './components/cell/Cell';
 import { Search } from './components/Search';
-import { messageService } from 'src/store/services/messageService';
 
 export const ChatsPage = (): JSX.Element => {
     const { room } = useParams() as { room: string };
@@ -25,7 +25,7 @@ export const ChatsPage = (): JSX.Element => {
     const [activeChat, setActiveChat] = useState({} as User);
     const [iLoader, setILoader] = useState(false);
     const user = useSelector((state: AllStateTypes) => state.user.item);
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
     const [rooms, setRooms] = useState([]);
     const { request, loading } = useHttp();
     const navigate = useNavigate();
@@ -88,10 +88,9 @@ export const ChatsPage = (): JSX.Element => {
                                 (element: User) =>
                                     user?._id !== element._id && (
                                         <Cell
-                                            key={element._id}
+                                            key={element._id.toString()}
                                             element={element}
                                             selectUser={(userData: User) => {
-                                                messageService.selectMessage();
                                                 setActiveChat(userData);
                                                 navigate(
                                                     `${PageLinks.chats}/${userData.room}`,
@@ -124,7 +123,9 @@ export const ChatsPage = (): JSX.Element => {
                                 </Button>
                                 <InputMessage
                                     videoCall={videoCall}
-                                    setVideoCall={() => setVideoCall()}
+                                    setVideoCall={() =>
+                                        setVideoCall(!videoCall)
+                                    }
                                 />
                             </div>
                         )}
