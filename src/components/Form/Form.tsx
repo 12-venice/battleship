@@ -33,6 +33,7 @@ export const Form = ({
 
     const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
+        event.target.reset();
         if (!checking) {
             setData(formValues);
         } else {

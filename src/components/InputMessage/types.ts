@@ -2,4 +2,5 @@
 export type InputMessageType = {
     videoCall?: boolean;
     setVideoCall?: Function;
+    callback?: Function;
 };

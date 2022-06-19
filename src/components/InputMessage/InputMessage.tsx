@@ -24,7 +24,11 @@ import { InputMessageType } from './types';
 import { Emoji } from '../Emoji';
 import { AuthContext } from '../utils/Context/AuthContext';
 
-export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
+export const InputMessage = ({
+    videoCall,
+    setVideoCall,
+    callback,
+}: InputMessageType) => {
     const { room } = useParams() as { room: string };
     const [message, setMessage] = useState('');
     const [openEmoji, setOpenEmoji] = useState(false);
@@ -105,6 +109,9 @@ export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
                 createComment();
             }
             setMessage('');
+            if (callback) {
+                callback(comment ?? topic);
+            }
         }
     };
 

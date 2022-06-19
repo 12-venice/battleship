@@ -95,7 +95,7 @@ export const ForumPage = (): JSX.Element => {
                     </div>
                 </div>
                 <div className={styles.forum__footer}>
-                    <InputMessage />
+                    <InputMessage callback={getTopics} />
                 </div>
             </div>
             {openCreateWindow && (
