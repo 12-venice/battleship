@@ -31,7 +31,7 @@ router.post('/create', authMiddleware, async (req, res) => {
 
         await newMessage.save((err: string, obj: object) => {
             if (err) {
-                console.log(err);
+                res.status(500);
             }
             io.in(room).emit('messages:recive', obj);
         });
