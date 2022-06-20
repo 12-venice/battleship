@@ -10,10 +10,12 @@ import path from 'path';
 import { Server, Socket } from 'socket.io';
 import authRoutes from 'socketRoutes/auth.routes';
 import inviteRoutes from 'socketRoutes/invite.routes';
+import videoRoutes from 'socketRoutes/video.routes';
 import mongoose from 'mongoose';
 import webpack from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
+import { ExpressPeerServer } from 'peer';
 import { DB, IS_DEV, IS_DEV_SERVER, PORT, SECRET_KEY } from '../webpack/env';
 import { renderResponse } from './server/renderResponse';
 import authRouter from '../serverRoutes/auth.routes';
@@ -25,6 +27,10 @@ import roomRouter from '../serverRoutes/room.routes';
 import messageRouter from '../serverRoutes/message.routes';
 import webpackConfig from '../webpack/client.config';
 import { ISocket } from './server/types';
+import {
+    ClientToServerEvents,
+    ServerToClientEvents,
+} from './components/utils/Socket/types';
 
 const compiler = webpack(webpackConfig);
 
@@ -38,6 +44,9 @@ if (IS_DEV && !IS_DEV_SERVER) {
     );
     app.use(hotMiddleware(compiler));
 }
+
+const peerServer = ExpressPeerServer(httpServer);
+app.use('/peerjs', peerServer);
 export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
     httpServer,
     {
@@ -72,6 +81,7 @@ io.use((socket: ISocket, next: (err?: Error) => void) => {
 io.on('connection', (socket: Socket) => {
     authRoutes(socket);
     inviteRoutes(socket);
+    videoRoutes(socket);
 });
 
 app.use(express.json({ limit: '10mb' }));

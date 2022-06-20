@@ -12,6 +12,8 @@ export interface ServerToClientEvents {
     'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;
     'messages:recived': (data: any) => void;
+    'call:recived': (data: any) => void;
+    'call:accept': (data: any) => void;
 }
 
 export interface ClientToServerEvents {
@@ -27,4 +29,7 @@ export interface ClientToServerEvents {
     'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;
     'messages:recived': (data: any) => void;
+    'call:sent': (data: any) => void;
+    'call:recived': (data: any) => void;
+    'call:accept': (data: any) => void;
 }

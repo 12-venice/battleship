@@ -104,7 +104,7 @@ export const ChatsPage = (): JSX.Element => {
                         )}
                     </div>
                     <div className={styles['chats__main-chat']}>
-                        <Outlet />
+                        <Outlet context={videoCall} />
                         {!room ? (
                             <div className={styles['chats__main-plug']}>
                                 Select chat

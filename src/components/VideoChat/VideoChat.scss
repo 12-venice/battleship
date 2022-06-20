@@ -1,0 +1,11 @@
+.videochat__video {
+    border: 1px solid blue;
+    width: 50%;
+    height: 50%;
+}
+
+.videochat__block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}

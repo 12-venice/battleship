@@ -18,6 +18,9 @@ export const deleteUser = (socket: ISocket) => {
 
 export const getUsers = () => _users;
 
+export const getSocket = (_id: string) =>
+    _users.find((obj) => obj.id === _id!)?.socket.id;
+
 export default async (socket: ISocket) => {
     io.to(socket.id).emit(
         'users:set',

@@ -1,16 +1,18 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import { Preloader } from 'src/components/Preloader';
 import { useHttp } from 'src/hooks/http.hook';
 import { messageService } from 'src/store/services/messageService';
 import { socket } from '../utils/Socket/Socket';
+import { VideoChat } from '../VideoChat';
 import styles from './Chat.scss';
 import { Message } from './components/Message';
 import { messageType } from './components/Message/types';
 import { getBotMessage } from './config';
 
-export const Chat = ({ videoCall }: { videoCall: boolean }): JSX.Element => {
+export const Chat = (): JSX.Element => {
+    const videoCall = useOutletContext();
     const { request, loading } = useHttp();
     const { room } = useParams() as { room: string };
     const [messages, setMessages] = useState([] as messageType[]);
@@ -52,14 +54,14 @@ export const Chat = ({ videoCall }: { videoCall: boolean }): JSX.Element => {
         }
         return () => setMessages([]);
     }, [getMessages, room]);
-    if (videoCall) {
-        return <div className={styles.chat__block}>VIDEOCALL</div>;
-    }
 
+    if (loading) {
+        return <Preloader />;
+    }
     return (
         <div className={styles.chat__block}>
-            {loading ? (
-                <Preloader />
+            {videoCall ? (
+                <VideoChat />
             ) : (
                 messages.map((message: messageType) => (
                     <Message

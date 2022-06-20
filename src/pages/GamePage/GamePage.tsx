@@ -11,12 +11,11 @@ import { Placement } from 'src/gameCore/Placement';
 import { AllStateTypes } from 'src/store/reducers';
 import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
 import { MatrixCell } from 'src/gameCore/types';
-import { useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import { useHttp } from 'src/hooks/http.hook';
 import { User } from 'src/store/reducers/user';
 import { Button } from 'src/components/Button';
 import { activeFieldIds } from 'src/gameCore/Controller/types';
-import { Chat } from 'src/components/Chat';
 import { Area } from './components/Area';
 import { ShipsMenu } from './components/ShipsMenu';
 import styles from './GamePage.scss';
@@ -289,12 +288,11 @@ export const GamePage = (): JSX.Element => {
                                 />
                             </div>
                         ) : (
-                            <Chat {...{ videoCall }} />
+                            <Outlet context={videoCall} />
                         )}
                     </div>
                     <Footer
                         {...{
-                            videoCall,
                             isFull,
                             startGame,
                             placementArea,
@@ -303,7 +301,10 @@ export const GamePage = (): JSX.Element => {
                             setPlayerSquadron,
                             setGameStep,
                             setIsFull,
-                            setVideoCall,
+                            videoCall,
+                            setVideoCall: () => {
+                                setVideoCall(!videoCall)
+                            },
                         }}
                     />
                     {gameOver && (

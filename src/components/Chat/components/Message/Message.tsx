@@ -15,6 +15,7 @@ export const Message = (message: messageType): JSX.Element => {
     const [deliver, setDeliver] = useState(delivered);
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
     const myMsg = user._id === thisUser?._id;
+    console.log(user._id, thisUser?._id);
 
     moment.locale('ru');
     const parseDate = moment(createdAt).fromNow();
