@@ -1,17 +1,14 @@
-import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
+import { MouseEventHandler } from 'react';
+import { User } from 'src/store/reducers/user';
 
 export type TopicProps = {
-    user: { display_name: string };
+    user: User;
     createdAt: string;
     theme: string;
-    description?: string;
+    description: string;
     _id: string;
-    isActiveTopic: string;
-    setTopicId: Dispatch<SetStateAction<string>>;
-    deleteFunc: (_id: string) => void;
-    editFunc: (_id: string, theme: string, description: string) => void;
+    deleteFunc: () => void;
+    editFunc: () => void;
 };
 
 export type handleClickType = MouseEventHandler<HTMLDivElement>;
-
-export type Props = FC<TopicProps>;

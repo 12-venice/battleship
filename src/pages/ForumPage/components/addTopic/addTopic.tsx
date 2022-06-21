@@ -27,6 +27,7 @@ export const AddTopicWindow: Props = ({ close }): JSX.Element => {
         });
         close();
     }, [close, description, request, theme, token]);
+
     return (
         <ModalWindow>
             <h2 className={styles['add-topic__label']}>

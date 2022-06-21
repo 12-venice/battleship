@@ -9,7 +9,6 @@ import http from 'http';
 import path from 'path';
 import { Server, Socket } from 'socket.io';
 import authRoutes from 'socketRoutes/auth.routes';
-import messageRoutes from 'socketRoutes/message.routes';
 import inviteRoutes from 'socketRoutes/invite.routes';
 import mongoose from 'mongoose';
 import webpack from 'webpack';
@@ -18,6 +17,7 @@ import hotMiddleware from 'webpack-hot-middleware';
 import { DB, IS_DEV, IS_DEV_SERVER, PORT, SECRET_KEY } from '../webpack/env';
 import { renderResponse } from './server/renderResponse';
 import authRouter from '../serverRoutes/auth.routes';
+import fileRouter from '../serverRoutes/file.routes';
 import userRouter from '../serverRoutes/user.routes';
 import topicRouter from '../serverRoutes/topic.routes';
 import commentRouter from '../serverRoutes/comment.routes';
@@ -31,7 +31,6 @@ import { TimersStore } from './server/timersStore';
 const compiler = webpack(webpackConfig);
 
 const app = express();
-
 const httpServer = http.createServer(app);
 if (IS_DEV && !IS_DEV_SERVER) {
     app.use(
@@ -76,7 +75,6 @@ io.use((socket: ISocket, next: (err?: Error) => void) => {
 
 io.on('connection', (socket: Socket) => {
     authRoutes(socket);
-    messageRoutes(socket);
     inviteRoutes(socket);
 });
 
@@ -90,6 +88,7 @@ app.use('/api/comment', commentRouter);
 app.use('/api/room', roomRouter);
 app.use('/api/message', messageRouter);
 app.use('/api/game', gameRouter);
+app.use('/api/upload', fileRouter);
 
 app.use(express.static(path.resolve(__dirname, '../dist')));
 app.get('/*', renderResponse);

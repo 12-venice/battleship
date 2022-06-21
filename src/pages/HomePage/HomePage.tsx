@@ -9,13 +9,9 @@ import { useAuth } from 'src/hooks/auth.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
 import { opponentService } from 'src/store/services/opponentService';
+import { Icon } from 'src/components/Icon/Icon';
 import menuLogoWithShips from '../../../images/menuLogoWithShips.svg';
 import menuLogoWithPirates from '../../../images/menuLogoWithPirates.png';
-import exitIcon from '../../../images/exit.svg';
-import profileIcon from '../../../images/profile.svg';
-import loginIcon from '../../../images/login.svg';
-import registrationIcon from '../../../images/registration.svg';
-import chatsIcon from '../../../images/chats.svg';
 import bigShip from '../../../images/4-ship.png';
 import { Layout } from '../../components/Layout';
 import styles from './HomePage.scss';
@@ -35,18 +31,10 @@ export const HomePage = (): JSX.Element => {
             return (
                 <>
                     <Button href={PageLinks.profile} skin="quad">
-                        <img
-                            className={styles.icon}
-                            src={profileIcon}
-                            alt="Profile"
-                        />
+                        <Icon type="profile" />
                     </Button>
                     <Button href={PageLinks.chats} skin="quad">
-                        <img
-                            className={styles.icon}
-                            src={chatsIcon}
-                            alt="Chats"
-                        />
+                        <Icon type="chats" />
                     </Button>
                 </>
             );
@@ -58,18 +46,10 @@ export const HomePage = (): JSX.Element => {
             return (
                 <>
                     <Button skin="quad" onClick={() => logout()} color="red">
-                        <img
-                            className={styles.icon}
-                            src={exitIcon}
-                            alt="Exit"
-                        />
+                        <Icon type="exit" />
                     </Button>
                     <Button skin="quad" href={PageLinks.profile}>
-                        <img
-                            className={styles.icon}
-                            src={profileIcon}
-                            alt="Profile"
-                        />
+                        <Icon type="profile" />
                     </Button>
                 </>
             );
@@ -77,18 +57,10 @@ export const HomePage = (): JSX.Element => {
         return (
             <>
                 <Button skin="quad" href={PageLinks.auth}>
-                    <img
-                        className={styles.icon}
-                        src={loginIcon}
-                        alt="Profile"
-                    />
+                    <Icon type="login" />
                 </Button>
                 <Button skin="quad" href={PageLinks.register} color="green">
-                    <img
-                        className={styles.icon}
-                        src={registrationIcon}
-                        alt="Profile"
-                    />
+                    <Icon type="profile" />
                 </Button>
             </>
         );
@@ -234,11 +206,7 @@ export const HomePage = (): JSX.Element => {
                 </div>
                 <div className={styles['home__select-footer']}>
                     <Button href={PageLinks.chats} skin="quad">
-                        <img
-                            className={styles.icon}
-                            src={chatsIcon}
-                            alt="Chats"
-                        />
+                        <Icon type="chats" />
                     </Button>
                     <Button
                         skin="regular"

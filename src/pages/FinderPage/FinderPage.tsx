@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-unused-expressions */
@@ -45,14 +44,14 @@ export const FinderPage = () => {
             },
         );
         setRooms(data);
-    }, [token]);
+    }, [request, token]);
 
     useEffect(() => {
         if (!str && token) {
             getRooms();
         }
         return () => setRooms([]);
-    }, [str, token]);
+    }, [getRooms, str, token]);
 
     useEffect(() => {
         const timeOut = setTimeout(() => {

@@ -41,14 +41,20 @@ const config: Configuration = {
     devtool: 'source-map',
 
     plugins: [
-        new MiniCssExtractPlugin({
-            filename: '[name].css',
-        }),
         new NodemonPlugin({
             script: './dist/server.js',
             ignore: ['main.js', '*.js.map'],
             delay: 1,
         }),
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+        }),
+        IS_DEV &&
+            new NodemonPlugin({
+                script: './dist/server.js',
+                ignore: ['main.js', '*.js.map'],
+                delay: 1,
+            }),
     ],
 
     performance: {

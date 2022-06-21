@@ -13,7 +13,7 @@ import { GamePage } from 'src/pages/GamePage';
 import { AllStateTypes } from 'src/store/reducers';
 import { FinderPage } from 'src/pages/FinderPage';
 import { ChatsPage } from 'src/pages/ChatsPage';
-import { Chat } from 'src/pages/GamePage/components/Chat';
+import { Chat } from 'src/components/Chat';
 import { PageLinks, Props } from './types';
 
 const ProtectedRoute: Props = ({ childrens }) => {

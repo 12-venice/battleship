@@ -9,6 +9,7 @@ import { User } from 'src/store/reducers/user';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import styles from './Cell.scss';
+import { messageService } from 'src/store/services/messageService';
 
 export const Cell = ({ element, str }: { element: User; str: string }) => {
     const navigator = useNavigate();
@@ -29,6 +30,7 @@ export const Cell = ({ element, str }: { element: User; str: string }) => {
     };
 
     const selectUser = () => {
+        messageService.selectMessage();
         str ? createRoom(element._id) : inviteUser(element._id, element.room!);
     };
     return (
@@ -38,7 +40,7 @@ export const Cell = ({ element, str }: { element: User; str: string }) => {
             className={styles.finder__line}
             onClick={() => selectUser()}
         >
-            <Avatar login={element.display_name} />
+            <Avatar avatar={element.avatar} login={element.display_name} />
             <span className={styles.finder__name}>{element.display_name}</span>
             {!str && (
                 <div

@@ -8,7 +8,7 @@ export const Avatar = ({
     login: string;
 }): JSX.Element => {
     if (avatar) {
-        const imageUrl = `https://ya-praktikum.tech/api/v2/resources${avatar}`;
+        const imageUrl = avatar;
         return (
             <img
                 className={styles.profile__avatar}

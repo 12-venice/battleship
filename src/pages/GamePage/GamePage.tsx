@@ -19,10 +19,10 @@ import { Button } from 'src/components/Button';
 import { activeFieldIds } from 'src/gameCore/Controller/types';
 import { getCoordinates } from 'src/gameCore/helpers';
 import { gameService } from 'src/store/services/gameService';
+import { Chat } from 'src/components/Chat';
 import { Area } from './components/Area';
 import { ShipsMenu } from './components/ShipsMenu';
 import styles from './GamePage.scss';
-import { Chat } from './components/Chat';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { EndGameComponent } from './components/EndGame';
@@ -133,7 +133,9 @@ export const GamePage = (): JSX.Element => {
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
         const currentMatrix = matrix.map((row) =>
             row.map((cell) =>
-                (cell === MatrixCell.deck ? MatrixCell.empty : cell),),);
+                cell === MatrixCell.deck ? MatrixCell.empty : cell,
+            ),
+        );
 
         const ships = Object.entries(squadron)
             .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)

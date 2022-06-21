@@ -37,7 +37,7 @@ router.post('/find', authMiddleware, async (req, res) => {
                 (user: { _id: string }) =>
                     user._id.toString() !== req.user.userId,
             );
-            data.push({ ...anotherUser.toJSON(), ...{ room: rooms[i] } });
+            data.push({ ...anotherUser?.toJSON(), ...{ room: rooms[i] } });
         }
         res.status(200).json(data);
     } catch (e) {

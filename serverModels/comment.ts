@@ -3,8 +3,10 @@ import mongoose, { Schema, model, Types } from 'mongoose';
 
 const schema = new Schema(
     {
-        topic: { type: Types.ObjectId, ref: 'Topic', required: true },
-        description: { type: String, trim: true, required: true },
+        topic: { type: String },
+        message: { type: String, trim: true, required: true },
+        comment: { type: String },
+        subcomments: [{ type: Types.ObjectId, ref: 'Comment' }],
         user: { type: Types.ObjectId, ref: 'User', required: true },
     },
     { timestamps: true },

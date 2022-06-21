@@ -7,11 +7,9 @@ import { AllStateTypes } from 'src/store/reducers';
 import { useCallback } from 'react';
 import { Placement } from 'src/gameCore/Placement';
 import { useParams } from 'react-router-dom';
-import fsIcon from '../../../../../images/fs.svg';
-import fsExitIcon from '../../../../../images/fs_exit.svg';
-import arrowIcon from '../../../../../images/round_arrow.svg';
+import { InputMessage } from 'src/components/InputMessage';
+import { Icon } from 'src/components/Icon/Icon';
 import styles from './Footer.scss';
-import { InputMessage } from './components/InputMessage';
 
 export const Footer = ({
     videoCall,
@@ -96,15 +94,14 @@ export const Footer = ({
                 color="green"
                 onClick={() => setIsFull(!isFull)}
             >
-                <img
-                    className={styles.footer__icon}
-                    src={isFull ? fsExitIcon : fsIcon}
-                    alt="Add"
-                />
+                <Icon type={isFull ? 'fsexit' : 'fs'} />
             </Button>
             {startGame ? (
                 room !== 'bot' && (
-                    <InputMessage {...{ videoCall, setVideoCall }} />
+                    <InputMessage
+                        videoCall={videoCall}
+                        setVideoCall={() => setVideoCall()}
+                    />
                 )
             ) : (
                 <>
@@ -116,11 +113,7 @@ export const Footer = ({
                     />
 
                     <Button href="/" skin="quad" onClick={handleClickReset}>
-                        <img
-                            className={styles.footer__icon}
-                            src={arrowIcon}
-                            alt="Add"
-                        />
+                        <Icon type="roundarrow" />
                     </Button>
 
                     <Button

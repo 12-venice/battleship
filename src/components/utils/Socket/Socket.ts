@@ -76,7 +76,10 @@ socket.on('invite:recive', (data) => {
 });
 
 socket.on('messages:recive', (data) => {
-    if (document.location.pathname !== `${PageLinks.game}/${data.room}`) {
+    if (
+        document.location.pathname !==
+        (`${PageLinks.game}/${data.room}` && `${PageLinks.chats}/${data.room}`)
+    ) {
         notificationService.addNotification({
             title: `New message by ${data.user.display_name}`,
             message: data.text,

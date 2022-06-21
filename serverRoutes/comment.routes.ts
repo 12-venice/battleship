@@ -7,23 +7,24 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Router } from 'express';
 import authMiddleware from 'src/server/auth.middleware';
-import User from '../serverModels/user';
-import Topic from '../serverModels/topic';
 import Comment from '../serverModels/comment';
 
 const router = Router();
 
 router.post('/create', authMiddleware, async (req, res) => {
     try {
-        const { topic } = req.body;
-        const user = await User.findOne({ _id: req.user.userId });
-        const topicFind = await Topic.findOne({ topic });
-        const comment = new Comment({
-            ...{ user },
-            ...{ topic: topicFind },
+        const { comment } = req.body;
+        const newComment = new Comment({
             ...req.body,
+            ...{ user: req.user.userId },
         });
-        await comment.save();
+        await newComment.save();
+        if (comment) {
+            await Comment.updateOne(
+                { _id: comment },
+                { $push: { subcomments: newComment } },
+            );
+        }
         res.status(200).json({ message: 'OK' });
     } catch (e) {
         res.status(500).json({
@@ -34,9 +35,19 @@ router.post('/create', authMiddleware, async (req, res) => {
 
 router.post('/read', async (req, res) => {
     try {
-        const { _id } = req.body;
-        const comments = await Comment.find({ topic: _id }).populate('user');
-        res.status(200).json(comments);
+        const { comment, topic } = req.body;
+        let comments;
+        if (comment) {
+            comments = await Comment.find({ comment }).populate('user');
+            res.status(200).json(comments);
+        } else if (topic) {
+            comments = await Comment.find({ topic }).populate('user');
+            res.status(200).json(comments);
+        } else {
+            res.status(500).json({
+                message: 'Неоходимо выбрать комментарий или топик',
+            });
+        }
     } catch (e) {
         res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
@@ -67,6 +78,7 @@ router.post('/delete', authMiddleware, async (req, res) => {
         const { user } = await Comment.findOne({ _id });
         if (user._id.toJSON() === req.user.userId) {
             await Comment.deleteOne({ _id });
+            await Comment.deleteMany({ comment: _id });
             res.status(200).json({ message: 'OK' });
         } else {
             res.status(400).json({ message: 'Denied' });

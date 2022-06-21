@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable no-param-reassign */
 /* eslint-disable react-hooks/exhaustive-deps */
 import cn from 'classnames';
@@ -38,12 +39,14 @@ export const Message = (message: messageType): JSX.Element => {
                 myMsg && styles.message__row__notme,
             )}
         >
-            <div className={styles.message__text}>{text}</div>
+            {text.match(/^\/image\//gm) ? (
+                <img className={styles.message__image} src={text} alt="img" />
+            ) : (
+                <div className={styles.message__text}>{text}</div>
+            )}
             <div className={styles.message__date}>
                 {parseDate}
-                {deliver && myMsg && (
-                    <i className="material-icons tiny">check</i>
-                )}
+                {deliver && myMsg && 'Прочитано'}
             </div>
         </div>
     );

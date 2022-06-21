@@ -6,6 +6,7 @@ import { opponentReducer, OpponentState } from './opponent';
 import { notificationReducer, NotificationState } from './notifications';
 import { userOnlineReducer, userOnlineState } from './online';
 import { gameReducer, Game } from './game';
+import { MSGReducer, TypeMSGState } from './message';
 
 export type AllStateTypes = {
     user: UserState;
@@ -14,6 +15,7 @@ export type AllStateTypes = {
     notification: NotificationState;
     userOnline: userOnlineState;
     game: Game;
+    message: TypeMSGState;
 };
 
 export default combineReducers({
@@ -23,4 +25,5 @@ export default combineReducers({
     notification: notificationReducer,
     userOnline: userOnlineReducer,
     game: gameReducer,
+    message: MSGReducer,
 });
