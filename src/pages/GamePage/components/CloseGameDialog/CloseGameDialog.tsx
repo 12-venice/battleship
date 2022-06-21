@@ -1,5 +1,4 @@
 import { useSelector } from 'react-redux';
-import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
@@ -7,6 +6,8 @@ import { AllStateTypes } from 'src/store/reducers';
 import { gameService } from 'src/store/services/gameService';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PageLinks } from 'src/components/utils/Routes/types';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
+import { useContext } from 'react';
 import styles from './CloseGameDialog.scss';
 
 import { Props } from './types';
@@ -15,7 +16,7 @@ export const CloseGameDialog: Props = ({ close, gameStep }): JSX.Element => {
     const onlineGameID = useSelector((state: AllStateTypes) => state.game.id);
     const { room } = useParams() as { room: string };
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
     const { request } = useHttp();
     const navigate = useNavigate();
     const fastExit = async () => {

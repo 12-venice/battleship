@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { Button } from 'src/components/Button';
 import { useHttp } from 'src/hooks/http.hook';
-import { useAuth } from 'src/hooks/auth.hook';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { Placement } from 'src/gameCore/Placement';
 import { useParams } from 'react-router-dom';
 import { InputMessage } from 'src/components/InputMessage';
 import { Icon } from 'src/components/Icon/Icon';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import styles from './Footer.scss';
 
 export const Footer = ({
@@ -37,7 +37,7 @@ export const Footer = ({
     setWaitingOnlineGame: Function;
 }) => {
     const { request } = useHttp();
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );

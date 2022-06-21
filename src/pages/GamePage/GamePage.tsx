@@ -1,5 +1,12 @@
 import cn from 'classnames';
-import { createRef, useState, useCallback, useMemo, useEffect } from 'react';
+import {
+    createRef,
+    useState,
+    useCallback,
+    useMemo,
+    useEffect,
+    useContext,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { Layout } from 'src/components/Layout';
 import {
@@ -13,13 +20,13 @@ import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
 import { MatrixCell } from 'src/gameCore/types';
 import { useParams } from 'react-router-dom';
 import { useHttp } from 'src/hooks/http.hook';
-import { useAuth } from 'src/hooks/auth.hook';
 import { User } from 'src/store/reducers/user';
 import { Button } from 'src/components/Button';
 import { activeFieldIds } from 'src/gameCore/Controller/types';
 import { getCoordinates } from 'src/gameCore/helpers';
 import { gameService } from 'src/store/services/gameService';
 import { Chat } from 'src/components/Chat';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { Area } from './components/Area';
 import { ShipsMenu } from './components/ShipsMenu';
 import styles from './GamePage.scss';
@@ -35,7 +42,7 @@ export const GamePage = (): JSX.Element => {
     const { room } = useParams() as { room: string };
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
     const onlineGame = useSelector((state: AllStateTypes) => state.game);
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
 
     const [anotherUser, setAnotherUser] = useState();
     const [gameStep, setGameStep] = useState(0);
@@ -133,9 +140,7 @@ export const GamePage = (): JSX.Element => {
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
         const currentMatrix = matrix.map((row) =>
             row.map((cell) =>
-                cell === MatrixCell.deck ? MatrixCell.empty : cell,
-            ),
-        );
+                (cell === MatrixCell.deck ? MatrixCell.empty : cell),),);
 
         const ships = Object.entries(squadron)
             .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)
