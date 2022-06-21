@@ -44,6 +44,7 @@ const config: Configuration = {
         new MiniCssExtractPlugin({
             filename: '[name].css',
         }),
+        // @ts-ignore
         IS_DEV &&
             new NodemonPlugin({
                 script: './dist/server.js',
