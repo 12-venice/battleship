@@ -25,9 +25,9 @@ router.post('/create', authMiddleware, async (req, res) => {
                 { $push: { subcomments: newComment } },
             );
         }
-        res.status(200).json({ message: 'OK' });
+        return res.status(200).json({ message: 'OK' });
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -39,17 +39,17 @@ router.post('/read', async (req, res) => {
         let comments;
         if (comment) {
             comments = await Comment.find({ comment }).populate('user');
-            res.status(200).json(comments);
-        } else if (topic) {
-            comments = await Comment.find({ topic }).populate('user');
-            res.status(200).json(comments);
-        } else {
-            res.status(500).json({
-                message: 'Неоходимо выбрать комментарий или топик',
-            });
+            return res.status(200).json(comments);
         }
+        if (topic) {
+            comments = await Comment.find({ topic }).populate('user');
+            return res.status(200).json(comments);
+        }
+        return res.status(500).json({
+            message: 'Неоходимо выбрать комментарий или топик',
+        });
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -61,12 +61,11 @@ router.post('/update', authMiddleware, async (req, res) => {
         const { user } = await Comment.findOne({ _id });
         if (user._id.toJSON() === req.user.userId) {
             await Comment.updateOne({ _id }, { $set: req.body });
-            res.status(200).json({ message: 'OK' });
-        } else {
-            res.status(400).json({ message: 'Denied' });
+            return res.status(200).json({ message: 'OK' });
         }
+        return res.status(400).json({ message: 'Denied' });
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -79,12 +78,11 @@ router.post('/delete', authMiddleware, async (req, res) => {
         if (user._id.toJSON() === req.user.userId) {
             await Comment.deleteOne({ _id });
             await Comment.deleteMany({ comment: _id });
-            res.status(200).json({ message: 'OK' });
-        } else {
-            res.status(400).json({ message: 'Denied' });
+            return res.status(200).json({ message: 'OK' });
         }
+        return res.status(400).json({ message: 'Denied' });
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }

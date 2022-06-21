@@ -15,17 +15,20 @@ import styles from './Search.scss';
 import { Props } from './types';
 
 export const Search: Props = ({ close }): JSX.Element => {
-    const { request, loading, error, clearError } = useHttp();
+    const { request, loading } = useHttp();
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const [rooms, setRooms] = useState([]);
     const [str, setStr] = useState('');
+
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStr(e.target.value);
     };
+
     const createRoom = (invitedUserId: string) => {
         socket.emit('invite:sent', invitedUserId);
         close();
     };
+
     const findUser = useCallback(async () => {
         const data = await request('/api/user/find', 'POST', { str });
         setRooms(data);
@@ -38,6 +41,7 @@ export const Search: Props = ({ close }): JSX.Element => {
         }, 1000);
         return () => clearTimeout(timeOut);
     }, [findUser, str]);
+
     return (
         <ModalWindow>
             <Input
@@ -52,6 +56,7 @@ export const Search: Props = ({ close }): JSX.Element => {
                         (element: User) =>
                             user?._id !== element._id && (
                                 <Cell
+                                    key={element._id.toString()}
                                     element={element}
                                     selectUser={() => createRoom(element._id)}
                                 />

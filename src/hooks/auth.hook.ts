@@ -1,27 +1,19 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { FromProps, PageLinks } from 'src/components/utils/Routes/types';
+import { PageLinks } from 'src/components/utils/Routes/types';
 import { socket } from 'src/components/utils/Socket/Socket';
 import { userService } from 'src/store/services/userService';
 import { useHttp } from './http.hook';
-import { useMessage } from './message.hook';
 
 export const STORAGE_NAME = 'bShipData';
 
 export const useAuth = () => {
     const [token, setToken] = useState(null);
-    const { search } = useLocation();
-    const message = useMessage();
-    const { request, error, clearError } = useHttp();
+    const location = useLocation();
     const navigate = useNavigate();
-    const { pathname, state } = useLocation();
-    const code = /code=([^&]+)/.exec(search);
-    const from =
-        (state as FromProps)?.from?.pathname !== PageLinks.auth
-            ? (state as FromProps)?.from?.pathname
-            : null;
-
+    const { request } = useHttp();
+    const code = /code=([^&]+)/.exec(location.search);
     const _getUserInfo = useCallback(
         async (jwtToken: string) => {
             const userInfo = await request('/api/user/info', 'GET', null, {
@@ -33,24 +25,20 @@ export const useAuth = () => {
         [request],
     );
 
-    const login = useCallback(
-        (jwtToken) => {
-            setToken(jwtToken);
-            localStorage.setItem(
-                STORAGE_NAME,
-                JSON.stringify({
-                    token: jwtToken,
-                }),
-            );
-            _getUserInfo(jwtToken);
-            socket.auth = { jwtToken };
-            socket.connect();
-            if (pathname === (PageLinks.auth || PageLinks.register)) {
-                navigate(from || PageLinks.home, { replace: true });
-            }
-        },
-        [_getUserInfo, from, navigate, pathname],
-    );
+    const login = useCallback((jwtToken, from?) => {
+        setToken(jwtToken);
+        localStorage.setItem(
+            STORAGE_NAME,
+            JSON.stringify({
+                token: jwtToken,
+            }),
+        );
+        _getUserInfo(jwtToken);
+        socket.auth = { jwtToken };
+        socket.connect();
+        const origin = from || PageLinks.home;
+        navigate(origin);
+    }, []);
 
     const RequestTokenOauth = useCallback(
         async (reqCode: string) => {
@@ -72,17 +60,11 @@ export const useAuth = () => {
     }, []);
 
     useEffect(() => {
-        const data = JSON.parse(localStorage.getItem(STORAGE_NAME)!);
-
+        const data = JSON.parse(localStorage.getItem(STORAGE_NAME) as string);
         if (data && data.token) {
             login(data.token);
         }
     }, [login]);
-
-    useEffect(() => {
-        message(error);
-        clearError();
-    }, [error, message, clearError]);
 
     useEffect(() => {
         if (!token && code && code[1]) {

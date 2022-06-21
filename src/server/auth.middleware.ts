@@ -25,10 +25,12 @@ export default (req: Request, res: Response, next: () => void) => {
                 req.user = decoded;
                 next();
             } else {
-                res.status(401).json({ message: 'Пользователь не распознан' });
+                return res
+                    .status(401)
+                    .json({ message: 'Пользователь не распознан' });
             }
         });
     } catch (e) {
-        res.status(401).json({ message: 'Нет авторизации' });
+        return res.status(401).json({ message: 'Нет авторизации' });
     }
 };

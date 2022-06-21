@@ -31,17 +31,17 @@ router.post('/create', authMiddleware, async (req, res) => {
 
         await newMessage.save((err: string, obj: object) => {
             if (err) {
-                res.status(500);
+                return res.status(500).json({ message: 'Error' });
             }
-            io.in(room).emit('messages:recive', obj);
+            io.in(room).emit('messages:recived', obj);
         });
         await Room.updateOne(
             { _id: room },
             { $push: { messages: newMessage } },
         );
-        res.status(200);
+        return res.status(200).json({ message: 'OK' });
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -51,9 +51,9 @@ router.post('/read', async (req, res) => {
     try {
         const { room } = req.body;
         const messages = await Message.find({ room }).populate('user');
-        res.status(200).json(messages);
+        return res.status(200).json(messages);
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -65,9 +65,9 @@ router.post('/setdelivered', async (req, res) => {
         const message = await Message.findOne({ _id });
         await Message.updateOne({ _id }, { $set: { delivered: true } });
         io.in(message.room.toString()).emit('message:delivered', message._id);
-        res.status(200).json({ message: 'OK' });
+        return res.status(200).json({ message: 'OK' });
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -75,13 +75,10 @@ router.post('/setdelivered', async (req, res) => {
 
 router.post('/update', async (req, res) => {
     try {
-        await Message.updateOne(
-            { _id: req.body.id },
-            { $set: { delivered: true } },
-        );
-        res.status(200).json({ message: 'OK' });
+        await Message.updateOne({ _id: req.body._id }, { $set: req.body });
+        return res.status(200).json({ message: 'OK' });
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -91,9 +88,9 @@ router.post('/delete', async (req, res) => {
     try {
         const { _id } = req.body;
         await Message.deleteOne({ _id });
-        res.status(204).json({ message: 'OK' });
+        return res.status(204).json({ message: 'OK' });
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }

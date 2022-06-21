@@ -1,16 +1,16 @@
 import cn from 'classnames';
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { useHttp } from 'src/hooks/http.hook';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
-import { useAuth } from 'src/hooks/auth.hook';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { Props } from './types';
 import styles from './editTopic.scss';
 
 export const EditTopicWindow: Props = ({ close }): JSX.Element => {
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
     const { request, loading } = useHttp();
     const { topic, theme, description, comment, message } = useSelector(
         (messageState: AllStateTypes) => messageState.message,

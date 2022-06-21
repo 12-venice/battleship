@@ -49,7 +49,7 @@ export class Controller {
     account;
 
     bonusCount;
-  
+
     constructor({
         opponentFieldRef,
         playerSquadron,

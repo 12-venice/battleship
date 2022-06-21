@@ -4,12 +4,12 @@
 import { useNavigate } from 'react-router-dom';
 import { Avatar } from 'src/components/Avatar';
 import { PageLinks } from 'src/components/utils/Routes/types';
-import { socket } from 'src/components/utils/Socket/Socket';
 import { User } from 'src/store/reducers/user';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
-import styles from './Cell.scss';
 import { messageService } from 'src/store/services/messageService';
+import { socket } from 'src/components/utils/Socket/Socket';
+import styles from './Cell.scss';
 
 export const Cell = ({ element, str }: { element: User; str: string }) => {
     const navigator = useNavigate();
@@ -35,7 +35,6 @@ export const Cell = ({ element, str }: { element: User; str: string }) => {
     };
     return (
         <div
-            key={element._id}
             aria-hidden
             className={styles.finder__line}
             onClick={() => selectUser()}

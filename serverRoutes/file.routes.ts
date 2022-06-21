@@ -105,7 +105,7 @@ router.post('/message/:id', authMiddleware, (req, res) => {
                         message: 'Что-то пошло не так, попробуйте еще раз',
                     });
                 }
-                io.in(req.params.id).emit('messages:recive', obj);
+                io.in(req.params.id).emit('messages:recived', obj);
             });
             await Room.updateOne(
                 { _id: req.params.id },
@@ -136,7 +136,7 @@ router.post('/comment/:id', authMiddleware, (req, res) => {
                 user: req.user.userId,
             });
             await newComment.save();
-            res.status(200).json({
+            return res.status(200).json({
                 message: 'Файл успешно загружен',
             });
         });
@@ -167,7 +167,7 @@ router.post('/subcomment/:id', authMiddleware, (req, res) => {
                 { _id: req.params.id },
                 { $push: { subcomments: newComment } },
             );
-            res.status(200).json({
+            return res.status(200).json({
                 message: 'Файл успешно загружен',
             });
         });

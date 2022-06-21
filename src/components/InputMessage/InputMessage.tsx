@@ -4,10 +4,16 @@
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable @typescript-eslint/ban-types */
 import cn from 'classnames';
-import { ChangeEvent, FormEvent, useCallback, useRef, useState } from 'react';
+import {
+    ChangeEvent,
+    FormEvent,
+    useCallback,
+    useContext,
+    useRef,
+    useState,
+} from 'react';
 import { Button } from 'src/components/Button';
 import { useParams } from 'react-router-dom';
-import { useAuth } from 'src/hooks/auth.hook';
 import { useHttp } from 'src/hooks/http.hook';
 import { File, FileInput } from 'src/pages/UpdateProfilePage/components/types';
 import { useSelector } from 'react-redux';
@@ -16,8 +22,13 @@ import styles from './InputMessage.scss';
 import { Icon } from '../Icon/Icon';
 import { InputMessageType } from './types';
 import { Emoji } from '../Emoji';
+import { AuthContext } from '../utils/Context/AuthContext';
 
-export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
+export const InputMessage = ({
+    videoCall,
+    setVideoCall,
+    callback,
+}: InputMessageType) => {
     const { room } = useParams() as { room: string };
     const [message, setMessage] = useState('');
     const [openEmoji, setOpenEmoji] = useState(false);
@@ -27,7 +38,7 @@ export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
     );
 
     const fileInput = useRef<FileInput>(null);
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
     const { request, loading } = useHttp();
     const id = () => {
         switch (type) {
@@ -98,6 +109,9 @@ export const InputMessage = ({ videoCall, setVideoCall }: InputMessageType) => {
                 createComment();
             }
             setMessage('');
+            if (callback) {
+                callback(comment ?? topic);
+            }
         }
     };
 

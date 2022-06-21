@@ -99,7 +99,7 @@ export const Topic = (topic: TopicProps): JSX.Element => {
                 (comments.length > 0 ? (
                     comments.map((comment: CommentProps) => (
                         <Comment
-                            key={comment._id}
+                            key={comment._id.toString()}
                             _id={comment._id}
                             topic={comment.topic}
                             message={comment.message}
