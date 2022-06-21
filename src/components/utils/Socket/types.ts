@@ -11,7 +11,7 @@ export interface ServerToClientEvents {
     'move:sent': (data: any) => void;
     'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;
-    'messages:recive': (data: any) => void;
+    'messages:recived': (data: any) => void;
     'game:invite': (data: any) => void;
     'game:start': (data: any) => void;
     'game:step': (data: any) => void;
