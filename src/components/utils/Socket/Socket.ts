@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { io, Socket } from 'socket.io-client';
+import { gameService } from 'src/store/services/gameService';
 import { notificationService } from 'src/store/services/notificationService';
 import { OnlineService } from 'src/store/services/onlineService';
 import { PageLinks } from '../Routes/types';
@@ -90,6 +91,96 @@ socket.on('messages:recive', (data) => {
                     href: `${PageLinks.game}/${data.room}`,
                 },
             ],
+        });
+    }
+});
+
+export const acceptInvite = async (invitation: any) => {
+    const response = await fetch(
+        `${document.location.origin}/api/game/accept`,
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                createdUserId: invitation.from._id,
+                invitedUserId: invitation.to._id,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        },
+    );
+    const data = await response.json();
+    return data;
+};
+
+export const cancelInvite = async (invitation: any) => {
+    const response = await fetch(
+        `${document.location.origin}/api/game/cancel`,
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                createdUserId: invitation.from._id,
+                invitedUserId: invitation.to._id,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        },
+    );
+    notificationService.smartDeleteNotification({
+        selector: 'title',
+        element: invitation.from.display_name,
+    });
+    const data = await response.json();
+    return data;
+};
+
+socket.on('game:invite', (data) => {
+    notificationService.addNotification({
+        title: data.from.display_name,
+        message: 'Invites you to play',
+        autoDelete: false,
+        autoDeleteTime: 5000,
+        user: data.from,
+        buttons: [
+            {
+                title: 'ACCEPT',
+                skin: 'small',
+                color: 'orange',
+                onClick: () => acceptInvite(data),
+            },
+            {
+                title: 'CANCEL',
+                skin: 'small',
+                color: 'red',
+                onClick: () => cancelInvite(data),
+            },
+        ],
+    });
+});
+
+socket.on('game:cancel', (data) => {
+    notificationService.smartDeleteNotification({
+        selector: 'title',
+        element: data.user.display_name,
+    });
+});
+
+socket.on('game:start', (data) => {
+    notificationService.smartDeleteNotification({
+        selector: 'title',
+        element: data.user.display_name,
+    });
+    gameService.startGame({ room: data.room, id: data.gameId });
+});
+
+socket.on('game:step', (data) => {
+    if (data.gameCancel) {
+        gameService.gameCancel();
+    } else {
+        gameService.updateGameState({
+            playerField: data.playerField,
+            opponentField: data.opponentField,
+            queue: data.queue,
+            finish: data.gameOver,
+            score: data.score,
+            statistics: data.statistics,
         });
     }
 });

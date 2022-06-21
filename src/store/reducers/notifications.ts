@@ -15,6 +15,12 @@ export interface Notification {
     buttons?: btnProps[];
     autoDelete?: boolean;
     autoDeleteTime?: number;
+    loader?: boolean;
+}
+
+export interface DelI {
+    selector: string;
+    element: string;
 }
 
 export type NotificationState = Notification[];
@@ -22,6 +28,7 @@ export type NotificationState = Notification[];
 const actions: Record<string, string> = {
     ADD_NOTIFICATION: 'ADD_NOTIFICATION',
     DELETE_NOTIFICATION: 'DELETE_NOTIFICATION',
+    SMART_DELETE_NOTIFICATION: 'SMART_DELETE_NOTIFICATION',
     RESET_NOTIFICATION: 'RESET_NOTIFICATION',
 };
 
@@ -29,7 +36,7 @@ interface BaseActionType<T> {
     type: T;
 }
 interface ItemActionType extends BaseActionType<keyof typeof actions> {
-    data: Notification | string;
+    data: Notification | string | DelI;
 }
 
 const defaultState: NotificationState = [];
@@ -50,6 +57,13 @@ export function notificationReducer(
             state.splice(index, 1);
             return [...state];
         }
+        case actions.SMART_DELETE_NOTIFICATION: {
+            const index = state.findIndex(
+                (toast) => toast[data.selector] === data.element,
+            );
+            state.splice(index, 1);
+            return [...state];
+        }
         case actions.RESET_NOTIFICATION: {
             state = defaultState;
             return [...state];
@@ -65,6 +79,10 @@ export function addNotification(data: Notification): ItemActionType {
 
 export function deleteNotification(data: string): ItemActionType {
     return { type: actions.DELETE_NOTIFICATION, data };
+}
+
+export function smartDeleteNotification(data: DelI): ItemActionType {
+    return { type: actions.SMART_DELETE_NOTIFICATION, data };
 }
 
 export function resetNotification(): ItemActionType {

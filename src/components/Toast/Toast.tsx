@@ -11,6 +11,7 @@ import { Avatar } from '../Avatar';
 import { Button } from '../Button';
 import styles from './Toast.scss';
 import { Props } from './types';
+import { Preloader } from '../Preloader';
 
 const ToastBlock = (toast: Notification, position: string): JSX.Element => {
     const deleteToast = (id: string) => {
@@ -51,6 +52,7 @@ const ToastBlock = (toast: Notification, position: string): JSX.Element => {
             <div className={styles['notification-message']}>
                 {toast.message}
             </div>
+            {toast.loader && <Preloader />}
             {toast.buttons && toast.buttons.length > 0 && (
                 <p className={styles['notification-buttons']}>
                     {toast.buttons.map((button) => (

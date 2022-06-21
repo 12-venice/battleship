@@ -4,12 +4,11 @@ import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
 import { useCallback, useEffect, useState } from 'react';
 import { Preloader } from 'src/components/Preloader';
-import { socket } from 'src/components/utils/Socket/Socket';
 import { AllStateTypes } from 'src/store/reducers';
 import { useAuth } from 'src/hooks/auth.hook';
 import { User } from 'src/store/reducers/user';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
-import { InviteLoader } from 'src/components/InviteLoader';
+import { notificationService } from 'src/store/services/notificationService';
 import { Layout } from '../../components/Layout';
 import plusIcon from '../../../images/plus.svg';
 import searchIcon from '../../../images/search.svg';
@@ -23,16 +22,34 @@ export const ChatsPage = (): JSX.Element => {
     const [videoCall, setVideoCall] = useState(false);
     const [search, setSearch] = useState(false);
     const [activeChat, setActiveChat] = useState('');
-    const [iLoader, setILoader] = useState(false);
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const { token } = useAuth();
     const [rooms, setRooms] = useState([]);
     const { request, loading } = useHttp();
     const navigate = useNavigate();
 
-    const inviteUser = (invitedUserId: string) => {
-        setILoader(true);
-        socket.emit('invite:sent', invitedUserId);
+    const createTicket = useCallback(
+        async (createdUserId, invitedUserId) => {
+            const data = {
+                createdUserId,
+                invitedUserId,
+            };
+            await request('/api/game/invite', 'POST', data, {
+                Authorization: `Bearer ${token}`,
+            });
+        },
+        [request, token],
+    );
+
+    const inviteUser = (invitedUser: any) => {
+        notificationService.addNotification({
+            title: invitedUser.display_name,
+            message: 'Invite sending...',
+            autoDelete: false,
+            user: invitedUser,
+            loader: true,
+        });
+        createTicket(user?._id, invitedUser._id);
     };
 
     const getRooms = useCallback(async () => {
@@ -120,7 +137,7 @@ export const ChatsPage = (): JSX.Element => {
                                     color="green"
                                     disabled={!activeChat || !token}
                                     onClick={() => {
-                                        inviteUser(activeChat._id);
+                                        inviteUser(activeChat);
                                     }}
                                 >
                                     <img
@@ -137,7 +154,6 @@ export const ChatsPage = (): JSX.Element => {
                     </div>
                 </div>
             </div>
-            {iLoader && <InviteLoader user={activeChat} />}
             {search && (
                 <Search
                     close={() => {

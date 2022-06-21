@@ -26,6 +26,7 @@ import messageRouter from '../serverRoutes/message.routes';
 import gameRouter from '../serverRoutes/game.routes';
 import webpackConfig from '../webpack/client.config';
 import { ISocket } from './server/types';
+import { TimersStore } from './server/timersStore';
 
 const compiler = webpack(webpackConfig);
 
@@ -48,6 +49,8 @@ export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
         },
     },
 );
+
+export const ts = new TimersStore();
 
 io.use((socket: ISocket, next: (err?: Error) => void) => {
     try {

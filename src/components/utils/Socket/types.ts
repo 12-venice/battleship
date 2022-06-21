@@ -11,6 +11,10 @@ interface ServerToClientEvents {
     'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;
     'messages:recive': (data: any) => void;
+    'game:invite': (data: any) => void;
+    'game:start': (data: any) => void;
+    'game:step': (data: any) => void;
+    'game:cancel': (data: any) => void;
 }
 
 interface ClientToServerEvents {

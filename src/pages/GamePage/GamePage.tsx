@@ -13,9 +13,12 @@ import { FullScreenView } from 'src/components/api/Fullscreen/FullScreenView';
 import { MatrixCell } from 'src/gameCore/types';
 import { useParams } from 'react-router-dom';
 import { useHttp } from 'src/hooks/http.hook';
+import { useAuth } from 'src/hooks/auth.hook';
 import { User } from 'src/store/reducers/user';
 import { Button } from 'src/components/Button';
 import { activeFieldIds } from 'src/gameCore/Controller/types';
+import { getCoordinates } from 'src/gameCore/helpers';
+import { gameService } from 'src/store/services/gameService';
 import { Area } from './components/Area';
 import { ShipsMenu } from './components/ShipsMenu';
 import styles from './GamePage.scss';
@@ -24,11 +27,15 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { EndGameComponent } from './components/EndGame';
 import { Statistics } from './components/Statistics';
+import { Waiting } from './components/Waiting';
+import { CancelGame } from './components/CancelGame';
 
 export const GamePage = (): JSX.Element => {
     const { request } = useHttp();
     const { room } = useParams() as { room: string };
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
+    const onlineGame = useSelector((state: AllStateTypes) => state.game);
+    const { token } = useAuth();
 
     const [anotherUser, setAnotherUser] = useState();
     const [gameStep, setGameStep] = useState(0);
@@ -37,13 +44,17 @@ export const GamePage = (): JSX.Element => {
     const [playerMatrix, setPlayerMatrix] = useState();
     const [playerSquadron, setPlayerSquadron] = useState();
     const [startGame, setStartGame] = useState(false);
+    const [queueOnlineGame, setQueueOnlineGame] = useState(false);
+    const [waitingOnlineGame, setWaitingOnlineGame] = useState(false);
+    const [startOnlineTimer, setStartOnlineTimer] = useState(false);
     const [videoCall, setVideoCall] = useState(false);
     const [trnslX, setTrnslX] = useState(true);
     const [isFull, setIsFull] = useState(false);
     const [fieldIs, setField] = useState(true);
     const [gameOver, setGameOver] = useState(null);
-    const [gameStatistics, setGameStatistics] = useState([]);
-    const [gameAccount, setGameAccount] = useState([]);
+    const [gameCanceled, setGameCanceled] = useState(false);
+    const [gameStatistics, setGameStatistics] = useState(mockStatistics());
+    const [gameAccount, setGameAccount] = useState(mockAccount());
     const [timerDisplay, setTimerDisplay] = useState(true);
     const [timerOver, setTimerOver] = useState(false);
 
@@ -51,6 +62,42 @@ export const GamePage = (): JSX.Element => {
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
 
+    // следим за стейтом онлайн игры
+    useEffect(() => {
+        if (onlineGame.gameCancel) {
+            gameService.finishGame();
+            setGameCanceled(true);
+        }
+        if (onlineGame.state?.opponentField && onlineGame.state?.playerField) {
+            setGameAccount(onlineGame.state.score);
+            setGameStatistics(onlineGame.state.statistics);
+            if (onlineGame.state.queue === thisUser?._id) {
+                setQueueOnlineGame(true);
+                setTimerDisplay(true);
+            } else {
+                setQueueOnlineGame(false);
+                setTimerDisplay(false);
+            }
+            setStartOnlineTimer(!startOnlineTimer);
+            setStartGame(true);
+            if (gameStep === 0) {
+                setWaitingOnlineGame(false);
+                setGameStep(2);
+            }
+            setPlayerField(onlineGame.state.playerField);
+            setOpponentField(onlineGame.state.opponentField);
+            if (onlineGame.state.finish) {
+                gameService.finishGame();
+                if (onlineGame.state.queue === thisUser?._id) {
+                    setGameOver('victory');
+                } else {
+                    setGameOver('defeat');
+                }
+            }
+        }
+    }, [onlineGame]);
+
+    // запрашиваем данные второго игрока
     const getRoom = useCallback(async () => {
         const data = await request(`/api/room/${room}`, 'GET', null);
         setAnotherUser(
@@ -58,6 +105,7 @@ export const GamePage = (): JSX.Element => {
         );
     }, [request, room, thisUser?._id]);
 
+    // обработчик конца игры
     const handlerGameOver = useCallback((winner) => {
         if (winner === activeFieldIds.opponent) {
             setGameOver('defeat');
@@ -66,8 +114,8 @@ export const GamePage = (): JSX.Element => {
         }
     }, []);
 
+    // хендлер обработки данных поля игрока для рендера
     const handlerChangePlayerField = useCallback(({ matrix, squadron }) => {
-        console.log('player', { matrix, squadron });
         const ships = Object.entries(squadron).map(
             ([shipName, { arrDecks, x, y, kx, hits }]) => ({
                 id: shipName,
@@ -80,14 +128,12 @@ export const GamePage = (): JSX.Element => {
         );
         setPlayerField({ matrix, ships });
     }, []);
-    
+
+    // хендлер обработки данных поля соперника для рендера
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
-        console.log('bot', { matrix, squadron });
         const currentMatrix = matrix.map((row) =>
             row.map((cell) =>
-                cell === MatrixCell.deck ? MatrixCell.empty : cell,
-            ),
-        );
+                (cell === MatrixCell.deck ? MatrixCell.empty : cell),),);
 
         const ships = Object.entries(squadron)
             .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)
@@ -102,14 +148,15 @@ export const GamePage = (): JSX.Element => {
 
         setOpponentField({ matrix: currentMatrix, ships });
     }, []);
+
     const placementArea = useMemo(
         () => new Placement({ field: playerCanvasRef }),
         [playerCanvasRef],
     );
 
+    // создаем управляющий контроллер для игры с ботом
     const gameController = useMemo(() => {
         if (gameStep === 1) {
-            console.log('start controller', playerMatrix, playerSquadron);
             return new Controller({
                 opponentFieldRef: botCanvasRef,
                 playerSquadron,
@@ -122,6 +169,7 @@ export const GamePage = (): JSX.Element => {
         return null;
     }, [gameStep, handlerChangePlayerField, handlerChangeOpponentField]);
 
+    // обработчик выстрела игрока
     const handlerPlayerShot = useCallback(
         (event) => {
             if (gameController?.handlerPlayerShot) {
@@ -131,6 +179,33 @@ export const GamePage = (): JSX.Element => {
         [gameController],
     );
 
+    const fireShot = async ({ x, y }) => {
+        const data = {
+            gameId: onlineGame.id,
+            userId: thisUser?._id,
+            shot: { x, y },
+        };
+        await request('/api/game/shot', 'POST', data, {
+            Authorization: `Bearer ${token}`,
+        });
+    };
+
+    const onlineHandlerPlayerShot = useCallback(
+        (event) => {
+            if (queueOnlineGame) {
+                const areaCoords = getCoordinates(event.target);
+                const cellSize = event.target.width / 10;
+                const x = Math.trunc((event.pageY - areaCoords.top) / cellSize);
+                const y = Math.trunc(
+                    (event.pageX - areaCoords.left) / cellSize,
+                );
+                fireShot({ x, y });
+            }
+        },
+        [gameController, queueOnlineGame],
+    );
+
+    // размеры игрового поля при старте игры (ресайз)
     const startAreaWidth = useCallback(() => {
         if (typeof window === 'undefined') {
             return 250;
@@ -147,6 +222,7 @@ export const GamePage = (): JSX.Element => {
         return 380;
     }, []);
 
+    // слайдер
     useEffect(() => {
         let tuchX = 0;
         let delt = false;
@@ -168,11 +244,13 @@ export const GamePage = (): JSX.Element => {
             window.removeEventListener('touchend', tEnd);
         };
     }, []);
+
+    // получаем данные соперника после маунта
     useEffect(() => {
         getRoom();
     }, []);
 
-    // callback задержки смены поля
+    // callback задержки смены поля БОТ
     const delay = useCallback(() => {
         setTimeout(() => setField(!fieldIs), 400);
     }, [fieldIs]);
@@ -184,28 +262,30 @@ export const GamePage = (): JSX.Element => {
                 // если мы уже в процессе игры
                 gameController?.nextQueue();
                 setTimerOver(false);
-            } else {
-                // если мы на старте игры
-                handlerGameOver(activeFieldIds.opponent);
             }
+            setTimerOver(false);
         }
     }, [timerOver]);
 
     useEffect(() => {
         // следит за изменениями полей
-        setGameStatistics(gameController?.getStatistics() ?? mockStatistics());
-        setGameAccount(gameController?.getAccount() ?? mockAccount());
-        // проверка очереди хода
-        if (
-            (gameController?.getShotQueue() ?? activeFieldIds.player) ===
-            activeFieldIds.player
-        ) {
-            // если игрок, то меняем цвет таймера и включаем задержку на переход к полю противника
-            if (timerDisplay === false) delay();
-            setTimerDisplay(true);
-        } else {
-            if (timerDisplay === true) delay();
-            setTimerDisplay(false);
+        if (gameStep === 1) {
+            setGameStatistics(
+                gameController?.getStatistics() ?? mockStatistics(),
+            );
+            setGameAccount(gameController?.getAccount() ?? mockAccount());
+            // проверка очереди хода
+            if (
+                (gameController?.getShotQueue() ?? activeFieldIds.player) ===
+                activeFieldIds.player
+            ) {
+                // если игрок, то меняем цвет таймера и включаем задержку на переход к полю противника
+                if (timerDisplay === false) delay();
+                setTimerDisplay(true);
+            } else {
+                if (timerDisplay === true) delay();
+                setTimerDisplay(false);
+            }
         }
     }, [playerField, opponentField]);
 
@@ -220,6 +300,8 @@ export const GamePage = (): JSX.Element => {
                         handler={() => setTimerOver(true)}
                         gameOver={gameOver}
                         account={gameAccount}
+                        gameStep={gameStep}
+                        startOnlineTimer={startOnlineTimer}
                     />
                     <div className={styles['game__main-content']}>
                         <div className={styles.game__container}>
@@ -246,7 +328,11 @@ export const GamePage = (): JSX.Element => {
                                             ref={botCanvasRef}
                                             areaWidth={startAreaWidth()}
                                             fillColor="#9DC0F0"
-                                            onClick={handlerPlayerShot}
+                                            onClick={
+                                                gameStep === 2
+                                                    ? onlineHandlerPlayerShot
+                                                    : handlerPlayerShot
+                                            }
                                             {...opponentField}
                                         />
                                     </div>
@@ -307,6 +393,7 @@ export const GamePage = (): JSX.Element => {
                             setGameStep,
                             setIsFull,
                             setVideoCall,
+                            setWaitingOnlineGame,
                         }}
                     />
                     {gameOver && (
@@ -317,6 +404,8 @@ export const GamePage = (): JSX.Element => {
                             gameStatistics={gameStatistics}
                         />
                     )}
+                    {waitingOnlineGame && <Waiting />}
+                    {gameCanceled && <CancelGame />}
                 </FullScreenView>
             </div>
         </Layout>
