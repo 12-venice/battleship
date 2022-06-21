@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "importHelpers": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "es5",
+        "noImplicitAny": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "alwaysStrict": true,
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "jsx": "react",
+        "lib": ["dom", "es2018"],
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "experimentalDecorators": true,
+        "baseUrl": "..",
+        "outDir": "..",
+        "typeRoots": [
+            "../node_modules/@types/"
+        ]
+    },
+    "include": [
+        "../webpack",
+        "../webpack.config.ts"
+    ],
+    "exclude": []
+}
