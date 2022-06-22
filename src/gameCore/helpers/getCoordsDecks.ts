@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getRandom, checkLocationShip } from 'src/gameCore/helpers';
 import type { Matrix } from 'src/gameCore/types';
 

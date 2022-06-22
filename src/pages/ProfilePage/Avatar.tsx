@@ -1,3 +1,4 @@
+// @ts-nocheck
 import styles from './ProfilePage.scss';
 
 export const Avatar = ({

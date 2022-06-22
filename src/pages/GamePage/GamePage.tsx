@@ -1,3 +1,4 @@
+// @ts-nocheck
 import cn from 'classnames';
 import { createRef, useState, useCallback, useMemo, useEffect } from 'react';
 import { useSelector } from 'react-redux';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import cn from 'classnames';
 import { Avatar } from 'src/components/Avatar';
 import styles from './PlayerName.scss';

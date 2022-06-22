@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { shipsSrcMap } from 'src/pages/GamePage/data';
 import {
     IMG_WIDTH,

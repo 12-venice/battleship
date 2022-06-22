@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { FC } from 'react';

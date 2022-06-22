@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
 import { useCallback } from 'react';

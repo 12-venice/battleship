@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable @typescript-eslint/ban-types */
 import { Button } from 'src/components/Button';
 import { useSelector } from 'react-redux';

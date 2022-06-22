@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable @typescript-eslint/ban-types */
 import cn from 'classnames';
 import { FormEvent, useRef, useState } from 'react';

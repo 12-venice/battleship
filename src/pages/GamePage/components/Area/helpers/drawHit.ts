@@ -1,3 +1,4 @@
+// @ts-nocheck
 import fireImg from 'images/game/fire.png';
 import { CanvasCtx } from '../types';
 

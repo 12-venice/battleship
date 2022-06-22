@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable import/no-default-export */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-plusplus */

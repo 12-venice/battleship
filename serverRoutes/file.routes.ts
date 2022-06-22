@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable import/no-default-export */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-await-in-loop */

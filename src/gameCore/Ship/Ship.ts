@@ -1,3 +1,4 @@
+// @ts-nocheck
 export class Ship {
     // eslint-disable-next-line class-methods-use-this
     createShip({ x, y, kx, ky, decks }) {

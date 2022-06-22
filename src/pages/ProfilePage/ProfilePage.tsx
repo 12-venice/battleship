@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useSelector } from 'react-redux';

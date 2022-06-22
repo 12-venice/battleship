@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Props } from './types';
 
 import styles from './Comment.scss';

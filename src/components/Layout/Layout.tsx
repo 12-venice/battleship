@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable react/require-default-props */
 import { CSSProperties } from 'react';
 import background from '../../../images/background.svg';
