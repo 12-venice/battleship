@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { Field } from 'src/gameCore/Field';
 import { BotField } from 'src/gameCore/BotField';
 import {
@@ -12,7 +13,6 @@ import {
 
 const mockHandlerChangeField = ({ matrix, squadron }) => {};
 const mockHandlerGameOver = () => {};
-
 export const mockStatistics = () => [
     { label: 'HITS', [activeFieldIds.player]: 0, [activeFieldIds.opponent]: 0 },
     { label: 'MISS', [activeFieldIds.player]: 0, [activeFieldIds.opponent]: 0 },
@@ -27,9 +27,7 @@ export const mockStatistics = () => [
         [activeFieldIds.opponent]: 0,
     },
 ];
-
 export const mockAccount = () => [0, 0];
-
 export class Controller {
     opponentField;
 
