@@ -118,6 +118,7 @@ export const drawMatrix = ({
                             fire,
                             x: x * cellSize,
                             y: y * cellSize,
+                            cellSize,
                         });
                     });
                 }
