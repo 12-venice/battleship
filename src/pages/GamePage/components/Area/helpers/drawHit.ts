@@ -12,5 +12,5 @@ export interface drawHit {
 }
 
 export const drawHit = ({ ctx, x, y, fire, cellSize }: drawHit) => {
-    ctx.drawImage(fire, x - 1, y - 1, cellSize, cellSize);
+    ctx.drawImage(fire, x + 2, y + 2, cellSize * 0.8, cellSize * 0.8);
 };

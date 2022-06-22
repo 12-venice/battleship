@@ -27,4 +27,6 @@ export type Props = {
     ships?: Ship[];
     /** Цвет заливки ячеек. По умолчанию белый */
     fillColor?: string;
+    /** Тип огня */
+    fireType?: boolean;
 };

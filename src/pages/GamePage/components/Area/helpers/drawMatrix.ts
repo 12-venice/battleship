@@ -1,13 +1,14 @@
 import { MatrixCell } from 'src/gameCore/types';
-import fireImg from 'images/game/fire.png';
+import hitFire from 'images/game/hitFire.png';
+import redX from 'images/game/redX.png';
+import ripShip01 from 'images/ships/ripShip01.png';
 import ship1Img from 'images/ships/1-ship.png';
 import ship2Img from 'images/ships/2-ship.png';
 import ship3Img from 'images/ships/3-ship.png';
 import ship4Img from 'images/ships/4-ship.png';
-import ripShip1Img from 'images/ships/1-ship-rip.png';
-import ripShip2Img from 'images/ships/2-ship-rip.png';
-import ripShip3Img from 'images/ships/3-ship-rip.png';
-import ripShip4Img from 'images/ships/4-ship-rip.png';
+import ripShip2Img from 'images/ships/2-ship-rip-v2.png';
+import ripShip3Img from 'images/ships/3-ship-rip-v2.png';
+import ripShip4Img from 'images/ships/4-ship-rip-v2.png';
 import { drawCell } from './drawCell';
 import { drawMiss } from './drawMiss';
 import { drawHit } from './drawHit';
@@ -25,6 +26,7 @@ export const drawMatrix = ({
     fillColor,
     matrix,
     ships,
+    fireType,
 }: DrawMatrix) => {
     const loadImage = (img: string) =>
         new Promise((resolve) => {
@@ -52,7 +54,7 @@ export const drawMatrix = ({
                     [3, r[7]],
                     [4, r[8]],
                 ]);
-                const fire = r[0];
+                const fire = fireType ? r[0] : r[9];
                 const hitCoordinates: [number, number][] = [];
 
                 const buffer = document.createElement('canvas');
@@ -129,14 +131,15 @@ export const drawMatrix = ({
     };
 
     drow([
-        fireImg,
+        hitFire,
         ship1Img,
         ship2Img,
         ship3Img,
         ship4Img,
-        ripShip1Img,
+        ripShip01,
         ripShip2Img,
         ripShip3Img,
         ripShip4Img,
+        redX,
     ]);
 };

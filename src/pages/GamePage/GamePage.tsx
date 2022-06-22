@@ -341,6 +341,7 @@ export const GamePage = (): JSX.Element => {
                                                     : handlerPlayerShot
                                             }
                                             {...opponentField}
+                                            fireType
                                         />
                                     </div>
                                     <div
@@ -356,6 +357,7 @@ export const GamePage = (): JSX.Element => {
                                             ref={playerCanvasRef}
                                             areaWidth={startAreaWidth()}
                                             {...playerField}
+                                            fireType={false}
                                         />
                                     </div>
                                 </div>

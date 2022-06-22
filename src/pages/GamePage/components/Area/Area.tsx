@@ -9,6 +9,7 @@ export const Area = forwardRef(
         {
             areaWidth,
             fillColor,
+            fireType,
             matrix = emptyMatrix,
             ships,
             onClick,
@@ -46,6 +47,7 @@ export const Area = forwardRef(
             if (!renderCtx) return;
 
             drawMatrix({
+                fireType,
                 renderCtx,
                 areaWidth,
                 fillColor,
