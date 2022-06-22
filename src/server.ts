@@ -26,6 +26,7 @@ import roomRouter from '../serverRoutes/room.routes';
 import messageRouter from '../serverRoutes/message.routes';
 import webpackConfig from '../webpack/client.config';
 import { ISocket } from './server/types';
+import type { ClientToServerEvents, ServerToClientEvents } from './components/utils/Socket/types';
 
 const compiler = webpack(webpackConfig);
 
