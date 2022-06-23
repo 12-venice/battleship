@@ -1,3 +1,4 @@
+// @ts-nocheck
 import cn from 'classnames';
 import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';

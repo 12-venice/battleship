@@ -1,5 +1,5 @@
 /* eslint-disable import/no-default-export */
-import mongoose, { Schema, model, Types } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 
 const schema = new Schema(
     {
@@ -10,7 +10,7 @@ const schema = new Schema(
         phone: { type: String, default: '' },
         login: { type: String, default: '' },
         avatar: { type: String, default: '' },
-        rooms: [{ type: Types.ObjectId, ref: 'Room' }],
+        rooms: [{ type: Schema.Types.ObjectId, ref: 'Room' }],
         points: { type: String, default: 0 },
         wins: { type: String, default: 0 },
         defeats: { type: String, default: 0 },

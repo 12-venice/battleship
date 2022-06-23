@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { FC, useEffect, useRef } from 'react';
 import { useFullscreen } from './useFullScreen';
 import styles from './Fullscreen.scss';

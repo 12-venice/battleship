@@ -1,3 +1,4 @@
+// @ts-nocheck
 import cn from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import styles from './Button.scss';

@@ -1,4 +1,4 @@
-interface ServerToClientEvents {
+export interface ServerToClientEvents {
     'users:add': (data: string) => void;
     'users:remove': (data: string) => void;
     'users:set': (data: string[]) => void;
@@ -13,7 +13,7 @@ interface ServerToClientEvents {
     'messages:recive': (data: any) => void;
 }
 
-interface ClientToServerEvents {
+export interface ClientToServerEvents {
     'users:add': (data: string) => void;
     'users:remove': (data: string) => void;
     'users:set': (data: string[]) => void;

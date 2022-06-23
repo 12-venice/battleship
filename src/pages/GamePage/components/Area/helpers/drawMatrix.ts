@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { MatrixCell } from 'src/gameCore/types';
 import { drawCell } from './drawCell';
 import { drawMiss } from './drawMiss';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Field } from 'src/gameCore/Field';
 import { BotField } from 'src/gameCore/BotField';
 import {
@@ -50,7 +51,7 @@ export class Controller {
     account;
 
     bonusCount;
-  
+
     constructor({
         opponentFieldRef,
         playerSquadron,
