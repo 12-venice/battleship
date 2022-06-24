@@ -19,6 +19,8 @@ export const EndGameComponent: Props = ({
     room,
     gameAccount,
     gameStatistics,
+    restartGame,
+    gameStep,
 }): JSX.Element => {
     const [hitsPercent, setHitPercent] = useState(0);
     const [shipsCount, setShipsCount] = useState(0);
@@ -92,12 +94,21 @@ export const EndGameComponent: Props = ({
                     </div>
                 </div>
                 <div className={styles.endGame__buttons}>
-                    <Button
-                        href={PageLinks.home}
-                        skin="tiny"
-                        title="PLAY"
-                        color="green"
-                    />
+                    {gameStep === 1 ? (
+                        <Button
+                            skin="tiny"
+                            title="PLAY"
+                            color="green"
+                            onClick={() => restartGame()}
+                        />
+                    ) : (
+                        <Button
+                            skin="tiny"
+                            title="BOARD"
+                            color="green"
+                            href={PageLinks.leaderboard}
+                        />
+                    )}
                     <Button
                         href={PageLinks.home}
                         skin="tiny"

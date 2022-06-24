@@ -322,6 +322,14 @@ export const GamePage = (): JSX.Element => {
         }
     }, [playerField, opponentField]);
 
+    const restartGame = useCallback(() => {
+        setGameOver(false);
+        setOpponentField();
+        setPlayerField();
+        setGameStep(0);
+        setStartGame(false);
+    }, []);
+
     return (
         <Layout>
             <div className={styles.game__background}>
@@ -437,6 +445,8 @@ export const GamePage = (): JSX.Element => {
                             room={room}
                             gameAccount={gameAccount}
                             gameStatistics={gameStatistics}
+                            restartGame={restartGame}
+                            gameStep={gameStep}
                         />
                     )}
                     {waitingOnlineGame && <Waiting />}
