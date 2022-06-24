@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable react/jsx-props-no-spreading */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';

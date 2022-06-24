@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/no-default-export */
 /* eslint-disable import/extensions */

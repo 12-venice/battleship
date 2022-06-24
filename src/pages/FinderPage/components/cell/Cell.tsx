@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react/destructuring-assignment */

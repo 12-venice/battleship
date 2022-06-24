@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/destructuring-assignment */
 import { DateParser } from 'src/components/utils/DateParse/DateParser';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { MatrixCell } from 'src/gameCore/types';
 import hitFire from 'images/game/hitFire.png';
 import redX from 'images/game/redX.png';

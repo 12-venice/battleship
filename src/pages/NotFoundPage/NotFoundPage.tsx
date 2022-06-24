@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NavLink } from 'react-router-dom';
 
 import { Button } from 'src/components/Button';

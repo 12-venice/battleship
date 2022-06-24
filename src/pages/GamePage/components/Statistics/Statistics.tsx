@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { activeFieldIds } from 'src/gameCore/Controller/types';
 import styles from './Statistics.scss';
 

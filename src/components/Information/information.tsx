@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';

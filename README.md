@@ -46,6 +46,12 @@ npm run start:webpack
 npm run start:server
 ```
 
+#### Сборка и запуск проекта на продакшн сервере
+
+```bash
+npm run start:production
+```
+
 #### Удаление собранных файлов
 
 ```

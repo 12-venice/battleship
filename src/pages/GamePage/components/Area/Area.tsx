@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable react/jsx-no-useless-fragment */
 import { useCallback, useEffect, forwardRef } from 'react';
 import { drawMatrix } from './helpers/drawMatrix';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { io, Socket } from 'socket.io-client';
 import { gameService } from 'src/store/services/gameService';

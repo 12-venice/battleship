@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useSelector } from 'react-redux';
 import { useHttp } from 'src/hooks/http.hook';
 import { Button } from 'src/components/Button';

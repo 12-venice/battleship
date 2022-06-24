@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable react/jsx-curly-newline */
 import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';

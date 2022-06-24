@@ -1,11 +1,11 @@
 /* eslint-disable import/no-default-export */
-import mongoose, { Schema, model, Types } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 
 const schema = new Schema(
     {
-        users: [{ type: Types.ObjectId, ref: 'User' }],
-        messages: [{ type: Types.ObjectId, ref: 'Message' }],
-        moves: [{ type: Types.ObjectId, ref: 'Move' }],
+        users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+        messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
+        moves: [{ type: Schema.Types.ObjectId, ref: 'Move' }],
     },
     { timestamps: true },
 );

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable prettier/prettier */
 
 import { Button } from 'src/components/Button';

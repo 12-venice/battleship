@@ -27,6 +27,10 @@ import gameRouter from '../serverRoutes/game.routes';
 import webpackConfig from '../webpack/client.config';
 import { ISocket } from './server/types';
 import { TimersStore } from './server/timersStore';
+import type {
+    ClientToServerEvents,
+    ServerToClientEvents,
+} from './components/utils/Socket/types';
 
 const compiler = webpack(webpackConfig);
 

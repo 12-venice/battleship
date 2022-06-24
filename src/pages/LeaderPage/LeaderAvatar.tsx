@@ -1,3 +1,4 @@
+// @ts-nocheck
 import styles from './LeaderPage.scss';
 
 export const LeaderAvatar = ({

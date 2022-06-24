@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import styles from './Avatar.scss';
 

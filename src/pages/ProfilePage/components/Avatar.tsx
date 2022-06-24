@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Требует деструктуризацию user
 /* eslint-disable react/destructuring-assignment */
 import { MouseEventHandler } from 'react';
