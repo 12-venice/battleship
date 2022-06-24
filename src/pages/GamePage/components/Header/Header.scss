@@ -27,7 +27,7 @@
 .game__header-timer {
     height: min(7vw, 70px);
     width: min(7vw, 70px);
-    background: white;
+    background: rgb(157, 192, 240, 70%);
     margin: 0;
     border-radius: 50% 0 0 50%;
 }
@@ -52,7 +52,7 @@
 }
 
 .header__bar-active {
-    background: white;
+    background: rgb(157, 192, 240, 70%);
     color: var(--light-dark-blue);
 }
 
