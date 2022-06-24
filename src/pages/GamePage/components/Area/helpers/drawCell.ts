@@ -1,7 +1,8 @@
 import type { Props } from '../types';
-import type { DrawMatrix } from './drawMatrix';
 
 type DrawCell = {
+    /** Контекст канваса */
+    ctx: CanvasRenderingContext2D;
     /** Координата по горизонтали */
     x: number;
     /** Координата по вертикали */
@@ -10,8 +11,7 @@ type DrawCell = {
     size: number;
     /** Радиус скругления ячейки */
     radius: number;
-} & Pick<DrawMatrix, 'ctx'> &
-    Pick<Props, 'fillColor'>;
+} & Pick<Props, 'fillColor'>;
 
 export const drawCell = ({
     ctx,

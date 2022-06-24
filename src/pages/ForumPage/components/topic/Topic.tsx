@@ -1,45 +1,44 @@
+/* eslint-disable react/destructuring-assignment */
 // @ts-nocheck
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import cn from 'classnames';
-import { DateParser } from 'src/components/utils/DateParse/DateParser';
 import { AllStateTypes } from 'src/store/reducers';
 import { useHttp } from 'src/hooks/http.hook';
 import { Preloader } from 'src/components/Preloader';
-import { Props, handleClickType } from './types';
+import { DateParser } from 'src/components/utils/DateParse/DateParser';
+import { messageService } from 'src/store/services/messageService';
+import { handleClickType, TopicProps } from './types';
 import { Comment } from '../comment';
-
 import styles from './Topic.scss';
 import { CommentProps } from '../comment/types';
 
-export const Topic: Props = ({
-    createdAt = '',
-    user = { display_name: 'Noname' },
-    theme = 'Topic',
-    description = 'Default description...',
-    _id,
-    setTopicId,
-    deleteFunc,
-    editFunc,
-    isActiveTopic,
-}): JSX.Element => {
+export const Topic = (topic: TopicProps): JSX.Element => {
     const [state, toggleState] = useState(false);
     const [comments, setComments] = useState([]);
-    const [select, toggleSelect] = useState(false);
     const currentUser = useSelector(
         (userState: AllStateTypes) => userState.user.item,
     );
+    const selectTopic = useSelector(
+        (messageState: AllStateTypes) => messageState.message.topic,
+    );
+
     const { request, loading } = useHttp();
     const handleClick: handleClickType = () => {
         toggleState(!state);
-        toggleSelect(!select);
-        setTopicId(_id);
+        messageService.selectTopic({
+            topic: topic._id,
+            theme: topic.theme,
+            description: topic.description,
+        });
     };
 
     const getComments = useCallback(async () => {
-        const data = await request('/api/comment/read', 'POST', { _id });
+        const data = await request('/api/comment/read', 'POST', {
+            topic: topic._id,
+        });
         setComments(data);
-    }, [_id, request]);
+    }, [request, topic._id]);
 
     useEffect(() => {
         if (state) {
@@ -52,9 +51,7 @@ export const Topic: Props = ({
             <div
                 className={cn(
                     styles.topic,
-                    isActiveTopic === _id
-                        ? styles.topic_active
-                        : styles.topic_unactive,
+                    selectTopic === topic._id && styles.topic__active,
                 )}
                 onClick={handleClick}
                 aria-hidden="true"
@@ -62,54 +59,60 @@ export const Topic: Props = ({
                 <div className={styles.topic__header}>
                     <div>
                         <h2 className={styles['topic__header-theme']}>
-                            {theme}
+                            {topic.theme}
                         </h2>
-                        {user?._id === currentUser?._id && (
+                        <p className={styles.topic__description}>
+                            {topic.description}
+                        </p>
+                    </div>
+                    <div className={styles['topic__header-author']}>
+                        <h3 className={styles['topic__header-author-name']}>
+                            {topic.user?.display_name}
+                        </h3>
+                        <p className={styles['topic__header-author-date']}>
+                            {DateParser(topic.createdAt)}
+                        </p>
+                        {topic.user?._id === currentUser?._id && (
                             <div className={styles.topic__controls}>
                                 <i
+                                    aria-hidden
                                     className="small material-icons"
                                     onClick={() => {
-                                        editFunc(_id, theme, description);
-                                    }}
-                                    onKeyDown={() => {
-                                        // do nothing.
+                                        topic.editFunc();
                                     }}
                                 >
                                     edit
                                 </i>
                                 <i
+                                    aria-hidden
                                     className="small material-icons"
-                                    onClick={() => deleteFunc(_id)}
-                                    onKeyDown={() => {
-                                        // do nothing.
-                                    }}
+                                    onClick={() => topic.deleteFunc()}
                                 >
                                     delete
                                 </i>
                             </div>
                         )}
                     </div>
-                    <div className={styles['topic__header-author']}>
-                        <h3 className={styles['topic__header-author-name']}>
-                            {user?.display_name}
-                        </h3>
-                        <p className={styles['topic__header-author-date']}>
-                            {createdAt}
-                        </p>
-                    </div>
                 </div>
-                <p className={styles.topic__description}>{description}</p>
             </div>
             {!loading ? (
                 state &&
                 (comments.length > 0 ? (
                     comments.map((comment: CommentProps) => (
                         <Comment
-                            key={comment._id}
-                            user={comment.user}
-                            createdAt={DateParser(comment.createdAt)}
-                            description={comment.description}
+                            key={comment._id.toString()}
                             _id={comment._id}
+                            topic={comment.topic}
+                            message={comment.message}
+                            user={comment.user}
+                            createdAt={comment.createdAt}
+                            subcomments={comment.subcomments}
+                            deleteFunc={() => {
+                                topic.deleteFunc();
+                            }}
+                            editFunc={() => {
+                                topic.editFunc();
+                            }}
                         />
                     ))
                 ) : (

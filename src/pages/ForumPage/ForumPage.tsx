@@ -1,19 +1,17 @@
 // @ts-nocheck
-import cn from 'classnames';
 import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
 import { PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Preloader } from 'src/components/Preloader';
-import { DateParser } from 'src/components/utils/DateParse/DateParser';
 import { AllStateTypes } from 'src/store/reducers';
 import { lngService } from 'src/store/services/lngService';
-import { useAuth } from 'src/hooks/auth.hook';
+import { Icon } from 'src/components/Icon/Icon';
+import { InputMessage } from 'src/components/InputMessage';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { Layout } from '../../components/Layout';
 import { Topic } from './components/topic';
-import sendIcon from '../../../images/send.svg';
-import plusIcon from '../../../images/plus.svg';
 import { AddTopicWindow } from './components/addTopic';
 import styles from './ForumPage.scss';
 import { DeleteTopicWindow } from './components/deleteTopic';
@@ -21,17 +19,13 @@ import { EditTopicWindow } from './components/editTopic';
 import { TopicProps } from './components/topic/types';
 
 export const ForumPage = (): JSX.Element => {
-    const { token } = useAuth();
+    const { token } = useContext(AuthContext);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const [topicId, setTopicId] = useState('');
-    const [topicTheme, setTopicTheme] = useState('');
-    const [topicDesc, setTopicDesc] = useState('');
     const [openCreateWindow, setWindowCreate] = useState(false);
     const [openDeleteWindow, setWindowDelete] = useState(false);
-    const [editDeleteWindow, setWindowEdit] = useState(false);
-    const [textComment, setTextComment] = useState('');
+    const [openEditWindow, setWindowEdit] = useState(false);
     const [topics, setTopics] = useState([]);
     const { request, loading } = useHttp();
 
@@ -40,45 +34,28 @@ export const ForumPage = (): JSX.Element => {
         setTopics(data);
     }, [request]);
 
-    const createComment = useCallback(async () => {
-        const newTopic = {
-            topic: topicId,
-            description: textComment,
-        };
-        await request('/api/comment/create', 'POST', newTopic, {
-            Authorization: `Bearer ${token}`,
-        });
-        setTextComment('');
-        getTopics();
-    }, [getTopics, request, textComment, token, topicId]);
-
     useEffect(() => {
         getTopics();
     }, [getTopics]);
+
     const forumBlock = () => {
         if (loading) {
             return <Preloader />;
         }
         if (topics.length > 0) {
-            return topics.map((item: TopicProps) => (
+            return topics.map((topic: TopicProps) => (
                 <Topic
-                    key={item._id}
-                    theme={item.theme}
-                    createdAt={DateParser(item.createdAt)}
-                    description={item.description}
-                    user={item.user}
-                    isActiveTopic={topicId}
-                    setTopicId={setTopicId}
-                    _id={item._id}
-                    deleteFunc={(_id) => {
-                        setTopicId(_id);
-                        setWindowDelete(true);
+                    key={topic._id.toString()}
+                    _id={topic._id}
+                    theme={topic.theme}
+                    description={topic.description}
+                    user={topic.user}
+                    createdAt={topic.createdAt}
+                    deleteFunc={() => {
+                        setWindowDelete(!openDeleteWindow);
                     }}
-                    editFunc={(_id, theme, description) => {
-                        setTopicTheme(theme);
-                        setTopicId(_id);
-                        setTopicDesc(description);
-                        setWindowEdit(true);
+                    editFunc={() => {
+                        setWindowEdit(!openEditWindow);
                     }}
                 />
             ));
@@ -90,18 +67,14 @@ export const ForumPage = (): JSX.Element => {
         <Layout>
             <div className={styles.forum__background}>
                 <div className={styles.forum__header}>
-                    <div>
+                    <div className={styles['forum__header-left']}>
                         <Button
                             skin="quad"
                             color="green"
                             disabled={!token}
-                            onClick={() => setWindowCreate(true)}
+                            onClick={() => setWindowCreate(!openCreateWindow)}
                         >
-                            <img
-                                className={styles.icon}
-                                src={plusIcon}
-                                alt="Add"
-                            />
+                            <Icon type="plus" />
                         </Button>
                         <Button
                             skin="quad"
@@ -123,31 +96,13 @@ export const ForumPage = (): JSX.Element => {
                     </div>
                 </div>
                 <div className={styles.forum__footer}>
-                    <input
-                        className={cn(styles.forum__input, 'browser-default')}
-                        type="text"
-                        placeholder={dataStore.text.forum}
-                        value={textComment}
-                        onChange={(e) => setTextComment(e.target.value)}
-                    />
-                    <Button
-                        skin="quad"
-                        // title={dataStore.buttons.send}
-                        disabled={!topicId || !token}
-                        onClick={createComment}
-                    >
-                        <img
-                            className={styles.icon}
-                            src={sendIcon}
-                            alt="Send"
-                        />
-                    </Button>
+                    <InputMessage callback={getTopics} />
                 </div>
             </div>
             {openCreateWindow && (
                 <AddTopicWindow
                     close={() => {
-                        setWindowCreate(false);
+                        setWindowCreate(!openCreateWindow);
                         getTopics();
                     }}
                 />
@@ -155,21 +110,17 @@ export const ForumPage = (): JSX.Element => {
             {openDeleteWindow && (
                 <DeleteTopicWindow
                     close={() => {
-                        setWindowDelete(false);
+                        setWindowDelete(!openDeleteWindow);
                         getTopics();
                     }}
-                    _id={topicId}
                 />
             )}
-            {editDeleteWindow && (
+            {openEditWindow && (
                 <EditTopicWindow
                     close={() => {
-                        setWindowEdit(false);
+                        setWindowEdit(!openEditWindow);
                         getTopics();
                     }}
-                    _id={topicId}
-                    oldTheme={topicTheme}
-                    oldDescription={topicDesc}
                 />
             )}
         </Layout>

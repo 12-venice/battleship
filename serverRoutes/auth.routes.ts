@@ -59,14 +59,14 @@ router.post('/oauth', async (req, res) => {
                                 SECRET_KEY,
                                 { expiresIn: '30d' },
                             );
-                            res.json(token);
+                            return res.status(200).json(token);
                         },
                     );
                 }
             },
         );
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -97,9 +97,9 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({ userId: isExist.id }, SECRET_KEY, {
             expiresIn: '30d',
         });
-        res.status(200).json(token);
+        return res.status(200).json(token);
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }

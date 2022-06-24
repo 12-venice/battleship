@@ -1,10 +1,6 @@
 @import 'src/styles/colors.css';
 @import 'src/styles/variables.css';
 
-.icon {
-    height: 50%;
-}
-
 .forum__background {
     font-family: var(--font-family), var(--font-family-ru);
     display: flex;
@@ -23,23 +19,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.forum__input {
-    margin: 0; 
-    flex-grow: 2;
-    width: 90%;
-    height: 57px;
     background: var(--dark-blue);
     border-radius: 15px;
-    border-style: none;
-    padding-left: 20px;
-    font-family: var(--font-family-second);
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 23px;
-    color: var(--white);
 }
 
 .forum__main {
@@ -52,6 +33,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.forum__header-left {
+    display: flex;
+    flex-direction: row;
 }
 
 .forum__label {

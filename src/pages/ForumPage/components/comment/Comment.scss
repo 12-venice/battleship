@@ -10,6 +10,9 @@
     border-radius: 15px;
     color: var(--white);
 }
+.comment__active {
+    background: var(--light-blue);
+}
 .comment__btn {
     font-family: var(--font-family-second);
     font-size: 20px;
@@ -48,6 +51,9 @@
     margin: 0;
     margin-right: 10px;
     text-align: justify;
+}
+.comment__image {
+    max-width: 66%;
 }
 
 @media screen and (max-width: 800px) {

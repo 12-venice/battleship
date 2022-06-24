@@ -1,5 +1,4 @@
 import { Route, Navigate, Routes, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { AuthPage } from 'src/pages/AuthPage';
 import { HomePage } from 'src/pages/HomePage';
 import { NotFoundPage } from 'src/pages/NotFoundPage';
@@ -10,16 +9,17 @@ import { LeaderPage } from 'src/pages/LeaderPage';
 import { ForumPage } from 'src/pages/ForumPage';
 import { UpdateProfilePage } from 'src/pages/UpdateProfilePage';
 import { GamePage } from 'src/pages/GamePage';
-import { AllStateTypes } from 'src/store/reducers';
 import { FinderPage } from 'src/pages/FinderPage';
 import { ChatsPage } from 'src/pages/ChatsPage';
-import { Chat } from 'src/pages/GamePage/components/Chat';
+import { Chat } from 'src/components/Chat';
+import { useContext } from 'react';
 import { PageLinks, Props } from './types';
+import { AuthContext } from '../Context/AuthContext';
 
 const ProtectedRoute: Props = ({ childrens }) => {
-    const user = useSelector((state: AllStateTypes) => state.user.item);
+    const { token } = useContext(AuthContext);
     const location = useLocation();
-    if (!user && typeof window !== 'undefined') {
+    if (!token && typeof window !== 'undefined') {
         return (
             <Navigate to={PageLinks.auth} state={{ from: location }} replace />
         );

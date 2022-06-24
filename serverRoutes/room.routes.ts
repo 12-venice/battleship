@@ -18,9 +18,9 @@ router.get('/:id', async (req, res) => {
         const data = await Room.findOne({ _id: req.params.id }).populate(
             'users',
         );
-        res.status(200).json(data);
+        return res.status(200).json(data);
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -38,12 +38,11 @@ router.post('/find', authMiddleware, async (req, res) => {
                 (user: { _id: string }) =>
                     user._id.toString() !== req.user.userId,
             );
-            data.push({ ...anotherUser.toJSON(), ...{ room: rooms[i] } });
+            data.push({ ...anotherUser?.toJSON(), ...{ room: rooms[i] } });
         }
-        res.status(200).json(data);
+        return res.status(200).json(data);
     } catch (e) {
-        console.log(e);
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }

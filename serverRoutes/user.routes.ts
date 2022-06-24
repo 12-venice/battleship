@@ -8,6 +8,7 @@ import { Router } from 'express';
 import authMiddleware from 'src/server/auth.middleware';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { getUsers } from 'socketRoutes/auth.routes';
 import { SECRET_KEY } from '../webpack/env';
 import User from '../serverModels/user';
 
@@ -52,7 +53,7 @@ router.post('/generate', async (req, res) => {
             expiresIn: '30d',
         });
 
-        res.status(200).json(token);
+        return res.status(200).json(token);
     } catch (e) {
         return res
             .status(500)
@@ -67,9 +68,9 @@ router.post('/read', async (req, res) => {
             .sort({ [sortType]: sortDirection ? 1 : -1 })
             .skip(page * 10)
             .limit(10);
-        res.status(200).json(user);
+        return res.status(200).json(user);
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -91,9 +92,29 @@ router.post('/find', async (req, res) => {
             },
             { password: 0 },
         );
-        res.status(200).json(user);
+        return res.status(200).json(user);
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
+            message: 'Что-то пошло не так, попробуйте еще раз',
+        });
+    }
+});
+
+router.get('/online', async (req, res) => {
+    try {
+        const onlineUsersID = getUsers().map((s) => s.id);
+        const onlineUsers = await User.find(
+            { _id: { $in: onlineUsersID } },
+            {
+                password: 0,
+                defeats: 0,
+                points: 0,
+                wins: 0,
+            },
+        );
+        return res.status(200).json(onlineUsers);
+    } catch (e) {
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -103,9 +124,9 @@ router.post('/update', authMiddleware, async (req, res) => {
     try {
         await User.updateOne({ _id: req.user.userId }, { $set: req.body });
         const user = await User.findOne({ _id: req.user.userId });
-        res.status(200).json(user);
+        return res.status(200).json(user);
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -114,7 +135,6 @@ router.post('/update', authMiddleware, async (req, res) => {
 router.post('/password', authMiddleware, async (req, res) => {
     try {
         const { oldpassword, password } = req.body;
-        console.log(req.body)
         const user = await User.findOne({ _id: req.user.userId });
         const isMatch = await bcrypt.compare(oldpassword, user.password);
         if (isMatch) {
@@ -122,14 +142,13 @@ router.post('/password', authMiddleware, async (req, res) => {
                 { _id: req.user.userId },
                 { $set: { password } },
             );
-            res.status(200).json({ message: 'OK' });
-        } else {
-            res.status(400).json({
-                message: 'Пароль неправильный',
-            });
+            return res.status(200).json({ message: 'OK' });
         }
+        return res.status(400).json({
+            message: 'Пароль неправильный',
+        });
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -138,9 +157,9 @@ router.post('/password', authMiddleware, async (req, res) => {
 router.post('/delete', authMiddleware, async (req, res) => {
     try {
         await User.deleteOne({ _id: req.user.userId });
-        res.status(200).json({ message: 'OK' });
+        return res.status(200).json({ message: 'OK' });
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }
@@ -149,9 +168,9 @@ router.post('/delete', authMiddleware, async (req, res) => {
 router.get('/info', authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.user.userId);
-        res.status(200).json(user);
+        return res.status(200).json(user);
     } catch (e) {
-        res.status(500).json({
+        return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',
         });
     }

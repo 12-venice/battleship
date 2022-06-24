@@ -1,0 +1,15 @@
+.icon {
+    height: min(1.8vw, 60px);
+}
+
+@media screen and (max-width: 800px) {
+    .icon {
+        height: 30px;
+    }
+}
+
+@media screen and (max-width: 479px) {
+    .icon {
+        height: 20px;
+    }
+}

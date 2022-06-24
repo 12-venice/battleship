@@ -1,7 +1,6 @@
 // @ts-nocheck
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable no-param-reassign */
-/* eslint-disable react-hooks/exhaustive-deps */
 import cn from 'classnames';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -18,20 +17,26 @@ export const Message = (message: messageType): JSX.Element => {
     const [deliver, setDeliver] = useState(delivered);
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
     const myMsg = user._id === thisUser?._id;
+
     moment.locale('ru');
     const parseDate = moment(createdAt).fromNow();
 
-    socket.on('message:delivered', (id: string) => {
-        if (id === _id && myMsg) {
-            setDeliver(true);
-        }
-    });
+    useEffect(() => {
+        socket.on('message:delivered', (id: string) => {
+            if (id === _id && myMsg) {
+                setDeliver(true);
+            }
+        });
+        return () => {
+            socket.off('message:delivered');
+        };
+    }, [_id, myMsg]);
 
     useEffect(() => {
         if (!delivered && !myMsg) {
             request('/api/message/setdelivered', 'POST', { _id });
         }
-    }, []);
+    }, [_id, delivered, myMsg, request]);
 
     return (
         <div
@@ -41,15 +46,13 @@ export const Message = (message: messageType): JSX.Element => {
             )}
         >
             {text.match(/^\/image\//gm) ? (
-                <img className={styles.message__image} src={text} alt="image" />
+                <img className={styles.message__image} src={text} alt="img" />
             ) : (
                 <div className={styles.message__text}>{text}</div>
             )}
             <div className={styles.message__date}>
-                {parseDate}
-                {deliver && myMsg && (
-                    <i className="material-icons tiny">check</i>
-                )}
+                <p>{parseDate}</p>
+                <p>{deliver && myMsg && 'Прочитано'}</p>
             </div>
         </div>
     );

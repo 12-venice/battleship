@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react/destructuring-assignment */
@@ -13,27 +14,41 @@ export const Cell = ({
     selectUser,
 }: {
     element: User;
-    selectUser: any;
+    selectUser: Function;
 }) => {
     const usersOnline = useSelector((state: AllStateTypes) => state.userOnline);
 
+    // const checkUserOnline = () => {
+    //     const isOnline = usersOnline.indexOf(element._id) !== -1;
+    //     return !!isOnline;
+    // };
     const checkUserOnline = () => {
-        const isOnline = usersOnline.indexOf(element._id) !== -1;
+        const isOnline = usersOnline.filter((u) => u.id === element._id).length;
         return !!isOnline;
+    };
+    const checkUserGameStatus = () => {
+        const inspectUser = usersOnline.filter((u) => u.id === element._id);
+        if (inspectUser.length > 0) {
+            return inspectUser[0].inGame;
+        }
+        return false;
     };
     return (
         <div
-            key={element._id}
             aria-hidden
             className={styles.cell__line}
             onClick={() => selectUser(element)}
         >
-            <Avatar login={element.display_name} />
+            <Avatar avatar={element.avatar} login={element.display_name} />
             <span className={styles.cell__name}>{element.display_name}</span>
             <div
                 className={styles.cell__point}
                 style={{
-                    background: checkUserOnline() ? 'greenyellow' : 'gray',
+                    background: checkUserOnline()
+                        ? checkUserGameStatus()
+                            ? 'orange'
+                            : 'greenyellow'
+                        : 'gray',
                 }}
             />
         </div>

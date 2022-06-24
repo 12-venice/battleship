@@ -13,7 +13,6 @@ import {
 
 const mockHandlerChangeField = ({ matrix, squadron }) => {};
 const mockHandlerGameOver = () => {};
-
 export const mockStatistics = () => [
     { label: 'HITS', [activeFieldIds.player]: 0, [activeFieldIds.opponent]: 0 },
     { label: 'MISS', [activeFieldIds.player]: 0, [activeFieldIds.opponent]: 0 },

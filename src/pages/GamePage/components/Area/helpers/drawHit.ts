@@ -1,22 +1,16 @@
-// @ts-nocheck
-import fireImg from 'images/game/fire.png';
-import { CanvasCtx } from '../types';
-
 export interface drawHit {
     /** Контекст канваса */
-    ctx: CanvasCtx;
+    ctx: CanvasRenderingContext2D;
     /** Координата по горизонтали */
     x: number;
     /** Координата по вертикали */
     y: number;
+    /** Картинка попадания */
+    fire: HTMLImageElement;
+    /** Размер клетки */
+    cellSize: number;
 }
 
-export const drawHit = ({ ctx, x, y }: drawHit) => {
-    const width = 34;
-    const height = 33;
-    const image = new Image(width, height);
-    image.src = fireImg;
-    image.onload = () => {
-        ctx.drawImage(image, x + 2, y + 2);
-    };
+export const drawHit = ({ ctx, x, y, fire, cellSize }: drawHit) => {
+    ctx.drawImage(fire, x + 2, y + 2, cellSize * 0.8, cellSize * 0.8);
 };

@@ -34,6 +34,7 @@ export const Form = ({
 
     const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
+        event.target.reset();
         if (!checking) {
             setData(formValues);
         } else {
@@ -54,7 +55,7 @@ export const Form = ({
                             defaultValue={field.defaultValue}
                             className={field.className}
                             validateMsgFalse={field.validateMsgFalse}
-                            key={uuidv4()}
+                            key={field.name ?? uuidv4()}
                             type={field.type}
                             title={field.title}
                             name={field.name}

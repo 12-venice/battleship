@@ -10,7 +10,7 @@ import { Information } from 'src/components/Information';
 import { Preloader } from 'src/components/Preloader';
 import styles from './Header.scss';
 import { PlayerName } from './components/PlayerName';
-import { getBot } from '../Chat/config';
+import { getBot } from '../../../../components/Chat/config';
 import { Timer } from './helpers/easyTimer';
 import { CloseGameDialog } from '../CloseGameDialog';
 
@@ -21,6 +21,8 @@ export const Header = ({
     handler,
     gameOver,
     account,
+    gameStep,
+    startOnlineTimer,
 }: {
     user: User | undefined;
     updateTimer: any;
@@ -28,10 +30,12 @@ export const Header = ({
     handler: any;
     gameOver: boolean | null;
     account: number[];
+    gameStep: number;
+    startOnlineTimer: boolean;
 }) => {
     const [info, setinfo] = useState(false);
     const [exit, setExit] = useState(false);
-    const [timer, setTimer] = useState(30);
+    const [timer, setTimer] = useState(15);
     const { room } = useParams() as { room: string };
     const [anotherUser, setAnotherUser] = useState({} as User);
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
@@ -46,15 +50,23 @@ export const Header = ({
     const isTimeOver = () => {
         handler();
     };
-    const gameTimer = useMemo(() => new Timer(30, setTimer, isTimeOver), []);
+    const gameTimer = useMemo(() => new Timer(15, setTimer, isTimeOver), []);
+    useEffect(() => {
+        if (gameOver) {
+            gameTimer.stop();
+        } else if (gameStep === 1) {
+            gameTimer.start();
+            setTimer(15);
+        }
+    }, [...updateTimer, gameOver]);
     useEffect(() => {
         if (gameOver) {
             gameTimer.stop();
         } else {
             gameTimer.start();
-            setTimer(30);
+            setTimer(15);
         }
-    }, [...updateTimer, gameOver]);
+    }, [startOnlineTimer]);
     const getInfo = () => {
         setinfo(!info);
     };
@@ -80,7 +92,7 @@ export const Header = ({
                             display && styles['game__header-active'],
                         )}
                     >
-                        {timer}
+                        {gameStep >= 1 && timer}
                     </div>
                     {Object.keys(anotherUser).length === 0 ? (
                         <Preloader />
@@ -99,7 +111,12 @@ export const Header = ({
                 />
             </div>
             {info && <Information close={getInfo} />}
-            {exit && <CloseGameDialog close={() => setExit(!exit)} />}
+            {exit && (
+                <CloseGameDialog
+                    gameStep={gameStep}
+                    close={() => setExit(!exit)}
+                />
+            )}
         </>
     );
 };

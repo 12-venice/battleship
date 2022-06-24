@@ -10,6 +10,7 @@ export const Area = forwardRef(
         {
             areaWidth,
             fillColor,
+            fireType,
             matrix = emptyMatrix,
             ships,
             onClick,
@@ -43,11 +44,12 @@ export const Area = forwardRef(
         useEffect(() => {
             if (!canvasRef?.current) return;
 
-            const ctx = canvasRef.current.getContext('2d');
-            if (!ctx) return;
+            const renderCtx = canvasRef.current.getContext('2d');
+            if (!renderCtx) return;
 
             drawMatrix({
-                ctx,
+                fireType,
+                renderCtx,
                 areaWidth,
                 fillColor,
                 matrix,

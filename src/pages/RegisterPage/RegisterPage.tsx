@@ -1,12 +1,11 @@
 // @ts-nocheck
-import { useEffect } from 'react';
+import { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Form } from 'src/components/Form';
-import { PageLinks } from 'src/components/utils/Routes/types';
-import { useAuth } from 'src/hooks/auth.hook';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
+import { FromProps, PageLinks } from 'src/components/utils/Routes/types';
 import { useHttp } from 'src/hooks/http.hook';
-import { useMessage } from 'src/hooks/message.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import { User } from 'src/store/reducers/user';
 import { Layout } from '../../components/Layout';
@@ -14,23 +13,19 @@ import { inputs, headers } from './config';
 import styles from './RegisterPage.scss';
 
 export const RegisterPage = (): JSX.Element => {
+    const location = useLocation().state as FromProps;
+    const from = location?.from?.pathname;
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-    const { login } = useAuth();
-    const message = useMessage();
-    const { request, error, clearError, loading } = useHttp();
+    const { login } = useContext(AuthContext);
+    const { request, loading } = useHttp();
     const createUser = async (user: User) => {
-        const token = await request('api/user/generate', 'POST', user);
-        if (token) {
-            login(token);
+        const jwtToken = await request('api/user/generate', 'POST', user);
+        if (jwtToken) {
+            login(jwtToken, from);
         }
     };
-
-    useEffect(() => {
-        message(error);
-        clearError();
-    }, [error, message, clearError]);
 
     return (
         <Layout>

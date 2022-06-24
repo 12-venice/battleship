@@ -1,8 +1,6 @@
-import { CanvasCtx } from '../types';
-
 export interface DrawMiss {
     /** Контекст канваса */
-    ctx: CanvasCtx;
+    ctx: CanvasRenderingContext2D;
     /** Координата по горизонтали */
     x: number;
     /** Координата по вертикали */

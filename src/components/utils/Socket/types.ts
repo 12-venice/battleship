@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface ServerToClientEvents {
     'users:add': (data: string) => void;
     'users:remove': (data: string) => void;
@@ -10,7 +11,11 @@ export interface ServerToClientEvents {
     'move:sent': (data: any) => void;
     'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;
-    'messages:recive': (data: any) => void;
+    'messages:recived': (data: any) => void;
+    'game:invite': (data: any) => void;
+    'game:start': (data: any) => void;
+    'game:step': (data: any) => void;
+    'game:cancel': (data: any) => void;
 }
 
 export interface ClientToServerEvents {
@@ -25,5 +30,5 @@ export interface ClientToServerEvents {
     'move:sent': (data: any) => void;
     'move:recive': (data: any) => void;
     'messages:sent': (data: any) => void;
-    'messages:recive': (data: any) => void;
+    'messages:recived': (data: any) => void;
 }
