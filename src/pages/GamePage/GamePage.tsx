@@ -156,7 +156,9 @@ export const GamePage = (): JSX.Element => {
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
         const currentMatrix = matrix.map((row) =>
             row.map((cell) =>
-                (cell === MatrixCell.deck ? MatrixCell.empty : cell),),);
+                cell === MatrixCell.deck ? MatrixCell.empty : cell,
+            ),
+        );
 
         const ships = Object.entries(squadron)
             .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)
@@ -202,7 +204,7 @@ export const GamePage = (): JSX.Element => {
         [gameController],
     );
 
-    const fireShot = async ({ x, y }) => {
+    const sendShotCoord = async ({ x, y }) => {
         const data = {
             gameId: onlineGame.id,
             userId: thisUser?._id,
@@ -213,6 +215,15 @@ export const GamePage = (): JSX.Element => {
         });
     };
 
+    const fireShot = useCallback(({ x, y, oField }) => {
+        if (
+            oField.matrix[x][y] !== MatrixCell.hit &&
+            oField.matrix[x][y] !== MatrixCell.miss
+        ) {
+            sendShotCoord({ x, y });
+        }
+    }, []);
+
     const onlineHandlerPlayerShot = useCallback(
         (event) => {
             if (queueOnlineGame) {
@@ -222,10 +233,10 @@ export const GamePage = (): JSX.Element => {
                 const y = Math.trunc(
                     (event.pageX - areaCoords.left) / cellSize,
                 );
-                fireShot({ x, y });
+                fireShot({ x, y, oField: opponentField });
             }
         },
-        [gameController, queueOnlineGame],
+        [gameController, queueOnlineGame, opponentField],
     );
 
     // размеры игрового поля при старте игры (ресайз)
