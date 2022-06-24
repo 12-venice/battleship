@@ -214,7 +214,12 @@ export class Controller {
 
         if (this.shotQueue === activeFieldIds.opponent) {
             this.opponent.setHitCoords({ x, y });
-            this.opponent.nextShot(this.makeShot.bind(this));
+            console.log('[BOT FIELD]', this.opponent);
+            console.log('[P FIELD]', this.player);
+            this.opponent.nextShot(this.makeShot.bind(this), this.player, [
+                x,
+                y,
+            ]);
         }
     }
 
