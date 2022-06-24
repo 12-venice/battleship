@@ -281,7 +281,7 @@ export const GamePage = (): JSX.Element => {
 
     // получаем данные соперника после маунта
     useEffect(() => {
-        getRoom();
+        if (room !== 'bot') getRoom();
     }, []);
 
     useEffect(() => {
