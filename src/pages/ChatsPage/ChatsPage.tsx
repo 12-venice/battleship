@@ -153,7 +153,9 @@ export const ChatsPage = (): JSX.Element => {
                 <Search
                     close={() => {
                         setSearch(!search);
-                        getRooms();
+                        setTimeout(() => {
+                            getRooms();
+                        }, 1000);
                     }}
                 />
             )}

@@ -23,7 +23,7 @@ export const RUSSIAN = {
         random: 'СЛУЧАЙНЫЙ',
     },
     labels: {
-        finder: 'ДРУЗЬЯ',
+        finder: 'ПРИГЛАШЕНИЯ',
         menu: 'МЕНЮ',
         forum: 'ФОРУМ',
         leaders: 'ТАБЛИЦА ЛИДЕРОВ',

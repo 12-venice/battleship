@@ -17,9 +17,20 @@ export const Cell = ({
 }) => {
     const usersOnline = useSelector((state: AllStateTypes) => state.userOnline);
 
+    // const checkUserOnline = () => {
+    //     const isOnline = usersOnline.indexOf(element._id) !== -1;
+    //     return !!isOnline;
+    // };
     const checkUserOnline = () => {
-        const isOnline = usersOnline.indexOf(element._id) !== -1;
+        const isOnline = usersOnline.filter((u) => u.id === element._id).length;
         return !!isOnline;
+    };
+    const checkUserGameStatus = () => {
+        const inspectUser = usersOnline.filter((u) => u.id === element._id);
+        if (inspectUser.length > 0) {
+            return inspectUser[0].inGame;
+        }
+        return false;
     };
     return (
         <div
@@ -32,7 +43,11 @@ export const Cell = ({
             <div
                 className={styles.cell__point}
                 style={{
-                    background: checkUserOnline() ? 'greenyellow' : 'gray',
+                    background: checkUserOnline()
+                        ? checkUserGameStatus()
+                            ? 'orange'
+                            : 'greenyellow'
+                        : 'gray',
                 }}
             />
         </div>

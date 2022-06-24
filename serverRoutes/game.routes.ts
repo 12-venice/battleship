@@ -1,6 +1,6 @@
 /* eslint-disable import/no-default-export */
 import { Router } from 'express';
-import { getUsers } from 'socketRoutes/auth.routes';
+import { getUsers, setGameStatus } from 'socketRoutes/auth.routes';
 import { gameController } from 'src/server/gameController';
 import { gameFieldHandler } from 'src/server/gameFieldHandler';
 import { activeFieldList } from 'src/server/types';
@@ -101,6 +101,8 @@ router.post('/accept', async (req, res) => {
             user: invitedUser,
             room: game.room,
         });
+        setGameStatus({ socket: io, userID: createdUserId, status: true });
+        setGameStatus({ socket: io, userID: invitedUserId, status: true });
         res.status(200).json({
             message: 'Creating a game',
         });
@@ -300,6 +302,16 @@ router.post('/shot', async (req, res) => {
                 { _id: gameStateFromDB.invitedUser._id },
                 { $inc: { defeats: 1, points: freshGameState.score[0] } },
             );
+            setGameStatus({
+                socket: io,
+                userID: gameStateFromDB.createdUser._id.toString(),
+                status: false,
+            });
+            setGameStatus({
+                socket: io,
+                userID: gameStateFromDB.invitedUser._id.toString(),
+                status: false,
+            });
         } else {
             await User.updateOne(
                 { _id: gameStateFromDB.invitedUser._id },
@@ -309,6 +321,16 @@ router.post('/shot', async (req, res) => {
                 { _id: gameStateFromDB.createdUser._id },
                 { $inc: { defeats: 1, points: freshGameState.score[1] } },
             );
+            setGameStatus({
+                socket: io,
+                userID: gameStateFromDB.createdUser._id.toString(),
+                status: false,
+            });
+            setGameStatus({
+                socket: io,
+                userID: gameStateFromDB.invitedUser._id.toString(),
+                status: false,
+            });
         }
         res.status(200).json({ message: 'Coordinates accepted' });
     } catch (e) {
@@ -412,6 +434,16 @@ router.post('/exit', async (req, res) => {
                 gameCancel: true,
             });
         }
+        setGameStatus({
+            socket: io,
+            userID: gameStateFromDB.createdUser._id.toString(),
+            status: false,
+        });
+        setGameStatus({
+            socket: io,
+            userID: gameStateFromDB.invitedUser._id.toString(),
+            status: false,
+        });
         res.status(200).json({ message: 'The opponent left the game' });
     } catch (e) {
         res.status(500).json({

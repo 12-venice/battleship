@@ -2,11 +2,12 @@ import {
     addUserOnline,
     removeUserOnline,
     setUserOnline,
+    uOnline,
 } from '../reducers/online';
 import { store } from '../store';
 
 export const OnlineService = {
-    addUserOnline: (data: string) => store.dispatch(addUserOnline(data)),
+    addUserOnline: (data: uOnline) => store.dispatch(addUserOnline(data)),
     removeUserOnline: (data: string) => store.dispatch(removeUserOnline(data)),
-    setUserOnline: (data: string[]) => store.dispatch(setUserOnline(data)),
+    setUserOnline: (data: uOnline[]) => store.dispatch(setUserOnline(data)),
 };

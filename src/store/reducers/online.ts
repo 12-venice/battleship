@@ -2,7 +2,13 @@
 /* eslint-disable default-param-last */
 /* eslint-disable no-fallthrough */
 /* eslint-disable indent */
-export type userOnlineState = string[];
+
+export interface uOnline {
+    id: string;
+    inGame: boolean;
+}
+
+export type userOnlineState = uOnline[];
 
 const actions: Record<string, string> = {
     ADD_USER_ONLINE: 'ADD_USER_ONLINE',
@@ -15,7 +21,7 @@ interface BaseActionType<T> {
     type: T;
 }
 interface ItemActionType extends BaseActionType<keyof typeof actions> {
-    data: string | string[];
+    data: uOnline[];
 }
 
 const defaultState: userOnlineState = [];
@@ -27,21 +33,22 @@ export function userOnlineReducer(
     switch (type) {
         case actions.ADD_USER_ONLINE: {
             if (data) {
-                state.push(data as string);
+                state.push(data);
                 return [...state];
             }
             return state;
         }
         case actions.REMOVE_USER_ONLINE: {
-            const index = state.indexOf(data as string);
-            if (index > -1) {
-                state.splice(index, 1);
-                return [...state];
-            }
-            return state;
+            state = state.filter((user) => user.id !== (data as string));
+            // const index = state.indexOf(data);
+            // if (index > -1) {
+            //     state.splice(index, 1);
+            //     return [...state];
+            // }
+            return [...state];
         }
         case actions.SET_USER_ONLINE: {
-            state = data as string[];
+            state = data;
             return [...state];
         }
         default:
@@ -49,7 +56,7 @@ export function userOnlineReducer(
     }
 }
 
-export function addUserOnline(data: string): ItemActionType {
+export function addUserOnline(data: uOnline): ItemActionType {
     return { type: actions.ADD_USER_ONLINE, data };
 }
 
@@ -57,6 +64,6 @@ export function removeUserOnline(data: string): ItemActionType {
     return { type: actions.REMOVE_USER_ONLINE, data };
 }
 
-export function setUserOnline(data: string[]): ItemActionType {
+export function setUserOnline(data: uOnline[]): ItemActionType {
     return { type: actions.SET_USER_ONLINE, data };
 }

@@ -47,14 +47,7 @@ export const cancelInvite = async (invitation: any) => {
 };
 
 export const SocketListener = () => {
-    const AcceptInvite = (room?: string) => {
-        socket.emit('invite:accept', room);
-    };
-
-    const CancelInvite = (room?: string) => {
-        socket.emit('invite:cancel', room);
-    };
-    socket.on('users:add', (data: string) => {
+    socket.on('users:add', (data: any) => {
         OnlineService.addUserOnline(data);
     });
 
@@ -62,55 +55,10 @@ export const SocketListener = () => {
         OnlineService.removeUserOnline(data);
     });
 
-    socket.on('users:set', (data: string[]) => {
+    socket.on('users:set', (data: any) => {
         OnlineService.setUserOnline(data);
     });
 
-    socket.on('invite:accept', (data) => {
-        notificationService.addNotification({
-            title: data.user.display_name,
-            message: 'Аccepted the invitation',
-            autoDelete: false,
-            autoDeleteTime: 5000,
-            type: 'success',
-            user: data.user,
-        });
-    });
-
-    socket.on('invite:cancel', (data) => {
-        notificationService.addNotification({
-            title: data.user.display_name,
-            message: 'Refused the invitation',
-            autoDelete: true,
-            autoDeleteTime: 5000,
-            type: 'danger',
-            user: data.user,
-        });
-    });
-
-    socket.on('invite:recive', (data) => {
-        notificationService.addNotification({
-            title: data.display_name,
-            message: 'Invites you to play',
-            autoDelete: true,
-            autoDeleteTime: 5000,
-            user: data,
-            buttons: [
-                {
-                    title: 'ACCEPT',
-                    skin: 'small',
-                    color: 'orange',
-                    onClick: () => AcceptInvite(data.room),
-                },
-                {
-                    title: 'CANCEL',
-                    skin: 'small',
-                    color: 'red',
-                    onClick: () => CancelInvite(data.room),
-                },
-            ],
-        });
-    });
     socket.on('messages:recived', (data) => {
         if (
             document.location.pathname !==
@@ -128,7 +76,7 @@ export const SocketListener = () => {
                         title: 'READ',
                         skin: 'small',
                         color: 'green',
-                        href: `${PageLinks.game}/${data.room}`,
+                        href: `${PageLinks.chats}/${data.room}`,
                     },
                 ],
             });

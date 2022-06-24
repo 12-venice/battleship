@@ -23,7 +23,7 @@ export const ENGLISH = {
         random: 'RANDOM',
     },
     labels: {
-        finder: 'FRIENDS',
+        finder: 'INVITES',
         menu: 'MENU',
         forum: 'FORUM',
         leaders: 'LEADERBOARD',
