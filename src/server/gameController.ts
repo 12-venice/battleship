@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable prettier/prettier */
 import { Field } from 'src/gameCore/Field';
 import { MatrixCell } from 'src/gameCore/types';

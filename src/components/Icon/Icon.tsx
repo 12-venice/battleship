@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable indent */
 import styles from './Icon.scss';
 import chats from '../../../images/chats.svg';

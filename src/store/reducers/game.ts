@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Отключены для теста
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable default-param-last */

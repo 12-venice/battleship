@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ModalWindow } from 'src/components/ModalWindow';
 import { Preloader } from 'src/components/Preloader';
 
