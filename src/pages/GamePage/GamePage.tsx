@@ -70,6 +70,15 @@ export const GamePage = (): JSX.Element => {
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
 
+    // авто-переключение полей
+    const delay = useCallback(() => {
+        setTimeout(() => {
+            if (timerDisplay === fieldIs) {
+                setField(!fieldIs);
+            }
+        }, 400);
+    }, [fieldIs, timerDisplay]);
+
     // следим за стейтом онлайн игры
     useEffect(() => {
         if (onlineGame.gameCancel) {
@@ -80,9 +89,15 @@ export const GamePage = (): JSX.Element => {
             setGameAccount(onlineGame.state.score);
             setGameStatistics(onlineGame.state.statistics);
             if (onlineGame.state.queue === thisUser?._id) {
+                if (timerDisplay === false) {
+                    delay();
+                }
                 setQueueOnlineGame(true);
                 setTimerDisplay(true);
             } else {
+                if (timerDisplay === true) {
+                    delay();
+                }
                 setQueueOnlineGame(false);
                 setTimerDisplay(false);
             }
@@ -258,11 +273,6 @@ export const GamePage = (): JSX.Element => {
         getRoom();
     }, []);
 
-    // callback задержки смены поля БОТ
-    const delay = useCallback(() => {
-        setTimeout(() => setField(!fieldIs), 400);
-    }, [fieldIs]);
-
     useEffect(() => {
         // если время на ход вышло
         if (timerOver === true) {
@@ -288,10 +298,14 @@ export const GamePage = (): JSX.Element => {
                 activeFieldIds.player
             ) {
                 // если игрок, то меняем цвет таймера и включаем задержку на переход к полю противника
-                if (timerDisplay === false) delay();
+                if (timerDisplay === false) {
+                    delay();
+                }
                 setTimerDisplay(true);
             } else {
-                if (timerDisplay === true) delay();
+                if (timerDisplay === true) {
+                    delay();
+                }
                 setTimerDisplay(false);
             }
         }
