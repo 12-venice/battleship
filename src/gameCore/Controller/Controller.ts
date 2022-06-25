@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 // @ts-nocheck
 import { Field } from 'src/gameCore/Field';
 import { BotField } from 'src/gameCore/BotField';
@@ -148,6 +149,23 @@ export class Controller {
         }
     }
 
+    checkIsRip(coords) {
+        const squadron = this.player.getSquadron();
+        const result = Object.entries(squadron).filter(([shipId, shipData]) => {
+            const r = shipData.arrDecks.filter(
+                (c) => c[0] === coords[0] && c[1] === coords[1],
+            );
+            if (r.length > 0) {
+                return true;
+            }
+            return false;
+        });
+        if (result[0][1].hits + 1 === result[0][1].type) {
+            return true;
+        }
+        return false;
+    }
+
     makeShot({ x, y }) {
         const activeField =
             this.shotQueue === activeFieldIds.player
@@ -157,10 +175,20 @@ export class Controller {
         switch (v) {
             // промах
             case MatrixCell.empty:
+                if (this.shotQueue === activeFieldIds.opponent) {
+                    this.opponent.updateFieldMap([x, y], MatrixCell.miss);
+                }
                 this.miss({ x, y, activeField });
                 break;
             // попадание
             case MatrixCell.deck:
+                if (this.shotQueue === activeFieldIds.opponent) {
+                    this.opponent.updateFieldMap(
+                        [x, y],
+                        MatrixCell.hit,
+                        this.checkIsRip([x, y]),
+                    );
+                }
                 this.hit({ x, y, activeField });
                 break;
             default:
@@ -214,12 +242,7 @@ export class Controller {
 
         if (this.shotQueue === activeFieldIds.opponent) {
             this.opponent.setHitCoords({ x, y });
-            console.log('[BOT FIELD]', this.opponent);
-            console.log('[P FIELD]', this.player);
-            this.opponent.nextShot(this.makeShot.bind(this), this.player, [
-                x,
-                y,
-            ]);
+            this.opponent.nextShot(this.makeShot.bind(this));
         }
     }
 

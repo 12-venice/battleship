@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { Field } from 'src/gameCore/Field';
 import { getEmptyMatrix, getRandom } from 'src/gameCore/helpers';
 import { MatrixCell } from 'src/gameCore/types';
@@ -5,15 +6,15 @@ import { MatrixCell } from 'src/gameCore/types';
 export class BotField extends Field {
     opponentMatrix;
 
-    lastHit: any;
+    botTarget: any;
 
-    target: any;
+    fieldMap: any;
 
     constructor({ matrix, squadron }) {
         super({ matrix, squadron });
-        this.lastHit = [];
-        this.target = [];
+        this.botTarget = [];
         this.opponentMatrix = getEmptyMatrix();
+        this.fieldMap = getEmptyMatrix();
     }
 
     setHitCoords({ x, y }) {
@@ -30,7 +31,8 @@ export class BotField extends Field {
 
         if (
             this.opponentMatrix[x][y] === MatrixCell.hit ||
-            this.opponentMatrix[x][y] === MatrixCell.miss
+            this.opponentMatrix[x][y] === MatrixCell.miss ||
+            this.fieldMap[x][y] === 1
         ) {
             return this.getCoordsForShot();
         }
@@ -38,45 +40,126 @@ export class BotField extends Field {
         return [x, y];
     }
 
-    checkCoords([x, y]) {
-        if (
-            this.opponentMatrix[x][y] === MatrixCell.hit ||
-            this.opponentMatrix[x][y] === MatrixCell.miss
-        ) {
+    generateRoundShots() {
+        const hitDecks = this.botTarget;
+        const resultVariant = [];
+        hitDecks.forEach((hitDeck) => {
+            const nextShotVariant = [
+                [hitDeck[0], hitDeck[1] + 1],
+                [hitDeck[0], hitDeck[1] - 1],
+                [hitDeck[0] + 1, hitDeck[1]],
+                [hitDeck[0] - 1, hitDeck[1]],
+                [hitDeck[0] - 1, hitDeck[1] + 1],
+                [hitDeck[0] + 1, hitDeck[1] - 1],
+                [hitDeck[0] + 1, hitDeck[1] + 1],
+                [hitDeck[0] - 1, hitDeck[1] - 1],
+            ];
+            nextShotVariant.forEach((coords) => {
+                resultVariant.push(coords);
+            });
+        });
+        const result = resultVariant.filter((coords) =>
+            this.checkCoordsInFieldMap(coords),);
+        result.forEach((coords) => {
+            this.fieldMap[coords[0]][coords[1]] = 1;
+        });
+    }
+
+    updateFieldMap(coords, status, isRip = false) {
+        if (status === MatrixCell.miss) {
+            this.fieldMap[coords[0]][coords[1]] = 1;
+        } else if (status === MatrixCell.hit && isRip) {
+            this.fieldMap[coords[0]][coords[1]] = 1;
+            this.botTarget.push(coords);
+            this.generateRoundShots();
+            this.botTarget = [];
+        } else {
+            this.fieldMap[coords[0]][coords[1]] = 1;
+            this.botTarget.push(coords);
+        }
+        console.log('UPDATE-STATE');
+        console.log(this.fieldMap);
+    }
+
+    checkCoordsInFieldMap(coords: number[]) {
+        if (coords[0] < 0 || coords[1] < 0 || coords[0] > 9 || coords[1] > 9) {
             return false;
         }
-        return { x, y };
+        if (this.fieldMap[coords[0]][coords[1]] === 1) {
+            return false;
+        }
+        return true;
     }
 
-    nextShot(callback, playerFiel, prevShot) {
-        this.lastHit.push(prevShot);
-        this.target = this.searchShip(prevShot, playerFiel).filter(
-            (c) => c[0] !== prevShot[0] && c[1] !== prevShot[1],
-        );
-        const targetCoords = this.target.pop();
-        // const [x, y] = this.getCoordsForShot();
-        setTimeout(() => {
-            callback({ x: targetCoords[0], y: targetCoords[1] });
-        }, 1000);
+    selectVariant(arr) {
+        const untouched = arr.filter((coords) =>
+            this.checkCoordsInFieldMap(coords),);
+        const index = Math.floor(Math.random() * untouched.length);
+        return untouched[index];
     }
 
-    searchShip(coords, field) {
-        if (!field) return;
-        const result = Object.entries(field.squadron).filter(
-            ([shipId, shipData]) => {
-                const r = shipData.arrDecks.filter(
-                    (c) => c[0] === coords[0] && c[1] === coords[1],
-                );
-                if (r.length > 0) {
-                    return true;
-                }
-                return false;
-            },
-        );
-        return result[0][1].arrDecks;
-        // (c) => c[0] === coords[0] && c[1] === coords[1],
-        console.log(result[0][1].arrDecks); // [[], [], [], []]
+    searchDirection(): number[] | undefined {
+        const hitDeck = this.botTarget[0];
+        const nextShotVariant = [
+            [hitDeck[0], hitDeck[1] + 1],
+            [hitDeck[0], hitDeck[1] - 1],
+            [hitDeck[0] + 1, hitDeck[1]],
+            [hitDeck[0] - 1, hitDeck[1]],
+        ];
+        return this.selectVariant(nextShotVariant);
     }
 
-    // pickDirection(shot) {}
+    findMinMax(arr) {
+        const min = arr.reduce((previousValue, currentValue) => {
+            if (previousValue[0] < currentValue[0]) {
+                return previousValue;
+            }
+            return currentValue;
+        });
+        const max = arr.reduce((previousValue, currentValue) => {
+            if (previousValue[0] > currentValue[0]) {
+                return previousValue;
+            }
+            return currentValue;
+        });
+        return [min, max];
+    }
+
+    checkDirection(): number[] | undefined {
+        const hitDecks = this.botTarget;
+        if (hitDecks[0][1] === hitDecks[1][1]) {
+            const [min, max] = this.findMinMax(hitDecks);
+            const nextShotVariant = [
+                [min[0] - 1, min[1]],
+                [max[0] + 1, max[1]],
+            ];
+            return this.selectVariant(nextShotVariant);
+        }
+        const [min, max] = this.findMinMax(hitDecks);
+        const nextShotVariant = [
+            [min[0], min[1] - 1],
+            [max[0], max[1] + 1],
+        ];
+        return this.selectVariant(nextShotVariant);
+    }
+
+    nextShot(callback) {
+        const l = this.botTarget.length;
+        if (l === 0) {
+            const [x, y] = this.getCoordsForShot();
+            setTimeout(() => {
+                callback({ x, y });
+            }, 1000);
+        } else if (l === 1) {
+            const [x, y] = this.searchDirection() ?? this.getCoordsForShot();
+            setTimeout(() => {
+                callback({ x, y });
+            }, 1000);
+        } else {
+            const [x, y] = this.checkDirection() ?? this.getCoordsForShot();
+            setTimeout(() => {
+                callback({ x, y });
+            }, 1000);
+        }
+    }
 }
