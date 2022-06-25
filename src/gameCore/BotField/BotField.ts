@@ -77,8 +77,6 @@ export class BotField extends Field {
             this.fieldMap[coords[0]][coords[1]] = 1;
             this.botTarget.push(coords);
         }
-        console.log('UPDATE-STATE');
-        console.log(this.fieldMap);
     }
 
     checkCoordsInFieldMap(coords: number[]) {
@@ -109,33 +107,33 @@ export class BotField extends Field {
         return this.selectVariant(nextShotVariant);
     }
 
-    findMinMax(arr) {
+    findMinMax(arr, type) {
         const min = arr.reduce((previousValue, currentValue) => {
-            if (previousValue[0] < currentValue[0]) {
+            if (previousValue[type] < currentValue[type]) {
                 return previousValue;
             }
             return currentValue;
-        });
+        }, arr[0]);
         const max = arr.reduce((previousValue, currentValue) => {
-            if (previousValue[0] > currentValue[0]) {
+            if (previousValue[type] > currentValue[type]) {
                 return previousValue;
             }
             return currentValue;
-        });
+        }, arr[0]);
         return [min, max];
     }
 
     checkDirection(): number[] | undefined {
         const hitDecks = this.botTarget;
         if (hitDecks[0][1] === hitDecks[1][1]) {
-            const [min, max] = this.findMinMax(hitDecks);
+            const [min, max] = this.findMinMax(hitDecks, 0);
             const nextShotVariant = [
                 [min[0] - 1, min[1]],
                 [max[0] + 1, max[1]],
             ];
             return this.selectVariant(nextShotVariant);
         }
-        const [min, max] = this.findMinMax(hitDecks);
+        const [min, max] = this.findMinMax(hitDecks, 1);
         const nextShotVariant = [
             [min[0], min[1] - 1],
             [max[0], max[1] + 1],
