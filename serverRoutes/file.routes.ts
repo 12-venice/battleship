@@ -96,7 +96,7 @@ router.post('/message/:id', authMiddleware, (req, res) => {
             }
             const newMessage = new Message({
                 text: `/image/${req.files?.image[0].filename}`,
-                user: req.user.userId,
+                user: await User.findOne({ _id: req.user.userId }),
                 room: req.params.id,
             });
             await newMessage.save((e: Error, obj: object) => {
@@ -133,7 +133,7 @@ router.post('/comment/:id', authMiddleware, (req, res) => {
             const newComment = new Comment({
                 topic: req.params.id,
                 message: `/image/${req.files?.image[0].filename}`,
-                user: req.user.userId,
+                user: await User.findOne({ _id: req.user.userId }),
             });
             await newComment.save();
             return res.status(200).json({
@@ -160,7 +160,7 @@ router.post('/subcomment/:id', authMiddleware, (req, res) => {
                 topic,
                 comment: req.params.id,
                 message: `/image/${req.files?.image[0].filename}`,
-                user: req.user.userId,
+                user: await User.findOne({ _id: req.user.userId }),
             });
             await newComment.save();
             await Comment.updateOne(

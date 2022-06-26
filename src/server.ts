@@ -6,6 +6,7 @@ import express from 'express';
 import 'babel-polyfill';
 import jwt from 'jsonwebtoken';
 import http from 'http';
+import https from 'https';
 import path from 'path';
 import { Server, Socket } from 'socket.io';
 import authRoutes from 'socketRoutes/auth.routes';
@@ -16,6 +17,7 @@ import webpack from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
 import { ExpressPeerServer } from 'peer';
+import fs from 'fs';
 import { DB, IS_DEV, IS_DEV_SERVER, PORT, SECRET_KEY } from '../webpack/env';
 import { renderResponse } from './server/renderResponse';
 import authRouter from '../serverRoutes/auth.routes';
@@ -34,8 +36,13 @@ import {
 
 const compiler = webpack(webpackConfig);
 
+const privateKey = fs.readFileSync('./src/sslcert/localhost.key', 'utf8');
+const certificate = fs.readFileSync('./src/sslcert/localhost.crt', 'utf8');
+
+const credentials = { key: privateKey, cert: certificate };
 const app = express();
 const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
 if (IS_DEV && !IS_DEV_SERVER) {
     app.use(
         devMiddleware(compiler, {
@@ -45,10 +52,10 @@ if (IS_DEV && !IS_DEV_SERVER) {
     app.use(hotMiddleware(compiler));
 }
 
-const peerServer = ExpressPeerServer(httpServer);
+const peerServer = ExpressPeerServer(httpsServer);
 app.use('/peerjs', peerServer);
 export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
-    httpServer,
+    httpsServer,
     {
         cors: {
             origin: '*',
@@ -104,5 +111,13 @@ httpServer.listen(PORT, () => {
         `Сервер запущен в режиме ${IS_DEV ? 'РАЗРАБОТКИ' : 'ПРОДАКШЕН'}${
             IS_DEV_SERVER ? ' СЕРВЕРА' : ''
         } на порту: ${PORT}`,
+    );
+});
+
+httpsServer.listen(5443, () => {
+    console.log(
+        `Сервер запущен в режиме ${IS_DEV ? 'РАЗРАБОТКИ' : 'ПРОДАКШЕН'}${
+            IS_DEV_SERVER ? ' СЕРВЕРА' : ''
+        } на порту: ${5443}`,
     );
 });

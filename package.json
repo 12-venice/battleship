@@ -91,6 +91,7 @@
     "classnames": "2.3.1",
     "dotenv": "16.0.1",
     "express": "4.17.3",
+    "freeice": "2.2.2",
     "jsonwebtoken": "8.5.1",
     "mini-css-extract-plugin": "2.6.0",
     "moment": "2.29.3",
