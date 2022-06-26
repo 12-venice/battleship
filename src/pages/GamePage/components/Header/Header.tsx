@@ -46,6 +46,7 @@ export const Header = ({
         if (user !== undefined) {
             setAnotherUser(user);
         }
+        return () => setAnotherUser({} as User);
     }, [room, user]);
     const isTimeOver = () => {
         handler();
@@ -58,6 +59,7 @@ export const Header = ({
             gameTimer.start();
             setTimer(15);
         }
+        return () => setTimer(0);
     }, [...updateTimer, gameOver]);
     useEffect(() => {
         if (gameOver) {
@@ -66,6 +68,7 @@ export const Header = ({
             gameTimer.start();
             setTimer(15);
         }
+        return () => setTimer(0);
     }, [startOnlineTimer]);
     const getInfo = () => {
         setinfo(!info);

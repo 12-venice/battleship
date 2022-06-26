@@ -118,6 +118,9 @@ export const GamePage = (): JSX.Element => {
                 }
             }
         }
+        return () => {
+            setTimerDisplay(false);
+        }
     }, [onlineGame]);
 
     // запрашиваем данные второго игрока
