@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useMemo, useCallback, useEffect } from 'react';
 import { getCurrentShips } from './helpers/getCurrentShips';
 import { CONTAINER_HEIGHT, shipsData, MARGIN } from './data';

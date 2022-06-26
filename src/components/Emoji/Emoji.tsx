@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable @typescript-eslint/ban-types */
 import { config } from './config';
 import styles from './Emoji.scss';

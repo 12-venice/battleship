@@ -1,4 +1,4 @@
-/* eslint-disable indent */
+// @ts-nocheck
 import { Field } from 'src/gameCore/Field';
 import { BotField } from 'src/gameCore/BotField';
 import {

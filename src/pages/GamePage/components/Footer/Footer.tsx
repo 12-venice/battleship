@@ -1,12 +1,15 @@
+// @ts-nocheck
 /* eslint-disable @typescript-eslint/ban-types */
 import { Button } from 'src/components/Button';
+import { useHttp } from 'src/hooks/http.hook';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { Placement } from 'src/gameCore/Placement';
 import { useParams } from 'react-router-dom';
 import { InputMessage } from 'src/components/InputMessage';
 import { Icon } from 'src/components/Icon/Icon';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import styles from './Footer.scss';
 
 export const Footer = ({
@@ -20,6 +23,7 @@ export const Footer = ({
     setGameStep,
     setIsFull,
     setVideoCall,
+    setWaitingOnlineGame,
 }: {
     videoCall: boolean;
     isFull: boolean;
@@ -31,18 +35,40 @@ export const Footer = ({
     setGameStep: Function;
     setIsFull: Function;
     setVideoCall: Function;
+    setWaitingOnlineGame: Function;
 }) => {
+    const { request } = useHttp();
+    const { token } = useContext(AuthContext);
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
+    const gameID = useSelector((state: AllStateTypes) => state.game.id);
+    const thisUser = useSelector((state: AllStateTypes) => state.user.item);
     const { room } = useParams() as { room: string };
+
+    const createField = async () => {
+        const data = {
+            gameId: gameID,
+            userId: thisUser?._id,
+            matrix: placementArea.getMatrix(),
+            squadron: placementArea.getSquadron(),
+        };
+        await request('/api/game/ready', 'POST', data, {
+            Authorization: `Bearer ${token}`,
+        });
+    };
 
     const handleGameStart = useCallback(() => {
         if (Object.entries(placementArea.getSquadron()).length === 10) {
-            setPlayerMatrix(placementArea.getMatrix());
-            setPlayerSquadron(placementArea.getSquadron());
-            setGameStep(1);
-            setStartGame(!startGame);
+            if (room === 'bot') {
+                setPlayerMatrix(placementArea.getMatrix());
+                setPlayerSquadron(placementArea.getSquadron());
+                setGameStep(1);
+                setStartGame(!startGame);
+            } else {
+                setWaitingOnlineGame(true);
+                createField();
+            }
         }
     }, [
         placementArea,
@@ -93,7 +119,9 @@ export const Footer = ({
 
                     <Button
                         skin="short"
-                        title={dataStore.buttons.start}
+                        title={
+                            room === 'bot' ? dataStore.buttons.start : 'READY'
+                        }
                         color="green"
                         onClick={handleGameStart}
                     />

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import styles from './Preloader.scss'
 
 export const Preloader = (): JSX.Element => (

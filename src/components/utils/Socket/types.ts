@@ -14,6 +14,10 @@ export interface ServerToClientEvents {
     'messages:recived': (data: any) => void;
     'call:recived': (data: any) => void;
     'call:accept': (data: any) => void;
+    'game:invite': (data: any) => void;
+    'game:start': (data: any) => void;
+    'game:step': (data: any) => void;
+    'game:cancel': (data: any) => void;
 }
 
 export interface ClientToServerEvents {

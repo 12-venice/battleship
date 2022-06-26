@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable import/no-import-module-exports */
 import { hydrate, render } from 'react-dom';
 import 'babel-polyfill';

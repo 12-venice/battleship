@@ -1,3 +1,4 @@
+// @ts-nocheck
 import image1 from '../../../../images/avatars/m.png';
 import image2 from '../../../../images/avatars/ma.png';
 import image3 from '../../../../images/avatars/w.png';

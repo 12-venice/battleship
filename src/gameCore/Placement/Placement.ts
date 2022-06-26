@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
     getCoordinates,
     removeShip,

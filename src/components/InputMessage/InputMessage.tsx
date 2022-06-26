@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable indent */
 /* eslint-disable no-param-reassign */

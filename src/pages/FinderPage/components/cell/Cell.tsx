@@ -1,37 +1,66 @@
+// @ts-nocheck
 /* eslint-disable no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react/destructuring-assignment */
-import { useNavigate } from 'react-router-dom';
 import { Avatar } from 'src/components/Avatar';
-import { PageLinks } from 'src/components/utils/Routes/types';
+import { useHttp } from 'src/hooks/http.hook';
 import { User } from 'src/store/reducers/user';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { messageService } from 'src/store/services/messageService';
-import { socket } from 'src/components/utils/Socket/Socket';
+import { useCallback, useContext } from 'react';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
+import { notificationService } from 'src/store/services/notificationService';
 import styles from './Cell.scss';
 
-export const Cell = ({ element, str }: { element: User; str: string }) => {
-    const navigator = useNavigate();
+export const Cell = ({ element }: { element: User }) => {
+    const { request } = useHttp();
+    const { token } = useContext(AuthContext);
     const usersOnline = useSelector((state: AllStateTypes) => state.userOnline);
+    const user = useSelector((state: AllStateTypes) => state.user.item);
 
     const checkUserOnline = () => {
-        const isOnline = usersOnline.indexOf(element._id) !== -1;
+        const isOnline = usersOnline.filter((u) => u.id === element._id).length;
         return !!isOnline;
     };
 
-    const createRoom = (invitedUserId: string) => {
-        socket.emit('invite:sent', invitedUserId);
+    const checkUserGameStatus = () => {
+        const inspectUser = usersOnline.filter((u) => u.id === element._id);
+        if (inspectUser.length > 0) {
+            return inspectUser[0].inGame;
+        }
+        return false;
     };
 
-    const inviteUser = (invitedUserId: string, room: string) => {
-        socket.emit('invite:sent', invitedUserId);
-        navigator(`${PageLinks.game}/${room}`);
+    const createTicket = useCallback(
+        async (createdUserId, invitedUserId) => {
+            const data = {
+                createdUserId,
+                invitedUserId,
+            };
+            await request('/api/game/invite', 'POST', data, {
+                Authorization: `Bearer ${token}`,
+            });
+        },
+        [request, token],
+    );
+
+    const inviteUser = (invitedUser: any) => {
+        notificationService.addNotification({
+            title: invitedUser.display_name,
+            message: 'Invite sending...',
+            autoDelete: false,
+            user: invitedUser,
+            loader: true,
+        });
+        createTicket(user?._id, invitedUser._id);
     };
 
     const selectUser = () => {
-        messageService.selectMessage();
-        str ? createRoom(element._id) : inviteUser(element._id, element.room!);
+        if (checkUserOnline() && !checkUserGameStatus()) {
+            messageService.selectMessage();
+            inviteUser(element);
+        }
     };
     return (
         <div
@@ -41,14 +70,16 @@ export const Cell = ({ element, str }: { element: User; str: string }) => {
         >
             <Avatar avatar={element.avatar} login={element.display_name} />
             <span className={styles.finder__name}>{element.display_name}</span>
-            {!str && (
-                <div
-                    className={styles.finder__point}
-                    style={{
-                        background: checkUserOnline() ? 'greenyellow' : 'gray',
-                    }}
-                />
-            )}
+            <div
+                className={styles.finder__point}
+                style={{
+                    background: checkUserOnline()
+                        ? checkUserGameStatus()
+                            ? 'orange'
+                            : 'greenyellow'
+                        : 'gray',
+                }}
+            />
         </div>
     );
 };

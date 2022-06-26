@@ -27,9 +27,11 @@ import topicRouter from '../serverRoutes/topic.routes';
 import commentRouter from '../serverRoutes/comment.routes';
 import roomRouter from '../serverRoutes/room.routes';
 import messageRouter from '../serverRoutes/message.routes';
+import gameRouter from '../serverRoutes/game.routes';
 import webpackConfig from '../webpack/client.config';
 import { ISocket } from './server/types';
-import {
+import { TimersStore } from './server/timersStore';
+import type {
     ClientToServerEvents,
     ServerToClientEvents,
 } from './components/utils/Socket/types';
@@ -40,6 +42,7 @@ const privateKey = fs.readFileSync('./src/sslcert/localhost.key', 'utf8');
 const certificate = fs.readFileSync('./src/sslcert/localhost.crt', 'utf8');
 
 const credentials = { key: privateKey, cert: certificate };
+
 const app = express();
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
@@ -62,6 +65,8 @@ export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
         },
     },
 );
+
+export const ts = new TimersStore();
 
 io.use((socket: ISocket, next: (err?: Error) => void) => {
     try {
@@ -100,6 +105,7 @@ app.use('/api/topic', topicRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/room', roomRouter);
 app.use('/api/message', messageRouter);
+app.use('/api/game', gameRouter);
 app.use('/api/upload', fileRouter);
 
 app.use(express.static(path.resolve(__dirname, '../dist')));

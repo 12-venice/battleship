@@ -1,4 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
+// @ts-nocheck
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import cn from 'classnames';

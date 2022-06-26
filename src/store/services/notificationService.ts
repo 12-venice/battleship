@@ -2,8 +2,10 @@ import { v4 as uuidv4 } from 'uuid';
 import {
     addNotification,
     deleteNotification,
+    DelI,
     Notification,
     resetNotification,
+    smartDeleteNotification,
 } from '../reducers/notifications';
 import { store } from '../store';
 
@@ -18,6 +20,7 @@ const newToast = (data: Notification) => {
         type: data.type ?? undefined,
         autoDelete: data.autoDelete ?? true,
         autoDeleteTime: data.autoDeleteTime ?? 3000,
+        loader: data.loader ?? false,
     };
 };
 
@@ -26,5 +29,7 @@ export const notificationService = {
         store.dispatch(addNotification(newToast(data))),
     deleteNotification: (data: string) =>
         store.dispatch(deleteNotification(data)),
+    smartDeleteNotification: (data: DelI) =>
+        store.dispatch(smartDeleteNotification(data)),
     resetNotification: () => store.dispatch(resetNotification()),
 };

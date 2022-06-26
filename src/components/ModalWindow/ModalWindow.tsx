@@ -1,3 +1,4 @@
+// @ts-nocheck
 import cn from 'classnames';
 import styles from './ModalWindow.scss';
 

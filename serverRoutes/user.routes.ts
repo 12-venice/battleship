@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/no-default-export */
 /* eslint-disable import/extensions */
@@ -7,6 +8,7 @@ import { Router } from 'express';
 import authMiddleware from 'src/server/auth.middleware';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { getUsers } from 'socketRoutes/auth.routes';
 import { SECRET_KEY } from '../webpack/env';
 import User from '../serverModels/user';
 
@@ -91,6 +93,26 @@ router.post('/find', async (req, res) => {
             { password: 0 },
         );
         return res.status(200).json(user);
+    } catch (e) {
+        return res.status(500).json({
+            message: 'Что-то пошло не так, попробуйте еще раз',
+        });
+    }
+});
+
+router.get('/online', async (req, res) => {
+    try {
+        const onlineUsersID = getUsers().map((s) => s.id);
+        const onlineUsers = await User.find(
+            { _id: { $in: onlineUsersID } },
+            {
+                password: 0,
+                defeats: 0,
+                points: 0,
+                wins: 0,
+            },
+        );
+        return res.status(200).json(onlineUsers);
     } catch (e) {
         return res.status(500).json({
             message: 'Что-то пошло не так, попробуйте еще раз',

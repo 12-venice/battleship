@@ -11,7 +11,7 @@ export class Timer {
         this.setTimer = setTimer;
     }
 
-    start(count = 30) {
+    start(count = 15) {
         this.stop();
         this.count = count;
         this.counter = setInterval(() => {
