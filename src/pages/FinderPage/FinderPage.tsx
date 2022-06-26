@@ -25,6 +25,9 @@ export const FinderPage = () => {
     const { token } = useContext(AuthContext);
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const usersOnline = useSelector((state: AllStateTypes) => state.userOnline);
+    const notifications = useSelector(
+        (state: AllStateTypes) => state.notification,
+    );
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
@@ -101,6 +104,10 @@ export const FinderPage = () => {
     );
 
     const inviteUser = (invitedUser: any) => {
+        const index = notifications.filter(
+            (toast) => toast.message === 'Invite sending...',
+        );
+        if (index.length > 0) return;
         notificationService.addNotification({
             title: invitedUser.display_name,
             message: 'Invite sending...',

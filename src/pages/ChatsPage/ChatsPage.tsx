@@ -24,6 +24,9 @@ export const ChatsPage = (): JSX.Element => {
     const [search, setSearch] = useState(false);
     const [activeChat, setActiveChat] = useState({} as User);
     const user = useSelector((state: AllStateTypes) => state.user.item);
+    const notifications = useSelector(
+        (state: AllStateTypes) => state.notification,
+    );
     const { token } = useContext(AuthContext);
     const [rooms, setRooms] = useState([]);
     const { request, loading } = useHttp();
@@ -43,6 +46,10 @@ export const ChatsPage = (): JSX.Element => {
     );
 
     const inviteUser = (invitedUser: any) => {
+        const index = notifications.filter(
+            (toast) => toast.message === 'Invite sending...',
+        );
+        if (index.length > 0) return;
         notificationService.addNotification({
             title: invitedUser.display_name,
             message: 'Invite sending...',
