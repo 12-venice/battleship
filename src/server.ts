@@ -44,8 +44,9 @@ const certificate = fs.readFileSync('./src/sslcert/localhost.crt', 'utf8');
 const credentials = { key: privateKey, cert: certificate };
 
 const app = express();
-const httpServer = http.createServer(app);
-const httpsServer = https.createServer(credentials, app);
+const httpServer = IS_DEV
+    ? https.createServer(credentials, app)
+    : http.createServer(app);
 if (IS_DEV && !IS_DEV_SERVER) {
     app.use(
         devMiddleware(compiler, {
@@ -55,10 +56,10 @@ if (IS_DEV && !IS_DEV_SERVER) {
     app.use(hotMiddleware(compiler));
 }
 
-const peerServer = ExpressPeerServer(httpsServer);
+const peerServer = ExpressPeerServer(httpServer);
 app.use('/peerjs', peerServer);
 export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
-    httpsServer,
+    httpServer,
     {
         cors: {
             origin: '*',
@@ -117,13 +118,5 @@ httpServer.listen(PORT, () => {
         `Сервер запущен в режиме ${IS_DEV ? 'РАЗРАБОТКИ' : 'ПРОДАКШЕН'}${
             IS_DEV_SERVER ? ' СЕРВЕРА' : ''
         } на порту: ${PORT}`,
-    );
-});
-
-httpsServer.listen(5443, () => {
-    console.log(
-        `Сервер запущен в режиме ${IS_DEV ? 'РАЗРАБОТКИ' : 'ПРОДАКШЕН'}${
-            IS_DEV_SERVER ? ' СЕРВЕРА' : ''
-        } на порту: ${5443}`,
     );
 });
