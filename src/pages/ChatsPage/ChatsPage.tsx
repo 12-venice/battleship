@@ -22,6 +22,9 @@ export const ChatsPage = (): JSX.Element => {
     const { room } = useParams() as { room: string };
     const [videoCall, setVideoCall] = useState(false);
     const [search, setSearch] = useState(false);
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const [activeChat, setActiveChat] = useState({} as User);
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const notifications = useSelector(
@@ -96,7 +99,7 @@ export const ChatsPage = (): JSX.Element => {
                     <div className={styles.chats__label}>
                         <p className={styles['chats__label-tag']}>BATTLESHIP</p>
                         <h2 className={styles['chats__label-description']}>
-                            CHATS
+                            {dataStore.labels.chats}
                         </h2>
                     </div>
                     <Button

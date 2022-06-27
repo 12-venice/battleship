@@ -41,6 +41,9 @@ import { CancelGame } from './components/CancelGame';
 export const GamePage = (): JSX.Element => {
     const { request } = useHttp();
     const { room } = useParams() as { room: string };
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
     const onlineGame = useSelector((state: AllStateTypes) => state.game);
     const { token } = useContext(AuthContext);
@@ -405,7 +408,7 @@ export const GamePage = (): JSX.Element => {
                             {startGame && (
                                 <Button
                                     onClick={() => setField(!fieldIs)}
-                                    title="switch"
+                                    title={dataStore.buttons.switch}
                                     color="blue"
                                     className={styles.game__switch}
                                 />

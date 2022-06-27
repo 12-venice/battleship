@@ -187,7 +187,7 @@ export const FinderPage = () => {
                 </div>
                 <Button
                     skin="regular"
-                    title="UPDATE"
+                    title={dataStore.buttons.update}
                     onClick={() => {
                         flag ? getRooms() : getOnlineUsers();
                     }}
