@@ -85,7 +85,7 @@ export const FinderPage = () => {
     useEffect(() => {
         message(error);
         return () => clearError();
-    }, [error, message, clearError]);=
+    }, [error, message, clearError]);
 
     const sendRandomInvite = () => {
         const online = rooms.filter(

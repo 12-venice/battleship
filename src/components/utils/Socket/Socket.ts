@@ -5,11 +5,6 @@ import { gameService } from 'src/store/services/gameService';
 import { notificationService } from 'src/store/services/notificationService';
 import { OnlineService } from 'src/store/services/onlineService';
 import { PageLinks } from '../Routes/types';
-import { ClientToServerEvents, ServerToClientEvents } from './types';
-
-export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io({
-    autoConnect: false,
-});
 
 export const acceptInvite = async (invitation: any) => {
     const response = await fetch(
@@ -47,7 +42,7 @@ export const cancelInvite = async (invitation: any) => {
     return data;
 };
 
-export const SocketListener = () => {
+export const SocketListener = (socket) => {
     socket.on('users:add', (data: any) => {
         OnlineService.addUserOnline(data);
     });

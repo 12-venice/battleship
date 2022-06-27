@@ -1,14 +1,15 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Socket } from 'socket.io-client';
 import { PageLinks } from 'src/components/utils/Routes/types';
-import { socket } from 'src/components/utils/Socket/Socket';
 import { userService } from 'src/store/services/userService';
 import { useHttp } from './http.hook';
 
 export const STORAGE_NAME = 'bShipData';
 
-export const useAuth = () => {
+export const useAuth = (socket: Socket) => {
     const [token, setToken] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();

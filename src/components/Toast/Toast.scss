@@ -85,11 +85,8 @@
     margin: 0;
     font-size: 16px;
     text-align: left;
-    height: 18px;
     margin-left: -1px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    word-break: break-all;
 }
 
 .notification-image {

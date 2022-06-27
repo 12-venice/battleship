@@ -1,3 +1,7 @@
+/* eslint-disable consistent-return */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable prettier/prettier */
 /* eslint-disable jsx-a11y/media-has-caption */
@@ -12,9 +16,9 @@ import { User } from 'src/store/reducers/user';
 import { notificationService } from 'src/store/services/notificationService';
 import { Button } from '../Button';
 import { AuthContext } from '../utils/Context/AuthContext';
-import { socket as socketForRef } from '../utils/Socket/Socket';
 import styles from './VideoChat.scss';
 import { Preloader } from '../Preloader';
+import { Icon } from '../Icon/Icon';
 
 export const VideoChat = () => {
     const { _id } = useSelector((state: AllStateTypes) => state.user.item!);
@@ -24,42 +28,40 @@ export const VideoChat = () => {
     const [caller, setCaller] = useState('');
     const [callerSignal, setCallerSignal] = useState();
     const [callAccepted, setCallAccepted] = useState(false);
-    const { token } = useContext(AuthContext);
+    const { token, socket } = useContext(AuthContext);
     const { request, loading } = useHttp();
     const userVideo = useRef() as MutableRefObject<HTMLVideoElement>;
     const partnerVideo = useRef() as MutableRefObject<HTMLVideoElement>;
     const stream = useRef(new MediaStream()) as MutableRefObject<MediaStream>;
     const peer = useRef() as MutableRefObject<Peer.Instance>;
-    const socket = useRef(socketForRef).current;
     const [videoOptions, setVideoOptions] = useState(false);
-    const [audioOptions, setAudioOptions] = useState(false);
+    const [audioOptions, setAudioOptions] = useState(true);
     const [screenOptions, setScreenOptions] = useState(false);
     const [facingMode, setFacingMode] = useState(true);
+    const [facingCam, setFacingCam] = useState(false);
+    const [sharing, setSharing] = useState(false);
+    const [message, setMessage] = useState('');
 
     const videoConstraints = {
-        frameRate: 30,
-        noiseSuppression: true,
+        frameRate: { max: 30, ideal: 20 },
         width: { min: 640, ideal: 1280, max: 1920 },
         height: { min: 480, ideal: 720, max: 1080 },
         facingMode: facingMode ? 'user' : 'environment',
     };
 
-    function addMedia() {
-        peer.current.addStream(stream.current);
-    }
+    const audioConstraints = {
+        echoCancellation: true,
+        autoGainControl: true,
+        noiseSuppression: true,
+    };
 
-    const updateStream = (newTrack: MediaStreamTrack, oldTrack?: MediaStreamTrack) => {
+    const updateStream = (newTrack: MediaStreamTrack, oldTrack: MediaStreamTrack) => {
         if (peer.current !== undefined) {
-            if (oldTrack) {
-                peer.current.replaceTrack(oldTrack, newTrack, stream.current);
-            } else {
-                peer.current.addTrack(newTrack, stream.current);
-            }
+            console.log(oldTrack);
+            peer.current.replaceTrack(oldTrack, newTrack, stream.current);
         }
-        if (oldTrack) {
-            oldTrack.stop();
-            stream.current.removeTrack(oldTrack);
-        }
+        oldTrack.stop();
+        stream.current.removeTrack(oldTrack);
         stream.current.addTrack(newTrack);
 
         if (userVideo.current) {
@@ -67,25 +69,70 @@ export const VideoChat = () => {
         }
     };
 
+    const fakeAudio = () => {
+        try {
+            let ctx;
+            if (typeof window !== 'undefined') {
+                const AudioContext = window.AudioContext
+                    || window.webkitAudioContext;
+                ctx = new AudioContext();
+            } else {
+                const AT = stream.current.getAudioTracks()[0];
+                AT.enabled = false;
+                return AT;
+            }
+            const oscillator = ctx.createOscillator();
+            const dst = oscillator.connect(ctx.createMediaStreamDestination());
+            oscillator.start();
+            return Object.assign(dst.stream.getAudioTracks()[0], { enabled: false });
+        } catch (err) {
+            setMessage(err.toString());
+        }
+    };
+
+    const fakeVideo = ({ width = 640, height = 480 } = {}) => {
+        const canvas = Object.assign(document.createElement('canvas'), { width, height });
+        canvas.getContext('2d')?.fillRect(0, 0, width, height);
+        const streamFake = canvas.captureStream();
+        return Object.assign(streamFake.getVideoTracks()[0], { enabled: false });
+    };
+
+    const initializeStream = async () => {
+        try {
+            const mediaUser = await navigator.mediaDevices.getUserMedia({
+                video: videoConstraints,
+                audio: audioConstraints,
+            });
+            const audioTrack = mediaUser.getAudioTracks()[0];
+            stream.current.addTrack(audioTrack);
+            const videoTrack = mediaUser.getVideoTracks()[0];
+            videoTrack.stop();
+            stream.current.addTrack(fakeVideo());
+            if (userVideo.current) {
+                userVideo.current.srcObject = stream.current;
+            }
+            console.log(stream.current.getTracks());
+            setFacingCam(videoTrack.getCapabilities()!.facingMode!.length > 0);
+            if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                setSharing(true);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     const handleAudio = async () => {
         try {
-            let oldTrack;
-            if (stream.current.getAudioTracks().length > 0) {
-                oldTrack = stream.current.getAudioTracks()[0];
-            }
-            if (audioOptions && oldTrack) {
-                stream.current.getAudioTracks()[0].stop();
-                stream.current.removeTrack(oldTrack);
-                if (userVideo.current) {
-                    userVideo.current.srcObject = stream.current;
-                }
-                setAudioOptions(false);
+            if (audioOptions) {
+                updateStream(fakeAudio(), stream.current.getAudioTracks()[0]);
             } else {
-                const track = await navigator.mediaDevices.getUserMedia({ audio: true });
-                const getAudioTrack = track.getAudioTracks()[0];
-                updateStream(getAudioTrack);
-                setAudioOptions(true);
+                const mediaUser = await navigator.mediaDevices.getUserMedia({
+                    audio: audioConstraints,
+                });
+                const realAudio = mediaUser.getAudioTracks()[0];
+                updateStream(realAudio, stream.current.getAudioTracks()[0]);
             }
+            setAudioOptions(!audioOptions);
         } catch (err) {
             if ((err as object).toString() === 'NotAllowedError: Permission denied') {
                 notificationService.addNotification({
@@ -99,25 +146,16 @@ export const VideoChat = () => {
 
     const handleVideo = async () => {
         try {
-            let oldTrack;
-            if (stream.current.getVideoTracks().length > 0) {
-                oldTrack = stream.current.getVideoTracks()[0];
-            }
-            if (videoOptions && oldTrack) {
-                stream.current.getVideoTracks()[0].stop();
-                stream.current.removeTrack(oldTrack);
-                if (userVideo.current) {
-                    userVideo.current.srcObject = stream.current;
-                }
-                setVideoOptions(false);
+            if (videoOptions) {
+                updateStream(fakeVideo(), stream.current.getVideoTracks()[0]);
             } else {
-                const track = await navigator.mediaDevices.getUserMedia({
+                const mediaUser = await navigator.mediaDevices.getUserMedia({
                     video: videoConstraints,
                 });
-                const getVideoTrack = track.getVideoTracks()[0];
-                updateStream(getVideoTrack);
-                setVideoOptions(true);
+                const realVideo = mediaUser.getVideoTracks()[0];
+                updateStream(realVideo, stream.current.getVideoTracks()[0]);
             }
+            setVideoOptions(!videoOptions);
             setScreenOptions(false);
         } catch (err) {
             if ((err as object).toString() === 'NotAllowedError: Permission denied') {
@@ -132,14 +170,12 @@ export const VideoChat = () => {
 
     const handleCamera = async () => {
         try {
-            let oldTrack;
+            const mediaUser = await navigator.mediaDevices.getUserMedia({
+                video: videoConstraints,
+            });
+            const realVideo = mediaUser.getVideoTracks()[0];
             videoConstraints.facingMode = !facingMode ? 'user' : 'environment';
-            if (stream.current.getVideoTracks().length > 0) {
-                oldTrack = stream.current.getVideoTracks()[0];
-            }
-            const track = await navigator.mediaDevices.getUserMedia({ video: videoConstraints });
-            const getCameraTrack = track.getVideoTracks()[0];
-            updateStream(getCameraTrack, oldTrack);
+            updateStream(realVideo, stream.current.getVideoTracks()[0]);
             setFacingMode((cur: boolean) => !cur);
             if (!videoOptions) {
                 setVideoOptions((cur: boolean) => !cur);
@@ -157,28 +193,21 @@ export const VideoChat = () => {
 
     const handleDisplay = async () => {
         try {
-            let oldTrack;
-            if (stream.current.getVideoTracks().length > 0) {
-                oldTrack = stream.current.getVideoTracks()[0];
-            }
             if (!screenOptions) {
-                const track = await navigator.mediaDevices.getDisplayMedia();
-                const getDisplayTrack = track.getVideoTracks()[0];
-                updateStream(getDisplayTrack, oldTrack);
+                const trackDisplay = await navigator.mediaDevices.getDisplayMedia();
+                const getDisplayTrack = trackDisplay.getVideoTracks()[0];
+                updateStream(getDisplayTrack, stream.current.getVideoTracks()[0]);
                 setScreenOptions(true);
             } else {
-                if (!videoOptions && oldTrack) {
-                    stream.current.getVideoTracks()[0].stop();
-                    stream.current.removeTrack(oldTrack);
-                    if (userVideo.current) {
-                        userVideo.current.srcObject = stream.current;
-                    }
+                const mediaUser = await navigator.mediaDevices.getUserMedia({
+                    video: videoConstraints,
+                });
+                const realVideo = mediaUser.getVideoTracks()[0];
+                if (!videoOptions) {
+                    updateStream(fakeVideo(), stream.current.getVideoTracks()[0]);
+                    realVideo.stop();
                 } else {
-                    const track = await navigator.mediaDevices.getUserMedia({
-                        video: videoConstraints,
-                    });
-                    const getDisplayTrack = track.getVideoTracks()[0];
-                    updateStream(getDisplayTrack, oldTrack);
+                    updateStream(realVideo, stream.current.getVideoTracks()[0]);
                 }
                 setScreenOptions(false);
             }
@@ -207,39 +236,37 @@ export const VideoChat = () => {
 
     useEffect(() => {
         getRoom();
+        initializeStream();
     }, []);
 
     function callPeer(id: string) {
         peer.current = new Peer({
             initiator: true,
-            answerOptions: {},
-            offerOptions: {
-                iceRestart: true,
-                offerToReceiveAudio: true,
-                offerToReceiveVideo: true,
-            },
             trickle: false,
-            config: {
-                iceServers: freeice(),
-            },
+            config: { iceServers: freeice() },
             stream: stream.current,
+            offerOptions: { offerToReceiveAudio: true, offerToReceiveVideo: true },
         });
         peer.current.on('signal', (data) => {
-            console.log('<<<CALL>>>  \n', data);
             socket.emit('call:sent', {
                 userToCall: id,
                 signalData: data,
                 from: _id,
             });
         });
-
         peer.current.on('stream', (partnerStream: MediaStream) => {
             if (partnerVideo.current) {
                 partnerVideo.current.srcObject = partnerStream;
+                partnerVideo.current.play();
             }
         });
+        peer.current.on('close', () => {
+            console.log('CLOSE');
+        });
+        peer.current.on('error', (err) => {
+            console.log('PEER ERROR: ', err);
+        });
         socket.on('call:accept', (signal) => {
-            console.log('<<<SOCKET ACCEPT>>>  \n', signal);
             setCallAccepted(true);
             peer.current.signal(signal);
         });
@@ -250,29 +277,30 @@ export const VideoChat = () => {
         peer.current = new Peer({
             initiator: false,
             trickle: false,
-            offerOptions: {
-                iceRestart: true,
-                offerToReceiveAudio: true,
-                offerToReceiveVideo: true,
-            },
+            config: { iceServers: freeice() },
             stream: stream.current,
+            offerOptions: { offerToReceiveAudio: true, offerToReceiveVideo: true },
         });
         peer.current.on('signal', (data: SignalData) => {
-            console.log('<<<ACCEPT>>>  \n', data);
             socket.emit('call:accept', { signal: data, to: caller });
         });
 
         peer.current.on('stream', (partnerStream: MediaStream) => {
             if (partnerVideo.current) {
                 partnerVideo.current.srcObject = partnerStream;
+                partnerVideo.current.play();
             }
         });
-
+        peer.current.on('close', () => {
+            console.log('CLOSE');
+        });
+        peer.current.on('error', (err) => {
+            console.log('PEER ERROR: ', err);
+        });
         peer.current.signal(callerSignal as unknown as SignalData);
     }
 
     socket.on('call:recived', (data) => {
-        console.log('<<<SOCKET RECIVED>>>  \n', data);
         setReceivingCall(true);
         setCaller(data.from);
         setCallerSignal(data.signal);
@@ -280,7 +308,7 @@ export const VideoChat = () => {
 
     let incomingCall;
     if (receivingCall && !callAccepted) {
-        incomingCall = <Button onClick={() => acceptCall()} title="INCOMING CALL..." />;
+        incomingCall = <Button onClick={() => acceptCall()} title="CALLING..." />;
     }
 
     if (loading) {
@@ -296,57 +324,66 @@ export const VideoChat = () => {
                 autoPlay
             />
             <div>
-                <Button
-                    onClick={() => handleAudio()}
-                    title="A"
-                    color={audioOptions ? 'green' : 'red'}
-                    skin="quad"
+                <video
+                    className={callAccepted ?
+                        styles.videochat__video__user : styles.videochat__video}
+                    playsInline
+                    muted
+                    ref={userVideo as unknown as LegacyRef<HTMLVideoElement>}
+                    autoPlay
                 />
-                <Button
-                    onClick={() => handleVideo()}
-                    title="V"
-                    color={videoOptions ? 'green' : 'red'}
-                    skin="quad"
-                />
-                {videoOptions && (
+            </div>
+            <div className={styles.videochat__controls}>
+                <div>
                     <Button
-                        onClick={() => handleCamera()}
-                        title="C"
-                        color="blue"
+                        onClick={() => handleAudio()}
+                        color={audioOptions ? 'green' : 'red'}
                         skin="quad"
-                    />
-                )}
-                <Button
-                    onClick={() => handleDisplay()}
-                    title="D"
-                    color={screenOptions ? 'green' : 'red'}
-                    skin="quad"
-                />
+                    >
+                        <Icon type="mic" />
+                    </Button>
+                    <Button
+                        onClick={() => handleVideo()}
+                        color={videoOptions ? 'green' : 'red'}
+                        skin="quad"
+                    >
+                        <Icon type="camera" />
+                    </Button>
+                    {videoOptions && facingCam && (
+                        <Button
+                            onClick={() => handleCamera()}
+                            color="blue"
+                            skin="quad"
+                        >
+                            <Icon type="changecam" />
+                        </Button>
+                    )}
+                    {sharing && (
+                        <Button
+                            onClick={() => handleDisplay()}
+                            color={screenOptions ? 'green' : 'red'}
+                            skin="quad"
+                        >
+                            <Icon type="monitor" />
+                        </Button>
+                    )}
+                </div>
+                <div>
+                    {users.map((user: User) => {
+                        if (user._id === _id) {
+                            return null;
+                        }
+                        return (
+                            !receivingCall && (
+                                !callAccepted ?
+                                    <Button key={user._id} onClick={() => callPeer(user._id)} skin="quad" color="green"><Icon type="call" /></Button> :
+                                    <Button key={user._id} onClick={() => console.log('OFF')} skin="quad" color="red"><Icon type="slashcall" /></Button>
+                            ));
+                    })}
+                </div>
             </div>
-            <div>
-                {users.map((user: User) => {
-                    if (user._id === _id) {
-                        return null;
-                    }
-                    return (
-                        !receivingCall && (
-                            <Button
-                                key={user._id}
-                                onClick={() => callPeer(user._id)}
-                                title={user.display_name}
-                            />
-                        )
-                    );
-                })}
-                {incomingCall}
-            </div>
-            <video
-                className={callAccepted ? styles.videochat__video__user : styles.videochat__video}
-                playsInline
-                muted
-                ref={userVideo as unknown as LegacyRef<HTMLVideoElement>}
-                autoPlay
-            />
+            {incomingCall}
+            {message}
         </div>
     );
 };

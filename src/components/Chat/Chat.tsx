@@ -1,11 +1,11 @@
 // @ts-nocheck
 /* eslint-disable react/jsx-props-no-spreading */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import { Preloader } from 'src/components/Preloader';
 import { useHttp } from 'src/hooks/http.hook';
 import { messageService } from 'src/store/services/messageService';
-import { socket } from '../utils/Socket/Socket';
+import { AuthContext } from '../utils/Context/AuthContext';
 import { VideoChat } from '../VideoChat';
 import styles from './Chat.scss';
 import { Message } from './components/Message';
@@ -14,6 +14,7 @@ import { getBotMessage } from './config';
 
 export const Chat = (): JSX.Element => {
     const videoCall = useOutletContext();
+    const { socket } = useContext(AuthContext);
     const { request, loading } = useHttp();
     const { room } = useParams() as { room: string };
     const [messages, setMessages] = useState([] as messageType[]);

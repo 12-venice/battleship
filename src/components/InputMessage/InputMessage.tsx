@@ -137,7 +137,7 @@ export const InputMessage = ({
         >
             {setVideoCall && (
                 <Button skin="quad" color="red" onClick={() => setVideoCall()}>
-                    <Icon type="video" />
+                    <Icon type="call" />
                 </Button>
             )}
             {!videoCall && (
@@ -150,7 +150,7 @@ export const InputMessage = ({
                         }
                         disabled={!type || loading}
                     >
-                        <Icon type="plus" />
+                        <Icon type="gallery" />
                     </Button>
                     <Button
                         title={'\u{1F642}'}

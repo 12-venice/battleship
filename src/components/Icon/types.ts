@@ -12,5 +12,12 @@ export type IconType = {
         | 'roundarrow'
         | 'search'
         | 'send'
-        | 'video';
+        | 'video'
+        | 'slashcall'
+        | 'call'
+        | 'monitor'
+        | 'changecam'
+        | 'gallery'
+        | 'camera'
+        | 'mic';
 };

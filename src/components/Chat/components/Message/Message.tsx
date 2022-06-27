@@ -3,9 +3,9 @@
 /* eslint-disable no-param-reassign */
 import cn from 'classnames';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { socket } from 'src/components/utils/Socket/Socket';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { useHttp } from 'src/hooks/http.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import styles from './Message.scss';
@@ -13,6 +13,7 @@ import { messageType } from './types';
 
 export const Message = (message: messageType): JSX.Element => {
     const { _id, createdAt, text, user, delivered } = message;
+    const { socket } = useContext(AuthContext);
     const { request } = useHttp();
     const [deliver, setDeliver] = useState(delivered);
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
