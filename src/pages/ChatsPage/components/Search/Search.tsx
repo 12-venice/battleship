@@ -27,7 +27,7 @@ export const Search: Props = ({ close }): JSX.Element => {
     };
 
     const createRoom = (invitedUserId: string) => {
-        socket.emit('invite:sent', invitedUserId);
+        socket?.emit('invite:sent', invitedUserId);
         close();
     };
 

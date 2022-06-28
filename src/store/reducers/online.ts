@@ -41,11 +41,6 @@ export function userOnlineReducer(
         }
         case actions.REMOVE_USER_ONLINE: {
             state = state.filter((user) => user.id !== (data as string));
-            // const index = state.indexOf(data);
-            // if (index > -1) {
-            //     state.splice(index, 1);
-            //     return [...state];
-            // }
             return [...state];
         }
         case actions.SET_USER_ONLINE: {

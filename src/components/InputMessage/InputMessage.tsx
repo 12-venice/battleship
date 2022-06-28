@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 // @ts-nocheck
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable indent */
@@ -10,6 +11,7 @@ import {
     FormEvent,
     useCallback,
     useContext,
+    useEffect,
     useRef,
     useState,
 } from 'react';
@@ -19,11 +21,13 @@ import { useHttp } from 'src/hooks/http.hook';
 import { File, FileInput } from 'src/pages/UpdateProfilePage/components/types';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
+import { User } from 'src/store/reducers/user';
 import styles from './InputMessage.scss';
 import { Icon } from '../Icon/Icon';
 import { InputMessageType } from './types';
 import { Emoji } from '../Emoji';
 import { AuthContext } from '../utils/Context/AuthContext';
+import { CallPeer } from '../VideoChat/utils';
 
 export const InputMessage = ({
     videoCall,
@@ -34,12 +38,13 @@ export const InputMessage = ({
     const [message, setMessage] = useState('');
     const [openEmoji, setOpenEmoji] = useState(false);
     const [caretPosition, setCaretPosition] = useState(0);
+    const [userInRoom, setUserInRoom] = useState({}) as User;
     const { type, comment, topic } = useSelector(
         (messageState: AllStateTypes) => messageState.message,
     );
-
+    const userState = useSelector((state: AllStateTypes) => state.user.item);
     const fileInput = useRef<FileInput>(null);
-    const { token } = useContext(AuthContext);
+    const { token, socket } = useContext(AuthContext);
     const { request, loading } = useHttp();
     const id = () => {
         switch (type) {
@@ -82,6 +87,19 @@ export const InputMessage = ({
             Authorization: `Bearer ${token}`,
         });
     }, [message, request, room, token]);
+
+    const getUser = useCallback(async () => {
+        const user = await request(
+            '/api/room/findusers',
+            'POST',
+            { room },
+            {
+                Authorization: `Bearer ${token}`,
+            },
+        );
+        const userForCall = user.find((obj) => obj._id !== userState._id);
+        setUserInRoom(userForCall);
+    }, [userState._id, request, room, token]);
 
     const createComment = useCallback(async () => {
         let newTopic;
@@ -130,13 +148,28 @@ export const InputMessage = ({
         setMessage(e.target.value);
     };
 
+    useEffect(() => {
+        getUser();
+    }, []);
+
     return (
         <form
             className={styles.inputMessage__block}
             onSubmit={(e) => sendMessageHandler(e)}
         >
             {setVideoCall && (
-                <Button skin="quad" color="red" onClick={() => setVideoCall()}>
+                <Button
+                    skin="quad"
+                    color="red"
+                    onClick={() => {
+                        CallPeer({
+                            user: userInRoom,
+                            from: userState._id ?? '',
+                            socket,
+                        });
+                        setVideoCall();
+                    }}
+                >
                     <Icon type="call" />
                 </Button>
             )}

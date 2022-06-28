@@ -1,6 +1,6 @@
 // @ts-nocheck
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { io, Socket } from 'socket.io-client';
+import { AcceptCall, CancelCall } from 'src/components/VideoChat/utils';
 import { gameService } from 'src/store/services/gameService';
 import { notificationService } from 'src/store/services/notificationService';
 import { OnlineService } from 'src/store/services/onlineService';
@@ -42,7 +42,7 @@ export const cancelInvite = async (invitation: any) => {
     return data;
 };
 
-export const SocketListener = (socket) => {
+export const SocketListener = (socket, peer) => {
     socket.on('users:add', (data: any) => {
         OnlineService.addUserOnline(data);
     });
@@ -51,7 +51,7 @@ export const SocketListener = (socket) => {
         OnlineService.removeUserOnline(data);
     });
 
-    socket.on('users:set', (data: any) => {
+    socket.on('users:set', (data: {}[]) => {
         OnlineService.setUserOnline(data);
     });
 
@@ -89,7 +89,7 @@ export const SocketListener = (socket) => {
                 {
                     title: 'ACCEPT',
                     skin: 'small',
-                    color: 'orange',
+                    color: 'green',
                     onClick: () => acceptInvite(data),
                 },
                 {
@@ -127,5 +127,39 @@ export const SocketListener = (socket) => {
                 statistics: data.statistics,
             });
         }
+    });
+
+    socket.on('call:recived', ({ signal, from }) => {
+        notificationService.addNotification({
+            title: from.display_name,
+            message: 'is calling you',
+            autoDelete: false,
+            autoDeleteTime: 5000,
+            user: from,
+            buttons: [
+                {
+                    title: 'ACCEPT',
+                    skin: 'small',
+                    color: 'green',
+                    onClick: () => AcceptCall({ from, socket, signal }),
+                },
+                {
+                    title: 'CANCEL',
+                    skin: 'small',
+                    color: 'red',
+                    onClick: () => CancelCall({ from, socket }),
+                },
+            ],
+        });
+    });
+
+    socket.on('call:accept', (signal: SignalData) => {
+        setCallAccepted(true);
+        peer.signal(signal);
+    });
+
+    socket.on('call:cancel', (signal: SignalData) => {
+        setCallAccepted(true);
+        peer.signal(signal);
     });
 };

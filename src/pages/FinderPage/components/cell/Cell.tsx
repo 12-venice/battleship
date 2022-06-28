@@ -20,16 +20,14 @@ export const Cell = ({ element }: { element: User }) => {
     const user = useSelector((state: AllStateTypes) => state.user.item);
 
     const checkUserOnline = () => {
-        const isOnline = usersOnline.filter((u) => u.id === element._id).length;
-        return !!isOnline;
-    };
-
-    const checkUserGameStatus = () => {
-        const inspectUser = usersOnline.filter((u) => u.id === element._id);
-        if (inspectUser.length > 0) {
-            return inspectUser[0].inGame;
+        const isOnline = usersOnline.find((u) => u.id === element._id);
+        if (!isOnline) {
+            return 'grey';
         }
-        return false;
+        if (isOnline.inGame) {
+            return 'orange';
+        }
+        return 'greenyellow';
     };
 
     const createTicket = useCallback(
@@ -73,11 +71,7 @@ export const Cell = ({ element }: { element: User }) => {
             <div
                 className={styles.finder__point}
                 style={{
-                    background: checkUserOnline()
-                        ? checkUserGameStatus()
-                            ? 'orange'
-                            : 'greenyellow'
-                        : 'gray',
+                    background: checkUserOnline(),
                 }}
             />
         </div>

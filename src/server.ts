@@ -9,7 +9,7 @@ import http from 'http';
 import https from 'https';
 import path from 'path';
 import { Server, Socket } from 'socket.io';
-import authRoutes from 'socketRoutes/auth.routes';
+import authRoutes, { getUsers } from 'socketRoutes/auth.routes';
 import inviteRoutes from 'socketRoutes/invite.routes';
 import videoRoutes from 'socketRoutes/video.routes';
 import mongoose from 'mongoose';
@@ -68,6 +68,13 @@ export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
 );
 
 export const ts = new TimersStore();
+
+io.engine.on('connection_error', (err) => {
+    console.log(err.req); // the request object
+    console.log(err.code); // the error code, for example 1
+    console.log(err.message); // the error message, for example "Session ID unknown"
+    console.log(err.context); // some additional error context
+});
 
 io.use((socket: ISocket, next: (err?: Error) => void) => {
     try {

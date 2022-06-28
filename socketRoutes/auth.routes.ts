@@ -7,7 +7,7 @@ import { io } from 'src/server';
 import { ISocket } from 'src/server/types';
 import User from '../serverModels/user';
 
-let _users: { socket: ISocket; id: string; inGame: boolean }[] = [];
+const _users: { socket: ISocket; id: string; inGame: boolean }[] = [];
 
 export const addUser = (socket: ISocket) => {
     _users.push({ socket, id: socket.userID!, inGame: false });
@@ -15,40 +15,34 @@ export const addUser = (socket: ISocket) => {
 
 export const getUsers = () => _users;
 
-export const setGameStatus = ({ socket, userID, status }) => {
-    _users = _users.map((user) => {
-        if (user.id === userID) {
-            user.inGame = status;
-        }
-        return user;
-    });
-    socket.emit(
-        'users:set',
-        getUsers().map((userOnline) => ({
-            id: userOnline.socket.userID,
-            inGame: userOnline.inGame,
-        })),
-    );
+export const setGameStatus = ({ userID, status }) => {
+    const usersOnline = getUsers().map((userOnline) => ({
+        id: userOnline.socket.userID,
+        inGame: userOnline.inGame,
+    }));
+    const user = _users.find((obj) => obj.id === userID!);
+    if (user) {
+        user.inGame = status;
+        io.emit('users:set', usersOnline);
+    }
 };
 
 export const deleteUser = (socket: ISocket) => {
-    _users = _users.filter((obj) => obj.id !== socket.userID!);
+    const i = _users.findIndex((obj) => obj.id === socket.userID!);
+    _users.splice(i, 1);
 };
 
 export const getSocket = (_id: string) =>
     _users.find((obj) => obj.id === _id!)?.socket.id;
 
 export default async (socket: ISocket) => {
-    io.to(socket.id).emit(
-        'users:set',
-        getUsers().map((userOnline) => ({
-            id: userOnline.socket.userID,
-            inGame: userOnline.inGame,
-        })),
-    );
     addUser(socket);
-    const user = await User.findOne({ _id: socket.userID }).populate('rooms');
-
+    const usersOnline = getUsers().map((userOnline) => ({
+        id: userOnline.socket.userID,
+        inGame: userOnline.inGame,
+    }));
+    io.to(socket?.id).emit('users:set', usersOnline);
+    const user = await User.findOne({ _id: socket.userID });
     const joinToRoom = async (room: { _id: string }) => {
         socket.join(room._id.toString());
         socket.broadcast.to(room._id.toString()).emit('users:add', {
@@ -57,7 +51,6 @@ export default async (socket: ISocket) => {
         });
         console.log(`${socket.userID} JOIN to room: ${room._id.toString()}`);
     };
-
     if (user && user.rooms) {
         await user.rooms.forEach(joinToRoom);
     }
