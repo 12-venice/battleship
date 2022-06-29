@@ -41,6 +41,9 @@ import { CancelGame } from './components/CancelGame';
 export const GamePage = (): JSX.Element => {
     const { request } = useHttp();
     const { room } = useParams() as { room: string };
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
     const onlineGame = useSelector((state: AllStateTypes) => state.game);
     const { token } = useContext(AuthContext);
@@ -70,6 +73,15 @@ export const GamePage = (): JSX.Element => {
     const playerCanvasRef = createRef<HTMLCanvasElement>();
     const botCanvasRef = createRef<HTMLCanvasElement>();
 
+    // авто-переключение полей
+    const delay = useCallback(() => {
+        setTimeout(() => {
+            if (timerDisplay === fieldIs) {
+                setField(!fieldIs);
+            }
+        }, 400);
+    }, [fieldIs, timerDisplay]);
+
     // следим за стейтом онлайн игры
     useEffect(() => {
         if (onlineGame.gameCancel) {
@@ -80,9 +92,15 @@ export const GamePage = (): JSX.Element => {
             setGameAccount(onlineGame.state.score);
             setGameStatistics(onlineGame.state.statistics);
             if (onlineGame.state.queue === thisUser?._id) {
+                if (timerDisplay === false) {
+                    delay();
+                }
                 setQueueOnlineGame(true);
                 setTimerDisplay(true);
             } else {
+                if (timerDisplay === true) {
+                    delay();
+                }
                 setQueueOnlineGame(false);
                 setTimerDisplay(false);
             }
@@ -102,6 +120,9 @@ export const GamePage = (): JSX.Element => {
                     setGameOver('defeat');
                 }
             }
+        }
+        return () => {
+            setTimerDisplay(false);
         }
     }, [onlineGame]);
 
@@ -141,7 +162,9 @@ export const GamePage = (): JSX.Element => {
     const handlerChangeOpponentField = useCallback(({ matrix, squadron }) => {
         const currentMatrix = matrix.map((row) =>
             row.map((cell) =>
-                (cell === MatrixCell.deck ? MatrixCell.empty : cell),),);
+                cell === MatrixCell.deck ? MatrixCell.empty : cell,
+            ),
+        );
 
         const ships = Object.entries(squadron)
             .filter(([, { arrDecks, hits }]) => hits === arrDecks.length)
@@ -187,7 +210,7 @@ export const GamePage = (): JSX.Element => {
         [gameController],
     );
 
-    const fireShot = async ({ x, y }) => {
+    const sendShotCoord = async ({ x, y }) => {
         const data = {
             gameId: onlineGame.id,
             userId: thisUser?._id,
@@ -198,6 +221,15 @@ export const GamePage = (): JSX.Element => {
         });
     };
 
+    const fireShot = useCallback(({ x, y, oField }) => {
+        if (
+            oField.matrix[x][y] !== MatrixCell.hit &&
+            oField.matrix[x][y] !== MatrixCell.miss
+        ) {
+            sendShotCoord({ x, y });
+        }
+    }, []);
+
     const onlineHandlerPlayerShot = useCallback(
         (event) => {
             if (queueOnlineGame) {
@@ -207,10 +239,10 @@ export const GamePage = (): JSX.Element => {
                 const y = Math.trunc(
                     (event.pageX - areaCoords.left) / cellSize,
                 );
-                fireShot({ x, y });
+                fireShot({ x, y, oField: opponentField });
             }
         },
-        [gameController, queueOnlineGame],
+        [gameController, queueOnlineGame, opponentField],
     );
 
     // размеры игрового поля при старте игры (ресайз)
@@ -255,13 +287,8 @@ export const GamePage = (): JSX.Element => {
 
     // получаем данные соперника после маунта
     useEffect(() => {
-        getRoom();
+        if (room !== 'bot') getRoom();
     }, []);
-
-    // callback задержки смены поля БОТ
-    const delay = useCallback(() => {
-        setTimeout(() => setField(!fieldIs), 400);
-    }, [fieldIs]);
 
     useEffect(() => {
         // если время на ход вышло
@@ -288,14 +315,26 @@ export const GamePage = (): JSX.Element => {
                 activeFieldIds.player
             ) {
                 // если игрок, то меняем цвет таймера и включаем задержку на переход к полю противника
-                if (timerDisplay === false) delay();
+                if (timerDisplay === false) {
+                    delay();
+                }
                 setTimerDisplay(true);
             } else {
-                if (timerDisplay === true) delay();
+                if (timerDisplay === true) {
+                    delay();
+                }
                 setTimerDisplay(false);
             }
         }
     }, [playerField, opponentField]);
+
+    const restartGame = useCallback(() => {
+        setGameOver(false);
+        setOpponentField();
+        setPlayerField();
+        setGameStep(0);
+        setStartGame(false);
+    }, []);
 
     return (
         <Layout>
@@ -369,7 +408,7 @@ export const GamePage = (): JSX.Element => {
                             {startGame && (
                                 <Button
                                     onClick={() => setField(!fieldIs)}
-                                    title="switch"
+                                    title={dataStore.buttons.switch}
                                     color="blue"
                                     className={styles.game__switch}
                                 />
@@ -412,6 +451,8 @@ export const GamePage = (): JSX.Element => {
                             room={room}
                             gameAccount={gameAccount}
                             gameStatistics={gameStatistics}
+                            restartGame={restartGame}
+                            gameStep={gameStep}
                         />
                     )}
                     {waitingOnlineGame && <Waiting />}

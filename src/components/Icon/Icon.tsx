@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable indent */
 import styles from './Icon.scss';
 import chats from '../../../images/chats.svg';
@@ -14,6 +13,8 @@ import roundarrow from '../../../images/round_arrow.svg';
 import search from '../../../images/search.svg';
 import send from '../../../images/send.svg';
 import video from '../../../images/video.svg';
+import invite from '../../../images/invite.svg';
+import arrowUp from '../../../images/arrowUp.svg';
 import { IconType } from './types';
 
 export const Icon = ({ type }: IconType): JSX.Element => {
@@ -45,6 +46,10 @@ export const Icon = ({ type }: IconType): JSX.Element => {
                 return send;
             case 'video':
                 return video;
+            case 'invite':
+                return invite;
+            case 'arrowUp':
+                return arrowUp;
             default:
                 return null;
         }

@@ -1,19 +1,41 @@
 .inputMessage__input {
     display: flex;
-    height: 70%;
+    height: min(3.6vw, 70px);
     width: 60%;
     padding: 10px;
     margin: 0;
     flex-grow: 2;
+    font-size: 1.5vw;
 }
 
 .inputMessage__block{
     display: flex;
     width: 90%;
-    height: 57px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     margin: 0;
     flex-grow: 2;
+}
+.inputMessage__dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.inputMessage__dropdown-content {
+    display: flex;
+    position: absolute;
+    background-color: var(--dark-blue);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 3px;
+    z-index: 1;
+    border-radius: 16px;
+    transform: translateY(-100px);
+}
+
+@media screen and (max-width: 800px) {
+    .inputMessage__input {
+        height: 57px;
+        font-size: 3vw;
+    }
 }

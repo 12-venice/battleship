@@ -22,7 +22,7 @@ export const Input = ({
     return (
         <div style={{ margin: '5px 0' }}>
             <input
-                style={{ width: 'min(250px, 45vw)' }}
+                style={{ width: 'min(250px, 57vw)' }}
                 id={name}
                 type={type}
                 name={name}

@@ -51,3 +51,12 @@ input[type=password]:not(.browser-default):focus:not([readonly])+label {
 span::after {
   font-family: var(--font-family-second);
 }
+
+@media screen and (max-width: 479px) {
+  input[type=text]:not([readonly]) {
+    height: 2rem;
+  }
+  input[type=password]:not([readonly]) {
+    height: 2rem;
+  }
+}

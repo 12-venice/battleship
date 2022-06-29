@@ -11,6 +11,7 @@
 
 .auth__header {
     font-size: min(30px, 7vw);
+    line-height: min(34px, 7vw);
 }
 
 .auth__link {
@@ -26,4 +27,20 @@
 
 .auth__yandexid {
     margin: 10px;
+    max-width: 228px;
+    width: 100%;
+}
+
+.auth__form {
+    margin-top: 40px;
+    width: 90%;
+    padding-top: 29px;
+    padding-bottom: 24px;
+    margin-bottom: 39px;
+}
+
+@media screen and (max-width: 479px) {
+    .auth__main {
+        padding: 30px;
+    }
 }

@@ -12,5 +12,7 @@ export type IconType = {
         | 'roundarrow'
         | 'search'
         | 'send'
-        | 'video';
+        | 'video'
+        | 'invite'
+        | 'arrowUp';
 };

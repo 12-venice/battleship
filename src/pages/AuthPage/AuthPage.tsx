@@ -37,6 +37,7 @@ export const AuthPage = (): JSX.Element => {
                     {dataStore.labels.auth}
                 </span>
                 <Form
+                    styleClass={styles.auth__form}
                     inputs={inputs}
                     setData={auth}
                     submitTitle={dataStore.buttons.login}
@@ -52,7 +53,7 @@ export const AuthPage = (): JSX.Element => {
                 />
                 <NavLink to={PageLinks.register}>
                     <span className={styles.auth__link}>
-                        {headers.navigation}
+                        {dataStore.buttons.signup}
                     </span>
                 </NavLink>
             </div>

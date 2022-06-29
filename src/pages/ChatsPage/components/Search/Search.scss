@@ -1,6 +1,6 @@
 .search__block {
-    height: 600px;
-    width: 450px;
+    height: 50vh;
+    width: min(60vw, 450px);
     overflow-y: scroll;
     font-family: var(--font-family), var(--font-family-ru);
     border-radius: 38px;
@@ -12,4 +12,15 @@
     justify-content: flex-start;
     font-size: 25px;
     margin-bottom: 10px;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+        background-color: var(--blue);
+        ;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: var(--dark-blue);
+    }
 }

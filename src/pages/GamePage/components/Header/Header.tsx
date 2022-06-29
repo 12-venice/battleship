@@ -46,6 +46,7 @@ export const Header = ({
         if (user !== undefined) {
             setAnotherUser(user);
         }
+        return () => setAnotherUser({} as User);
     }, [room, user]);
     const isTimeOver = () => {
         handler();
@@ -58,6 +59,7 @@ export const Header = ({
             gameTimer.start();
             setTimer(15);
         }
+        return () => setTimer(0);
     }, [...updateTimer, gameOver]);
     useEffect(() => {
         if (gameOver) {
@@ -66,6 +68,7 @@ export const Header = ({
             gameTimer.start();
             setTimer(15);
         }
+        return () => setTimer(0);
     }, [startOnlineTimer]);
     const getInfo = () => {
         setinfo(!info);
@@ -78,29 +81,50 @@ export const Header = ({
                 <div className={styles['game__header-players']}>
                     <div
                         className={cn(
-                            styles['game__header-text'],
-                            styles['game__header-active'],
+                            styles['header__bar-left'],
+                            gameStep >= 1 &&
+                                display &&
+                                styles['header__bar-active'],
                         )}
                     >
-                        {account[0]}
+                        <div
+                            className={cn(
+                                styles['game__header-text'],
+                                styles['game__header-active'],
+                            )}
+                        >
+                            {account[0]}
+                        </div>
+                        <PlayerName user={thisUser} avatarPosition="right" />
                     </div>
-                    <PlayerName user={thisUser} avatarPosition="right" />
                     <div
                         className={cn(
                             styles['game__header-text'],
-                            styles['game__header-timer'],
+                            gameStep >= 1 && styles['game__header-timer'],
                             display && styles['game__header-active'],
                         )}
                     >
-                        {gameStep >= 1 && timer}
+                        {gameStep >= 1 ? timer : 'VS'}
                     </div>
-                    {Object.keys(anotherUser).length === 0 ? (
-                        <Preloader />
-                    ) : (
-                        <PlayerName user={anotherUser} avatarPosition="left" />
-                    )}
-                    <div className={styles['game__header-text']}>
-                        {account[1]}
+                    <div
+                        className={cn(
+                            styles['header__bar-right'],
+                            gameStep >= 1 &&
+                                !display &&
+                                styles['header__bar-active'],
+                        )}
+                    >
+                        {Object.keys(anotherUser).length === 0 ? (
+                            <Preloader />
+                        ) : (
+                            <PlayerName
+                                user={anotherUser}
+                                avatarPosition="left"
+                            />
+                        )}
+                        <div className={styles['game__header-text']}>
+                            {account[1]}
+                        </div>
                     </div>
                 </div>
                 <Button
