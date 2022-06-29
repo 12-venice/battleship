@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useSelector } from 'react-redux';
 import { ModalWindow } from 'src/components/ModalWindow';
 import { Preloader } from 'src/components/Preloader';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable no-param-reassign */
 /* eslint-disable default-param-last */
 /* eslint-disable no-fallthrough */

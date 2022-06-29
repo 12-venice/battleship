@@ -1,11 +1,11 @@
 /* eslint-disable import/no-default-export */
-import mongoose, { Schema, model, Types } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 
 const schema = new Schema({
     id: { type: String },
-    invitedUser: { type: Types.ObjectId, ref: 'User' },
-    createdUser: { type: Types.ObjectId, ref: 'User' },
-    room: { type: Types.ObjectId, ref: 'Room', required: true },
+    invitedUser: { type: Schema.Types.ObjectId, ref: 'User' },
+    createdUser: { type: Schema.Types.ObjectId, ref: 'User' },
+    room: { type: Schema.Types.ObjectId, ref: 'Room', required: true },
     createdField: { type: Object },
     invitedField: { type: Object },
     queue: { type: String },

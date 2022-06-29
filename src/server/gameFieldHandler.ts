@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { MatrixCell } from 'src/gameCore/types';
 
 export function gameFieldHandler(playerField, opponentField) {
