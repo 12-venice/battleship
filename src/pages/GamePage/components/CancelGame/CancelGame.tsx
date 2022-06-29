@@ -15,7 +15,7 @@ export const CancelGame = (): JSX.Element => {
             <p className={styles.cancelGame__text}>
                 {dataStore.text.cancelGame}
             </p>
-            <div className={styles.cancelGame__text}>
+            <div className={styles.cancelGame__buttons}>
                 <Button
                     skin="high"
                     title={dataStore.buttons.home}

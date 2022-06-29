@@ -16,7 +16,7 @@ export const RUSSIAN = {
         reset: 'СБРОС',
         start: 'СТАРТ',
         send: 'ТЫК!',
-        editprofile: 'ИЗМЕНИТЬ ПРОФ',
+        editprofile: 'ИЗМЕНИТЬ ПРОФИЛЬ',
         editpass: 'ИЗМЕНИТЬ ПАРОЛЬ',
         confirm: 'ПОДТВЕРДИТЬ',
         back: 'НАЗАД',

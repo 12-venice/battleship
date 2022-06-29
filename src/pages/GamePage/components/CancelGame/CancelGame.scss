@@ -1,13 +1,19 @@
 .cancelGame__buttons {
-    width: 370px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .cancelGame__text {
-    font-size: 41px;
+    font-size: 38px;
     width: 426px;
     margin: 0;
     margin-bottom: 20px;
     text-align: center;
+}
+
+@media screen and (max-width: 800px) {
+    .cancelGame__text {
+        width: 60vw;
+        font-size: 4vw;
+    }
 }

@@ -1,0 +1,29 @@
+@import 'src/styles/colors.css';
+@import 'src/styles/variables.css';
+
+.dropdown12 {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content12 {
+    display: flex;
+    position: absolute;
+    background-color: var(--dark-blue);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 3px;
+    z-index: 1;
+    border-radius: 16px;
+    transform: translateY(-100px);
+}
+
+// .dropdown12:hover .dropdown-content12 {
+//     display: block;
+// }
+
+// @media screen and (max-width: 800px) {
+//     .modal__plate {
+//         padding: 30px;
+//     }
+// }

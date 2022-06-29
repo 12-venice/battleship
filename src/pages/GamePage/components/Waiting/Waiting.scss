@@ -1,7 +1,14 @@
 .waiting__text {
-    font-size: 41px;
+    font-size: 38px;
     width: 426px;
     margin: 0;
     margin-bottom: 20px;
     text-align: center;
+}
+
+@media screen and (max-width: 800px) {
+    .waiting__text {
+        width: 60vw;
+        font-size: 4vw;
+    }
 }

@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { v4 as uuidv4 } from 'uuid';
+import cn from 'classnames';
 import { useState } from 'react';
 import { Button } from '../Button';
 import { Input } from '../Input';
@@ -12,6 +13,7 @@ export const Form = ({
     setData,
     submitTitle,
     disabled,
+    styleClass,
     checking = true,
 }: formProps): JSX.Element => {
     const [fields, setFields] = useState(inputs);
@@ -48,7 +50,7 @@ export const Form = ({
 
     return (
         <form className={styles.form__main} onSubmit={handleSubmit}>
-            <div className={styles.form__block}>
+            <div className={cn(styles.form__block, styleClass)}>
                 {fields.map(
                     (field): JSX.Element => (
                         <Input

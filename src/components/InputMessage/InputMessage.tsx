@@ -23,12 +23,14 @@ import { Icon } from '../Icon/Icon';
 import { InputMessageType } from './types';
 import { Emoji } from '../Emoji';
 import { AuthContext } from '../utils/Context/AuthContext';
+import { Dropdown } from '../Dropdown/Dropdown';
 
 export const InputMessage = ({
     videoCall,
     setVideoCall,
     callback,
 }: InputMessageType) => {
+    const [isActive, setIsActive] = useState(false);
     const { room } = useParams() as { room: string };
     const [message, setMessage] = useState('');
     const [openEmoji, setOpenEmoji] = useState(false);
@@ -134,29 +136,59 @@ export const InputMessage = ({
             className={styles.inputMessage__block}
             onSubmit={(e) => sendMessageHandler(e)}
         >
-            {setVideoCall && (
-                <Button skin="quad" color="red" onClick={() => setVideoCall()}>
-                    <Icon type="video" />
+            <div className={styles.inputMessage__dropdown}>
+                {isActive && (
+                    <div className={styles['inputMessage__dropdown-content']}>
+                        {setVideoCall && (
+                            <Button
+                                skin="quad"
+                                color="red"
+                                onClick={() => {
+                                    setVideoCall();
+                                    setIsActive(!isActive);
+                                }}
+                            >
+                                <Icon type="video" />
+                            </Button>
+                        )}
+                        {!videoCall && (
+                            <>
+                                <Button
+                                    skin="quad"
+                                    color="yellow"
+                                    onClick={() => {
+                                        setIsActive(!isActive);
+                                        if (fileInput.current) {
+                                            fileInput.current.click();
+                                        }
+                                    }}
+                                    disabled={!type || loading}
+                                >
+                                    <Icon type="plus" />
+                                </Button>
+                                <Button
+                                    title={'\u{1F642}'}
+                                    skin="quad"
+                                    color="blue"
+                                    onClick={() => {
+                                        setOpenEmoji(!openEmoji);
+                                        setIsActive(!isActive);
+                                    }}
+                                />
+                            </>
+                        )}
+                    </div>
+                )}
+                <Button
+                    skin="quad"
+                    color="blue"
+                    onClick={() => setIsActive(!isActive)}
+                >
+                    <Icon type="arrowUp" />
                 </Button>
-            )}
+            </div>
             {!videoCall && (
                 <>
-                    <Button
-                        skin="quad"
-                        color="yellow"
-                        onClick={() =>
-                            fileInput.current && fileInput.current.click()
-                        }
-                        disabled={!type || loading}
-                    >
-                        <Icon type="plus" />
-                    </Button>
-                    <Button
-                        title={'\u{1F642}'}
-                        skin="quad"
-                        color="blue"
-                        onClick={() => setOpenEmoji(!openEmoji)}
-                    />
                     <input
                         className={cn(
                             styles.inputMessage__input,

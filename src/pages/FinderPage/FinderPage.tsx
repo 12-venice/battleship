@@ -11,6 +11,7 @@ import { Layout } from 'src/components/Layout';
 import { Preloader } from 'src/components/Preloader';
 import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { PageLinks } from 'src/components/utils/Routes/types';
+import { Icon } from 'src/components/Icon/Icon';
 // import { socket } from 'src/components/utils/Socket/Socket';
 import { useHttp } from 'src/hooks/http.hook';
 import { useMessage } from 'src/hooks/message.hook';
@@ -144,17 +145,16 @@ export const FinderPage = () => {
         <Layout>
             <div className={styles.finder__background}>
                 <div className={styles.finder__header}>
-                    <div>
-                        <Button
-                            skin="quad"
-                            color="orange"
-                            title="F"
-                            onClick={() => {
-                                flag ? getOnlineUsers() : getRooms();
-                                setFlag(!flag);
-                            }}
-                        />
-                    </div>
+                    <Button
+                        skin="quad"
+                        color="orange"
+                        onClick={() => {
+                            flag ? getOnlineUsers() : getRooms();
+                            setFlag(!flag);
+                        }}
+                    >
+                        <Icon type="invite" />
+                    </Button>
                     <div className={styles.finder__label}>
                         <p className={styles['finder__label-tag']}>
                             BATTLESHIP
@@ -185,19 +185,21 @@ export const FinderPage = () => {
                         <Preloader />
                     )}
                 </div>
-                <Button
-                    skin="regular"
-                    title={dataStore.buttons.update}
-                    onClick={() => {
-                        flag ? getRooms() : getOnlineUsers();
-                    }}
-                />
-                <Button
-                    skin="regular"
-                    color="green"
-                    title={dataStore.buttons.random}
-                    onClick={() => sendRandomInvite()}
-                />
+                <div className={styles.finder__buttons}>
+                    <Button
+                        skin="regular"
+                        title={dataStore.buttons.update}
+                        onClick={() => {
+                            flag ? getRooms() : getOnlineUsers();
+                        }}
+                    />
+                    <Button
+                        skin="regular"
+                        color="green"
+                        title={dataStore.buttons.random}
+                        onClick={() => sendRandomInvite()}
+                    />
+                </div>
             </div>
         </Layout>
     );
