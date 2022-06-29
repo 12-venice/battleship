@@ -28,10 +28,7 @@ export const ENGLISH = {
         random: 'RANDOM',
     },
     labels: {
-<<<<<<< HEAD
         chats: 'CHATS',
-=======
->>>>>>> main
         finder: 'INVITES',
         menu: 'MENU',
         forum: 'FORUM',
@@ -56,12 +53,9 @@ export const ENGLISH = {
         find: 'FIND',
     },
     text: {
-<<<<<<< HEAD
         cancelGame: 'The game was canceled',
         waiting: 'Waiting for your opponent',
         closeGame: 'Do you want to close the game?',
-=======
->>>>>>> main
         editTopic: 'Describe your topic',
         editComment: 'Describe your comment',
         add: 'Describe your topic',
