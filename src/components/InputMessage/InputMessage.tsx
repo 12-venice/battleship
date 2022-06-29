@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 // @ts-nocheck
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable indent */
 /* eslint-disable no-param-reassign */
@@ -30,8 +30,6 @@ import { AuthContext } from '../utils/Context/AuthContext';
 import { CallPeer } from '../VideoChat/utils';
 
 export const InputMessage = ({
-    videoCall,
-    setVideoCall,
     callback,
 }: InputMessageType) => {
     const { room } = useParams() as { room: string };
@@ -149,8 +147,10 @@ export const InputMessage = ({
     };
 
     useEffect(() => {
-        getUser();
-    }, []);
+        if (userState._id) {
+            getUser();
+        }
+    }, [userState]);
 
     return (
         <form
@@ -166,14 +166,14 @@ export const InputMessage = ({
                             user: userInRoom,
                             from: userState._id ?? '',
                             socket,
+                            room,
                         });
-                        setVideoCall();
                     }}
                 >
                     <Icon type="call" />
                 </Button>
             )}
-            {!videoCall && (
+            {status === 'end' && (
                 <>
                     <Button
                         skin="quad"

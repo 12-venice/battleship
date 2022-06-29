@@ -22,12 +22,15 @@ const AppWithRoutes: React.FC = () => {
     const startGameRoom = useSelector(
         (state: AllStateTypes) => state.game.room,
     );
-    const { peer } = useSelector((state: AllStateTypes) => state.videocall!);
+    const { peer, room } = useSelector(
+        (state: AllStateTypes) => state.videocall!,
+    );
     const navigate = useNavigate();
 
     useEffect(() => {
         if (startGameRoom) navigate(`${PageLinks.game}/${startGameRoom}`);
-    }, [startGameRoom]);
+        if (room) navigate(`${PageLinks.chats}/${room}`);
+    }, [startGameRoom, room]);
     const { token, login, logout, socket } = useAuth();
 
     useEffect(() => {

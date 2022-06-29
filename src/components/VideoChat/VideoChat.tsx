@@ -7,9 +7,9 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import { useEffect, useState, useRef, LegacyRef, MutableRefObject, useContext } from 'react';
 import { useSelector } from 'react-redux';
-import Peer from 'simple-peer';
 import { AllStateTypes } from 'src/store/reducers';
 import { notificationService } from 'src/store/services/notificationService';
+import { VideoCallService } from 'src/store/services/videoCallService';
 import { Button } from '../Button';
 import styles from './VideoChat.scss';
 import { Icon } from '../Icon/Icon';
@@ -20,7 +20,6 @@ export const VideoChat = () => {
     const { socket } = useContext(AuthContext);
     const userVideo = useRef() as MutableRefObject<HTMLVideoElement>;
     const partnerVideo = useRef() as MutableRefObject<HTMLVideoElement>;
-    const peer = useRef() as MutableRefObject<Peer.Instance>;
     const [videoOptions, setVideoOptions] = useState(false);
     const [audioOptions, setAudioOptions] = useState(true);
     const [screenOptions, setScreenOptions] = useState(false);
@@ -29,13 +28,15 @@ export const VideoChat = () => {
     const [sharing, setSharing] = useState(false);
     const [message, setMessage] = useState('');
 
-    const { signal, stream, status } = useSelector((state: AllStateTypes) => state.videocall);
+    const { peer, signal, stream, status } = useSelector((state: AllStateTypes) => state.videocall);
+
     useEffect(() => {
-        if (stream) {
+        if (partnerVideo && partnerVideo.current && stream) {
+            VideoCallService.updateStatus('live');
             partnerVideo.current.srcObject = stream;
         }
-    }, []);
-    console.log(signal, stream, status);
+    }, [stream]);
+    console.log(peer, signal?.getTracks(), stream?.getTracks(), status);
 
     const videoConstraints = {
         frameRate: { max: 30, ideal: 20 },
@@ -51,9 +52,8 @@ export const VideoChat = () => {
     };
 
     const updateStream = (newTrack: MediaStreamTrack, oldTrack: MediaStreamTrack) => {
-        if (peer.current !== undefined) {
-            console.log(oldTrack);
-            peer.current.replaceTrack(oldTrack, newTrack, signal!);
+        if (peer !== undefined) {
+            peer?.replaceTrack(oldTrack, newTrack, signal!);
         }
         oldTrack.stop();
         signal?.removeTrack(oldTrack);
@@ -102,7 +102,8 @@ export const VideoChat = () => {
             signal?.addTrack(audioTrack);
             const videoTrack = mediaUser.getVideoTracks()[0];
             videoTrack.stop();
-            signal?.addTrack(fakeVideo());
+            VideoCallService.updateSignal(mediaUser);
+            peer?.addStream(mediaUser);
             if (userVideo.current) {
                 userVideo.current.srcObject = signal;
             }
@@ -231,7 +232,7 @@ export const VideoChat = () => {
             />
             <div>
                 <video
-                    className={status === ('accept' || 'live') ?
+                    className={status === ('calling' || 'live') ?
                         styles.videochat__video__user : styles.videochat__video}
                     playsInline
                     muted

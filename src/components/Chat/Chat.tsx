@@ -1,10 +1,11 @@
 // @ts-nocheck
 /* eslint-disable react/jsx-props-no-spreading */
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { useOutletContext, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Preloader } from 'src/components/Preloader';
 import { useHttp } from 'src/hooks/http.hook';
 import { messageService } from 'src/store/services/messageService';
+import { VideoCallService } from 'src/store/services/videoCallService';
 import { AuthContext } from '../utils/Context/AuthContext';
 import { VideoChat } from '../VideoChat';
 import styles from './Chat.scss';
@@ -13,7 +14,7 @@ import { messageType } from './components/Message/types';
 import { getBotMessage } from './config';
 
 export const Chat = (): JSX.Element => {
-    const videoCall = useOutletContext();
+    const { status } = VideoCallService.getVideoCall();
     const { socket } = useContext(AuthContext);
     const { request, loading } = useHttp();
     const { room } = useParams() as { room: string };
@@ -41,6 +42,15 @@ export const Chat = (): JSX.Element => {
     };
 
     useEffect(() => {
+        console.log(status);
+        if (status && status !== 'end') {
+            <VideoChat />;
+        }
+        console.log(status);
+        return () => next;
+    }, [status]);
+
+    useEffect(() => {
         scrollToBottom();
     }, [messages]);
 
@@ -60,22 +70,19 @@ export const Chat = (): JSX.Element => {
     if (loading) {
         return <Preloader />;
     }
+
     return (
         <div className={styles.chat__block}>
-            {videoCall ? (
-                <VideoChat />
-            ) : (
-                messages.map((message: messageType) => (
-                    <Message
-                        key={message._id.toString()}
-                        _id={message._id}
-                        text={message.text}
-                        user={message.user}
-                        createdAt={message.createdAt}
-                        delivered={message.delivered}
-                    />
-                ))
-            )}
+            {messages.map((message: messageType) => (
+                <Message
+                    key={message._id.toString()}
+                    _id={message._id}
+                    text={message.text}
+                    user={message.user}
+                    createdAt={message.createdAt}
+                    delivered={message.delivered}
+                />
+            ))}
             <div ref={messagesEndRef} />
         </div>
     );

@@ -4,6 +4,7 @@ import { AcceptCall, CancelCall } from 'src/components/VideoChat/utils';
 import { gameService } from 'src/store/services/gameService';
 import { notificationService } from 'src/store/services/notificationService';
 import { OnlineService } from 'src/store/services/onlineService';
+import { VideoCallService } from 'src/store/services/videoCallService';
 import { PageLinks } from '../Routes/types';
 
 export const acceptInvite = async (invitation: any) => {
@@ -129,7 +130,7 @@ export const SocketListener = (socket, peer) => {
         }
     });
 
-    socket.on('call:recived', ({ signal, from }) => {
+    socket.on('call:recived', ({ signal, from, room }) => {
         notificationService.addNotification({
             title: from.display_name,
             message: 'is calling you',
@@ -141,7 +142,7 @@ export const SocketListener = (socket, peer) => {
                     title: 'ACCEPT',
                     skin: 'small',
                     color: 'green',
-                    onClick: () => AcceptCall({ from, socket, signal }),
+                    onClick: () => AcceptCall({ from, socket, signal, room }),
                 },
                 {
                     title: 'CANCEL',
@@ -154,12 +155,10 @@ export const SocketListener = (socket, peer) => {
     });
 
     socket.on('call:accept', (signal: SignalData) => {
-        setCallAccepted(true);
         peer.signal(signal);
     });
 
     socket.on('call:cancel', (signal: SignalData) => {
-        setCallAccepted(true);
         peer.signal(signal);
     });
 };

@@ -4,22 +4,18 @@
 /* eslint-disable indent */
 import Peer from 'simple-peer';
 
-export type videoCallStatus =
-    | 'busy'
-    | 'calling'
-    | 'accept'
-    | 'cancel'
-    | 'live'
-    | 'end';
+export type videoCallStatus = 'calling' | 'live' | 'end';
 
 export type videoCall = {
     status: videoCallStatus;
     stream: MediaStream | null;
     signal: MediaStream | null;
     peer: Peer.Instance | null;
+    room: string;
 };
 
 const actions: Record<string, string> = {
+    UPDATE_ROOM: 'UPDATE_ROOM',
     UPDATE_PEER: 'UPDATE_PEER',
     UPDATE_SIGNAL: 'UPDATE_SIGNAL',
     UPDATE_STREAM: 'UPDATE_STREAM',
@@ -39,6 +35,7 @@ const defaultState: videoCall = {
     stream: null,
     signal: null,
     peer: null,
+    room: '',
 };
 
 export function videoCallReducer(
@@ -46,17 +43,20 @@ export function videoCallReducer(
     { type, data }: ItemActionType,
 ): videoCall {
     switch (type) {
+        case actions.UPDATE_ROOM: {
+            return { ...state, ...{ room: data as string } };
+        }
         case actions.UPDATE_PEER: {
-            state = { ...state, ...{ peer: data as Peer.Instance } };
+            return { ...state, ...{ peer: data as Peer.Instance } };
         }
         case actions.UPDATE_SIGNAL: {
-            state = { ...state, signal: data as MediaStream };
+            return { ...state, signal: data as MediaStream };
         }
         case actions.UPDATE_STREAM: {
-            state = { ...state, stream: data as MediaStream };
+            return { ...state, stream: data as MediaStream };
         }
         case actions.UPDATE_STATUS: {
-            state = { ...state, status: data as videoCallStatus };
+            return { ...state, status: data as videoCallStatus };
         }
         case actions.GET_VIDEOCALL: {
             return state;
@@ -65,6 +65,10 @@ export function videoCallReducer(
         default:
             return state;
     }
+}
+
+export function updateRoom(data: string): ItemActionType {
+    return { type: actions.UPDATE_ROOM, data };
 }
 
 export function updatePeer(data: Peer.Instance): ItemActionType {
