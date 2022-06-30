@@ -1,11 +1,35 @@
 @import 'src/styles/colors.css';
 @import 'src/styles/variables.css';
 
+.information__block {
+    width: min(400px, 75vw);
+    height: 80vh;
+    overflow: auto;
+    justify-content: start;
+    &::-webkit-scrollbar {
+        width: 10px;
+        background-color: var(--blue);
+        ;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: var(--dark-blue);
+    }
+}
+
+.information__img {
+    display: block;
+    width: min(50vw, 300px);
+    margin: 0 auto;
+}
+
 .information__label {
     font-family: var(--font-family), var(--font-family-ru);
     color: var(--white);
     font-size: min(41px, 7vw);
     margin: 0;
+    text-align: center;
 }
 .information__description {
     font-family: var(--font-family-second);
@@ -13,5 +37,9 @@
     font-size: min(24px, 5vw);
     line-height: min(28px, 6vw);
     text-align: center;
-    width: min(368px, 80vw);
+}
+
+.information__footer {
+    justify-content: center;
+    display: flex;
 }
