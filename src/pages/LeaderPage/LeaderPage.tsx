@@ -18,7 +18,7 @@ export const LeaderPage = (): JSX.Element => {
     const dataStore = useSelector((state: AllStateTypes) => state.language);
     const { request } = useHttp();
     const [leaders, setLeaders] = useState([]);
-    const [sortType, setSortType] = useState('display_name');
+    const [sortType, setSortType] = useState('points');
     const [sortDirection, setSortDirection] = useState(false);
     const [page, setPage] = useState(0);
     const getLeaders = useCallback(async () => {

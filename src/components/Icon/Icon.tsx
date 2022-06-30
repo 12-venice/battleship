@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable indent */
 import styles from './Icon.scss';
 import chats from '../../../images/chats.svg';
@@ -21,6 +20,9 @@ import monitor from '../../../images/monitor.svg';
 import changecam from '../../../images/changecam.svg';
 import gallery from '../../../images/gallery.svg';
 import camera from '../../../images/camera.svg';
+import invite from '../../../images/invite.svg';
+import arrowUp from '../../../images/arrowUp.svg';
+import speaker from '../../../images/speaker.svg';
 import { IconType } from './types';
 
 export const Icon = ({ type }: IconType): JSX.Element => {
@@ -66,6 +68,12 @@ export const Icon = ({ type }: IconType): JSX.Element => {
                 return gallery;
             case 'camera':
                 return camera;
+            case 'invite':
+                return invite;
+            case 'arrowUp':
+                return arrowUp;
+            case 'speaker':
+                return speaker;
             default:
                 return null;
         }

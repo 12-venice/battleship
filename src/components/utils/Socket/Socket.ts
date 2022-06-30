@@ -1,9 +1,14 @@
-// @ts-nocheck
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AcceptCall, CancelCall } from 'src/components/VideoChat/utils';
 import { gameService } from 'src/store/services/gameService';
 import { notificationService } from 'src/store/services/notificationService';
 import { OnlineService } from 'src/store/services/onlineService';
+import Peer, { SignalData } from 'simple-peer';
+import { Socket } from 'socket.io-client';
+import { VideoCallService } from 'src/store/services/videoCallService';
+import { User } from 'src/store/reducers/user';
+import { Icon } from 'src/components/Icon/Icon';
+import { uOnline } from 'src/store/reducers/online';
 import { PageLinks } from '../Routes/types';
 
 export const acceptInvite = async (invitation: any) => {
@@ -42,7 +47,7 @@ export const cancelInvite = async (invitation: any) => {
     return data;
 };
 
-export const SocketListener = (socket, peer) => {
+export const SocketListener = (socket: Socket) => {
     socket.on('users:add', (data: any) => {
         OnlineService.addUserOnline(data);
     });
@@ -51,7 +56,7 @@ export const SocketListener = (socket, peer) => {
         OnlineService.removeUserOnline(data);
     });
 
-    socket.on('users:set', (data: {}[]) => {
+    socket.on('users:set', (data: uOnline[]) => {
         OnlineService.setUserOnline(data);
     });
 
@@ -70,8 +75,8 @@ export const SocketListener = (socket, peer) => {
                 buttons: [
                     {
                         title: 'READ',
-                        skin: 'small',
-                        color: 'green',
+                        skin: 'regular',
+                        color: 'yellow',
                         href: `${PageLinks.chats}/${data.room}`,
                     },
                 ],
@@ -88,13 +93,13 @@ export const SocketListener = (socket, peer) => {
             buttons: [
                 {
                     title: 'ACCEPT',
-                    skin: 'small',
+                    skin: 'regular',
                     color: 'green',
                     onClick: () => acceptInvite(data),
                 },
                 {
                     title: 'CANCEL',
-                    skin: 'small',
+                    skin: 'regular',
                     color: 'red',
                     onClick: () => cancelInvite(data),
                 },
@@ -129,7 +134,7 @@ export const SocketListener = (socket, peer) => {
         }
     });
 
-    socket.on('call:recived', ({ signal, from }) => {
+    socket.on('call:recived', ({ signal, from, room }) => {
         notificationService.addNotification({
             title: from.display_name,
             message: 'is calling you',
@@ -138,14 +143,14 @@ export const SocketListener = (socket, peer) => {
             user: from,
             buttons: [
                 {
-                    title: 'ACCEPT',
-                    skin: 'small',
+                    title: Icon({ type: 'call' }),
+                    skin: 'quad',
                     color: 'green',
-                    onClick: () => AcceptCall({ from, socket, signal }),
+                    onClick: () => AcceptCall({ from, socket, signal, room }),
                 },
                 {
-                    title: 'CANCEL',
-                    skin: 'small',
+                    title: Icon({ type: 'slashcall' }),
+                    skin: 'quad',
                     color: 'red',
                     onClick: () => CancelCall({ from, socket }),
                 },
@@ -153,13 +158,14 @@ export const SocketListener = (socket, peer) => {
         });
     });
 
-    socket.on('call:accept', (signal: SignalData) => {
-        setCallAccepted(true);
-        peer.signal(signal);
-    });
-
-    socket.on('call:cancel', (signal: SignalData) => {
-        setCallAccepted(true);
-        peer.signal(signal);
+    socket.on('call:cancel', (user: User) => {
+        VideoCallService.connectClose();
+        notificationService.addNotification({
+            title: `${user.display_name}`,
+            message: 'cancel call',
+            autoDelete: true,
+            autoDeleteTime: 3000,
+            user,
+        });
     });
 };

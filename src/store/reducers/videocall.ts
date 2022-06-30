@@ -2,30 +2,23 @@
 /* eslint-disable default-param-last */
 /* eslint-disable no-fallthrough */
 /* eslint-disable indent */
-import { stream } from 'favicons';
 import Peer from 'simple-peer';
 
-export type videoCallStatus =
-    | 'busy'
-    | 'calling'
-    | 'accept'
-    | 'cancel'
-    | 'live'
-    | 'end';
+export type videoCallStatus = 'calling' | 'live' | 'end';
 
 export type videoCall = {
     status: videoCallStatus;
     stream: MediaStream | null;
     signal: MediaStream | null;
-    peer: Peer.Instance | null;
+    room: string;
 };
 
 const actions: Record<string, string> = {
-    UPDATE_PEER: 'UPDATE_PEER',
+    UPDATE_ROOM: 'UPDATE_ROOM',
     UPDATE_SIGNAL: 'UPDATE_SIGNAL',
     UPDATE_STREAM: 'UPDATE_STREAM',
     UPDATE_STATUS: 'UPDATE_STATUS',
-    GET_VIDEOCALL: 'GET_VIDEOCALL',
+    CONNECT_CLOSE: 'CONNECT_CLOSE',
 };
 
 interface BaseActionType<T> {
@@ -39,7 +32,7 @@ const defaultState: videoCall = {
     status: 'end',
     stream: null,
     signal: null,
-    peer: null,
+    room: '',
 };
 
 export function videoCallReducer(
@@ -47,40 +40,20 @@ export function videoCallReducer(
     { type, data }: ItemActionType,
 ): videoCall {
     switch (type) {
-        case actions.UPDATE_PEER: {
-            return {
-                peer: data as Peer.Instance,
-                stream: state.stream,
-                signal: state.signal,
-                status: state.status
-            }
-        };
+        case actions.UPDATE_ROOM: {
+            return { ...state, ...{ room: data as string } };
+        }
         case actions.UPDATE_SIGNAL: {
-            return {
-                peer: state.peer,
-                stream: data as MediaStream,
-                signal: state.signal,
-                status: state.status
-            }
-        };
+            return { ...state, ...{ signal: data as MediaStream } };
+        }
         case actions.UPDATE_STREAM: {
-            return {
-                peer: state.peer,
-                stream: state.stream,
-                signal: data as MediaStream,
-                status: state.status
-            }
-        };
+            return { ...state, ...{ stream: data as MediaStream } };
+        }
         case actions.UPDATE_STATUS: {
-            return {
-                peer: state.peer,
-                stream: state.stream,
-                signal: state.signal,
-                status: data as videoCallStatus
-            }
-        };
-        case actions.GET_VIDEOCALL: {
-            return state;
+            return { ...state, ...{ status: data as videoCallStatus } };
+        }
+        case actions.CONNECT_CLOSE: {
+            return { ...state, ...defaultState };
         }
 
         default:
@@ -88,8 +61,8 @@ export function videoCallReducer(
     }
 }
 
-export function updatePeer(data: Peer.Instance): ItemActionType {
-    return { type: actions.UPDATE_PEER, data };
+export function updateRoom(data: string): ItemActionType {
+    return { type: actions.UPDATE_ROOM, data };
 }
 
 export function updateSignal(data: MediaStream): ItemActionType {
@@ -104,6 +77,6 @@ export function updateStatus(data: videoCallStatus): ItemActionType {
     return { type: actions.UPDATE_STATUS, data };
 }
 
-export function getVideoCall(): ItemActionType {
-    return { type: actions.GET_VIDEOCALL };
+export function connectClose(): ItemActionType {
+    return { type: actions.CONNECT_CLOSE };
 }

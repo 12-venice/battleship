@@ -1,5 +1,10 @@
 export const ENGLISH = {
     buttons: {
+        home: 'HOME',
+        ready: 'READY',
+        close: 'CLOSE',
+        switch: 'SWITCH',
+        update: 'UPDATE',
         forum: 'FORUM',
         leaders: 'LEADERS',
         profile: 'PROFILE',
@@ -23,6 +28,7 @@ export const ENGLISH = {
         random: 'RANDOM',
     },
     labels: {
+        chats: 'CHATS',
         finder: 'INVITES',
         menu: 'MENU',
         forum: 'FORUM',
@@ -47,6 +53,9 @@ export const ENGLISH = {
         find: 'FIND',
     },
     text: {
+        cancelGame: 'The game was canceled',
+        waiting: 'Waiting for your opponent',
+        closeGame: 'Do you want to close the game?',
         editTopic: 'Describe your topic',
         editComment: 'Describe your comment',
         add: 'Describe your topic',

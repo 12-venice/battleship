@@ -53,10 +53,12 @@
 .chats__label-description {
     margin: 0 auto;
     font-size: min(30px, 4vw);
-    line-height: 40px;
 }
 
 .chats__main-plug {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-grow: 2;
     height: 100%;
     background: var(--light-dark-blue);
@@ -68,9 +70,9 @@
     background: var(--light-dark-blue);
     margin-right: 10px;
     border-radius: 16px;
-    width: 30%;
-    padding: 10px;
+    width: min(300px, 30vw);
     overflow: auto;
+    padding: 0 10px;
     &::-webkit-scrollbar {
         width: 10px;
         background-color: var(--blue);
@@ -91,4 +93,27 @@
 
 .chats__main-field {
     display: flex;
+}
+
+.chats__button {
+    display: none;
+}
+
+@media screen and (max-width: 800px) {
+    .chats__main {
+        flex-direction: column;
+    }
+    .chats__main-list {
+        width: 100%;
+        height: 30%;
+        margin-bottom: 10px;
+    }
+    .chats__button {
+        display: flex;
+        width: 80vw;
+        margin: 0 auto 10px auto;
+    }
+    .chats__background {
+        justify-content: center;
+    }
 }

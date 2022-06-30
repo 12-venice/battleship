@@ -1,7 +1,6 @@
-import Peer from 'simple-peer';
 import {
-    getVideoCall,
-    updatePeer,
+    connectClose,
+    updateRoom,
     updateSignal,
     updateStatus,
     updateStream,
@@ -10,9 +9,9 @@ import {
 import { store } from '../store';
 
 export const VideoCallService = {
-    updatePeer: (data: Peer.Instance) => store.dispatch(updatePeer(data)),
+    updateRoom: (data: string) => store.dispatch(updateRoom(data)),
     updateSignal: (data: MediaStream) => store.dispatch(updateSignal(data)),
     updateStream: (data: MediaStream) => store.dispatch(updateStream(data)),
     updateStatus: (data: videoCallStatus) => store.dispatch(updateStatus(data)),
-    getVideoCall: () => store.dispatch(getVideoCall()),
+    connectClose: () => store.dispatch(connectClose()),
 };

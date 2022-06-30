@@ -3,12 +3,13 @@ import { SignalData } from 'simple-peer';
 import { Socket } from 'socket.io-client';
 
 export type acceptCallType = {
-    from: string;
+    from: User;
     signal: SignalData;
     socket: Socket;
+    room: string;
 };
 
 export type cancelCallType = {
-    fromUser: User;
+    from: User;
     socket: Socket;
 };

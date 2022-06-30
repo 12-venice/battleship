@@ -16,6 +16,19 @@ export default {
                     sourceMap: true,
                 },
             },
+            {
+                loader: 'postcss-loader',
+                options: {
+                    postcssOptions: {
+                        plugins: [
+                            [
+                                'autoprefixer',
+                                { overrideBrowserslist: ['last 2 versions'] },
+                            ],
+                        ],
+                    },
+                },
+            },
             'sass-loader',
         ],
     },
@@ -30,6 +43,14 @@ export default {
                         localIdentName: '[local]',
                     },
                     sourceMap: true,
+                },
+            },
+            {
+                loader: 'postcss-loader',
+                options: {
+                    postcssOptions: {
+                        plugins: [['autoprefixer']],
+                    },
                 },
             },
             'sass-loader',

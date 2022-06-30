@@ -6,15 +6,14 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 849px;
     background: var(--blue);
     border-radius: 38px;
     padding: 20px;
 }
 
 .finder__block {
-    height: 600px;
-    width: 450px;
+    height: 50vh;
+    width: min(60vw, 450px);
     overflow-y: scroll;
     font-family: var(--font-family), var(--font-family-ru);
     border-radius: 38px;
@@ -26,13 +25,27 @@
     justify-content: flex-start;
     font-size: 25px;
     margin-bottom: 10px;
+
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+        background-color: var(--blue);
+        ;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: var(--dark-blue);
+    }
 }
 
 .finder__header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: flex-start;
+    width: 100%;
 }
 
 .finder__label {
@@ -45,11 +58,23 @@
 
 .finder__label-tag {
     margin: 0 auto;
-    font-size: 20px;
+    font-size: min(20px, 2vw);
 }
 
 .finder__label-description {
     margin: 0 auto;
-    font-size: 40px;
-    line-height: 40px;
+    font-size: min(30px, 4vw);
+}
+
+.finder__buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media screen and (max-width: 800px) {
+    .finder__buttons {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 }

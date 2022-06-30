@@ -1,6 +1,6 @@
 // @ts-nocheck
 /* eslint-disable prettier/prettier */
-
+import cn from 'classnames';
 import { Button } from 'src/components/Button';
 import { ModalWindow } from 'src/components/ModalWindow';
 import { ChangeEvent, useContext, useRef, useState } from 'react';
@@ -100,7 +100,7 @@ export const UpdateAvatar: Props = ({ close }): JSX.Element => {
                     <span className={styles['update-avatar__title']}>
                         {dataStore.labels.custom}
                     </span>
-                    <div className={styles['update-avatar__block']}>
+                    <div className={cn(styles['update-avatar__block'], styles['update-avatar__block-custom'])}>
                         {preview ? (
                             <img
                                 aria-hidden

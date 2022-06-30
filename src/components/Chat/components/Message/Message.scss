@@ -28,8 +28,14 @@
 }
 
 .message__date {
+    margin-top: 5px;
     font-family: var(--font-family-second);
     font-size: min(2vw, 10px);
+}
+
+.message__date p {
+    margin: 0;
+    text-align: right;
 }
 
 .message__image {

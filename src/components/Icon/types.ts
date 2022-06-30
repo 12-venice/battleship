@@ -19,5 +19,8 @@ export type IconType = {
         | 'changecam'
         | 'gallery'
         | 'camera'
-        | 'mic';
+        | 'mic'
+        | 'invite'
+        | 'speaker'
+        | 'arrowUp';
 };
