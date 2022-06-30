@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AllStateTypes } from 'src/store/reducers';
 import { useEffect } from 'react';
 import { hot } from 'react-hot-loader/root';
@@ -24,10 +24,11 @@ const AppWithRoutes: React.FC = () => {
     );
     const { room } = useSelector((state: AllStateTypes) => state.videocall);
     const navigate = useNavigate();
+    const { pathname } = useLocation();
 
     useEffect(() => {
         if (startGameRoom) navigate(`${PageLinks.game}/${startGameRoom}`);
-        if (room) navigate(`${PageLinks.chats}/${room}`);
+        if (room && pathname !== `${PageLinks.game}/${room}`) navigate(`${PageLinks.chats}/${room}`);
     }, [startGameRoom, room]);
     const { token, login, logout, socket } = useAuth();
 

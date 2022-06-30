@@ -42,6 +42,8 @@ export default async (socket: ISocket) => {
         inGame: userOnline.inGame,
     }));
     io.to(socket?.id).emit('users:set', usersOnline);
+    console.log(usersOnline);
+    
     const user = await User.findOne({ _id: socket.userID });
     const joinToRoom = async (room: { _id: string }) => {
         socket.join(room._id.toString());

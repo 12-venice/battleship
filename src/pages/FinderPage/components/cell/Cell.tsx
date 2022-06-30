@@ -62,7 +62,7 @@ export const Cell = ({ element }: { element: User }) => {
     };
 
     const selectUser = () => {
-        if (checkUserOnline() && !checkUserGameStatus()) {
+        if (checkUserOnline() === 'greenyellow') {
             messageService.selectMessage();
             inviteUser(element);
         }

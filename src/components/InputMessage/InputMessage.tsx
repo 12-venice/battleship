@@ -16,7 +16,7 @@ import {
     useState,
 } from 'react';
 import { Button } from 'src/components/Button';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useHttp } from 'src/hooks/http.hook';
 import { File, FileInput } from 'src/pages/UpdateProfilePage/components/types';
 import { useSelector } from 'react-redux';
@@ -33,6 +33,7 @@ import { CallPeer, CancelCall } from '../VideoChat/utils';
 
 export const InputMessage = ({ callback }: InputMessageType) => {
     const [isActive, setIsActive] = useState(false);
+    const { pathname } = useLocation();
     const { room } = useParams() as { room: string };
     const [message, setMessage] = useState('');
     const [openEmoji, setOpenEmoji] = useState(false);
@@ -149,7 +150,10 @@ export const InputMessage = ({ callback }: InputMessageType) => {
     };
 
     useEffect(() => {
-        getUser();
+        console.log(!pathname.match(/forum/gm))
+        if (!pathname.match(/forum/gm)) {
+            getUser();
+        }
     }, []);
 
     return (
@@ -166,17 +170,17 @@ export const InputMessage = ({ callback }: InputMessageType) => {
                             onClick={
                                 status === 'end'
                                     ? () =>
-                                          CallPeer({
-                                              user: userInRoom,
-                                              from: user,
-                                              socket,
-                                              room,
-                                          })
+                                        CallPeer({
+                                            user: userInRoom,
+                                            from: user,
+                                            socket,
+                                            room,
+                                        })
                                     : () =>
-                                          CancelCall({
-                                              socket,
-                                              from: userInRoom,
-                                          })
+                                        CancelCall({
+                                            socket,
+                                            from: userInRoom,
+                                        })
                             }
                         >
                             <Icon

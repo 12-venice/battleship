@@ -1,0 +1,11 @@
+{
+    "name": "BATTLESHIP Game",
+    "short_name": "BSHIP",
+    "theme_color": "#1e61be",
+    "background_color": "#1e61be",
+    "display": "standalone",
+    "orientation": "landscape",
+    "scope": "/",
+    "start_url": "/",
+    "id": "b-ship-game-venice-12"
+} 

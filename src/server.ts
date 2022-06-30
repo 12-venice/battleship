@@ -36,7 +36,7 @@ import type {
 } from './components/utils/Socket/types';
 
 const compiler = webpack(webpackConfig);
-
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
 const privateKey = fs.readFileSync('./src/sslcert/localhost.key', 'utf8');
 const certificate = fs.readFileSync('./src/sslcert/localhost.crt', 'utf8');
 
