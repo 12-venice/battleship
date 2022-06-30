@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AllStateTypes } from 'src/store/reducers';
 import { useEffect } from 'react';
 import { hot } from 'react-hot-loader/root';
 import { useAuth } from 'src/hooks/auth.hook';
-
 import { Toast } from '../Toast';
 import { AuthContext } from '../utils/Context/AuthContext';
 import { ErrorBoundary } from '../utils/ErrorBoundary';
@@ -22,18 +22,22 @@ const AppWithRoutes: React.FC = () => {
     const startGameRoom = useSelector(
         (state: AllStateTypes) => state.game.room,
     );
+    const { room } = useSelector((state: AllStateTypes) => state.videocall);
     const navigate = useNavigate();
-    useEffect(() => {
-        if (startGameRoom) navigate(`${PageLinks.game}/${startGameRoom}`);
-    }, [startGameRoom]);
-    const { token, login, logout } = useAuth();
+    const { pathname } = useLocation();
 
     useEffect(() => {
-        SocketListener();
+        if (startGameRoom) navigate(`${PageLinks.game}/${startGameRoom}`);
+        if (room && pathname !== `${PageLinks.game}/${room}`) navigate(`${PageLinks.chats}/${room}`);
+    }, [startGameRoom, room]);
+    const { token, login, logout, socket } = useAuth();
+
+    useEffect(() => {
+        SocketListener(socket);
     }, []);
 
     return (
-        <AuthContext.Provider value={{ token, login, logout }}>
+        <AuthContext.Provider value={{ token, login, logout, socket }}>
             <ErrorBoundary>
                 <Toast position={position} />
                 {routes}

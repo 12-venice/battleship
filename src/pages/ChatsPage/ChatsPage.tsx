@@ -20,7 +20,6 @@ import { Search } from './components/Search';
 
 export const ChatsPage = (): JSX.Element => {
     const { room } = useParams() as { room: string };
-    const [videoCall, setVideoCall] = useState(false);
     const [search, setSearch] = useState(false);
     const [chatsList, setChatsList] = useState(true);
     const dataStore = useSelector(
@@ -174,12 +173,7 @@ export const ChatsPage = (): JSX.Element => {
                                 >
                                     <Icon type="plus" />
                                 </Button>
-                                <InputMessage
-                                    videoCall={videoCall}
-                                    setVideoCall={() =>
-                                        setVideoCall(!videoCall)
-                                    }
-                                />
+                                <InputMessage />
                             </div>
                         )}
                     </div>

@@ -44,9 +44,11 @@ export const useRoutes = (): JSX.Element => (
         <Route path={PageLinks.profileUpdate} element={<UpdateProfilePage />} />
         <Route path={PageLinks.forum} element={<ForumPage />} />
         <Route
-            path={`${PageLinks.game}/:room`}
+            path={PageLinks.game}
             element={<ProtectedRoute childrens={<GamePage />} />}
-        />
+        >
+            <Route path=":room" element={<Chat />} />
+        </Route>
         <Route
             path={PageLinks.finder}
             element={<ProtectedRoute childrens={<FinderPage />} />}
@@ -55,7 +57,7 @@ export const useRoutes = (): JSX.Element => (
             path={PageLinks.chats}
             element={<ProtectedRoute childrens={<ChatsPage />} />}
         >
-            <Route path=":room" element={<Chat videoCall={false} />} />
+            <Route path=":room" element={<Chat />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
     </Routes>

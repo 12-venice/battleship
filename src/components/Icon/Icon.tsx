@@ -13,8 +13,16 @@ import roundarrow from '../../../images/round_arrow.svg';
 import search from '../../../images/search.svg';
 import send from '../../../images/send.svg';
 import video from '../../../images/video.svg';
+import slashcall from '../../../images/slashcall.svg';
+import call from '../../../images/call.svg';
+import mic from '../../../images/mic.svg';
+import monitor from '../../../images/monitor.svg';
+import changecam from '../../../images/changecam.svg';
+import gallery from '../../../images/gallery.svg';
+import camera from '../../../images/camera.svg';
 import invite from '../../../images/invite.svg';
 import arrowUp from '../../../images/arrowUp.svg';
+import speaker from '../../../images/speaker.svg';
 import { IconType } from './types';
 
 export const Icon = ({ type }: IconType): JSX.Element => {
@@ -46,10 +54,26 @@ export const Icon = ({ type }: IconType): JSX.Element => {
                 return send;
             case 'video':
                 return video;
+            case 'slashcall':
+                return slashcall;
+            case 'call':
+                return call;
+            case 'mic':
+                return mic;
+            case 'monitor':
+                return monitor;
+            case 'changecam':
+                return changecam;
+            case 'gallery':
+                return gallery;
+            case 'camera':
+                return camera;
             case 'invite':
                 return invite;
             case 'arrowUp':
                 return arrowUp;
+            case 'speaker':
+                return speaker;
             default:
                 return null;
         }

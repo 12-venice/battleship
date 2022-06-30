@@ -1,0 +1,48 @@
+.videochat__block {
+    border: 1px solid transparent;
+    background: black;
+    border-radius: 15px;
+    margin: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    flex-grow: 2;
+}
+
+.videochat__video {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%; 
+    z-index: -1;
+    object-fit: cover;
+    overflow: hidden;
+    background: black;
+}
+
+.videochat__video__user {
+    position: absolute; 
+    top: 0;
+    right: 0;
+    width: 30%; 
+    height: 30%;
+    object-fit: cover;
+    overflow: hidden;
+    background: black;
+    transition-duration: .5s ease;
+}
+
+.videochat__controls {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+}

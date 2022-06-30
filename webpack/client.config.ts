@@ -10,6 +10,7 @@ import { IS_DEV, DIST_DIR, SRC_DIR } from './env';
 import fileLoader from './loaders/file';
 import cssLoader from './loaders/css';
 import jsLoader from './loaders/js';
+import WorkboxPlugin from 'workbox-webpack-plugin';
 
 const config: Configuration = {
     name: 'client',
@@ -43,6 +44,14 @@ const config: Configuration = {
         }),
         new FaviconsWebpackPlugin('./images/favicon.png'),
         ...(IS_DEV ? [new webpack.HotModuleReplacementPlugin()] : []),
+        new WorkboxPlugin.GenerateSW({
+            mode: process.env.NODE_ENV,
+            disableDevLogs: true,
+            maximumFileSizeToCacheInBytes: 3000000,
+            clientsClaim: true,
+            skipWaiting: true,
+            cleanupOutdatedCaches: true,
+        }),
     ],
 
     devtool: 'source-map',

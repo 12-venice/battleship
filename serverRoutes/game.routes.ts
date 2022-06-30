@@ -101,12 +101,10 @@ export async function exitGameFunc(gameId, userId, gameStep) {
         });
     }
     setGameStatus({
-        socket: io,
         userID: gameStateFromDB.createdUser._id.toString(),
         status: false,
     });
     setGameStatus({
-        socket: io,
         userID: gameStateFromDB.invitedUser._id.toString(),
         status: false,
     });
@@ -199,8 +197,8 @@ router.post('/accept', async (req, res) => {
             user: invitedUser,
             room: game.room,
         });
-        setGameStatus({ socket: io, userID: createdUserId, status: true });
-        setGameStatus({ socket: io, userID: invitedUserId, status: true });
+        setGameStatus({ userID: createdUserId, status: true });
+        setGameStatus({ userID: invitedUserId, status: true });
         res.status(200).json({
             message: 'Creating a game',
         });
@@ -401,12 +399,10 @@ router.post('/shot', async (req, res) => {
                 { $inc: { defeats: 1, points: freshGameState.score[0] } },
             );
             setGameStatus({
-                socket: io,
                 userID: gameStateFromDB.createdUser._id.toString(),
                 status: false,
             });
             setGameStatus({
-                socket: io,
                 userID: gameStateFromDB.invitedUser._id.toString(),
                 status: false,
             });
@@ -420,12 +416,10 @@ router.post('/shot', async (req, res) => {
                 { $inc: { defeats: 1, points: freshGameState.score[1] } },
             );
             setGameStatus({
-                socket: io,
                 userID: gameStateFromDB.createdUser._id.toString(),
                 status: false,
             });
             setGameStatus({
-                socket: io,
                 userID: gameStateFromDB.invitedUser._id.toString(),
                 status: false,
             });

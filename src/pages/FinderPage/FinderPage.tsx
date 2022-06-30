@@ -32,22 +32,9 @@ export const FinderPage = () => {
     const dataStore = useSelector(
         (state: AllStateTypes) => state.language.translate,
     );
-
     const [rooms, setRooms] = useState([]);
-    // const [filterRooms, setFilterRooms] = useState([]);
-    // const [str, setStr] = useState('');
     const [flag, setFlag] = useState(false);
     const { request, loading, error, clearError } = useHttp();
-
-    // const findUser = useCallback(async () => {
-    //     const data = rooms.filter((room) => {
-    //         const reg = new RegExp(str, 'i');
-    //         console.log(room);
-    //         return reg.test(room.login);
-    //     });
-    //     // setFilterRooms(data);
-    //     console.log(data);
-    // }, [request, str]);
 
     const getRooms = useCallback(async () => {
         const data = await request(
@@ -68,14 +55,6 @@ export const FinderPage = () => {
         setRooms(data);
     }, [request, token]);
 
-    // useEffect(() => {
-    //     if (!str && token) {
-    //         // getRooms();
-    //         getOnlineUsers();
-    //     }
-    //     return () => setRooms([]);
-    // }, [getRooms, str, token]);
-
     useEffect(() => {
         if (token) {
             getOnlineUsers();
@@ -83,14 +62,6 @@ export const FinderPage = () => {
         return () => setRooms([]);
     }, [getRooms, token]);
 
-    // useEffect(() => {
-    //     const timeOut = setTimeout(() => {
-    //         if (str) {
-    //             findUser();
-    //         }
-    //     }, 1000);
-    //     return () => clearTimeout(timeOut);
-    // }, [findUser, str]);
     const createTicket = useCallback(
         async (createdUserId, invitedUserId) => {
             const data = {
@@ -123,10 +94,6 @@ export const FinderPage = () => {
         message(error);
         return () => clearError();
     }, [error, message, clearError]);
-
-    // const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     setStr(e.target.value);
-    // };
 
     const sendRandomInvite = () => {
         const online = rooms.filter(

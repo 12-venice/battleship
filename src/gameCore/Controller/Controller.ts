@@ -28,9 +28,7 @@ export const mockStatistics = () => [
         [activeFieldIds.opponent]: 0,
     },
 ];
-
 export const mockAccount = () => [0, 0];
-
 export class Controller {
     opponentField;
 

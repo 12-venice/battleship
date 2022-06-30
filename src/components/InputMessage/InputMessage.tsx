@@ -1,3 +1,5 @@
+// @ts-nocheck
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable indent */
 /* eslint-disable no-param-reassign */
@@ -9,38 +11,41 @@ import {
     FormEvent,
     useCallback,
     useContext,
+    useEffect,
     useRef,
     useState,
 } from 'react';
 import { Button } from 'src/components/Button';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useHttp } from 'src/hooks/http.hook';
 import { File, FileInput } from 'src/pages/UpdateProfilePage/components/types';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
+import { User } from 'src/store/reducers/user';
+import { VideoCallService } from 'src/store/services/videoCallService';
 import styles from './InputMessage.scss';
 import { Icon } from '../Icon/Icon';
 import { InputMessageType } from './types';
 import { Emoji } from '../Emoji';
 import { AuthContext } from '../utils/Context/AuthContext';
 import { Dropdown } from '../Dropdown/Dropdown';
+import { CallPeer, CancelCall } from '../VideoChat/utils';
 
-export const InputMessage = ({
-    videoCall,
-    setVideoCall,
-    callback,
-}: InputMessageType) => {
+export const InputMessage = ({ callback }: InputMessageType) => {
     const [isActive, setIsActive] = useState(false);
+    const { pathname } = useLocation();
     const { room } = useParams() as { room: string };
     const [message, setMessage] = useState('');
     const [openEmoji, setOpenEmoji] = useState(false);
     const [caretPosition, setCaretPosition] = useState(0);
+    const [userInRoom, setUserInRoom] = useState() as unknown as User;
     const { type, comment, topic } = useSelector(
         (messageState: AllStateTypes) => messageState.message,
     );
-
+    const user = useSelector((state: AllStateTypes) => state.user.item);
+    const { status } = useSelector((state: AllStateTypes) => state.videocall);
     const fileInput = useRef<FileInput>(null);
-    const { token } = useContext(AuthContext);
+    const { token, socket } = useContext(AuthContext);
     const { request, loading } = useHttp();
     const id = () => {
         switch (type) {
@@ -83,6 +88,19 @@ export const InputMessage = ({
             Authorization: `Bearer ${token}`,
         });
     }, [message, request, room, token]);
+
+    const getUser = useCallback(async () => {
+        const userFind = await request(
+            '/api/room/findusers',
+            'POST',
+            { room },
+            {
+                Authorization: `Bearer ${token}`,
+            },
+        );
+        const userForCall = userFind.find((obj: User) => obj._id !== user?._id);
+        setUserInRoom(userForCall);
+    }, [request, room, token, user]);
 
     const createComment = useCallback(async () => {
         let newTopic;
@@ -131,6 +149,13 @@ export const InputMessage = ({
         setMessage(e.target.value);
     };
 
+    useEffect(() => {
+        console.log(!pathname.match(/forum/gm))
+        if (!pathname.match(/forum/gm)) {
+            getUser();
+        }
+    }, []);
+
     return (
         <form
             className={styles.inputMessage__block}
@@ -139,44 +164,51 @@ export const InputMessage = ({
             <div className={styles.inputMessage__dropdown}>
                 {isActive && (
                     <div className={styles['inputMessage__dropdown-content']}>
-                        {setVideoCall && (
-                            <Button
-                                skin="quad"
-                                color="red"
-                                onClick={() => {
-                                    setVideoCall();
-                                    setIsActive(!isActive);
-                                }}
-                            >
-                                <Icon type="video" />
-                            </Button>
-                        )}
-                        {!videoCall && (
-                            <>
-                                <Button
-                                    skin="quad"
-                                    color="yellow"
-                                    onClick={() => {
-                                        setIsActive(!isActive);
-                                        if (fileInput.current) {
-                                            fileInput.current.click();
-                                        }
-                                    }}
-                                    disabled={!type || loading}
-                                >
-                                    <Icon type="plus" />
-                                </Button>
-                                <Button
-                                    title={'\u{1F642}'}
-                                    skin="quad"
-                                    color="blue"
-                                    onClick={() => {
-                                        setOpenEmoji(!openEmoji);
-                                        setIsActive(!isActive);
-                                    }}
-                                />
-                            </>
-                        )}
+                        <Button
+                            skin="quad"
+                            color={status === 'end' ? 'green' : 'red'}
+                            onClick={
+                                status === 'end'
+                                    ? () =>
+                                        CallPeer({
+                                            user: userInRoom,
+                                            from: user,
+                                            socket,
+                                            room,
+                                        })
+                                    : () =>
+                                        CancelCall({
+                                            socket,
+                                            from: userInRoom,
+                                        })
+                            }
+                        >
+                            <Icon
+                                type={status === 'end' ? 'call' : 'slashcall'}
+                            />
+                        </Button>
+                        <Button
+                            skin="quad"
+                            color="yellow"
+                            onClick={() => {
+                                setIsActive(!isActive);
+                                if (fileInput.current) {
+                                    fileInput.current.click();
+                                }
+                            }}
+                            disabled={!type || loading}
+                        >
+                            <Icon type="gallery" />
+                        </Button>
+                        <Button
+                            title={'\u{1F642}'}
+                            skin="quad"
+                            color="blue"
+                            onClick={() => {
+                                setOpenEmoji(!openEmoji);
+                                setIsActive(!isActive);
+                            }}
+                        />
                     </div>
                 )}
                 <Button
@@ -187,7 +219,7 @@ export const InputMessage = ({
                     <Icon type="arrowUp" />
                 </Button>
             </div>
-            {!videoCall && (
+            {status === 'end' && (
                 <>
                     <input
                         className={cn(

@@ -6,14 +6,17 @@ import express from 'express';
 import 'babel-polyfill';
 import jwt from 'jsonwebtoken';
 import http from 'http';
+import https from 'https';
 import path from 'path';
 import { Server, Socket } from 'socket.io';
 import authRoutes from 'socketRoutes/auth.routes';
 import inviteRoutes from 'socketRoutes/invite.routes';
+import videoRoutes from 'socketRoutes/video.routes';
 import mongoose from 'mongoose';
 import webpack from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
+import fs from 'fs';
 import { DB, IS_DEV, IS_DEV_SERVER, PORT, SECRET_KEY } from '../webpack/env';
 import { renderResponse } from './server/renderResponse';
 import authRouter from '../serverRoutes/auth.routes';
@@ -33,9 +36,16 @@ import type {
 } from './components/utils/Socket/types';
 
 const compiler = webpack(webpackConfig);
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+const privateKey = fs.readFileSync('./src/sslcert/localhost.key', 'utf8');
+const certificate = fs.readFileSync('./src/sslcert/localhost.crt', 'utf8');
+
+const credentials = { key: privateKey, cert: certificate };
 
 const app = express();
-const httpServer = http.createServer(app);
+const httpServer = IS_DEV
+    ? https.createServer(credentials, app)
+    : http.createServer(app);
 if (IS_DEV && !IS_DEV_SERVER) {
     app.use(
         devMiddleware(compiler, {
@@ -44,16 +54,28 @@ if (IS_DEV && !IS_DEV_SERVER) {
     );
     app.use(hotMiddleware(compiler));
 }
+
 export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
     httpServer,
     {
         cors: {
             origin: '*',
         },
+        transports: ['polling'],
     },
 );
 
 export const ts = new TimersStore();
+
+io.engine.on(
+    'connection_error',
+    (err: { req: any; code: any; message: any; context: any }) => {
+        console.log(err.req); // the request object
+        console.log(err.code); // the error code, for example 1
+        console.log(err.message); // the error message, for example "Session ID unknown"
+        console.log(err.context); // some additional error context
+    },
+);
 
 io.use((socket: ISocket, next: (err?: Error) => void) => {
     try {
@@ -80,6 +102,7 @@ io.use((socket: ISocket, next: (err?: Error) => void) => {
 io.on('connection', (socket: Socket) => {
     authRoutes(socket);
     inviteRoutes(socket);
+    videoRoutes(socket);
 });
 
 app.use(express.json({ limit: '10mb' }));

@@ -7,7 +7,6 @@ const schema = new Schema(
         message: { type: String, trim: true, required: true },
         comment: { type: String },
         subcomments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-        description: { type: String, trim: true, required: true },
         user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     },
     { timestamps: true },

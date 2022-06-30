@@ -18,21 +18,17 @@ export const Cell = ({
 }) => {
     const usersOnline = useSelector((state: AllStateTypes) => state.userOnline);
 
-    // const checkUserOnline = () => {
-    //     const isOnline = usersOnline.indexOf(element._id) !== -1;
-    //     return !!isOnline;
-    // };
     const checkUserOnline = () => {
-        const isOnline = usersOnline.filter((u) => u.id === element._id).length;
-        return !!isOnline;
-    };
-    const checkUserGameStatus = () => {
-        const inspectUser = usersOnline.filter((u) => u.id === element._id);
-        if (inspectUser.length > 0) {
-            return inspectUser[0].inGame;
+        const isOnline = usersOnline.find((u) => u.id === element._id);
+        if (!isOnline) {
+            return 'grey';
         }
-        return false;
+        if (isOnline.inGame) {
+            return 'orange';
+        }
+        return 'greenyellow';
     };
+
     return (
         <div
             aria-hidden
@@ -44,11 +40,7 @@ export const Cell = ({
             <div
                 className={styles.cell__point}
                 style={{
-                    background: checkUserOnline()
-                        ? checkUserGameStatus()
-                            ? 'orange'
-                            : 'greenyellow'
-                        : 'gray',
+                    background: checkUserOnline(),
                 }}
             />
         </div>

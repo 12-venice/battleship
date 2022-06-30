@@ -7,6 +7,7 @@ import { notificationReducer, NotificationState } from './notifications';
 import { userOnlineReducer, userOnlineState } from './online';
 import { gameReducer, Game } from './game';
 import { MSGReducer, TypeMSGState } from './message';
+import { videoCall, videoCallReducer } from './videocall';
 
 export type AllStateTypes = {
     user: UserState;
@@ -16,6 +17,7 @@ export type AllStateTypes = {
     userOnline: userOnlineState;
     game: Game;
     message: TypeMSGState;
+    videocall: videoCall;
 };
 
 export default combineReducers({
@@ -26,4 +28,5 @@ export default combineReducers({
     userOnline: userOnlineReducer,
     game: gameReducer,
     message: MSGReducer,
+    videocall: videoCallReducer,
 });

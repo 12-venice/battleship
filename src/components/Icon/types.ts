@@ -13,6 +13,14 @@ export type IconType = {
         | 'search'
         | 'send'
         | 'video'
+        | 'slashcall'
+        | 'call'
+        | 'monitor'
+        | 'changecam'
+        | 'gallery'
+        | 'camera'
+        | 'mic'
         | 'invite'
+        | 'speaker'
         | 'arrowUp';
 };

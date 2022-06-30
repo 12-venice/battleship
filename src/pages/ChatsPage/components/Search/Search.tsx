@@ -1,11 +1,11 @@
 // @ts-nocheck
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button } from 'src/components/Button';
 import { Input } from 'src/components/Input';
 import { ModalWindow } from 'src/components/ModalWindow';
 import { Preloader } from 'src/components/Preloader';
-import { socket } from 'src/components/utils/Socket/Socket';
+import { AuthContext } from 'src/components/utils/Context/AuthContext';
 import { useHttp } from 'src/hooks/http.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import { User } from 'src/store/reducers/user';
@@ -17,6 +17,7 @@ import { Props } from './types';
 
 export const Search: Props = ({ close }): JSX.Element => {
     const { request, loading } = useHttp();
+    const { socket } = useContext(AuthContext);
     const user = useSelector((state: AllStateTypes) => state.user.item);
     const [rooms, setRooms] = useState([]);
     const [str, setStr] = useState('');
@@ -26,7 +27,7 @@ export const Search: Props = ({ close }): JSX.Element => {
     };
 
     const createRoom = (invitedUserId: string) => {
-        socket.emit('invite:sent', invitedUserId);
+        socket?.emit('invite:sent', invitedUserId);
         close();
     };
 

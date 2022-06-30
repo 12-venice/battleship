@@ -1,15 +1,15 @@
-// @ts-nocheck
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { io, Socket } from 'socket.io-client';
+import { AcceptCall, CancelCall } from 'src/components/VideoChat/utils';
 import { gameService } from 'src/store/services/gameService';
 import { notificationService } from 'src/store/services/notificationService';
 import { OnlineService } from 'src/store/services/onlineService';
+import Peer, { SignalData } from 'simple-peer';
+import { Socket } from 'socket.io-client';
+import { VideoCallService } from 'src/store/services/videoCallService';
+import { User } from 'src/store/reducers/user';
+import { Icon } from 'src/components/Icon/Icon';
+import { uOnline } from 'src/store/reducers/online';
 import { PageLinks } from '../Routes/types';
-import { ClientToServerEvents, ServerToClientEvents } from './types';
-
-export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io({
-    autoConnect: false,
-});
 
 export const acceptInvite = async (invitation: any) => {
     const response = await fetch(
@@ -47,7 +47,7 @@ export const cancelInvite = async (invitation: any) => {
     return data;
 };
 
-export const SocketListener = () => {
+export const SocketListener = (socket: Socket) => {
     socket.on('users:add', (data: any) => {
         OnlineService.addUserOnline(data);
     });
@@ -56,7 +56,7 @@ export const SocketListener = () => {
         OnlineService.removeUserOnline(data);
     });
 
-    socket.on('users:set', (data: any) => {
+    socket.on('users:set', (data: uOnline[]) => {
         OnlineService.setUserOnline(data);
     });
 
@@ -75,8 +75,8 @@ export const SocketListener = () => {
                 buttons: [
                     {
                         title: 'READ',
-                        skin: 'small',
-                        color: 'green',
+                        skin: 'regular',
+                        color: 'yellow',
                         href: `${PageLinks.chats}/${data.room}`,
                     },
                 ],
@@ -93,13 +93,13 @@ export const SocketListener = () => {
             buttons: [
                 {
                     title: 'ACCEPT',
-                    skin: 'small',
-                    color: 'orange',
+                    skin: 'regular',
+                    color: 'green',
                     onClick: () => acceptInvite(data),
                 },
                 {
                     title: 'CANCEL',
-                    skin: 'small',
+                    skin: 'regular',
                     color: 'red',
                     onClick: () => cancelInvite(data),
                 },
@@ -132,5 +132,40 @@ export const SocketListener = () => {
                 statistics: data.statistics,
             });
         }
+    });
+
+    socket.on('call:recived', ({ signal, from, room }) => {
+        notificationService.addNotification({
+            title: from.display_name,
+            message: 'is calling you',
+            autoDelete: false,
+            autoDeleteTime: 5000,
+            user: from,
+            buttons: [
+                {
+                    title: Icon({ type: 'call' }),
+                    skin: 'quad',
+                    color: 'green',
+                    onClick: () => AcceptCall({ from, socket, signal, room }),
+                },
+                {
+                    title: Icon({ type: 'slashcall' }),
+                    skin: 'quad',
+                    color: 'red',
+                    onClick: () => CancelCall({ from, socket }),
+                },
+            ],
+        });
+    });
+
+    socket.on('call:cancel', (user: User) => {
+        VideoCallService.connectClose();
+        notificationService.addNotification({
+            title: `${user.display_name}`,
+            message: 'cancel call',
+            autoDelete: true,
+            autoDeleteTime: 3000,
+            user,
+        });
     });
 };

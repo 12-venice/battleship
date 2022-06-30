@@ -48,4 +48,17 @@ router.post('/find', authMiddleware, async (req, res) => {
     }
 });
 
+router.post('/findusers', authMiddleware, async (req, res) => {
+    try {
+        const { users } = await Room.findOne({ _id: req.body.room }).populate(
+            'users',
+        );
+        return res.status(200).json(users);
+    } catch (e) {
+        return res.status(500).json({
+            message: 'Что-то пошло не так, попробуйте еще раз',
+        });
+    }
+});
+
 export default router;
