@@ -26,9 +26,8 @@
     background: none;
 }
 
-@media screen and (max-width: 479px) {
+@media screen and (max-width: 800px) {
     .modal__plate {
-        width: 90%;
-        height: 90%;
+        padding: 30px;
     }
 }

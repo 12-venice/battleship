@@ -120,7 +120,9 @@ export const Footer = ({
                     <Button
                         skin="short"
                         title={
-                            room === 'bot' ? dataStore.buttons.start : 'READY'
+                            room === 'bot'
+                                ? dataStore.buttons.start
+                                : dataStore.buttons.ready
                         }
                         color="green"
                         onClick={handleGameStart}

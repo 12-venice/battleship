@@ -1,5 +1,10 @@
 export const RUSSIAN = {
     buttons: {
+        home: 'МЕНЮ',
+        ready: 'ГОТОВ',
+        close: 'ВЫЙТИ',
+        switch: 'ПЕРЕКЛЮЧИТЬ',
+        update: 'ОБНОВИТЬ',
         forum: 'ФОРУМ',
         leaders: 'ЛИДЕРЫ',
         profile: 'ПРОФИЛЬ',
@@ -11,7 +16,7 @@ export const RUSSIAN = {
         reset: 'СБРОС',
         start: 'СТАРТ',
         send: 'ТЫК!',
-        editprofile: 'ИЗМЕНИТЬ ПРОФ',
+        editprofile: 'ИЗМЕНИТЬ ПРОФИЛЬ',
         editpass: 'ИЗМЕНИТЬ ПАРОЛЬ',
         confirm: 'ПОДТВЕРДИТЬ',
         back: 'НАЗАД',
@@ -23,6 +28,7 @@ export const RUSSIAN = {
         random: 'СЛУЧАЙНЫЙ',
     },
     labels: {
+        chats: 'ЧАТЫ',
         finder: 'ПРИГЛАШЕНИЯ',
         menu: 'МЕНЮ',
         forum: 'ФОРУМ',
@@ -47,6 +53,9 @@ export const RUSSIAN = {
         find: 'ПОИСК',
     },
     text: {
+        cancelGame: 'Игра была отменена',
+        waiting: 'Ждём вашего соперника',
+        closeGame: 'Вы действительно хотите закончить игру?',
         editTopic: 'Опиши свой топик',
         editComment: 'Опиши свой комментарий',
         avatar: 'добавь аватар со своего компьютера',

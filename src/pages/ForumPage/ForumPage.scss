@@ -15,12 +15,13 @@
 }
 
 .forum__footer {
-    margin: 0px 4vw 5vw 4vw;
+    margin: 0 min(4vw, 70px) min(5vw, 50px) min(4vw, 70px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: var(--dark-blue);
     border-radius: 15px;
+    padding: min(1vw, 10px);
 }
 
 .forum__main {
@@ -29,7 +30,7 @@
 }
 
 .forum__header {
-    margin: 5vw 4vw 0px 4vw;
+    margin: min(5vw, 50px) min(4vw, 70px) 0px min(4vw, 70px);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -45,7 +46,7 @@
     justify-content: center;
     flex-direction: column;
     color: var(--white);
-    margin-right: 10vw;
+    margin-right: 5vw;
 }
 
 .forum__label-tag {
@@ -56,15 +57,14 @@
 .forum__label-description {
     margin: 0 auto;
     font-size: min(30px, 4vw);
-    line-height: 40px;
 }
 
 .forum__main-field {
     width: 100%;
     max-height: 550px;
     height: 51vh;
+    margin: 10px min(4vw, 70px);
     overflow-y: scroll;
-    margin: 0 4vw;
 
     &::-webkit-scrollbar {
         width: 10px;
@@ -75,5 +75,11 @@
     &::-webkit-scrollbar-thumb {
         border-radius: 10px;
         background-color: var(--dark-blue);
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .forum__label {
+        margin-right: 14vw;
     }
 }

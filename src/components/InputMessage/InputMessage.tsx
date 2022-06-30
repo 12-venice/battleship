@@ -28,14 +28,16 @@ import { Icon } from '../Icon/Icon';
 import { InputMessageType } from './types';
 import { Emoji } from '../Emoji';
 import { AuthContext } from '../utils/Context/AuthContext';
+import { Dropdown } from '../Dropdown/Dropdown';
 import { CallPeer, CancelCall } from '../VideoChat/utils';
 
 export const InputMessage = ({ callback }: InputMessageType) => {
+    const [isActive, setIsActive] = useState(false);
     const { room } = useParams() as { room: string };
     const [message, setMessage] = useState('');
     const [openEmoji, setOpenEmoji] = useState(false);
     const [caretPosition, setCaretPosition] = useState(0);
-    const [userInRoom, setUserInRoom] = useState({}) as User;
+    const [userInRoom, setUserInRoom] = useState() as unknown as User;
     const { type, comment, topic } = useSelector(
         (messageState: AllStateTypes) => messageState.message,
     );
@@ -95,7 +97,7 @@ export const InputMessage = ({ callback }: InputMessageType) => {
                 Authorization: `Bearer ${token}`,
             },
         );
-        const userForCall = userFind.find((obj) => obj._id !== user._id);
+        const userForCall = userFind.find((obj: User) => obj._id !== user?._id);
         setUserInRoom(userForCall);
     }, [request, room, token, user]);
 
@@ -155,62 +157,98 @@ export const InputMessage = ({ callback }: InputMessageType) => {
             className={styles.inputMessage__block}
             onSubmit={(e) => sendMessageHandler(e)}
         >
-            <Button
-                skin="quad"
-                color={status === 'end' ? 'green' : 'red'}
-                onClick={
-                    status === 'end'
-                        ? () =>
-                              CallPeer({
-                                  user: userInRoom,
-                                  from: user,
-                                  socket,
-                                  room,
-                              })
-                        : () => CancelCall({ socket, from: userInRoom })
-                }
-            >
-                <Icon type={status === 'end' ? 'call' : 'slashcall'} />
-            </Button>
-            <Button
-                skin="quad"
-                color="yellow"
-                onClick={() => fileInput.current && fileInput.current.click()}
-                disabled={!type || loading}
-            >
-                <Icon type="gallery" />
-            </Button>
-            <Button
-                title={'\u{1F642}'}
-                skin="quad"
-                color="blue"
-                onClick={() => setOpenEmoji(!openEmoji)}
-            />
-            <input
-                className={cn(styles.inputMessage__input, 'browser-default')}
-                type="text"
-                placeholder="Message"
-                name="MessageInput"
-                value={message}
-                onChange={(e) => inputHandler(e)}
-                onClick={(e) => setCaretPosition(e.target.selectionStart)}
-            />
-            <Button
-                skin="quad"
-                color="green"
-                type="submit"
-                disabled={!message || !type}
-            >
-                <Icon type="send" />
-            </Button>
-            <input
-                accept=".png, .jpg, .jpeg"
-                hidden
-                onChange={(e) => handlerImageCustom(e)}
-                type="file"
-                ref={fileInput}
-            />
-            {openEmoji && <Emoji callback={(emoji) => onEmojiClick(emoji)} />}
+            <div className={styles.inputMessage__dropdown}>
+                {isActive && (
+                    <div className={styles['inputMessage__dropdown-content']}>
+                        <Button
+                            skin="quad"
+                            color={status === 'end' ? 'green' : 'red'}
+                            onClick={
+                                status === 'end'
+                                    ? () =>
+                                          CallPeer({
+                                              user: userInRoom,
+                                              from: user,
+                                              socket,
+                                              room,
+                                          })
+                                    : () =>
+                                          CancelCall({
+                                              socket,
+                                              from: userInRoom,
+                                          })
+                            }
+                        >
+                            <Icon
+                                type={status === 'end' ? 'call' : 'slashcall'}
+                            />
+                        </Button>
+                        <Button
+                            skin="quad"
+                            color="yellow"
+                            onClick={() => {
+                                setIsActive(!isActive);
+                                if (fileInput.current) {
+                                    fileInput.current.click();
+                                }
+                            }}
+                            disabled={!type || loading}
+                        >
+                            <Icon type="gallery" />
+                        </Button>
+                        <Button
+                            title={'\u{1F642}'}
+                            skin="quad"
+                            color="blue"
+                            onClick={() => {
+                                setOpenEmoji(!openEmoji);
+                                setIsActive(!isActive);
+                            }}
+                        />
+                    </div>
+                )}
+                <Button
+                    skin="quad"
+                    color="blue"
+                    onClick={() => setIsActive(!isActive)}
+                >
+                    <Icon type="arrowUp" />
+                </Button>
+            </div>
+            {status === 'end' && (
+                <>
+                    <input
+                        className={cn(
+                            styles.inputMessage__input,
+                            'browser-default',
+                        )}
+                        type="text"
+                        placeholder="Message"
+                        name="MessageInput"
+                        value={message}
+                        onChange={(e) => inputHandler(e)}
+                        onClick={(e) =>
+                            setCaretPosition(e.target.selectionStart)
+                        }
+                    />
+                    <Button
+                        skin="quad"
+                        color="green"
+                        type="submit"
+                        disabled={!message || !type}
+                    >
+                        <Icon type="send" />
+                    </Button>
+                    <input
+                        accept=".png, .jpg, .jpeg"
+                        hidden
+                        onChange={(e) => handlerImageCustom(e)}
+                        type="file"
+                        ref={fileInput}
+                    />
+                    {openEmoji && <Emoji callback={onEmojiClick} />}
+                </>
+            )}
         </form>
     );
 };

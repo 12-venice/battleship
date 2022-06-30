@@ -14,6 +14,9 @@ import styles from './CloseGameDialog.scss';
 import { Props } from './types';
 
 export const CloseGameDialog: Props = ({ close, gameStep }): JSX.Element => {
+    const dataStore = useSelector(
+        (state: AllStateTypes) => state.language.translate,
+    );
     const onlineGameID = useSelector((state: AllStateTypes) => state.game.id);
     const { room } = useParams() as { room: string };
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
@@ -38,19 +41,17 @@ export const CloseGameDialog: Props = ({ close, gameStep }): JSX.Element => {
     };
     return (
         <ModalWindow>
-            <p className={styles.closeGame__text}>
-                Do you want to close the game?
-            </p>
+            <p className={styles.closeGame__text}>{dataStore.text.closeGame}</p>
             <div className={styles.closeGame__buttons}>
                 <Button
                     skin="high"
-                    title="BACK"
+                    title={dataStore.buttons.back}
                     color="green"
                     onClick={close}
                 />
                 <Button
                     skin="high"
-                    title="CLOSE"
+                    title={dataStore.buttons.close}
                     color="yellow"
                     onClick={() => fastExit()}
                 />

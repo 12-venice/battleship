@@ -14,10 +14,6 @@ export const getHtml = (reactHtml: string, reduxState = {}) => `
                     rel="stylesheet"
                 />
                 <link
-                    href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap"
-                    rel="stylesheet"
-                >
-                <link
                     rel="stylesheet"
                     href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
                 />
@@ -29,6 +25,7 @@ export const getHtml = (reactHtml: string, reduxState = {}) => `
                     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap"
                     rel="stylesheet"
                 />
+                <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
                 <link rel="stylesheet" href="/styles.css"/>
                 <script defer src="/main.js"></script>
             </head>

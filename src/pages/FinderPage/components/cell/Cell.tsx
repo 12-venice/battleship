@@ -18,6 +18,9 @@ export const Cell = ({ element }: { element: User }) => {
     const { token } = useContext(AuthContext);
     const usersOnline = useSelector((state: AllStateTypes) => state.userOnline);
     const user = useSelector((state: AllStateTypes) => state.user.item);
+    const notifications = useSelector(
+        (state: AllStateTypes) => state.notification,
+    );
 
     const checkUserOnline = () => {
         const isOnline = usersOnline.find((u) => u.id === element._id);
@@ -44,6 +47,10 @@ export const Cell = ({ element }: { element: User }) => {
     );
 
     const inviteUser = (invitedUser: any) => {
+        const index = notifications.filter(
+            (toast) => toast.message === 'Invite sending...',
+        );
+        if (index.length > 0) return;
         notificationService.addNotification({
             title: invitedUser.display_name,
             message: 'Invite sending...',

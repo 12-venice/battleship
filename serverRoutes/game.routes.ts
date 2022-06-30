@@ -14,6 +14,102 @@ import Game from '../serverModels/game';
 
 const router = Router();
 
+export async function exitGameFunc(gameId, userId, gameStep) {
+    ts.deleteTimer(gameId);
+    const gameStateFromDB = await Game.findOne({ _id: gameId });
+    const invitedUserSocket = getUsers()?.find(
+        (userSocket) =>
+            userSocket.id === gameStateFromDB.invitedUser._id.toString(),
+    )?.socket;
+    const createdUserSocket = getUsers()?.find(
+        (userSocket) =>
+            userSocket.id === gameStateFromDB.createdUser._id.toString(),
+    )?.socket;
+    if (gameStep > 0) {
+        let queue;
+        let score;
+        if (gameStateFromDB.createdUser._id.toString() === userId) {
+            queue = gameStateFromDB.invitedUser._id.toString();
+            score = [10 + gameStateFromDB.score[activeFieldList.invited], 0];
+        } else {
+            queue = gameStateFromDB.createdUser._id.toString();
+            score = [0, 10 + gameStateFromDB.score[activeFieldList.created]];
+        }
+        await Game.updateOne(
+            { _id: gameId },
+            {
+                $set: {
+                    queue,
+                    score,
+                    gameOver: true,
+                },
+            },
+        );
+        io.to(invitedUserSocket?.id as string).emit('game:step', {
+            ...gameFieldHandler(
+                gameStateFromDB.invitedField,
+                gameStateFromDB.createdField,
+            ),
+            queue,
+            gameOver: true,
+            score,
+            statistics: gameStateFromDB.statistics,
+        });
+        io.to(createdUserSocket?.id as string).emit('game:step', {
+            ...gameFieldHandler(
+                gameStateFromDB.createdField,
+                gameStateFromDB.invitedField,
+            ),
+            queue,
+            gameOver: true,
+            score: reverseScore(score),
+            statistics: reverseStatistics(gameStateFromDB.statistics),
+        });
+        if (gameStateFromDB.createdUser._id.toString() === queue) {
+            await User.updateOne(
+                { _id: gameStateFromDB.createdUser._id },
+                { $inc: { wins: 1, points: score[1] } },
+            );
+            await User.updateOne(
+                { _id: gameStateFromDB.invitedUser._id },
+                { $inc: { defeats: 1, points: score[0] } },
+            );
+        } else {
+            await User.updateOne(
+                { _id: gameStateFromDB.invitedUser._id },
+                { $inc: { wins: 1, points: score[0] } },
+            );
+            await User.updateOne(
+                { _id: gameStateFromDB.createdUser._id },
+                { $inc: { defeats: 1, points: score[1] } },
+            );
+        }
+    } else {
+        await Game.updateOne(
+            { _id: gameId },
+            {
+                $set: {
+                    gameCancel: true,
+                },
+            },
+        );
+        io.to(invitedUserSocket?.id as string).emit('game:step', {
+            gameCancel: true,
+        });
+        io.to(createdUserSocket?.id as string).emit('game:step', {
+            gameCancel: true,
+        });
+    }
+    setGameStatus({
+        userID: gameStateFromDB.createdUser._id.toString(),
+        status: false,
+    });
+    setGameStatus({
+        userID: gameStateFromDB.invitedUser._id.toString(),
+        status: false,
+    });
+}
+
 router.post('/accept', async (req, res) => {
     try {
         const { createdUserId, invitedUserId } = req.body;
@@ -339,105 +435,7 @@ router.post('/shot', async (req, res) => {
 router.post('/exit', async (req, res) => {
     try {
         const { gameId, userId, gameStep } = req.body;
-        ts.deleteTimer(gameId);
-        const gameStateFromDB = await Game.findOne({ _id: gameId });
-        const invitedUserSocket = getUsers()?.find(
-            (userSocket) =>
-                userSocket.id === gameStateFromDB.invitedUser._id.toString(),
-        )?.socket;
-        const createdUserSocket = getUsers()?.find(
-            (userSocket) =>
-                userSocket.id === gameStateFromDB.createdUser._id.toString(),
-        )?.socket;
-        if (gameStep > 0) {
-            let queue;
-            let score;
-            if (gameStateFromDB.createdUser._id.toString() === userId) {
-                queue = gameStateFromDB.invitedUser._id.toString();
-                score = [
-                    10 + gameStateFromDB.score[activeFieldList.invited],
-                    0,
-                ];
-            } else {
-                queue = gameStateFromDB.createdUser._id.toString();
-                score = [
-                    0,
-                    10 + gameStateFromDB.score[activeFieldList.created],
-                ];
-            }
-            await Game.updateOne(
-                { _id: gameId },
-                {
-                    $set: {
-                        queue,
-                        score,
-                        gameOver: true,
-                    },
-                },
-            );
-            io.to(invitedUserSocket?.id as string).emit('game:step', {
-                ...gameFieldHandler(
-                    gameStateFromDB.invitedField,
-                    gameStateFromDB.createdField,
-                ),
-                queue,
-                gameOver: true,
-                score,
-                statistics: gameStateFromDB.statistics,
-            });
-            io.to(createdUserSocket?.id as string).emit('game:step', {
-                ...gameFieldHandler(
-                    gameStateFromDB.createdField,
-                    gameStateFromDB.invitedField,
-                ),
-                queue,
-                gameOver: true,
-                score: reverseScore(score),
-                statistics: reverseStatistics(gameStateFromDB.statistics),
-            });
-            if (gameStateFromDB.createdUser._id.toString() === queue) {
-                await User.updateOne(
-                    { _id: gameStateFromDB.createdUser._id },
-                    { $inc: { wins: 1, points: score[1] } },
-                );
-                await User.updateOne(
-                    { _id: gameStateFromDB.invitedUser._id },
-                    { $inc: { defeats: 1, points: score[0] } },
-                );
-            } else {
-                await User.updateOne(
-                    { _id: gameStateFromDB.invitedUser._id },
-                    { $inc: { wins: 1, points: score[0] } },
-                );
-                await User.updateOne(
-                    { _id: gameStateFromDB.createdUser._id },
-                    { $inc: { defeats: 1, points: score[1] } },
-                );
-            }
-        } else {
-            await Game.updateOne(
-                { _id: gameId },
-                {
-                    $set: {
-                        gameCancel: true,
-                    },
-                },
-            );
-            io.to(invitedUserSocket?.id as string).emit('game:step', {
-                gameCancel: true,
-            });
-            io.to(createdUserSocket?.id as string).emit('game:step', {
-                gameCancel: true,
-            });
-        }
-        setGameStatus({
-            userID: gameStateFromDB.createdUser._id.toString(),
-            status: false,
-        });
-        setGameStatus({
-            userID: gameStateFromDB.invitedUser._id.toString(),
-            status: false,
-        });
+        exitGameFunc(gameId, userId, gameStep);
         res.status(200).json({ message: 'The opponent left the game' });
     } catch (e) {
         res.status(500).json({

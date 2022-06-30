@@ -61,7 +61,7 @@
     margin: 15px;
 }
 
-@media screen and (max-width: 1030px) {
+@media screen and (max-width: 900px) {
     .update-avatar__main {
         flex-direction: column;
     }
@@ -70,6 +70,19 @@
         height: 100px;
     }
     .update-avatar__block {
-        height: 278px;
+        height: 100%;
+        width: 60vw;
+        flex-wrap: nowrap;
+        overflow: auto;
+        justify-content: inherit;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+    .update-avatar__title {
+        font-size: 4vw;
+    }
+    .update-avatar__block-custom {
+        justify-content: center;
     }
 }

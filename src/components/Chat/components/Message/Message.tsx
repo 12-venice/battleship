@@ -15,6 +15,7 @@ export const Message = (message: messageType): JSX.Element => {
     const { _id, createdAt, text, user, delivered } = message;
     const { socket } = useContext(AuthContext);
     const { request } = useHttp();
+    const { room } = useParams() as { room: string };
     const [deliver, setDeliver] = useState(delivered);
     const thisUser = useSelector((state: AllStateTypes) => state.user.item);
     const myMsg = user._id === thisUser?._id;
@@ -34,10 +35,10 @@ export const Message = (message: messageType): JSX.Element => {
     }, [_id, myMsg]);
 
     useEffect(() => {
-        if (!delivered && !myMsg) {
+        if (!delivered && !myMsg && room !== 'bot') {
             request('/api/message/setdelivered', 'POST', { _id });
         }
-    }, [_id, delivered, myMsg, request]);
+    }, [_id, delivered, myMsg, request, room]);
 
     return (
         <div

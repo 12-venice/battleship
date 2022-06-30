@@ -15,4 +15,5 @@ export type formProps = {
     submitTitle: string;
     disabled?: boolean;
     checking?: boolean;
+    styleClass?: string;
 };

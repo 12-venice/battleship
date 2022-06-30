@@ -26,6 +26,9 @@
     height: 40%;
     overflow-y: scroll;
     background: var(--blue);
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .emoji__cell {

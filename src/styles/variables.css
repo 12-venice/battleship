@@ -1,7 +1,7 @@
 :root {
   --font-family: "Titan One";
   --font-family-second: "Inter", sans-serif;
-  --font-family-ru: "Russo One", sans-serif;
+  --font-family-ru: 'Oswald', sans-serif;
   --MAX-WIDTH-PHONE: 479px;
   --MAX-WIDTH-TABLET: 800px;
 }

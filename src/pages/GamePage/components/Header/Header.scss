@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--dark-yellow);
+    color: var(--light-yellow);
     font-size: min(4vw, 34px);
     margin: 0 min(1vw, 10px);
     width: 44px;
@@ -21,15 +21,42 @@
     background: var(--light-dark-blue);
     height: 100%;
     border-radius: 7vw;
-    padding: min(1vw, 5px);
+    // padding: min(1vw, 5px);
 }
 
 .game__header-timer {
-    width: 44px;
+    // height: min(7vw, 70px);
+    height: 100%;
+    width: min(7vw, 70px);
+    background: var(--light-blue);
+    margin: 0;
+    border-radius: 50% 0 0 50%;
 }
 
 .game__header-active {
-    color: var(--light-green);
+    color: var(--light-green-2);
+    border-radius: 0 50% 50% 0;
+}
+
+.header__bar-left {
+    border-radius: 700px 0 0 700px;
+    display: flex;
+    color: white;
+    // height: min(7vw, 70px);
+    height: 100%;
+}
+
+.header__bar-right {
+    border-radius: 0 700px 700px 0;
+    display: flex;
+    color: white;
+    // height: min(7vw, 70px);
+    height: 100%;
+}
+
+.header__bar-active {
+    background: var(--light-blue);
+    color: var(--light-dark-blue);
 }
 
 @media screen and (max-width: 800px) {
@@ -38,10 +65,7 @@
         margin-bottom: 10px;
     }
 
-    .game__header-timer {
-        width: 2vw;
-    }
-
+    
     .game__header-text {
         display: flex;
         align-items: center;
@@ -49,6 +73,12 @@
         font-size: 34px;
         margin: 0 2vw;
         width: 2vw;
+    }
+
+    .game__header-timer {
+        width: 7vw;
+        margin: 0;
+        height: min(7vw, 70px);
     }
 
     .game__header-players {
@@ -60,6 +90,14 @@
         height: 80%;
         border-radius: 7vw;
         padding: 0 1vw;
+    }
+
+    .header__bar-left {
+        height: min(7vw, 70px);
+    }
+    
+    .header__bar-right {
+        height: min(7vw, 70px);
     }
 }
 
@@ -75,6 +113,10 @@
         justify-content: center;
         font-size: 20px;
         margin: 0 2vw;
+    }
+
+    .game__header-timer {
+        margin: 0;
     }
 
     .game__header-players {
