@@ -12,25 +12,6 @@ export const audioConstraints = {
     noiseSuppression: true,
 };
 
-export const fakeAudio = () => {
-    try {
-        let ctx;
-        if (typeof window !== 'undefined') {
-            const AudioContext =
-                window.AudioContext || window.webkitAudioContext;
-            ctx = new AudioContext();
-        }
-        const oscillator = ctx.createOscillator();
-        const dst = oscillator.connect(ctx.createMediaStreamDestination());
-        oscillator.start();
-        return Object.assign(dst.stream.getAudioTracks()[0], {
-            enabled: false,
-        });
-    } catch (err: any) {
-        console.log(err.toString());
-    }
-};
-
 export const fakeVideo = ({ width = 640, height = 480 } = {}) => {
     const canvas = Object.assign(document.createElement('canvas'), {
         width,

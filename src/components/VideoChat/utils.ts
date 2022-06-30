@@ -7,7 +7,7 @@ import { Socket } from 'socket.io-client';
 import { User } from 'src/store/reducers/user';
 import { notificationService } from 'src/store/services/notificationService';
 import { VideoCallService } from 'src/store/services/videoCallService';
-import { fakeAudio, fakeVideo } from './config';
+import { audioConstraints, fakeVideo } from './config';
 import { acceptCallType, cancelCallType } from './types';
 
 let _peer: Peer.Instance | null;
@@ -25,10 +25,6 @@ export const destroyPeer = () => {
     _peer = null;
 };
 
-const stream =
-    typeof window !== 'undefined' &&
-    new MediaStream([fakeAudio(), fakeVideo()]);
-
 export const CallPeer = async ({
     user,
     from,
@@ -40,6 +36,13 @@ export const CallPeer = async ({
     socket: Socket;
     room: string;
 }) => {
+    const media = await navigator.mediaDevices.getUserMedia({
+        audio: audioConstraints,
+    });
+    const audioTrack = media.getAudioTracks()[0];
+    const stream = new MediaStream([audioTrack, fakeVideo()]);
+    VideoCallService.updateSignal(stream);
+
     const config = {
         initiator: true,
         trickle: false,
@@ -81,6 +84,12 @@ export const AcceptCall = async ({
 }: acceptCallType) => {
     VideoCallService.updateRoom(room);
     VideoCallService.updateStatus('live');
+    const media = await navigator.mediaDevices.getUserMedia({
+        audio: audioConstraints,
+    });
+    const audioTrack = media.getAudioTracks()[0];
+    const stream = new MediaStream([audioTrack, fakeVideo()]);
+    VideoCallService.updateSignal(stream);
 
     const config = {
         initiator: false,

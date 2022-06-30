@@ -6,6 +6,7 @@ import moment from 'moment';
 import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AuthContext } from 'src/components/utils/Context/AuthContext';
+import { useParams } from 'react-router-dom';
 import { useHttp } from 'src/hooks/http.hook';
 import { AllStateTypes } from 'src/store/reducers';
 import styles from './Message.scss';

@@ -21,5 +21,6 @@ export type IconType = {
         | 'camera'
         | 'mic'
         | 'invite'
+        | 'speaker'
         | 'arrowUp';
 };

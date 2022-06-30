@@ -22,6 +22,7 @@ import gallery from '../../../images/gallery.svg';
 import camera from '../../../images/camera.svg';
 import invite from '../../../images/invite.svg';
 import arrowUp from '../../../images/arrowUp.svg';
+import speaker from '../../../images/speaker.svg';
 import { IconType } from './types';
 
 export const Icon = ({ type }: IconType): JSX.Element => {
@@ -71,6 +72,8 @@ export const Icon = ({ type }: IconType): JSX.Element => {
                 return invite;
             case 'arrowUp':
                 return arrowUp;
+            case 'speaker':
+                return speaker;
             default:
                 return null;
         }

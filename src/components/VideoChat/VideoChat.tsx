@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable consistent-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-console */
@@ -9,12 +10,11 @@ import { useEffect, useState, useRef, LegacyRef, MutableRefObject } from 'react'
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { notificationService } from 'src/store/services/notificationService';
-import { VideoCallService } from 'src/store/services/videoCallService';
 import { Button } from '../Button';
 import styles from './VideoChat.scss';
 import { Icon } from '../Icon/Icon';
 import { getPeer } from './utils';
-import { audioConstraints, fakeAudio, fakeVideo, videoConstraints } from './config';
+import { fakeVideo, videoConstraints } from './config';
 
 export const VideoChat = () => {
     const userVideo = useRef() as MutableRefObject<HTMLVideoElement>;
@@ -26,6 +26,7 @@ export const VideoChat = () => {
     const [facingCam, setFacingCam] = useState(false);
     const [sharing, setSharing] = useState(false);
     const [isInitialize, setIsInitialize] = useState(false);
+    const [isPlay, setIsplay] = useState(true);
     const { signal, stream, status } = useSelector((state: AllStateTypes) => state.videocall);
 
     console.log(stream?.getTracks(), signal?.getTracks());
@@ -47,17 +48,14 @@ export const VideoChat = () => {
         }
     };
 
-    const updateStream = (newTrack: MediaStreamTrack, audio?: boolean) => {
+    const updateStream = (newTrack: MediaStreamTrack) => {
         try {
-            if (!audio && !isInitialize) {
+            if (!isInitialize) {
                 initialize();
             }
-            const oldTrack = audio ?
-                getPeer()?.streams[0]?.getAudioTracks()[0] :
-                getPeer()?.streams[0]?.getVideoTracks()[0];
+            const oldTrack = getPeer()?.streams[0]?.getVideoTracks()[0];
             if (oldTrack) {
-                signal?.removeTrack(audio ?
-                    signal?.getAudioTracks()[0] : signal?.getVideoTracks()[0]);
+                signal?.removeTrack(signal?.getVideoTracks()[0]);
             }
             signal?.addTrack(newTrack);
             if (userVideo.current) {
@@ -65,11 +63,11 @@ export const VideoChat = () => {
             }
             console.log(getPeer()?.streams[0].getAudioTracks()[0], oldTrack);
             if (oldTrack) {
+                oldTrack.stop();
                 getPeer()?.replaceTrack(oldTrack, newTrack, getPeer()?.streams[0]!);
             } else {
-                getPeer()?.addTrack(newTrack, getPeer()?.streams[0]!);
+                getPeer()?.replaceTrack(oldTrack, newTrack, getPeer()?.streams[0]!);
             }
-            oldTrack.stop();
         } catch (err) {
             console.log(err);
         }
@@ -77,15 +75,7 @@ export const VideoChat = () => {
 
     const handleAudio = async () => {
         try {
-            if (audioOptions) {
-                updateStream(fakeAudio(), true);
-            } else {
-                const mediaUser = await navigator.mediaDevices.getUserMedia({
-                    audio: audioConstraints,
-                });
-                const realAudio = mediaUser.getAudioTracks()[0];
-                updateStream(realAudio, true);
-            }
+            getPeer()!.streams[0]!.getAudioTracks()[0]!.enabled = !audioOptions;
             setAudioOptions(!audioOptions);
         } catch (err) {
             if ((err as object).toString() === 'NotAllowedError: Permission denied') {
@@ -100,13 +90,13 @@ export const VideoChat = () => {
 
     const handleVideo = async () => {
         try {
+            const mediaUser = await navigator.mediaDevices.getUserMedia({
+                video: videoConstraints(facingMode),
+            });
+            const realVideo = mediaUser.getVideoTracks()[0];
             if (videoOptions) {
                 updateStream(fakeVideo());
             } else {
-                const mediaUser = await navigator.mediaDevices.getUserMedia({
-                    video: videoConstraints(facingMode),
-                });
-                const realVideo = mediaUser.getVideoTracks()[0];
                 updateStream(realVideo);
             }
             setVideoOptions(!videoOptions);
@@ -158,7 +148,6 @@ export const VideoChat = () => {
                 const realVideo = mediaUser.getVideoTracks()[0];
                 if (!videoOptions) {
                     updateStream(fakeVideo());
-                    realVideo.stop();
                 } else {
                     updateStream(realVideo);
                 }
@@ -175,22 +164,9 @@ export const VideoChat = () => {
         }
     };
 
-    const getUserStream = async () => {
-        const mediaUser = await navigator.mediaDevices.getUserMedia({
-            audio: audioConstraints,
-        });
-        const realAudio = mediaUser.getAudioTracks()[0];
-        if (realAudio) {
-            setAudioOptions(true);
-        }
-        const userStream = new MediaStream([realAudio || fakeAudio(), fakeVideo()]);
-        VideoCallService.updateSignal(userStream);
-    };
-
     useEffect(() => {
         if (stream) {
-            console.log(stream);
-            getUserStream();
+            handleAudio();
         }
     }, [stream]);
 
@@ -211,6 +187,7 @@ export const VideoChat = () => {
             <video
                 className={styles.videochat__video}
                 playsInline
+                muted={!isPlay}
                 ref={partnerVideo as unknown as LegacyRef<HTMLVideoElement>}
                 autoPlay
             />
@@ -262,6 +239,13 @@ export const VideoChat = () => {
                     </>
                 )}
             </div>
+            <Button
+                onClick={() => setIsplay(!isPlay)}
+                color={isPlay ? 'green' : 'red'}
+                skin="quad"
+            >
+                <Icon type="speaker" />
+            </Button>
         </div>
     );
 };
