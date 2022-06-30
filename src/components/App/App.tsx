@@ -22,9 +22,7 @@ const AppWithRoutes: React.FC = () => {
     const startGameRoom = useSelector(
         (state: AllStateTypes) => state.game.room,
     );
-    const { peer, room } = useSelector(
-        (state: AllStateTypes) => state.videocall!,
-    );
+    const { room } = useSelector((state: AllStateTypes) => state.videocall);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -34,7 +32,7 @@ const AppWithRoutes: React.FC = () => {
     const { token, login, logout, socket } = useAuth();
 
     useEffect(() => {
-        SocketListener(socket, peer);
+        SocketListener(socket);
     }, []);
 
     return (

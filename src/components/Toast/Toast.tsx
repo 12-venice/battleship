@@ -58,10 +58,12 @@ const ToastBlock = (toast: Notification, position: string): JSX.Element => {
                 <p className={styles['notification-buttons']}>
                     {toast.buttons.map((button) => (
                         <Button
-                            key={button.title ?? uuidv4()}
+                            key={uuidv4()}
                             title={button.title}
                             onClick={button.onClick}
                             href={button.href}
+                            skin={button.skin}
+                            color={button.color}
                         />
                     ))}
                 </p>

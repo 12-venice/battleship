@@ -9,14 +9,13 @@ import http from 'http';
 import https from 'https';
 import path from 'path';
 import { Server, Socket } from 'socket.io';
-import authRoutes, { getUsers } from 'socketRoutes/auth.routes';
+import authRoutes from 'socketRoutes/auth.routes';
 import inviteRoutes from 'socketRoutes/invite.routes';
 import videoRoutes from 'socketRoutes/video.routes';
 import mongoose from 'mongoose';
 import webpack from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
-import { ExpressPeerServer } from 'peer';
 import fs from 'fs';
 import { DB, IS_DEV, IS_DEV_SERVER, PORT, SECRET_KEY } from '../webpack/env';
 import { renderResponse } from './server/renderResponse';
@@ -56,25 +55,27 @@ if (IS_DEV && !IS_DEV_SERVER) {
     app.use(hotMiddleware(compiler));
 }
 
-const peerServer = ExpressPeerServer(httpServer);
-app.use('/peerjs', peerServer);
 export const io = new Server<ClientToServerEvents, ServerToClientEvents>(
     httpServer,
     {
         cors: {
             origin: '*',
         },
+        transports: ['polling'],
     },
 );
 
 export const ts = new TimersStore();
 
-io.engine.on('connection_error', (err) => {
-    console.log(err.req); // the request object
-    console.log(err.code); // the error code, for example 1
-    console.log(err.message); // the error message, for example "Session ID unknown"
-    console.log(err.context); // some additional error context
-});
+io.engine.on(
+    'connection_error',
+    (err: { req: any; code: any; message: any; context: any }) => {
+        console.log(err.req); // the request object
+        console.log(err.code); // the error code, for example 1
+        console.log(err.message); // the error message, for example "Session ID unknown"
+        console.log(err.context); // some additional error context
+    },
+);
 
 io.use((socket: ISocket, next: (err?: Error) => void) => {
     try {

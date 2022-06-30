@@ -1,11 +1,12 @@
 // @ts-nocheck
 /* eslint-disable react/jsx-props-no-spreading */
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Preloader } from 'src/components/Preloader';
 import { useHttp } from 'src/hooks/http.hook';
+import { AllStateTypes } from 'src/store/reducers';
 import { messageService } from 'src/store/services/messageService';
-import { VideoCallService } from 'src/store/services/videoCallService';
 import { AuthContext } from '../utils/Context/AuthContext';
 import { VideoChat } from '../VideoChat';
 import styles from './Chat.scss';
@@ -14,12 +15,13 @@ import { messageType } from './components/Message/types';
 import { getBotMessage } from './config';
 
 export const Chat = (): JSX.Element => {
-    const { status } = VideoCallService.getVideoCall();
+    const { status } = useSelector((state: AllStateTypes) => state.videocall);
     const { socket } = useContext(AuthContext);
     const { request, loading } = useHttp();
     const { room } = useParams() as { room: string };
     const [messages, setMessages] = useState([] as messageType[]);
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
+
     useEffect(() => {
         socket.on('messages:recived', (data) => {
             if (room === data.room) {
@@ -30,7 +32,7 @@ export const Chat = (): JSX.Element => {
         return () => {
             socket.off('messages:recived');
         };
-    }, [messages, room]);
+    }, [messages, room, socket]);
 
     const getMessages = useCallback(async () => {
         const data = await request('/api/message/read', 'POST', { room });
@@ -40,15 +42,6 @@ export const Chat = (): JSX.Element => {
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView?.({ behavior: 'smooth' });
     };
-
-    useEffect(() => {
-        console.log(status);
-        if (status && status !== 'end') {
-            <VideoChat />;
-        }
-        console.log(status);
-        return () => next;
-    }, [status]);
 
     useEffect(() => {
         scrollToBottom();
@@ -69,6 +62,10 @@ export const Chat = (): JSX.Element => {
 
     if (loading) {
         return <Preloader />;
+    }
+
+    if (status !== 'end') {
+        return <VideoChat />;
     }
 
     return (

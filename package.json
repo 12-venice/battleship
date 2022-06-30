@@ -108,6 +108,7 @@
     "react-redux": "8.0.1",
     "react-router-dom": "6.3.0",
     "redux": "4.1.2",
+    "redux-peer-connection": "0.1.6",
     "redux-thunk": "2.4.1",
     "reselect": "4.1.5",
     "save-dev": "0.0.1-security",

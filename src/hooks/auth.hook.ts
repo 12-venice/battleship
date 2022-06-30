@@ -16,6 +16,7 @@ export const STORAGE_NAME = 'bShipData';
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io({
     autoConnect: false,
     closeOnBeforeunload: true,
+    transports: ['polling'],
 });
 
 export const useAuth = () => {

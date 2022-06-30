@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-param-reassign */
 import freeice from 'freeice';
@@ -6,7 +7,27 @@ import { Socket } from 'socket.io-client';
 import { User } from 'src/store/reducers/user';
 import { notificationService } from 'src/store/services/notificationService';
 import { VideoCallService } from 'src/store/services/videoCallService';
+import { fakeAudio, fakeVideo } from './config';
 import { acceptCallType, cancelCallType } from './types';
+
+let _peer: Peer.Instance | null;
+
+const setPeer = (config: {}) => {
+    _peer = new Peer(config);
+};
+
+export const getPeer = () => _peer;
+
+export const destroyPeer = () => {
+    if (_peer !== null) {
+        _peer.destroy();
+    }
+    _peer = null;
+};
+
+const stream =
+    typeof window !== 'undefined' &&
+    new MediaStream([fakeAudio(), fakeVideo()]);
 
 export const CallPeer = async ({
     user,
@@ -17,19 +38,23 @@ export const CallPeer = async ({
     user: User;
     from: string;
     socket: Socket;
-    room: string,
+    room: string;
 }) => {
-    const peer = new Peer({
+    const config = {
         initiator: true,
         trickle: false,
         config: { iceServers: freeice() },
+        stream,
         offerOptions: { offerToReceiveAudio: true, offerToReceiveVideo: true },
-    });
-    VideoCallService.updatePeer(peer);
+    };
+
+    setPeer(config);
+
     VideoCallService.updateStatus('calling');
     VideoCallService.updateRoom(room);
 
-    peer.on('signal', (data) => {
+    getPeer()?.on('signal', (data) => {
+        console.log('Calling...');
         socket.emit('call:sent', {
             userToCall: user._id,
             signalData: data,
@@ -37,47 +62,46 @@ export const CallPeer = async ({
             room,
         });
     });
-    peer.on('stream', (partnerStream: MediaStream) => {
+
+    getPeer()?.on('stream', (partnerStream: MediaStream) => {
         VideoCallService.updateStream(partnerStream);
+    });
+
+    socket.on('call:accept', (signal: SignalData) => {
         VideoCallService.updateStatus('live');
-    });
-    peer.on('close', () => {
-        console.log('CLOSE');
-        VideoCallService.updateStatus('end');
-    });
-    peer.on('error', (err) => {
-        console.log('PEER ERROR: ', err);
-        VideoCallService.updateStatus('end');
+        getPeer()?.signal(signal);
     });
 };
 
-export const AcceptCall = ({ signal, from, socket, room }: acceptCallType) => {
+export const AcceptCall = async ({
+    signal,
+    from,
+    socket,
+    room,
+}: acceptCallType) => {
     VideoCallService.updateRoom(room);
-    VideoCallService.updateStatus('calling');
-    const peer = new Peer({
+    VideoCallService.updateStatus('live');
+
+    const config = {
         initiator: false,
         trickle: false,
         config: { iceServers: freeice() },
+        stream,
         offerOptions: { offerToReceiveAudio: true, offerToReceiveVideo: true },
-    });
-    VideoCallService.updatePeer(peer);
-    peer.on('signal', (data: SignalData) => {
+    };
+
+    setPeer(config);
+
+    getPeer()?.on('signal', (data: SignalData) => {
         socket.emit('call:accept', { signal: data, to: from });
     });
 
-    peer.on('stream', (partnerStream: MediaStream) => {
+    getPeer()?.on('stream', (partnerStream: MediaStream) => {
         VideoCallService.updateStream(partnerStream);
-        VideoCallService.updateStatus('live');
     });
-    peer.on('close', () => {
-        console.log('CLOSE');
-        VideoCallService.updateStatus('end');
-    });
-    peer.on('error', (err) => {
-        console.log('PEER ERROR: ', err);
-        VideoCallService.updateStatus('end');
-    });
-    peer.signal(signal as unknown as SignalData);
+
+    getPeer()?.signal(signal as unknown as SignalData);
+
     notificationService.smartDeleteNotification({
         selector: 'title',
         element: from.display_name,
@@ -85,7 +109,9 @@ export const AcceptCall = ({ signal, from, socket, room }: acceptCallType) => {
 };
 
 export const CancelCall = ({ from, socket }: cancelCallType) => {
-    VideoCallService.updateStatus('end');
+    getPeer()?.destroy();
+    destroyPeer();
+    VideoCallService.connectClose();
     notificationService.smartDeleteNotification({
         selector: 'title',
         element: from.display_name,

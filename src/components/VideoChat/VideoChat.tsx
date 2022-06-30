@@ -5,7 +5,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable prettier/prettier */
 /* eslint-disable jsx-a11y/media-has-caption */
-import { useEffect, useState, useRef, LegacyRef, MutableRefObject, useContext } from 'react';
+import { useEffect, useState, useRef, LegacyRef, MutableRefObject } from 'react';
 import { useSelector } from 'react-redux';
 import { AllStateTypes } from 'src/store/reducers';
 import { notificationService } from 'src/store/services/notificationService';
@@ -13,105 +13,63 @@ import { VideoCallService } from 'src/store/services/videoCallService';
 import { Button } from '../Button';
 import styles from './VideoChat.scss';
 import { Icon } from '../Icon/Icon';
-import { CancelCall } from './utils';
-import { AuthContext } from '../utils/Context/AuthContext';
+import { getPeer } from './utils';
+import { audioConstraints, fakeAudio, fakeVideo, videoConstraints } from './config';
 
 export const VideoChat = () => {
-    const { socket } = useContext(AuthContext);
     const userVideo = useRef() as MutableRefObject<HTMLVideoElement>;
     const partnerVideo = useRef() as MutableRefObject<HTMLVideoElement>;
     const [videoOptions, setVideoOptions] = useState(false);
-    const [audioOptions, setAudioOptions] = useState(true);
+    const [audioOptions, setAudioOptions] = useState(false);
     const [screenOptions, setScreenOptions] = useState(false);
     const [facingMode, setFacingMode] = useState(true);
     const [facingCam, setFacingCam] = useState(false);
     const [sharing, setSharing] = useState(false);
-    const [message, setMessage] = useState('');
+    const [isInitialize, setIsInitialize] = useState(false);
+    const { signal, stream, status } = useSelector((state: AllStateTypes) => state.videocall);
 
-    const { peer, signal, stream, status } = useSelector((state: AllStateTypes) => state.videocall);
+    console.log(stream?.getTracks(), signal?.getTracks());
 
-    useEffect(() => {
-        if (partnerVideo && partnerVideo.current && stream) {
-            VideoCallService.updateStatus('live');
-            partnerVideo.current.srcObject = stream;
-        }
-    }, [stream]);
-    console.log(peer, signal?.getTracks(), stream?.getTracks(), status);
-
-    const videoConstraints = {
-        frameRate: { max: 30, ideal: 20 },
-        width: { min: 640, ideal: 1280, max: 1920 },
-        height: { min: 480, ideal: 720, max: 1080 },
-        facingMode: facingMode ? 'user' : 'environment',
-    };
-
-    const audioConstraints = {
-        echoCancellation: true,
-        autoGainControl: true,
-        noiseSuppression: true,
-    };
-
-    const updateStream = (newTrack: MediaStreamTrack, oldTrack: MediaStreamTrack) => {
-        if (peer !== undefined) {
-            peer?.replaceTrack(oldTrack, newTrack, signal!);
-        }
-        oldTrack.stop();
-        signal?.removeTrack(oldTrack);
-        signal?.addTrack(newTrack);
-
-        if (userVideo.current) {
-            userVideo.current.srcObject = signal;
-        }
-    };
-
-    const fakeAudio = () => {
-        try {
-            let ctx;
-            if (typeof window !== 'undefined') {
-                const AudioContext = window.AudioContext
-                    || window.webkitAudioContext;
-                ctx = new AudioContext();
-            } else {
-                const AT = signal?.getAudioTracks()[0];
-                if (AT) AT.enabled = false;
-                return AT;
-            }
-            const oscillator = ctx.createOscillator();
-            const dst = oscillator.connect(ctx.createMediaStreamDestination());
-            oscillator.start();
-            return Object.assign(dst.stream.getAudioTracks()[0], { enabled: false });
-        } catch (err) {
-            setMessage(err.toString());
-        }
-    };
-
-    const fakeVideo = ({ width = 640, height = 480 } = {}) => {
-        const canvas = Object.assign(document.createElement('canvas'), { width, height });
-        canvas.getContext('2d')?.fillRect(0, 0, width, height);
-        const streamFake = canvas.captureStream();
-        return Object.assign(streamFake.getVideoTracks()[0], { enabled: false });
-    };
-
-    const initializeStream = async () => {
+    const initialize = async () => {
         try {
             const mediaUser = await navigator.mediaDevices.getUserMedia({
-                video: videoConstraints,
-                audio: audioConstraints,
+                video: videoConstraints(facingMode),
             });
-            const audioTrack = mediaUser.getAudioTracks()[0];
-            signal?.addTrack(audioTrack);
             const videoTrack = mediaUser.getVideoTracks()[0];
             videoTrack.stop();
-            VideoCallService.updateSignal(mediaUser);
-            peer?.addStream(mediaUser);
-            if (userVideo.current) {
-                userVideo.current.srcObject = signal;
-            }
-            console.log(signal?.getTracks());
             setFacingCam(videoTrack.getCapabilities()!.facingMode!.length > 0);
             if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                 setSharing(true);
             }
+            setIsInitialize(true);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const updateStream = (newTrack: MediaStreamTrack, audio?: boolean) => {
+        try {
+            if (!audio && !isInitialize) {
+                initialize();
+            }
+            const oldTrack = audio ?
+                getPeer()?.streams[0]?.getAudioTracks()[0] :
+                getPeer()?.streams[0]?.getVideoTracks()[0];
+            if (oldTrack) {
+                signal?.removeTrack(audio ?
+                    signal?.getAudioTracks()[0] : signal?.getVideoTracks()[0]);
+            }
+            signal?.addTrack(newTrack);
+            if (userVideo.current) {
+                userVideo.current.srcObject = signal;
+            }
+            console.log(getPeer()?.streams[0].getAudioTracks()[0], oldTrack);
+            if (oldTrack) {
+                getPeer()?.replaceTrack(oldTrack, newTrack, getPeer()?.streams[0]!);
+            } else {
+                getPeer()?.addTrack(newTrack, getPeer()?.streams[0]!);
+            }
+            oldTrack.stop();
         } catch (err) {
             console.log(err);
         }
@@ -120,13 +78,13 @@ export const VideoChat = () => {
     const handleAudio = async () => {
         try {
             if (audioOptions) {
-                updateStream(fakeAudio(), signal!.getAudioTracks()[0]);
+                updateStream(fakeAudio(), true);
             } else {
                 const mediaUser = await navigator.mediaDevices.getUserMedia({
                     audio: audioConstraints,
                 });
                 const realAudio = mediaUser.getAudioTracks()[0];
-                updateStream(realAudio, signal!.getAudioTracks()[0]);
+                updateStream(realAudio, true);
             }
             setAudioOptions(!audioOptions);
         } catch (err) {
@@ -143,13 +101,13 @@ export const VideoChat = () => {
     const handleVideo = async () => {
         try {
             if (videoOptions) {
-                updateStream(fakeVideo(), signal!.getVideoTracks()[0]);
+                updateStream(fakeVideo());
             } else {
                 const mediaUser = await navigator.mediaDevices.getUserMedia({
-                    video: videoConstraints,
+                    video: videoConstraints(facingMode),
                 });
                 const realVideo = mediaUser.getVideoTracks()[0];
-                updateStream(realVideo, signal!.getVideoTracks()[0]);
+                updateStream(realVideo);
             }
             setVideoOptions(!videoOptions);
             setScreenOptions(false);
@@ -167,11 +125,10 @@ export const VideoChat = () => {
     const handleCamera = async () => {
         try {
             const mediaUser = await navigator.mediaDevices.getUserMedia({
-                video: videoConstraints,
+                video: videoConstraints(!facingMode),
             });
             const realVideo = mediaUser.getVideoTracks()[0];
-            videoConstraints.facingMode = !facingMode ? 'user' : 'environment';
-            updateStream(realVideo, signal!.getVideoTracks()[0]);
+            updateStream(realVideo);
             setFacingMode((cur: boolean) => !cur);
             if (!videoOptions) {
                 setVideoOptions((cur: boolean) => !cur);
@@ -192,18 +149,18 @@ export const VideoChat = () => {
             if (!screenOptions) {
                 const trackDisplay = await navigator.mediaDevices.getDisplayMedia();
                 const getDisplayTrack = trackDisplay.getVideoTracks()[0];
-                updateStream(getDisplayTrack, signal!.getVideoTracks()[0]);
+                updateStream(getDisplayTrack);
                 setScreenOptions(true);
             } else {
                 const mediaUser = await navigator.mediaDevices.getUserMedia({
-                    video: videoConstraints,
+                    video: videoConstraints(facingMode),
                 });
                 const realVideo = mediaUser.getVideoTracks()[0];
                 if (!videoOptions) {
-                    updateStream(fakeVideo(), signal!.getVideoTracks()[0]!);
+                    updateStream(fakeVideo());
                     realVideo.stop();
                 } else {
-                    updateStream(realVideo, signal!.getVideoTracks()[0]);
+                    updateStream(realVideo);
                 }
                 setScreenOptions(false);
             }
@@ -218,9 +175,36 @@ export const VideoChat = () => {
         }
     };
 
+    const getUserStream = async () => {
+        const mediaUser = await navigator.mediaDevices.getUserMedia({
+            audio: audioConstraints,
+        });
+        const realAudio = mediaUser.getAudioTracks()[0];
+        if (realAudio) {
+            setAudioOptions(true);
+        }
+        const userStream = new MediaStream([realAudio || fakeAudio(), fakeVideo()]);
+        VideoCallService.updateSignal(userStream);
+    };
+
     useEffect(() => {
-        initializeStream();
-    }, []);
+        if (stream) {
+            console.log(stream);
+            getUserStream();
+        }
+    }, [stream]);
+
+    useEffect(() => {
+        if (partnerVideo && partnerVideo.current) {
+            partnerVideo.current.srcObject = stream;
+        }
+    }, [stream]);
+
+    useEffect(() => {
+        if (userVideo && userVideo.current) {
+            userVideo.current.srcObject = signal;
+        }
+    }, [signal]);
 
     return (
         <div className={styles.videochat__block}>
@@ -232,7 +216,7 @@ export const VideoChat = () => {
             />
             <div>
                 <video
-                    className={status === ('calling' || 'live') ?
+                    className={status === ('calling' && 'live') ?
                         styles.videochat__video__user : styles.videochat__video}
                     playsInline
                     muted
@@ -241,45 +225,43 @@ export const VideoChat = () => {
                 />
             </div>
             <div className={styles.videochat__controls}>
-                <div>
-                    <Button
-                        onClick={() => handleAudio()}
-                        color={audioOptions ? 'green' : 'red'}
-                        skin="quad"
-                    >
-                        <Icon type="mic" />
-                    </Button>
-                    <Button
-                        onClick={() => handleVideo()}
-                        color={videoOptions ? 'green' : 'red'}
-                        skin="quad"
-                    >
-                        <Icon type="camera" />
-                    </Button>
-                    {videoOptions && facingCam && (
+                {status === 'calling' ? 'Calling ...' : (
+                    <>
                         <Button
-                            onClick={() => handleCamera()}
-                            color="blue"
+                            onClick={() => handleAudio()}
+                            color={audioOptions ? 'green' : 'red'}
                             skin="quad"
                         >
-                            <Icon type="changecam" />
+                            <Icon type="mic" />
                         </Button>
-                    )}
-                    {sharing && (
                         <Button
-                            onClick={() => handleDisplay()}
-                            color={screenOptions ? 'green' : 'red'}
+                            onClick={() => handleVideo()}
+                            color={videoOptions ? 'green' : 'red'}
                             skin="quad"
                         >
-                            <Icon type="monitor" />
+                            <Icon type="camera" />
                         </Button>
-                    )}
-                </div>
-                <div>
-                    <Button onClick={() => CancelCall(socket)} skin="quad" color="red"><Icon type="slashcall" /></Button>
-                </div>
+                        {videoOptions && facingCam && (
+                            <Button
+                                onClick={() => handleCamera()}
+                                color="blue"
+                                skin="quad"
+                            >
+                                <Icon type="changecam" />
+                            </Button>
+                        )}
+                        {sharing && (
+                            <Button
+                                onClick={() => handleDisplay()}
+                                color={screenOptions ? 'green' : 'red'}
+                                skin="quad"
+                            >
+                                <Icon type="monitor" />
+                            </Button>
+                        )}
+                    </>
+                )}
             </div>
-            {message}
         </div>
     );
 };
