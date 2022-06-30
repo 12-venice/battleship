@@ -173,7 +173,6 @@ export const VideoChat = () => {
     useEffect(() => {
         if (partnerVideo && partnerVideo.current) {
             partnerVideo.current.srcObject = stream;
-            partnerVideo.current.play();
         }
     }, [stream]);
 
