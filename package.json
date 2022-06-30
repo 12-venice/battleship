@@ -11,7 +11,7 @@
     "eslint:fix": "eslint ./src --ext .js,.ts,.tsx --fix",
     "prepare": "husky install",
     "dev": "npm run clean && cross-env NODE_ENV=development webpack --watch",
-    "dev:server": "npm run clean && cross-env NODE_ENV=development SERVER=true webpack --watch",
+    "dev:server": "npm run clean && cross-env NODE_ENV=development NODE_TLS_REJECT_UNAUTHORIZED=0 SERVER=true webpack --watch",
     "start:webpack": "npm run clean && webpack",
     "start:server": "node dist/server.js",
     "start:production": "tsc --project prod.tsconfig.json && webpack --mode=production --config webpack.config.js && node dist/server.js",

@@ -2,6 +2,7 @@
 /* eslint-disable default-param-last */
 /* eslint-disable no-fallthrough */
 /* eslint-disable indent */
+import { stream } from 'favicons';
 import Peer from 'simple-peer';
 
 export type videoCallStatus =
@@ -47,17 +48,37 @@ export function videoCallReducer(
 ): videoCall {
     switch (type) {
         case actions.UPDATE_PEER: {
-            state = { ...state, ...{ peer: data as Peer.Instance } };
-        }
+            return {
+                peer: data as Peer.Instance,
+                stream: state.stream,
+                signal: state.signal,
+                status: state.status
+            }
+        };
         case actions.UPDATE_SIGNAL: {
-            state = { ...state, signal: data as MediaStream };
-        }
+            return {
+                peer: state.peer,
+                stream: data as MediaStream,
+                signal: state.signal,
+                status: state.status
+            }
+        };
         case actions.UPDATE_STREAM: {
-            state = { ...state, stream: data as MediaStream };
-        }
+            return {
+                peer: state.peer,
+                stream: state.stream,
+                signal: data as MediaStream,
+                status: state.status
+            }
+        };
         case actions.UPDATE_STATUS: {
-            state = { ...state, status: data as videoCallStatus };
-        }
+            return {
+                peer: state.peer,
+                stream: state.stream,
+                signal: state.signal,
+                status: data as videoCallStatus
+            }
+        };
         case actions.GET_VIDEOCALL: {
             return state;
         }
